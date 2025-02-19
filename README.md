@@ -1,16 +1,6 @@
 
 <h1 align="center">
-  Assignment  project - 4 🚀
 </h1>
-
- # 📝 Bike Shop Management API
-
-
-I developed a powerful backend for a blogging platform, enabling both user and admin operations with full CRUD functionality, authentication, and authorization. Users can create, read, update, and delete their blogs, while admins have extended privileges to manage all content.
-
-Key features include advanced search and filtering for efficient content discovery. The backend is built using Node.js, Express.js, TypeScript, and MongoDB, ensuring scalability, type safety, and high performance. JWT-based authentication secures user sessions, while role-based authorization safeguards resources. Designed with clean architecture and modularity, this backend provides a robust, efficient, and secure foundation for a modern blogging platform.
-* * *
-
 
 ## Technologies
 
@@ -27,7 +17,6 @@ Key features include advanced search and filtering for efficient content discove
 *   **Stripe**
 
 * * *
-
 
 
 ## 🚀 Features
@@ -93,10 +82,3 @@ All errors are returned in a structured format with clear messages and status co
 }
 ```
 
-
-
-
-Thank you for exploring this project! 🚀
-# assignment-4-server
-# Server Link :  https://bikeshopserver.vercel.app
-# Github Link :  https://github.com/Mosiur411/bikeshopserver
