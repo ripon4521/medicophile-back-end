@@ -37,10 +37,6 @@ const deleteBlogByAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void
         throw new Error('User is not authenticated or authorized');
     }
     const { id: blogId } = req.params;
-    const result = yield admin_service_1.adminService.deleteBlog(blogId);
-    if (!result) {
-        throw new Error('Blog not found');
-    }
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: 'Blog deleted successfully',

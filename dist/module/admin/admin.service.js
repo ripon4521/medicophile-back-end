@@ -13,15 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminService = void 0;
-const blog_model_1 = __importDefault(require("../blog/blog.model"));
 const user_model_1 = __importDefault(require("../user/user.model"));
 const blockUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.default.findByIdAndUpdate(userId, { isBlocked: true }, { new: true });
     return result;
 });
 const deleteBlog = (blogId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield blog_model_1.default.findByIdAndDelete(blogId);
-    return result;
 });
 exports.adminService = {
     blockUser,

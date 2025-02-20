@@ -33,7 +33,7 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ["admin", "user"],
+      enum: ["admin", "user", "job_seeker","recruiter"],
       default: "user",
     },
     isBlocked: {

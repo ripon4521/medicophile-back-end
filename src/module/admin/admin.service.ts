@@ -1,4 +1,3 @@
-import Blog from "../blog/blog.model";
 import User from "../user/user.model";
 
 const blockUser = async (userId: string) => {
@@ -11,8 +10,6 @@ const blockUser = async (userId: string) => {
 };
 
 const deleteBlog = async (blogId: string) => {
-    const result = await Blog.findByIdAndDelete(blogId);
-    return result;
 };
 
 export const adminService = {

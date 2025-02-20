@@ -31,11 +31,8 @@ const deleteBlogByAdmin = catchAsync(async (req, res) => {
 
     const { id: blogId } = req.params; 
 
-    const result = await adminService.deleteBlog(blogId);
 
-    if (!result) {
-        throw new Error('Blog not found');
-    }
+   
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
