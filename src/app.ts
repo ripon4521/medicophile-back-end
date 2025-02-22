@@ -10,6 +10,7 @@ import cors from 'cors';
 import auth from './middlewares/auth'
 import { USER_ROLE } from './module/user/user.constants'
 import feedbackRouter from './module/feedback/feedback.router'
+import jobSeekerRouter from './module/jobseeker/jobseeker.router'
 
 const app = express()
 //parsers
@@ -25,6 +26,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/user', userRouter)
 app.use('/api/feedback', feedbackRouter)
+app.use('/api/jobSeeker', jobSeekerRouter)
 
 
 app.get('/', (req: Request, res: Response) => {

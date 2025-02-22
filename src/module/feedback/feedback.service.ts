@@ -18,7 +18,7 @@ const getSingleFeedbackFromDB = async (_id:string) => {
 }
 
 const updateFeedbackInDB = async (_id: string, payload: TFeedback) => {
-    const result = await feedbackModel.findOneAndUpdate({_id}, payload, {new: true}).populate('user');
+    const result = await feedbackModel.findOneAndUpdate({_id}, payload, {new: true});
     return result;
 }
 

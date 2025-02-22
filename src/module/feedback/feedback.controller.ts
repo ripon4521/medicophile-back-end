@@ -7,7 +7,6 @@ import { feedbackService } from "./feedback.service";
 
 
 const createFeedback = catchAsync(async (req, res) => {
-    console.log(req.body);
 
     const result = await feedbackService.createFeedbackIntoDB(req.body);
  sendResponse(res, {
