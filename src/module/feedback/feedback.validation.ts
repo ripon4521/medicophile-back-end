@@ -12,6 +12,6 @@ import { z } from "zod";
 });
 
 
-const feedbackValidation = {
+export const feedbackValidation = {
     createFeedback,
 }

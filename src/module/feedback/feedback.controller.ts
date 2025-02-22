@@ -18,6 +18,18 @@ const createFeedback = catchAsync(async (req, res) => {
 });
 
 
-const feedbackController = {
+const getAllFeedback = catchAsync(async (req, res) => {
+    const result = await feedbackService.getAllFeedbackFromDB();
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        message: 'Feedbacks fetched successfully',
+        data: result,
+    })
+    
+});
+
+
+export const feedbackController = {
     createFeedback,
+    getAllFeedback,
 }

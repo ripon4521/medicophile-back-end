@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import auth from './middlewares/auth'
 import { USER_ROLE } from './module/user/user.constants'
+import feedbackRouter from './module/feedback/feedback.router'
 
 const app = express()
 //parsers
@@ -23,6 +24,7 @@ app.use(express.json())
 app.use('/api/auth', authRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/user', userRouter)
+app.use('/api/feedback', feedbackRouter)
 
 
 app.get('/', (req: Request, res: Response) => {

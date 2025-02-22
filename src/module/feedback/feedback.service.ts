@@ -7,7 +7,13 @@ const createFeedbackIntoDB =async (payload:TFeedback) => {
     return result;
 }
 
+const getAllFeedbackFromDB = async () => {
+    const result = await feedbackModel.find();
+    return result;
+}
+
 
 export const feedbackService = {
     createFeedbackIntoDB,
+    getAllFeedbackFromDB,
 }
