@@ -11,6 +11,7 @@ import auth from './middlewares/auth'
 import { USER_ROLE } from './module/user/user.constants'
 import feedbackRouter from './module/feedback/feedback.router'
 import jobSeekerRouter from './module/jobseeker/jobseeker.router'
+import skillRouter from './module/skill/skill.router'
 
 const app = express()
 //parsers
@@ -27,6 +28,7 @@ app.use('/api/admin', adminRouter)
 app.use('/api/user', userRouter)
 app.use('/api/feedback', feedbackRouter)
 app.use('/api/jobSeeker', jobSeekerRouter)
+app.use('/api/skill', skillRouter)
 
 
 app.get('/', (req: Request, res: Response) => {
