@@ -8,5 +8,5 @@ export interface IJob  {
     location: string;
     salary_range: string;
     job_type: "full-time" | "part-time" | "remote";
-    postedAt: Date;
+
   }

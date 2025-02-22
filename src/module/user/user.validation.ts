@@ -23,7 +23,7 @@ const userValidationSchema = z.object({
       .max(20, { message: "Password cannot exceed 20 characters" }),
 
     role: z
-      .enum(["admin", "user"], {
+      .enum(["admin", "user", "recruiter"], {
         required_error: "Role must be provided and must be 'admin' or 'user'",
       })
       .default("user"),
