@@ -11,10 +11,14 @@ const getUser = async () => {
   const result = await User.find({ role: 'user' })
   return result
 }
-const getPofile = async (email:string) => {
-  const result = await User.find({ email: email })
-  return result
-}
+const getPofile = async (email: string) => {
+  if (!email) throw new Error('Email is required to fetch profile.');
+
+  const result = await User.findOne({ email }); // Use findOne for a single user
+  if (!result) throw new Error('User not found.');
+
+  return result;
+};
 
 const getSingleUser = async (id: string) => {
   //   const result = await User.findOne({name:"habi jabi"})

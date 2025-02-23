@@ -30,9 +30,7 @@ const userValidationSchema = z.object({
 
     isBlocked: z.boolean().default(false),
 
-    createdAt: z.date().default(() => new Date()),
 
-    updatedAt: z.date().default(() => new Date()),
   }),
 });
 
