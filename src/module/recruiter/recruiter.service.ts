@@ -8,12 +8,12 @@ const createRecruiter = async ( payload:IRecruiter) => {
 }
 
 const getRecruiters = async () => {
-    const result = await RecruiterModel.find();
+    const result = await RecruiterModel.find().populate('user');
     return result;
 }
 
 const getSingleRecruiter = async (_id: string) => {
-    const result = await RecruiterModel.findOne({_id});
+    const result = await RecruiterModel.findOne({_id}).populate('user');
     return result;
 }
 

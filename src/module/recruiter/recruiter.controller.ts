@@ -27,7 +27,7 @@ const getRecruiterById = catchAsync(async (req, res) => {
     const result = await recuirterService.getSingleRecruiter(id);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
-        message: 'Recruiter Fetched Successfully',
+        message: 'Single Recruiter Fetched Successfully',
         data: result,
     })
 })
