@@ -17,25 +17,24 @@ const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const user_model_1 = __importDefault(require("../module/user/user.model"));
 const auth = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        const token = req.headers.authorization;
-        if (!token) {
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
             throw new Error('You are not authorized!');
         }
+        const token = authHeader.split(' ')[1]; // Extract token after 'Bearer'
         const decoded = jsonwebtoken_1.default.verify(token, "primarytestkey");
-        const { role, email, id } = decoded;
+        const { role, email } = decoded;
         const user = yield user_model_1.default.findOne({ email });
         if (!user) {
-            throw new Error('This user is not found !');
+            throw new Error('This user is not found!');
         }
-        const userStatus = user === null || user === void 0 ? void 0 : user.isBlocked;
-        if (userStatus === true) {
-            throw new Error('This user is blocked ! !');
+        if (user.isBlocked) {
+            throw new Error('This user is blocked!');
         }
-        if (requiredRoles && !requiredRoles.includes(role)) {
-            throw new Error('You are not authorized');
+        if (requiredRoles.length && !requiredRoles.includes(role)) {
+            throw new Error('You are not authorized!');
         }
-        req.user = decoded;
-        // console.log(req.user)
+        req.user = decoded; // Attach decoded token to req.user
         next();
     }));
 };

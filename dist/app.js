@@ -11,6 +11,12 @@ const admin_router_1 = __importDefault(require("./module/admin/admin.router"));
 const notFound_1 = __importDefault(require("./middlewares/notFound"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
+const feedback_router_1 = __importDefault(require("./module/feedback/feedback.router"));
+const jobseeker_router_1 = __importDefault(require("./module/jobseeker/jobseeker.router"));
+const skill_router_1 = __importDefault(require("./module/skill/skill.router"));
+const job_router_1 = __importDefault(require("./module/job/job.router"));
+const recruiter_router_1 = __importDefault(require("./module/recruiter/recruiter.router"));
+const application_router_1 = __importDefault(require("./module/application/application.router"));
 const app = (0, express_1.default)();
 //parsers
 app.use(express_1.default.json());
@@ -21,6 +27,12 @@ app.use(express_1.default.json());
 app.use('/api/auth', auth_router_1.default);
 app.use('/api/admin', admin_router_1.default);
 app.use('/api/user', user_router_1.default);
+app.use('/api/feedback', feedback_router_1.default);
+app.use('/api/jobSeeker', jobseeker_router_1.default);
+app.use('/api/skill', skill_router_1.default);
+app.use('/api/job', job_router_1.default);
+app.use('/api/recruiter', recruiter_router_1.default);
+app.use('/api/application', application_router_1.default);
 app.get('/', (req, res) => {
     res.send({
         status: true,

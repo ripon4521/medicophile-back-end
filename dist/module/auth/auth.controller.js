@@ -34,6 +34,7 @@ const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, 
         message: "Login successful",
         data: {
             token: (result === null || result === void 0 ? void 0 : result.token) || "",
+            user: (result === null || result === void 0 ? void 0 : result.user) || {}
         },
     });
 }));

@@ -36,10 +36,11 @@ const getUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0
 }));
 const getProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const data = req.user;
+    console.log(data);
     const result = yield user_service_1.userService.getPofile(data === null || data === void 0 ? void 0 : data.email);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
-        message: 'Users getting successfully',
+        message: 'Profile getting successfully',
         data: result,
     });
 }));

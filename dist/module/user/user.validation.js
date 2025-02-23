@@ -22,13 +22,11 @@ const userValidationSchema = zod_1.z.object({
             .min(8, { message: "Password must be at least 8 characters long" })
             .max(20, { message: "Password cannot exceed 20 characters" }),
         role: zod_1.z
-            .enum(["admin", "user"], {
+            .enum(["admin", "user", "recruiter"], {
             required_error: "Role must be provided and must be 'admin' or 'user'",
         })
             .default("user"),
         isBlocked: zod_1.z.boolean().default(false),
-        createdAt: zod_1.z.date().default(() => new Date()),
-        updatedAt: zod_1.z.date().default(() => new Date()),
     }),
 });
 exports.UserValidation = {

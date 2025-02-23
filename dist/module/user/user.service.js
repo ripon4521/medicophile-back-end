@@ -24,7 +24,11 @@ const getUser = () => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getPofile = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.default.find({ email: email });
+    if (!email)
+        throw new Error('Email is required to fetch profile.');
+    const result = yield user_model_1.default.findOne({ email }); // Use findOne for a single user
+    if (!result)
+        throw new Error('User not found.');
     return result;
 });
 const getSingleUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
