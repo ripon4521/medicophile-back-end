@@ -13,6 +13,7 @@ import feedbackRouter from './module/feedback/feedback.router'
 import jobSeekerRouter from './module/jobseeker/jobseeker.router'
 import skillRouter from './module/skill/skill.router'
 import jobRouter from './module/job/job.router'
+import recruiterRouter from './module/recruiter/recruiter.router'
 
 const app = express()
 //parsers
@@ -31,6 +32,7 @@ app.use('/api/feedback', feedbackRouter)
 app.use('/api/jobSeeker', jobSeekerRouter)
 app.use('/api/skill', skillRouter)
 app.use('/api/job', jobRouter)
+app.use('api/recruiter', recruiterRouter )
 
 
 app.get('/', (req: Request, res: Response) => {
