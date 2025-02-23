@@ -27,12 +27,14 @@ const getUser = catchAsync(async (req, res) => {
     data: result,
   })
 })
+
 const getProfile = catchAsync(async (req, res) => {
-  const data=req.user
+  const data=req.user;
+  console.log(data);
   const result = await userService.getPofile(data?.email)
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: 'Users getting successfully',
+    message: 'Profile getting successfully',
     data: result,
   })
 })
