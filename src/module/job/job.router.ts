@@ -8,5 +8,7 @@ const jobRouter = Router();
 
 jobRouter.post('/create-job', validateRequest(jobValidation.createJob), jobController.createJob);
 jobRouter.get('/', jobController.getAllJobs);
+jobRouter.get('/:id', jobController.getJobById);
+jobRouter.patch('/:id', validateRequest(jobValidation.updateJob), jobController.updateJob)
 
 export default jobRouter;
