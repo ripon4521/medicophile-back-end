@@ -18,10 +18,9 @@ const createRecruiter = z.object({
 
 const updateRecruiter = z.object({
     body:z.object({
-        user: zObjectId, // Validates MongoDB ObjectId
-        company_name: z.string().min(1, { message: "Company name is required" }),
-        company_description: z.string().min(1, { message: "Company description is required" }),
-        industry: z.string().min(1, { message: "Industry is required" }),
+        company_name: z.string().min(1, { message: "Company name is required" }).optional(),
+        company_description: z.string().min(1, { message: "Company description is required" }).optional(),
+        industry: z.string().min(1, { message: "Industry is required" }).optional(),
         website: z.string().url({ message: "Invalid URL format" }).optional(), // Optional website with URL validation
         logo: z.string().url({ message: "Invalid logo URL format" }).optional(), // Optional logo URL
     })

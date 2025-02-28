@@ -13,10 +13,10 @@ const createSkill = z.object({
 });
 const updateSkill = z.object({
     body:z.object({
-        name: z.string().min(1, { message: "Skill name is required" }),
+        name: z.string().min(1, { message: "Skill name is required" }).optional(),
         category: z.enum(["technical", "soft_skills"], {
           errorMap: () => ({ message: "Category must be either 'technical' or 'soft_skills'" }),
-        }),
+        }).optional(),
         description: z.string().optional(),
     })
   // Optional description

@@ -12,30 +12,42 @@ const register = async (payload: IUser) => {
   return result
 }
 
-const login = async (payload: { email: string; password: string }) => {
-  const user = await User.findOne({ email: payload?.email }).select('+password');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+const login = async (payload: { mobile: string; pin: string }) => {
+  // Validate input
+  if (!payload.mobile || !payload.pin) {
+    throw { message: 'Mobile and PIN are required', statusCode: 400 };
+  }
+
+  // Find user by mobile number and select the pin field
+  const user = await User.findOne({ mobile: payload.mobile }).select('+pin');
 
   if (!user) {
-    throw new CustomError('This user is not found!', 404, { field: 'email' });
+    throw { message: 'User not found!', statusCode: 404, field: 'mobile' };
   }
 
   if (user.isBlocked) {
-    throw new CustomError('This user is blocked!', 403);
+    throw { message: 'This user is blocked!', statusCode: 403 };
   }
 
-  const isPasswordMatched = await bcrypt.compare(payload?.password, user?.password);
+  // Check if the pin matches
+  const isPinMatched = await bcrypt.compare(payload.pin, user.pin);
 
-  if (!isPasswordMatched) {
-    throw new CustomError('Invalid credentials', 401, { field: 'password' });
+  if (!isPinMatched) {
+    throw { message: 'Invalid PIN', statusCode: 401, field: 'pin' };
   }
 
-  const jwtPayload = { email: user.email, role: user.role ,  id: user._id.toString()};
-  // console.log("auth id setup ... ",jwtPayload)
+  // JWT Payload
+  const jwtPayload = { mobile: user.mobile, role: user.role, id: user._id.toString() };
 
-  const token = jwt.sign(jwtPayload, "primarytestkey", { expiresIn: '10d' });
+  // Generate JWT token
+  const token = jwt.sign(jwtPayload, process.env.JWT_SECRET || "primarytestkey", { expiresIn: '10d' });
 
   return { token, user };
 };
+
 
 export const AuthService = {
   register,

@@ -32,7 +32,7 @@ const createJobSeeker = z.object({
         experience: z.array(experienceSchema).optional(), // Optional experience array
         education: z.array(educationSchema).optional(), // Optional education array
         resume: z.string().url({ message: "Resume must be a valid URL" }).optional(), // Optional resume URL
-        preferences: preferencesSchema, // Required preferences
+        preferences: z.array(preferencesSchema), // Required preferences
 
     })
 
@@ -41,12 +41,11 @@ const createJobSeeker = z.object({
 //Update Validation
 const updateJobSeeker = z.object({
     body:z.object({
-        user: zObjectId, // Validates MongoDB ObjectId
-        skills: z.array(z.string().min(1, { message: "Skill cannot be empty" })).nonempty({ message: "At least one skill is required" }),
+        skills: z.array(z.string().min(1, { message: "Skill cannot be empty" })).nonempty({ message: "At least one skill is required" }).optional(), // Optional resume URL
         experience: z.array(experienceSchema).optional(), // Optional experience array
         education: z.array(educationSchema).optional(), // Optional education array
         resume: z.string().url({ message: "Resume must be a valid URL" }).optional(), // Optional resume URL
-        preferences: preferencesSchema, // Required preferences
+        preferences:z.array(preferencesSchema).optional(), // Required preferences
 
     })
 
