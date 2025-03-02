@@ -15,10 +15,9 @@ import { z } from "zod";
 
  const updateFeedback = z.object({
     body: z.object({
-        user: z.string().min(1, { message: "User ID is required" }), // Reference to User ID
         rating: z.number()
           .min(1, { message: "Rating must be at least 1" })
-          .max(5, { message: "Rating cannot exceed 5" }), // 1 to 5 rating
+          .max(5, { message: "Rating cannot exceed 5" }).optional(), // 1 to 5 rating
         comment: z.string().optional(), // Optional comment
        
     })

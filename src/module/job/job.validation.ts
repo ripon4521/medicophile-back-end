@@ -23,16 +23,15 @@ const createJob = z.object({
 
 const updateJob = z.object({
     body:z.object({
-        title: z.string().min(1, { message: "Job title is required" }),
-        description: z.string().min(1, { message: "Job description is required" }),
-        recruiter: zObjectId, // Validates MongoDB ObjectId
+        title: z.string().min(1, { message: "Job title is required" }).optional(),
+        description: z.string().min(1, { message: "Job description is required" }).optional(),
         skills_required: z.array(z.string().min(1, { message: "Skill cannot be empty" }))
-          .nonempty({ message: "At least one skill is required" }),
-        location: z.string().min(1, { message: "Location is required" }),
-        salary_range: z.string().min(1, { message: "Salary range is required" }),
+          .nonempty({ message: "At least one skill is required" }).optional(),
+        location: z.string().min(1, { message: "Location is required" }).optional(),
+        salary_range: z.string().min(1, { message: "Salary range is required" }).optional(),
         job_type: z.enum(["full-time", "part-time", "remote"], {
           errorMap: () => ({ message: "Job type must be 'full-time', 'part-time', or 'remote'" }),
-        })
+        }).optional(),
     })
 
 
