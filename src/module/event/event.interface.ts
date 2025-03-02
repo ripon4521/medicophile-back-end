@@ -1,6 +1,5 @@
 // Event Interface
 export interface IEvent {
-    event_id: string;
     event_name: string;
     date: Date;
     time: string;
