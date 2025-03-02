@@ -1,20 +1,10 @@
-
 import express, { Request, Response } from 'express'
-import userRouter from './module/user/user.router'
-import authRouter from './module/auth/auth.router'
 import { globalErrorHandler } from './middlewares/globalErrorHandler'
-import adminRouter from './module/admin/admin.router'
 import notFound from './middlewares/notFound'
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import auth from './middlewares/auth'
-import { USER_ROLE } from './module/user/user.constants'
-import feedbackRouter from './module/feedback/feedback.router'
-import jobSeekerRouter from './module/jobseeker/jobseeker.router'
-import skillRouter from './module/skill/skill.router'
-import jobRouter from './module/job/job.router'
-import recruiterRouter from './module/recruiter/recruiter.router'
-import applicationRouter from './module/application/application.router'
+import router from './route/route'
+
 
 const app = express()
 //parsers
@@ -26,23 +16,14 @@ app.use(cors({ origin: ['http://localhost:5173', 'https://bikeshopadmin.vercel.a
 // middleware
 app.use(express.json())
 
-app.use('/api/auth', authRouter)
-app.use('/api/admin', adminRouter)
-app.use('/api/user', userRouter)
-app.use('/api/feedback', feedbackRouter)
-app.use('/api/jobSeeker', jobSeekerRouter)
-app.use('/api/skill', skillRouter)
-app.use('/api/job', jobRouter)
-app.use('/api/recruiter', recruiterRouter );
-app.use('/api/application', applicationRouter);
+app.use('/api/v1', router);
+const getAcontroller = (req :Request, res:Response) =>{
+  res.send('Welcome to the All-in-One University App – Revolutionizing Student')
+}
 
 
-app.get('/', (req: Request, res: Response) => {
-  res.send({
-    status: true,
-    message: 'Hello',
-  })
-})
+
+app.get('/', getAcontroller);
 
 
 app.use(globalErrorHandler)
