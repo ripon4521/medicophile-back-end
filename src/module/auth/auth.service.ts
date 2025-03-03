@@ -1,8 +1,8 @@
 import { CustomError } from '../../helpers/handleCustomError'
 import { IUser } from '../user/user.interface'
-import User from '../user/user.model'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { User } from '../user/user.model'
 
 const register = async (payload: IUser) => {
   const result = await User.create(payload)
@@ -12,8 +12,7 @@ const register = async (payload: IUser) => {
   return result
 }
 
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+
 
 const login = async (payload: { mobile: string; pin: string }) => {
   // Validate input

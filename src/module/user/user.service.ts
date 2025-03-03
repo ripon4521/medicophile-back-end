@@ -1,48 +1,68 @@
-import { IUser } from './user.interface'
-import User from './user.model'
+import mongoose from 'mongoose';
+import { IStudentUser } from '../student/student.interface'
+import { UserModel } from './user.model';
+import { IUser } from './user.interface';
+import StudentUserModel from '../student/student.model';
 
-const createUser = async (payload: IUser): Promise<IUser> => {
-  //   payload.role = 'admin';
-  const result = await User.create(payload)
-  return result
-}
 
-const getUser = async () => {
-  const result = await User.find({ role: 'user' })
-  return result
-}
-const getPofile = async (email: string) => {
-  if (!email) throw new Error('Email is required to fetch profile.');
+const createStudentsIntoDB = async (payload: IStudentUser) => {
+  const userData: Partial<IUser> = {};
 
-  const result = await User.findOne({ email }); // Use findOne for a single user
-  if (!result) throw new Error('User not found.');
+  userData.name = payload.name; 
+  userData.status = payload.status; 
+  userData.role = 'student'; 
+  userData.address = payload.address; 
+  userData.contact = payload.contact; 
+  userData.password = payload.password 
+  userData.gmail = payload.gmail;
 
-  return result;
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+ 
+
+    const newUser = await UserModel.create([userData], { session });
+
+
+    payload.user = newUser[0]._id;
+    const student = await StudentUserModel.create([payload], { session });
+
+
+    await session.commitTransaction();
+
+
+    session.endSession();
+
+ 
+    return { student: student[0] };
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw new Error("Transaction failed: " + error);
+  }
 };
 
-const getSingleUser = async (id: string) => {
-  //   const result = await User.findOne({name:"habi jabi"})
-  const result = await User.findById(id)
-  return result
+
+const getUSers = async () => {
+  const users = await UserModel.find();
+  return users;
 }
 
-const updateUser = async (id: string, data: IUser) => {
-  const result = await User.findByIdAndUpdate(id, data, {
-    new: true,
-  })
-  return result
+const deleteUser = async() => {
+  const result = await UserModel.deleteMany();
+  return result;
 }
 
-const deleteUser = async (id: string) => {
-  const result = await User.findByIdAndDelete(id)
-  return result
-}
+
+
+
+
+
 
 export const userService = {
-  createUser,
-  getUser,
-  getSingleUser,
-  updateUser,
+createStudentsIntoDB,
+  getUSers,
   deleteUser,
-  getPofile
+
 }

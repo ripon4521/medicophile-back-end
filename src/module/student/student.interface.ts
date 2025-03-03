@@ -1,11 +1,17 @@
+import { Types } from "mongoose";
 import { IUser } from "../user/user.interface";
-
-// Student-specific Interface
 export interface IStudentUser extends IUser {
     role: 'student';
     student_id: string;
+    name: string;
+    user: Types.ObjectId;
+    gmail:string;
+    contact:string;
+    address: string;
+    passwoard:string;
     program: string;
     year_of_study: number;
+    profile_picture?:string;
     semester: string;
     preferences: {
       language: string;
@@ -25,4 +31,5 @@ export interface IStudentUser extends IUser {
       relationship: string;
       contact: string;
     };
+    status: "unblocked" | "blocked";
   }

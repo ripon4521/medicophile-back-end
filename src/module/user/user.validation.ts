@@ -1,39 +1,16 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-const userValidationSchema = z.object({
-  body: z.object({
-    name: z
-      .string({
-        required_error: "Name must be provided and must be a string",
-      })
-      .min(3, { message: "Name must be at least 3 characters long" })
-      .max(50, { message: "Name cannot exceed 50 characters" }),
-
-    email: z
-      .string({
-        required_error: "Email must be provided and must be a string",
-      })
-      .email({ message: "Invalid email address" }),
-
-    password: z
-      .string({
-        required_error: "Password is required for your safety",
-      })
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(20, { message: "Password cannot exceed 20 characters" }),
-
-    role: z
-      .enum(["admin", "user", "recruiter"], {
-        required_error: "Role must be provided and must be 'admin' or 'user'",
-      })
-      .default("user"),
-
-    isBlocked: z.boolean().default(false),
-
-
-  }),
+export const UserSchemaValidation = z.object({
+  body:z.object({
+  name: z.string().min(1, "Name is required"),
+  gmail: z.string().email("Invalid email format"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  contact: z.string().min(10, "Contact number must be at least 10 digits"),
+  address: z.string().min(1, "Address is required"),
+  role: z.enum(["admin", "student", "faculty", "guest", "canteen_staff"]),
+  profile_picture: z.string().url("Invalid URL").optional(),
+  registration_date: z.coerce.date(),
+  last_login: z.coerce.date().optional(),
+  status: z.enum(["unblocked", "blocked"]),
+})
 });
-
-export const UserValidation = {
-  userValidationSchema,
-};
