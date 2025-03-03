@@ -10,7 +10,7 @@ mealRouter.get('/', mealController.getAllMeals);
 
 mealRouter.get('/:id', mealController.getSingleMeal);
 
-mealRouter.patch('/:id', mealController.updateMeal);
+mealRouter.patch('/:id', validateRequest(mealValidations.updateMealSchema), mealController.updateMeal);
 
 mealRouter.delete('/:id', mealController.deleteMeal);
 

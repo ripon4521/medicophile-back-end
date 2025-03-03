@@ -8,7 +8,7 @@ const  busRouter = express.Router();
 busRouter.post('/create-bus', validateRequest(busValidations.createBusValidationSchema), busController.createBus);
 busRouter.get('/', busController.getBus);
 busRouter.get('/:id', busController.getBusById);
-busRouter.patch('/:id', busController.updateBus);
+busRouter.patch('/:id', validateRequest(busValidations.updateBusValidationSchema), busController.updateBus);
 busRouter.delete('/:id', busController.deleteBus);
 
 export default busRouter;

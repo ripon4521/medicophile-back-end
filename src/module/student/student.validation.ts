@@ -53,7 +53,7 @@ const updateStudentValidationSchema = z.object({
       sms_notifications: z.boolean().optional(),
       push_notifications: z.boolean().optional(),
     }).optional(),
-  }),
+  }).optional(),
   academic_info: z.object({
     current_gpa: z.number().min(0, "GPA cannot be negative").max(4, "GPA cannot exceed 4.0").optional(),
     major: z.string().min(1, "Major is required").optional(),
