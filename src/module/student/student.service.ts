@@ -1,4 +1,4 @@
-import { startSession } from "mongoose";
+import mongoose, { startSession } from "mongoose";
 import { UserModel } from "../user/user.model";
 import { IStudentUser } from "./student.interface";
 import StudentUserModel from "./student.model";
@@ -101,11 +101,44 @@ const updateStudentFromDb = async (_id: string, payload: Partial<IStudentUser>) 
   };
   
   
+  const deleteStudentById = async (_id: string) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    
+    try {
+        // Student ke find kore check kora
+        const student = await StudentUserModel.findOne({ _id }).session(session);
+        if (!student) {
+            throw new Error("Student not found");
+        }
 
-const deleteStudentById = async (_id: string) => {
-    const result = await StudentUserModel.findOneAndDelete({_id});
-    return result;
-}
+        // Student er associated user er _id niye delete korbo
+        const userId = student.user?._id;
+        
+        // StudentUserModel theke delete
+        await StudentUserModel.findOneAndDelete({ _id }).session(session);
+
+        // UserModel theke user delete
+        if (userId) {
+            await UserModel.findOneAndDelete({ _id: userId }).session(session);
+        }
+
+        // Transaction commit
+        await session.commitTransaction();
+        session.endSession();
+
+        return { message: "Student and associated user deleted successfully"   };
+    } catch (error) {
+        // Rollback transaction if error occurs
+        await session.abortTransaction();
+        session.endSession();
+        throw error;
+    }
+};
+
+
+
+
 
 export const studentsService = {
     getAllStudents,
