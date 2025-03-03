@@ -5,6 +5,7 @@ import userRouter from "../module/user/user.router";
 import busRouter from "../module/bus/bus.router";
 import eventRouter from '../module/event/event.router';
 import studentRoute from "../module/student/student.router";
+import mealRouter from "../module/meal/meal.router";
 
 
 const router = Router();
@@ -26,6 +27,9 @@ const moduleRoutes = [
     {
         path:'/event',
         route:eventRouter
+    },{
+        path:'/meal',
+        route:mealRouter
     }
   
 
