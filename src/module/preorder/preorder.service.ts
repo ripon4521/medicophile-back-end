@@ -7,12 +7,12 @@ const createPreorderIntoDb = async(payload:IPreOrder) => {
 }
 
 const getAllPreorders = async() => {
-    const result = await PreOrderModel.find().populate('user').populate('meal');
+    const result = await PreOrderModel.find().populate('user').populate('selected_meals_id');
     return result;
 }
 
 const getPreorderById = async(_id: string) => {
-    const result = await PreOrderModel.findOne({_id}).populate('user').populate('meal');
+    const result = await PreOrderModel.findOne({_id}).populate('user').populate('selected_meals_id');
     return result;
 }
 

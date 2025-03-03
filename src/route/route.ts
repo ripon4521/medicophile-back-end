@@ -6,6 +6,7 @@ import busRouter from "../module/bus/bus.router";
 import eventRouter from '../module/event/event.router';
 import studentRoute from "../module/student/student.router";
 import mealRouter from "../module/meal/meal.router";
+import preOrderRouter from "../module/preorder/preorder.router";
 
 
 const router = Router();
@@ -30,6 +31,9 @@ const moduleRoutes = [
     },{
         path:'/meal',
         route:mealRouter
+    },{
+        path:'/preOrder',
+        route:preOrderRouter
     }
   
 

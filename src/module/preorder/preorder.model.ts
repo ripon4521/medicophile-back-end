@@ -2,8 +2,8 @@ import mongoose, { Schema } from "mongoose";
 import { IPreOrder } from "./preorder.interface";
 
 const PreOrderSchema = new Schema<IPreOrder>({
-    user: { type: String, required: true, ref: "user" },
-    selected_meals_id: { type: String, required: true, ref: "meal"},
+    user: { type: String, required: true, ref: "User" },
+    selected_meals_id: { type: String, required: true, ref: "Meal"},
     total_price: { type: Number, required: true, min: 0 },
     pickup_time: { type: String, required: true },
     payment_method: { type: String, required: true },
