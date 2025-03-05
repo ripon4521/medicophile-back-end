@@ -14,31 +14,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const handleCustomError_1 = require("../../helpers/handleCustomError");
-const user_model_1 = __importDefault(require("../user/user.model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const user_model_1 = require("../user/user.model");
 const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.default.create(payload);
+    const result = yield user_model_1.UserModel.create(payload);
     if (!result) {
         throw new handleCustomError_1.CustomError('Failed to create user', 500);
     }
     return result;
 });
 const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.default.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email }).select('+password');
+    // Validate input
+    if (!payload.gmail || !payload.password) {
+        throw { message: 'Mobile and PIN are required', statusCode: 400 };
+    }
+    // Find user by mobile number and select the pin field
+    const user = yield user_model_1.UserModel.findOne({ gmail: payload === null || payload === void 0 ? void 0 : payload.gmail }).select('+password');
     if (!user) {
-        throw new handleCustomError_1.CustomError('This user is not found!', 404, { field: 'email' });
+        throw { message: 'User not found!', statusCode: 404, field: 'mobile' };
     }
-    if (user.isBlocked) {
-        throw new handleCustomError_1.CustomError('This user is blocked!', 403);
+    if (user.status !== 'unblocked') {
+        throw { message: 'This user is blocked!', statusCode: 403 };
     }
-    const isPasswordMatched = yield bcrypt_1.default.compare(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password);
-    if (!isPasswordMatched) {
-        throw new handleCustomError_1.CustomError('Invalid credentials', 401, { field: 'password' });
+    // Check if the pin matches
+    const isPinMatched = yield bcrypt_1.default.compare(payload.password, user.password);
+    if (!isPinMatched) {
+        throw { message: 'Invalid PIN', statusCode: 401, field: 'pin' };
     }
-    const jwtPayload = { email: user.email, role: user.role, id: user._id.toString() };
-    // console.log("auth id setup ... ",jwtPayload)
-    const token = jsonwebtoken_1.default.sign(jwtPayload, "primarytestkey", { expiresIn: '10d' });
+    console.log('isPinMatched', isPinMatched);
+    // JWT Payload
+    const jwtPayload = { gmail: user.gmail, role: user.role, _id: user._id.toString() };
+    // // Generate JWT token
+    const token = jsonwebtoken_1.default.sign(jwtPayload, process.env.JWT_SECRET || "primarytestkey", { expiresIn: '30d' });
     return { token, user };
 });
 exports.AuthService = {

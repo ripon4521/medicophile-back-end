@@ -13,44 +13,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userService = void 0;
-const user_model_1 = __importDefault(require("./user.model"));
-const createUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    //   payload.role = 'admin';
-    const result = yield user_model_1.default.create(payload);
-    return result;
+const mongoose_1 = __importDefault(require("mongoose"));
+const user_model_1 = require("./user.model");
+const student_model_1 = __importDefault(require("../student/student.model"));
+const createStudentsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = {};
+    userData.name = payload.name;
+    userData.status = payload.status;
+    userData.role = 'student';
+    userData.address = payload.address;
+    userData.contact = payload.contact;
+    userData.password = payload.password;
+    userData.gmail = payload.gmail;
+    const session = yield mongoose_1.default.startSession();
+    session.startTransaction();
+    try {
+        const newUser = yield user_model_1.UserModel.create([userData], { session });
+        payload.user = newUser[0]._id;
+        const student = yield student_model_1.default.create([payload], { session });
+        yield session.commitTransaction();
+        session.endSession();
+        return { student: student[0] };
+    }
+    catch (error) {
+        yield session.abortTransaction();
+        session.endSession();
+        throw new Error("Transaction failed: " + error);
+    }
 });
-const getUser = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.default.find({ role: 'user' });
-    return result;
+const getUSers = () => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield user_model_1.UserModel.find();
+    return users;
 });
-const getPofile = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!email)
-        throw new Error('Email is required to fetch profile.');
-    const result = yield user_model_1.default.findOne({ email }); // Use findOne for a single user
-    if (!result)
-        throw new Error('User not found.');
-    return result;
-});
-const getSingleUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    //   const result = await User.findOne({name:"habi jabi"})
-    const result = yield user_model_1.default.findById(id);
-    return result;
-});
-const updateUser = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.default.findByIdAndUpdate(id, data, {
-        new: true,
-    });
-    return result;
-});
-const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.default.findByIdAndDelete(id);
+const deleteUser = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.deleteMany();
     return result;
 });
 exports.userService = {
-    createUser,
-    getUser,
-    getSingleUser,
-    updateUser,
+    createStudentsIntoDB,
+    getUSers,
     deleteUser,
-    getPofile
 };

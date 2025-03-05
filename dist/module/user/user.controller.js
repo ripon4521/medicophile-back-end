@@ -17,66 +17,33 @@ const http_status_codes_1 = require("http-status-codes");
 const user_service_1 = require("./user.service");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createStudeent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
-    const result = yield user_service_1.userService.createUser(payload);
+    const result = yield user_service_1.userService.createStudentsIntoDB(payload);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.CREATED,
-        message: 'User created successfully',
+        message: 'Student created successfully',
         data: result,
     });
 }));
-const getUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.userService.getUser();
+const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.userService.getUSers();
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: 'Users getting successfully',
         data: result,
     });
 }));
-const getProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = req.user;
-    console.log(data);
-    const result = yield user_service_1.userService.getPofile(data === null || data === void 0 ? void 0 : data.email);
+const deleteUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.userService.deleteUser();
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
-        message: 'Profile getting successfully',
+        message: 'User Deleted successfully',
         data: result,
-    });
-}));
-const getSingleUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = req.params.userId;
-    const result = yield user_service_1.userService.getSingleUser(userId);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_codes_1.StatusCodes.OK,
-        message: 'User getting successfully',
-        data: result,
-    });
-}));
-const updateUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = req.params.userId;
-    const body = req.body;
-    const result = yield user_service_1.userService.updateUser(userId, body);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_codes_1.StatusCodes.OK,
-        message: 'User updated successfully',
-        data: result,
-    });
-}));
-const deleteUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = req.params.userId;
-    yield user_service_1.userService.deleteUser(userId);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_codes_1.StatusCodes.OK,
-        message: 'user deleted successfully',
-        data: {},
     });
 }));
 exports.userController = {
-    createUser,
-    getUser,
-    getSingleUser,
-    updateUser,
-    deleteUser,
-    getProfile
+    createStudeent,
+    getAllUsers,
+    deleteUsers,
 };

@@ -96,7 +96,7 @@ const updateStudentFromDb = async (_id: string, payload: Partial<IStudentUser>) 
       // Abort the transaction if anything fails
       await session.abortTransaction();
       session.endSession();
-      throw new Error(`Transaction failed: ${error.message}`);
+      throw new Error(`Transaction failed:`);
     }
   };
   

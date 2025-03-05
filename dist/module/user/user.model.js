@@ -12,57 +12,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserModel = void 0;
 const mongoose_1 = require("mongoose");
-const config_1 = __importDefault(require("../../config"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const userSchema = new mongoose_1.Schema({
-    name: {
-        type: String,
-        required: [true, "Name is required"],
-        minlength: 3,
-        maxlength: 50,
-    },
-    email: {
-        type: String,
-        required: [true, "Email is required"],
-        unique: true,
-        validate: {
-            validator: function (value) {
-                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value);
-            },
-            message: "{VALUE} is not a valid email",
-        },
-        immutable: true,
-    },
-    password: {
-        type: String,
-        required: [true, "Password is required"],
-        minlength: 8,
-        maxlength: 20,
-        select: false,
-    },
-    role: {
-        type: String,
-        enum: ["admin", "user", "job_seeker", "recruiter"],
-        default: "user",
-    },
-    isBlocked: {
-        type: Boolean,
-        default: false,
-    },
-}, {
-    timestamps: true,
+const config_1 = __importDefault(require("../../config"));
+const UserSchema = new mongoose_1.Schema({
+    name: { type: String, required: true },
+    gmail: { type: String, required: true, unique: true, },
+    password: { type: String, required: true },
+    contact: { type: String, required: true },
+    address: { type: String, required: true },
+    role: { type: String, enum: ["admin", "student", "faculty", "guest", "canteen_staff"], required: true },
+    profile_picture: { type: String },
+    registration_date: { type: Date, default: Date.now },
+    last_login: { type: Date },
+    status: { type: String, enum: ["unblocked", "blocked"], required: true }
 });
-userSchema.pre('save', function (next) {
+// Pre-save hook to update last_login when user logs in
+UserSchema.pre("save", function (next) {
+    if (this.isModified("password") || this.isNew) {
+        this.last_login = new Date();
+    }
+    next();
+});
+UserSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const user = this;
         user.password = yield bcrypt_1.default.hash(user.password, Number(config_1.default.bcrypt_salt_rounds));
         next();
     });
 });
-userSchema.post('save', function (doc, next) {
-    doc.password = '';
-    next();
+UserSchema.post('save', function (doc, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        doc.password = '';
+        next();
+    });
 });
-const User = (0, mongoose_1.model)("User", userSchema);
-exports.default = User;
+exports.UserModel = (0, mongoose_1.model)('User', UserSchema);

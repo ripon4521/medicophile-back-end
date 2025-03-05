@@ -14,7 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
-const user_model_1 = __importDefault(require("../module/user/user.model"));
+const user_model_1 = require("../module/user/user.model");
+const user_constants_1 = require("../module/user/user.constants");
 const auth = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const authHeader = req.headers.authorization;
@@ -24,11 +25,11 @@ const auth = (...requiredRoles) => {
         const token = authHeader.split(' ')[1]; // Extract token after 'Bearer'
         const decoded = jsonwebtoken_1.default.verify(token, "primarytestkey");
         const { role, email } = decoded;
-        const user = yield user_model_1.default.findOne({ email });
+        const user = yield user_model_1.UserModel.findOne({ email });
         if (!user) {
             throw new Error('This user is not found!');
         }
-        if (user.isBlocked) {
+        if (user.role === user_constants_1.USER_STATUS.blocked) {
             throw new Error('This user is blocked!');
         }
         if (requiredRoles.length && !requiredRoles.includes(role)) {

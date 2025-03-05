@@ -16,20 +16,11 @@ exports.adminController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const admin_service_1 = require("./admin.service");
 const userBlockByAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.user || req.user.role !== 'admin') {
-        throw new Error('User is not authenticated or authorized');
-    }
-    const { userId } = req.params;
-    const result = yield admin_service_1.adminService.blockUser(userId);
-    if (!result) {
-        throw new Error('User not found');
-    }
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: 'User blocked successfully',
-        data: result,
+        data: [],
     });
 }));
 const deleteBlogByAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

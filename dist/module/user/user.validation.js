@@ -1,34 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserValidation = void 0;
+exports.UserSchemaValidation = void 0;
 const zod_1 = require("zod");
-const userValidationSchema = zod_1.z.object({
+exports.UserSchemaValidation = zod_1.z.object({
     body: zod_1.z.object({
-        name: zod_1.z
-            .string({
-            required_error: "Name must be provided and must be a string",
-        })
-            .min(3, { message: "Name must be at least 3 characters long" })
-            .max(50, { message: "Name cannot exceed 50 characters" }),
-        email: zod_1.z
-            .string({
-            required_error: "Email must be provided and must be a string",
-        })
-            .email({ message: "Invalid email address" }),
-        password: zod_1.z
-            .string({
-            required_error: "Password is required for your safety",
-        })
-            .min(8, { message: "Password must be at least 8 characters long" })
-            .max(20, { message: "Password cannot exceed 20 characters" }),
-        role: zod_1.z
-            .enum(["admin", "user", "recruiter"], {
-            required_error: "Role must be provided and must be 'admin' or 'user'",
-        })
-            .default("user"),
-        isBlocked: zod_1.z.boolean().default(false),
-    }),
+        name: zod_1.z.string().min(1, "Name is required"),
+        gmail: zod_1.z.string().email("Invalid email format"),
+        password: zod_1.z.string().min(6, "Password must be at least 6 characters"),
+        contact: zod_1.z.string().min(10, "Contact number must be at least 10 digits"),
+        address: zod_1.z.string().min(1, "Address is required"),
+        role: zod_1.z.enum(["admin", "student", "faculty", "guest", "canteen_staff"]),
+        profile_picture: zod_1.z.string().url("Invalid URL").optional(),
+        registration_date: zod_1.z.coerce.date(),
+        last_login: zod_1.z.coerce.date().optional(),
+        status: zod_1.z.enum(["unblocked", "blocked"]),
+    })
 });
-exports.UserValidation = {
-    userValidationSchema,
-};

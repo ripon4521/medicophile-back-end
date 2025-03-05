@@ -1,8 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.USER_ROLE = void 0;
+exports.USER_STATUS = exports.USER_ROLE = void 0;
 exports.USER_ROLE = {
-    user: 'user',
+    student: 'student',
     admin: 'admin',
-    recruiter: 'recruiter'
+    faculty: 'faculty',
+    guest: 'guest',
+    canteen_staff: 'canteen_staff',
+};
+exports.USER_STATUS = {
+    unblocked: 'unblocked',
+    blocked: 'blocked',
 };

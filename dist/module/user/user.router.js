@@ -4,18 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const user_controller_1 = require("./user.controller");
-// import { USER_ROLE } from './user.constants'
 const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
-const user_validation_1 = require("./user.validation");
-const auth_1 = __importDefault(require("../../middlewares/auth"));
-const user_constants_1 = require("./user.constants");
+const student_validation_1 = require("../student/student.validation");
+const user_controller_1 = require("./user.controller");
 const userRouter = (0, express_1.Router)();
-userRouter.post('/user-create', (0, validateRequest_1.default)(user_validation_1.UserValidation.userValidationSchema), user_controller_1.userController.createUser);
-userRouter.get('/profile', (0, auth_1.default)(), user_controller_1.userController.getProfile);
-userRouter.get('/:userId', user_controller_1.userController.getSingleUser);
-userRouter.put('/:userId', user_controller_1.userController.updateUser);
-userRouter.delete('/:userId', user_controller_1.userController.deleteUser);
-userRouter.get('/', (0, auth_1.default)(user_constants_1.USER_ROLE.admin, user_constants_1.USER_ROLE.user), user_controller_1.userController.getUser);
-// userRouter.get('/', userController.getUser)
+userRouter.post('/create-student', (0, validateRequest_1.default)(student_validation_1.studentsValidation.createStudentValidationSchema), user_controller_1.userController.createStudeent);
+userRouter.get('/', user_controller_1.userController.getAllUsers);
+userRouter.delete('/', user_controller_1.userController.deleteUsers);
 exports.default = userRouter;
