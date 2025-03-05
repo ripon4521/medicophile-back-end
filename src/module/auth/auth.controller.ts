@@ -6,7 +6,6 @@ import { StatusCodes } from "http-status-codes";
 
 const register = catchAsync(async(req: Request, res: Response)=>{
     const result = await AuthService.register(req.body);
-    
     sendResponse(res,{
         statusCode: StatusCodes.CREATED,
         status: true,

@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import catchAsync from '../utils/catchAsync';
-import User from '../module/user/user.model';
 import { TUserRole } from '../module/user/user.interface';
+import { UserModel } from '../module/user/user.model';
+import { USER_STATUS } from '../module/user/user.constants';
 
 // Extend Request type to include user
 interface AuthenticatedRequest extends Request {
@@ -22,20 +23,18 @@ const auth = (...requiredRoles: TUserRole[]) => {
     const decoded = jwt.verify(token, "primarytestkey") as JwtPayload;
     const { role, email } = decoded;
 
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
 
     if (!user) {
       throw new Error('This user is not found!');
     }
-
-    if (user.isBlocked) {
+    if (user.role === USER_STATUS.blocked as string) { 
       throw new Error('This user is blocked!');
     }
 
     if (requiredRoles.length && !requiredRoles.includes(role)) {
       throw new Error('You are not authorized!');
     }
-
     req.user = decoded; // Attach decoded token to req.user
     next();
   });
