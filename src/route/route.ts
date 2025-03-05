@@ -3,6 +3,7 @@ import authRouter from "../module/auth/auth.router";
 import adminRouter from "../module/admin/admin.router";
 import userRouter from "../module/user/user.router";
 import busRouter from "../module/bus/bus.router";
+import studentRoute from "../module/student/student.router";
 
 
 const router = Router();
@@ -26,6 +27,9 @@ const moduleRoutes = [
     {
         path:'/bus',
         route:busRouter
+    },{
+        path:'/student',
+        route: studentRoute
     }
     
 ];
