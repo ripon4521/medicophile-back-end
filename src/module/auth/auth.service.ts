@@ -33,7 +33,7 @@ const login = async (payload:{ gmail: string, password: string }) => {
   }
   console.log('isPinMatched',isPinMatched)
   // JWT Payload
-  const jwtPayload = { gmail:user.gmail,role: user.role, id: user._id.toString() };
+  const jwtPayload = { gmail:user.gmail, role: user.role, _id: user._id.toString() };
   // // Generate JWT token
   const token = jwt.sign(jwtPayload, process.env.JWT_SECRET || "primarytestkey", { expiresIn: '30d' });
   return { token, user };
