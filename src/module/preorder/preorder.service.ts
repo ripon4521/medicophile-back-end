@@ -7,12 +7,12 @@ const createPreorderIntoDb = async(payload:IPreOrder) => {
 }
 
 const getAllPreorders = async() => {
-    const result = await PreOrderModel.find().populate('user').populate('selected_meals_id');
+    const result = await PreOrderModel.find().populate('user');
     return result;
 }
 
 const getPreorderById = async(_id: string) => {
-    const result = await PreOrderModel.findOne({_id}).populate('user').populate('selected_meals_id');
+    const result = await PreOrderModel.findOne({_id}).populate('user');
     return result;
 }
 
@@ -22,7 +22,7 @@ const updatePreorderById = async(_id: string, payload: Partial<IPreOrder>) => {
 }
 
 const deletePreorderById = async(_id: string) => {
-    const result = await PreOrderModel.findOneAndUpdate({_id});
+    const result = await PreOrderModel.findOneAndDelete({_id});
     return result;
 }
 

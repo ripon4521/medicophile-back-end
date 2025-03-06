@@ -1,9 +1,6 @@
-// PreOrder Interface
 export interface IPreOrder {
-    user: string; 
-    selected_meals_id: string; 
-    total_price: number;
-    pickup_time: string;
-    payment_method: string;
-    status: "Pending" | "Completed" | "Cancelled";
-  }
+  user: string;
+  selected_meals: [];
+  total_price: number;
+  status: "Pending" | "Completed" | "Cancelled";
+}

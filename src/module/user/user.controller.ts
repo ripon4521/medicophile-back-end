@@ -74,11 +74,29 @@ const deleteUsers = catchAsync(async (req, res) => {
 
 
 
+
+  const getProfile = catchAsync(async (req, res) => {
+    const data = req.user;
+    // console.log(data);
+
+    const result = await userService.getPofile(data?.gmail); // Assuming userServices.getProfile is defined
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      message: 'Profile get successfully',
+      data: result,
+    })
+});
+
+
+
+
 export const userController = {
   createStudeent,
   createFaculty,
   getAllUsers,
   deleteUsers,
+  getProfile,
+ 
   createGuest,
   createCanteenStaff
 

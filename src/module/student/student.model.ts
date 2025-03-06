@@ -1,5 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import { IStudentUser } from "./student.interface";
+import bcrypt from 'bcrypt';
+import config from "../../config";
+
 
 const StudentUserSchema = new Schema<IStudentUser>({
   role: { type: String, enum: ["student"], required: true },
@@ -15,27 +18,27 @@ const StudentUserSchema = new Schema<IStudentUser>({
   contact: { type: String, required: true },
   address: { type: String, required: true },
   password: { type: String, required: true },
-  program: { type: String, required: true },
-  year_of_study: { type: Number, required: true, min: 1 },
+  program: { type: String,  },
+  year_of_study: { type: Number,  },
   profile_picture: { type: String },
-  semester: { type: String, required: true },
+  semester: { type: String,  },
   preferences: {
-    language: { type: String, required: true },
+    language: { type: String,  },
     notification_preferences: {
-      email_notifications: { type: Boolean, required: true },
-      sms_notifications: { type: Boolean, required: true },
-      push_notifications: { type: Boolean, required: true },
+      email_notifications: { type: Boolean,  },
+      sms_notifications: { type: Boolean, },
+      push_notifications: { type: Boolean, },
     },
   },
   academic_info: {
-    current_gpa: { type: Number, required: true, min: 0, max: 4 },
-    major: { type: String, required: true },
+    current_gpa: { type: Number,  },
+    major: { type: String,  },
     minor: { type: String },
   },
   emergency_contact: {
-    name: { type: String, required: true },
-    relationship: { type: String, required: true },
-    contact: { type: String, required: true },
+    name: { type: String,  },
+    relationship: { type: String,  },
+    contact: { type: String,  },
   },
   status: {
     type: String,
@@ -56,6 +59,16 @@ StudentUserSchema.pre("save", async function (next) {
   
     next();
   });
+  StudentUserSchema.pre('save', async function (next) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this;
+    user.password = await bcrypt.hash(
+      user.password,
+      Number(config.bcrypt_salt_rounds),
+    );
+    next();
+  });
+  
   
 
 
