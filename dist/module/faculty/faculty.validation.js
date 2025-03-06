@@ -5,7 +5,6 @@ const zod_1 = require("zod");
 exports.createFacultyValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         role: zod_1.z.literal("faculty").optional(),
-        user: zod_1.z.string().min(1, "User ID is required"),
         name: zod_1.z.string().min(1, "Name is required"),
         gmail: zod_1.z.string().email("Invalid email format"),
         password: zod_1.z.string().min(6, "Password must be at least 6 characters"),
@@ -22,7 +21,6 @@ exports.createFacultyValidationSchema = zod_1.z.object({
 exports.updateFacultyValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         role: zod_1.z.literal("faculty").optional(),
-        user: zod_1.z.string().min(1, "User ID is required").optional(),
         name: zod_1.z.string().min(1, "Name is required").optional(),
         gmail: zod_1.z.string().email("Invalid email format").optional(),
         password: zod_1.z.string().min(6, "Password must be at least 6 characters").optional(),

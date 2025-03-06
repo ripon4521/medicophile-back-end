@@ -5,7 +5,6 @@ const zod_1 = require("zod");
 exports.createcanteenstaffValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         role: zod_1.z.literal("canteen_staff").optional(),
-        user: zod_1.z.string().min(1, "User ID is required"),
         name: zod_1.z.string().min(1, "Name is required"),
         gmail: zod_1.z.string().email("Invalid email format"),
         password: zod_1.z.string().min(6, "Password must be at least 6 characters"),
@@ -14,15 +13,13 @@ exports.createcanteenstaffValidationSchema = zod_1.z.object({
         profile_picture: zod_1.z.string().optional(),
         status: zod_1.z.enum(["unblocked", "blocked"]).optional(),
         staff_id: zod_1.z.string().min(1, "Faculty ID is required"),
-        department: zod_1.z.string().min(1, "Department is required"),
         canteen_section: zod_1.z.string().min(1, "Office location is required"),
-        shift_timing: zod_1.z.array(zod_1.z.string()).optional(),
+        shift_timing: zod_1.z.string(zod_1.z.string()).optional(),
     }),
 });
 exports.updatecanteenstaffValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         role: zod_1.z.literal("canteen_staff").optional(),
-        user: zod_1.z.string().min(1, "User ID is required").optional(),
         name: zod_1.z.string().min(1, "Name is required").optional(),
         gmail: zod_1.z.string().email("Invalid email format").optional(),
         password: zod_1.z.string().min(6, "Password must be at least 6 characters").optional(),

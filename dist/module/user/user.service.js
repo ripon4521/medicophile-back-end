@@ -63,9 +63,10 @@ const createFacultysIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
         return { faculty: faculty[0] };
     }
     catch (error) {
+        console.log('error', error);
         yield session.abortTransaction();
         session.endSession();
-        throw new Error("Transaction failed: " + error);
+        new Error("Transaction failed: " + error);
     }
 });
 const createGuestsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {

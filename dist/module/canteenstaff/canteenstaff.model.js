@@ -84,7 +84,7 @@ const CanteenstaffUserSchema = new mongoose_1.Schema({
         default: "unblocked",
     },
     staff_id: {
-        staff_id: String,
+        type: String,
         required: true,
         unique: true,
     },
@@ -94,7 +94,6 @@ const CanteenstaffUserSchema = new mongoose_1.Schema({
     },
     shift_timing: {
         type: String,
-        required: true,
     },
 });
 CanteenstaffUserSchema.pre("save", function (next) {

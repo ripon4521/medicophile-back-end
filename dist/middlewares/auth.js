@@ -25,8 +25,8 @@ const authUser = (...requiredRoles) => {
         }
         const token = authHeader.split(' ')[1];
         const decoded = jsonwebtoken_1.default.verify(token, "primarytestkey");
-        const { role, gmail } = decoded;
-        const user = yield user_model_1.UserModel.findOne({ gmail });
+        const { role, email } = decoded;
+        const user = yield user_model_1.UserModel.findOne({ email });
         if (!user) {
             throw new Error('This user is not found!');
         }
