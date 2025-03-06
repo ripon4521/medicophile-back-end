@@ -13,12 +13,12 @@ const app = (0, express_1.default)();
 //parsers
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
-app.use((0, cors_1.default)({ origin: ['http://localhost:5173', 'https://bikeshopadmin.vercel.app', 'https://bikeshopstore.vercel.app'] }));
+app.use((0, cors_1.default)({ origin: ['http://localhost:5173'] }));
 // middleware
 app.use(express_1.default.json());
 app.use('/api/v1', route_1.default);
 const getAcontroller = (req, res) => {
-    res.send('Welcome to the All-in-One University App – Revolutionizing Student');
+    res.send('Welcome');
 };
 app.get('/', getAcontroller);
 app.use(globalErrorHandler_1.globalErrorHandler);

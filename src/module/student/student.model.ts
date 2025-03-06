@@ -1,7 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IStudentUser } from "./student.interface";
-import bcrypt from 'bcrypt';
-
 
 const StudentUserSchema = new Schema<IStudentUser>({
   role: { type: String, enum: ["student"], required: true },

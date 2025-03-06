@@ -8,6 +8,9 @@ const auth_router_1 = __importDefault(require("../module/auth/auth.router"));
 const admin_router_1 = __importDefault(require("../module/admin/admin.router"));
 const user_router_1 = __importDefault(require("../module/user/user.router"));
 const bus_router_1 = __importDefault(require("../module/bus/bus.router"));
+const canteenstaff_router_1 = __importDefault(require("../module/canteenstaff/canteenstaff.router"));
+const student_router_1 = __importDefault(require("../module/student/student.router"));
+const faculty_router_1 = __importDefault(require("../module/faculty/faculty.router"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -25,6 +28,18 @@ const moduleRoutes = [
     {
         path: '/bus',
         route: bus_router_1.default
+    },
+    {
+        path: '/canteenstaff',
+        route: canteenstaff_router_1.default
+    },
+    {
+        path: '/student',
+        route: student_router_1.default
+    },
+    {
+        path: '/faculty',
+        route: faculty_router_1.default
     }
 ];
 moduleRoutes.forEach((route) => {

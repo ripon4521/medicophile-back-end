@@ -1,7 +1,6 @@
 import { Router } from 'express'
 // import validateRequest from '../../middlewares/validateRequest'
 
-import auth from '../../middlewares/auth'
 import { adminController } from './admin.controller'
 
 const adminRouter = Router()
