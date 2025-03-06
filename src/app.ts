@@ -10,7 +10,7 @@ const app = express()
 //parsers
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: ['http://localhost:5173', 'https://bikeshopadmin.vercel.app', 'https://bikeshopstore.vercel.app'] }));
+app.use(cors({ origin: ['http://localhost:5173'] }));
 
 
 // middleware
@@ -20,8 +20,6 @@ app.use('/api/v1', router);
 const getAcontroller = (req :Request, res:Response) =>{
   res.send('Welcome')
 }
-
-
 
 app.get('/', getAcontroller);
 

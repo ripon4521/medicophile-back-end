@@ -12,17 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.auth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const user_model_1 = require("../module/user/user.model");
 const user_constants_1 = require("../module/user/user.constants");
-const auth = (...requiredRoles) => {
+const authUser = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             throw new Error('You are not authorized!');
         }
-        const token = authHeader.split(' ')[1]; // Extract token after 'Bearer'
+        const token = authHeader.split(' ')[1];
         const decoded = jsonwebtoken_1.default.verify(token, "primarytestkey");
         const { role, email } = decoded;
         const user = yield user_model_1.UserModel.findOne({ email });
@@ -39,4 +40,79 @@ const auth = (...requiredRoles) => {
         next();
     }));
 };
-exports.default = auth;
+const onlyAdmin = (...requiredRoles) => {
+    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const user = req.user;
+        if (!user || !user.role) {
+            throw new Error("Access denied. No token provided or invalid format.");
+        }
+        if (user.role !== user_constants_1.USER_ROLE.admin) {
+            throw new Error("Access denied only admin");
+        }
+        if (requiredRoles.length && !requiredRoles.includes(user === null || user === void 0 ? void 0 : user.role)) {
+            throw new Error('You are not authorized!');
+        }
+        next();
+    }));
+};
+const onlyStudent = (...requiredRoles) => {
+    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const user = req.user;
+        if (!user || !user.role) {
+            throw new Error("Access denied. No token provided or invalid format.");
+        }
+        if (user.role !== user_constants_1.USER_ROLE.student) {
+            throw new Error("Access denied only student");
+        }
+        if (requiredRoles.length && !requiredRoles.includes(user === null || user === void 0 ? void 0 : user.role)) {
+            throw new Error('You are not authorized!');
+        }
+        next();
+    }));
+};
+const onlyFaculty = (...requiredRoles) => {
+    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const user = req.user;
+        if (!user || !user.role) {
+            throw new Error("Access denied. No token provided or invalid format.");
+        }
+        if (user.role !== user_constants_1.USER_ROLE.faculty) {
+            throw new Error("Access denied only faculty");
+        }
+        if (requiredRoles.length && !requiredRoles.includes(user === null || user === void 0 ? void 0 : user.role)) {
+            throw new Error('You are not authorized!');
+        }
+        next();
+    }));
+};
+const onlyGuest = (...requiredRoles) => {
+    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const user = req.user;
+        if (!user || !user.role) {
+            throw new Error("Access denied. No token provided or invalid format.");
+        }
+        if (user.role !== user_constants_1.USER_ROLE.guest) {
+            throw new Error("Access denied only guest");
+        }
+        if (requiredRoles.length && !requiredRoles.includes(user === null || user === void 0 ? void 0 : user.role)) {
+            throw new Error('You are not authorized!');
+        }
+        next();
+    }));
+};
+const onlyCanteenStaff = (...requiredRoles) => {
+    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const user = req.user;
+        if (!user || !user.role) {
+            throw new Error("Access denied. No token provided or invalid format.");
+        }
+        if (user.role !== user_constants_1.USER_ROLE.guest) {
+            throw new Error("Access denied only oCanteenStaff");
+        }
+        if (requiredRoles.length && !requiredRoles.includes(user === null || user === void 0 ? void 0 : user.role)) {
+            throw new Error('You are not authorized!');
+        }
+        next();
+    }));
+};
+exports.auth = { authUser, onlyAdmin, onlyStudent, onlyFaculty, onlyGuest, onlyCanteenStaff };

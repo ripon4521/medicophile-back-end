@@ -6,35 +6,73 @@ import sendResponse from '../../utils/sendResponse'
 const createStudeent = catchAsync(
   async (req, res) => {
     const payload = req.body
-
     const result = await userService.createStudentsIntoDB(payload)
-
     sendResponse(res, {
       statusCode: StatusCodes.CREATED,
       message: 'Student created successfully',
       data: result,
     }
-
     )
   });
 
-  const getAllUsers = catchAsync(async (req, res) => {
-    const result = await userService.getUSers();
+const createFaculty = catchAsync(
+  async (req, res) => {
+    const payload = req.body
+    const result = await userService.createFacultysIntoDB(payload)
     sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      message: 'Users getting successfully',
+      statusCode: StatusCodes.CREATED,
+      message: 'Student created successfully',
       data: result,
-    })
-  })
+    }
+    )
+});
 
-  const deleteUsers = catchAsync(async (req, res) => {
-     const result = await userService.deleteUser();
+
+const createGuest = catchAsync(
+  async (req, res) => {
+    const payload = req.body
+    const result = await userService.createStudentsIntoDB(payload)
     sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      message: 'User Deleted successfully',
+      statusCode: StatusCodes.CREATED,
+      message: 'Student created successfully',
       data: result,
-    })
+    }
+    )
+  });
+
+const createCanteenStaff = catchAsync(
+  async (req, res) => {
+    const payload = req.body
+    const result = await userService.createCanteenStaffsIntoDB(payload)
+    sendResponse(res, {
+      statusCode: StatusCodes.CREATED,
+      message: 'Student created successfully',
+      data: result,
+    }
+    )
+});
+
+
+
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await userService.getUSers();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: 'Users getting successfully',
+    data: result,
   })
+})
+
+const deleteUsers = catchAsync(async (req, res) => {
+  const result = await userService.deleteUser();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: 'User Deleted successfully',
+    data: result,
+  })
+})
+
+
 
 
   const getProfile = catchAsync(async (req, res) => {
@@ -53,11 +91,14 @@ const createStudeent = catchAsync(
 
 
 export const userController = {
-createStudeent,
+  createStudeent,
+  createFaculty,
   getAllUsers,
   deleteUsers,
   getProfile,
  
+  createGuest,
+  createCanteenStaff
 
- 
+
 }
