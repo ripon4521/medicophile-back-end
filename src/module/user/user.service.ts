@@ -54,6 +54,14 @@ const deleteUser = async() => {
   return result;
 }
 
+const getPofile = async (gmail: string) => {
+  if (!gmail) throw new Error('mobile is required to fetch profile.');
+
+  const result = await UserModel.findOne({ gmail }); 
+  if (!result) throw new Error('User not found.');
+
+  return result;
+};
 
 
 
@@ -64,5 +72,6 @@ export const userService = {
 createStudentsIntoDB,
   getUSers,
   deleteUser,
+  getPofile,
 
 }
