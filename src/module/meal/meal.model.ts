@@ -18,6 +18,7 @@ const MealSchema = new Schema<IMeal>(
     protein: { type: String, required: true },
     fat: { type: String, required: true },
     carbs: { type: String, required: true },
+    available: { type: Boolean, default: true },
   },
   { timestamps: true } // Add timestamps
 );
