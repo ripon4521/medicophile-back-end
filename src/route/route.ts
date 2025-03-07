@@ -10,6 +10,7 @@ import facultRoute from "../module/faculty/faculty.router";
 import classscheduleRoute from "../module/classschedule/classschedule.router";
 import courseRouter from "../module/course/course.router";
 import preOrderRouter from "../module/preorder/preorder.router";
+import eventRouter from "../module/event/event.router";
 
 
 const router = Router();
@@ -59,6 +60,9 @@ const moduleRoutes = [
     },{
         path:'/preOrder',
         route:preOrderRouter
+    },{
+        path:'/events',
+        route:eventRouter
     }
 
 ];

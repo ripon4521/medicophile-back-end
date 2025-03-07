@@ -5,7 +5,7 @@ const EventSchema  = new Schema<IEvent>(
     {
       event_name: { type: String, required: true, minlength: 3 },
       date: { type: Date, required: true },
-      time: { type: String, required: true, match: /^([01]\d|2[0-3]):([0-5]\d)$/ }, // HH:mm format
+      time: { type: String  }, 
       location: { type: String, required: true, minlength: 5 },
       organizer: { type: String, required: true, minlength: 3 },
       description: { type: String, required: true, minlength: 10 },
