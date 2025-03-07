@@ -8,7 +8,7 @@ import { z } from "zod";
   date: z.coerce.date().refine((d) => d >= new Date(), {
     message: "Date must be in the future",
   }),
-  time: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: "Invalid time format (HH:mm)" }),
+  time: z.string(),
   location: z.string().min(5, { message: "Location must be at least 5 characters long" }),
   organizer: z.string().min(3, { message: "Organizer name must be at least 3 characters long" }),
   description: z.string().min(10, { message: "Description must be at least 10 characters long" }),
@@ -29,7 +29,7 @@ import { z } from "zod";
   date: z.coerce.date().refine((d) => d >= new Date(), {
     message: "Date must be in the future",
   }).optional(),
-  time: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: "Invalid time format (HH:mm)" }).optional(),
+  time: z.string().optional(),
   location: z.string().min(5, { message: "Location must be at least 5 characters long" }).optional(),
   organizer: z.string().min(3, { message: "Organizer name must be at least 3 characters long" }).optional(),
   description: z.string().min(10, { message: "Description must be at least 10 characters long" }).optional(),
