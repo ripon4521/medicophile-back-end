@@ -4,7 +4,7 @@ import { mealValidations } from './meal.validation';
 import { mealController } from './meal.controller';
 
 const mealRouter = express.Router();
-mealRouter.post('/create-meal', validateRequest(mealValidations.createMealSchema), mealController.createMeals);
+mealRouter.post('/create-meal', mealController.createMeals);
 
 mealRouter.get('/', mealController.getAllMeals);
 

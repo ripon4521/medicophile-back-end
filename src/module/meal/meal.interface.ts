@@ -1,4 +1,5 @@
 export interface IMeal {
+  _id?: string
   name: string;
   price: number;
   category: string;
@@ -7,6 +8,7 @@ export interface IMeal {
   protein: string; // Should be in "Xg" format (e.g., "12g")
   fat: string; // Should be in "Xg" format (e.g., "8g")
   carbs: string; // Should be in "Xg" format (e.g., "60g")
+  available?: boolean;
 }
 
 export interface IDayMeal {
