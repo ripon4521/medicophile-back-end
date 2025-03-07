@@ -5,6 +5,7 @@ import { mealService } from "./meal.service";
 
 const createMeals = catchAsync(async(req, res) => {
     const result = await mealService.createMealIntoDB(req.body);
+    console.log(req.body)
     sendResponse(res, {
         statusCode: StatusCodes.CREATED,
         message: 'Meal Created successfully',
