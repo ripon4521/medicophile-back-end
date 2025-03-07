@@ -33,6 +33,19 @@ const createStudentsIntoDB = async (payload: IStudentUser) => {
     throw new Error("Transaction failed: " + error);
   }
 };
+const createAdminIntoDB = async (payload: IStudentUser) => {
+  const userData: Partial<IUser> = {};
+  userData.name = payload.name;
+  userData.status = payload.status;
+  userData.role = 'admin';
+  userData.address = payload.address;
+  userData.contact = payload.contact;
+  userData.password = payload.password
+  userData.gmail = payload.gmail;
+  const newUser = await UserModel.create(userData);
+  return newUser;
+
+};
 
 const createFacultysIntoDB = async (payload: IFacultyUser) => {
   const userData: Partial<IUser> = {};
@@ -142,4 +155,5 @@ export const userService = {
   createFacultysIntoDB,
   createGuestsIntoDB,
   createCanteenStaffsIntoDB,
+  createAdminIntoDB
 }

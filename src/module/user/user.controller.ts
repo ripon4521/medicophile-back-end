@@ -39,6 +39,17 @@ const createGuest = catchAsync(
     }
     )
   });
+const createAdmin = catchAsync(
+  async (req, res) => {
+    const payload = req.body
+    const result = await userService.createAdminIntoDB(payload)
+    sendResponse(res, {
+      statusCode: StatusCodes.CREATED,
+      message: 'Student created successfully',
+      data: result,
+    }
+    )
+  });
 
 const createCanteenStaff = catchAsync(
   async (req, res) => {
@@ -96,7 +107,7 @@ export const userController = {
   getAllUsers,
   deleteUsers,
   getProfile,
- 
+  createAdmin,
   createGuest,
   createCanteenStaff
 
