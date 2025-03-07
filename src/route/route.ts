@@ -12,6 +12,7 @@ import courseRouter from "../module/course/course.router";
 import preOrderRouter from "../module/preorder/preorder.router";
 import eventRouter from "../module/event/event.router";
 import dashboardRouter from "../module/dashboard/dashboard.router";
+import researchRoute from "../module/research/research.router";
 
 
 const router = Router();
@@ -62,12 +63,18 @@ const moduleRoutes = [
     {
         path: '/course',
         route: courseRouter
-    },{
+    },
+    {
         path:'/preOrder',
         route:preOrderRouter
-    },{
+    },
+    {
         path:'/events',
         route:eventRouter
+    },
+    {
+        path:'/research',
+        route:researchRoute
     }
 
 ];
