@@ -43,6 +43,18 @@ const createStudentsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
         throw new Error("Transaction failed: " + error);
     }
 });
+const createAdminIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = {};
+    userData.name = payload.name;
+    userData.status = payload.status;
+    userData.role = 'admin';
+    userData.address = payload.address;
+    userData.contact = payload.contact;
+    userData.password = payload.password;
+    userData.gmail = payload.gmail;
+    const newUser = yield user_model_1.UserModel.create(userData);
+    return newUser;
+});
 const createFacultysIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const userData = {};
     userData.name = payload.name;
@@ -127,11 +139,21 @@ const deleteUser = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.deleteMany();
     return result;
 });
+const getPofile = (gmail) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!gmail)
+        throw new Error('mobile is required to fetch profile.');
+    const result = yield user_model_1.UserModel.findOne({ gmail });
+    if (!result)
+        throw new Error('User not found.');
+    return result;
+});
 exports.userService = {
     createStudentsIntoDB,
     getUSers,
     deleteUser,
+    getPofile,
     createFacultysIntoDB,
     createGuestsIntoDB,
     createCanteenStaffsIntoDB,
+    createAdminIntoDB
 };

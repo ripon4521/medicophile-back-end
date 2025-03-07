@@ -44,6 +44,15 @@ const createGuest = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+const createAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.body;
+    const result = yield user_service_1.userService.createAdminIntoDB(payload);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.CREATED,
+        message: 'Student created successfully',
+        data: result,
+    });
+}));
 const createCanteenStaff = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
     const result = yield user_service_1.userService.createCanteenStaffsIntoDB(payload);
@@ -69,11 +78,23 @@ const deleteUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+const getProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = req.user;
+    // console.log(data);
+    const result = yield user_service_1.userService.getPofile(data === null || data === void 0 ? void 0 : data.gmail); // Assuming userServices.getProfile is defined
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: 'Profile get successfully',
+        data: result,
+    });
+}));
 exports.userController = {
     createStudeent,
     createFaculty,
     getAllUsers,
     deleteUsers,
+    getProfile,
+    createAdmin,
     createGuest,
     createCanteenStaff
 };

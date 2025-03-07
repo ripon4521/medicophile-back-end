@@ -12,24 +12,74 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.mealService = void 0;
 const meal_model_1 = require("./meal.model");
 const createMealIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield meal_model_1.MealModel.create(payload);
-    return result;
+    const { day, meal } = payload;
+    try {
+        const existingDayMeal = yield meal_model_1.DayMealModel.findOne({ day });
+        if (existingDayMeal) {
+            existingDayMeal.meals.push(meal);
+            yield existingDayMeal.save();
+            return existingDayMeal;
+        }
+        else {
+            const newDayMeal = yield meal_model_1.DayMealModel.create({
+                day,
+                meals: [meal],
+            });
+            return newDayMeal;
+        }
+    }
+    catch (error) {
+        console.error("Error adding meal to day:", error);
+        throw error;
+    }
 });
 const getAllMeals = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield meal_model_1.MealModel.find();
+    const result = yield meal_model_1.DayMealModel.find();
     return result;
 });
 const getMealById = (_id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield meal_model_1.MealModel.findOne({ _id });
+    const result = yield meal_model_1.DayMealModel.findOne({ _id });
     return result;
 });
 const updateMealById = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield meal_model_1.MealModel.findOneAndUpdate({ _id }, payload, { new: true });
-    return result;
+    try {
+        const document = yield meal_model_1.DayMealModel.findOne({ "meals._id": _id });
+        if (!document) {
+            console.log("No document found with meal ID:", _id);
+            return null;
+        }
+        const mealIndex = document.meals.findIndex((meal) => meal._id && meal._id.toString() === _id);
+        if (mealIndex === -1) {
+            console.log("Meal not found in the document:", _id);
+            return null;
+        }
+        Object.keys(payload).forEach((key) => {
+            document.meals[mealIndex][key] = payload[key];
+        });
+        yield document.save();
+        const result = yield meal_model_1.DayMealModel.findOne({ "meals._id": _id });
+        // console.log(result, "result");
+        return result;
+    }
+    catch (error) {
+        console.error("Error updating meal:", error);
+        throw error;
+    }
 });
 const deleteMealById = (_id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield meal_model_1.MealModel.findOneAndDelete({ _id });
-    return result;
+    try {
+        const document = yield meal_model_1.DayMealModel.findOne({ "meals._id": _id });
+        if (!document) {
+            console.log("No document found with meal ID:", _id);
+            return null;
+        }
+        const result = yield meal_model_1.DayMealModel.findOneAndUpdate({ "meals._id": _id }, { $pull: { meals: { _id: _id } } }, { new: true });
+        return result;
+    }
+    catch (error) {
+        console.error("Error deleting meal:", error);
+        throw error;
+    }
 });
 exports.mealService = {
     createMealIntoDB,

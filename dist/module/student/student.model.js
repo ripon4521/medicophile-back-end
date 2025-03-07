@@ -41,8 +41,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const config_1 = __importDefault(require("../../config"));
 const StudentUserSchema = new mongoose_1.Schema({
     role: { type: String, enum: ["student"], required: true },
     student_id: { type: String, required: true, unique: true },
@@ -57,27 +62,27 @@ const StudentUserSchema = new mongoose_1.Schema({
     contact: { type: String, required: true },
     address: { type: String, required: true },
     password: { type: String, required: true },
-    program: { type: String, required: true },
-    year_of_study: { type: Number, required: true, min: 1 },
+    program: { type: String, },
+    year_of_study: { type: Number, },
     profile_picture: { type: String },
-    semester: { type: String, required: true },
+    semester: { type: String, },
     preferences: {
-        language: { type: String, required: true },
+        language: { type: String, },
         notification_preferences: {
-            email_notifications: { type: Boolean, required: true },
-            sms_notifications: { type: Boolean, required: true },
-            push_notifications: { type: Boolean, required: true },
+            email_notifications: { type: Boolean, },
+            sms_notifications: { type: Boolean, },
+            push_notifications: { type: Boolean, },
         },
     },
     academic_info: {
-        current_gpa: { type: Number, required: true, min: 0, max: 4 },
-        major: { type: String, required: true },
+        current_gpa: { type: Number, },
+        major: { type: String, },
         minor: { type: String },
     },
     emergency_contact: {
-        name: { type: String, required: true },
-        relationship: { type: String, required: true },
-        contact: { type: String, required: true },
+        name: { type: String, },
+        relationship: { type: String, },
+        contact: { type: String, },
     },
     status: {
         type: String,
@@ -94,6 +99,14 @@ StudentUserSchema.pre("save", function (next) {
             const error = new Error("Student with this ID or Gmail already exists");
             return next(error);
         }
+        next();
+    });
+});
+StudentUserSchema.pre('save', function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const user = this;
+        user.password = yield bcrypt_1.default.hash(user.password, Number(config_1.default.bcrypt_salt_rounds));
         next();
     });
 });

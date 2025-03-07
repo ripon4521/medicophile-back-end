@@ -8,7 +8,7 @@ const validateRequest_1 = __importDefault(require("../../middlewares/validateReq
 const meal_validation_1 = require("./meal.validation");
 const meal_controller_1 = require("./meal.controller");
 const mealRouter = express_1.default.Router();
-mealRouter.post('/create-meal', (0, validateRequest_1.default)(meal_validation_1.mealValidations.createMealSchema), meal_controller_1.mealController.createMeals);
+mealRouter.post('/create-meal', meal_controller_1.mealController.createMeals);
 mealRouter.get('/', meal_controller_1.mealController.getAllMeals);
 mealRouter.get('/:id', meal_controller_1.mealController.getSingleMeal);
 mealRouter.patch('/:id', (0, validateRequest_1.default)(meal_validation_1.mealValidations.updateMealSchema), meal_controller_1.mealController.updateMeal);

@@ -65,29 +65,31 @@ const getAllStudents = () => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getStudentById = (_id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield student_model_1.default.findOne({ _id });
+    const result = yield student_model_1.default.findOne({ user: _id });
     return result;
 });
 const updateStudentFromDb = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield (0, mongoose_1.startSession)();
     session.startTransaction();
+    console.log(payload);
     try {
         const { preferences, academic_info, emergency_contact, user } = payload, remainingStudentData = __rest(payload, ["preferences", "academic_info", "emergency_contact", "user"]);
-        const modifiedUpdateData = Object.assign({}, remainingStudentData);
-        // Dynamically update preferences
+        let updateData = Object.assign({}, remainingStudentData);
+        // Handle preferences as a complete object
         if (preferences) {
-            for (const [key, value] of Object.entries(preferences)) {
-                modifiedUpdateData[`preferences.${key}`] = value;
-            }
+            updateData.preferences = preferences;
         }
-        // Dynamically update academic info
+        // Handle academic_info as a complete object
         if (academic_info) {
-            for (const [key, value] of Object.entries(academic_info)) {
-                modifiedUpdateData[`academic_info.${key}`] = value;
-            }
+            updateData.academic_info = academic_info;
         }
-        // Update student document with modified data
-        const updatedStudent = yield student_model_1.default.findByIdAndUpdate(_id, modifiedUpdateData, {
+        // Handle emergency_contact as a complete object
+        if (emergency_contact) {
+            updateData.emergency_contact = emergency_contact;
+        }
+        // Update student document
+        const updatedStudent = yield student_model_1.default.findOneAndUpdate({ user: _id }, // Find student by user ID instead of direct _id
+        updateData, {
             new: true,
             runValidators: true,
             session,
@@ -95,14 +97,18 @@ const updateStudentFromDb = (_id, payload) => __awaiter(void 0, void 0, void 0, 
         if (!updatedStudent) {
             throw new Error("Student not found");
         }
-        // Emergency contact update
-        if (emergency_contact) {
-            yield student_model_1.default.findByIdAndUpdate(_id, { $set: { emergency_contact } }, { session });
-        }
         // User data update, if any user fields are present
         const userFields = [
-            "name", "gmail", "password", "contact", "address", "role",
-            "profile_picture", "registration_date", "last_login", "status"
+            "name",
+            "gmail",
+            "password",
+            "contact",
+            "address",
+            "role",
+            "profile_picture",
+            "registration_date",
+            "last_login",
+            "status",
         ];
         const userUpdateData = {};
         for (const field of userFields) {
@@ -128,7 +134,8 @@ const updateStudentFromDb = (_id, payload) => __awaiter(void 0, void 0, void 0, 
         // Abort the transaction if anything fails
         yield session.abortTransaction();
         session.endSession();
-        throw new Error(`Transaction failed:`);
+        console.error("Transaction failed:", error); // Log the actual error
+        //throw new Error(`Transaction failed: ${error.message}`);
     }
 });
 const deleteStudentById = (_id) => __awaiter(void 0, void 0, void 0, function* () {

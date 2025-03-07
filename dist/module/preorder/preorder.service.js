@@ -16,11 +16,11 @@ const createPreorderIntoDb = (payload) => __awaiter(void 0, void 0, void 0, func
     return result;
 });
 const getAllPreorders = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield preorder_model_1.PreOrderModel.find().populate('user').populate('selected_meals_id');
+    const result = yield preorder_model_1.PreOrderModel.find().populate('user');
     return result;
 });
 const getPreorderById = (_id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield preorder_model_1.PreOrderModel.findOne({ _id }).populate('user').populate('selected_meals_id');
+    const result = yield preorder_model_1.PreOrderModel.findOne({ _id }).populate('user');
     return result;
 });
 const updatePreorderById = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,7 +28,7 @@ const updatePreorderById = (_id, payload) => __awaiter(void 0, void 0, void 0, f
     return result;
 });
 const deletePreorderById = (_id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield preorder_model_1.PreOrderModel.findOneAndUpdate({ _id });
+    const result = yield preorder_model_1.PreOrderModel.findOneAndDelete({ _id });
     return result;
 });
 exports.preorderService = {

@@ -34,6 +34,7 @@ const deleteBlogByAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void
         data: undefined,
     });
 }));
+/* Overview  handel  */
 exports.adminController = {
     userBlockByAdmin,
     deleteBlogByAdmin,

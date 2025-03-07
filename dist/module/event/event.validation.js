@@ -8,7 +8,7 @@ const createEventSchema = zod_1.z.object({
         date: zod_1.z.coerce.date().refine((d) => d >= new Date(), {
             message: "Date must be in the future",
         }),
-        time: zod_1.z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: "Invalid time format (HH:mm)" }),
+        time: zod_1.z.string(),
         location: zod_1.z.string().min(5, { message: "Location must be at least 5 characters long" }),
         organizer: zod_1.z.string().min(3, { message: "Organizer name must be at least 3 characters long" }),
         description: zod_1.z.string().min(10, { message: "Description must be at least 10 characters long" }),
@@ -27,7 +27,7 @@ const updateEventSchema = zod_1.z.object({
         date: zod_1.z.coerce.date().refine((d) => d >= new Date(), {
             message: "Date must be in the future",
         }).optional(),
-        time: zod_1.z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: "Invalid time format (HH:mm)" }).optional(),
+        time: zod_1.z.string().optional(),
         location: zod_1.z.string().min(5, { message: "Location must be at least 5 characters long" }).optional(),
         organizer: zod_1.z.string().min(3, { message: "Organizer name must be at least 3 characters long" }).optional(),
         description: zod_1.z.string().min(10, { message: "Description must be at least 10 characters long" }).optional(),

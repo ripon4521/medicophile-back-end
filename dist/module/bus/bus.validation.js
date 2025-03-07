@@ -8,13 +8,13 @@ const createBusValidationSchema = zod_1.z.object({
         route_name: zod_1.z.string().min(1, "Route name is required"),
         stops: zod_1.z
             .array(zod_1.z.object({
-            stop_name: zod_1.z.string().min(1, "Stop name is required"),
+            stop_name: zod_1.z.string().min(1, "Stop name is required").optional(),
             arrival_time: zod_1.z
                 .string()
-                .regex(/^\d{2}:\d{2}$/, "Invalid time format (HH:MM)"),
+                .optional(),
             departure_time: zod_1.z
                 .string()
-                .regex(/^\d{2}:\d{2}$/, "Invalid time format (HH:MM)"),
+                .optional(),
         }))
             .min(1, "At least one stop is required"),
         bus_number: zod_1.z.string().min(1, "Bus number is required"),
@@ -32,12 +32,15 @@ const updateBusValidationSchema = zod_1.z.object({
             stop_name: zod_1.z.string().min(1, "Stop name is required").optional(),
             arrival_time: zod_1.z
                 .string()
-                .regex(/^\d{2}:\d{2}$/, "Invalid time format (HH:MM)").optional(),
+                .regex(/^([01]?[0-9]|2[0-3]):([0-5][0-9])\s(AM|PM)$/, "Invalid time format (AM/PM)")
+                .optional(),
             departure_time: zod_1.z
                 .string()
-                .regex(/^\d{2}:\d{2}$/, "Invalid time format (HH:MM)").optional(),
+                .regex(/^([01]?[0-9]|2[0-3]):([0-5][0-9])\s(AM|PM)$/, "Invalid time format ( AM/PM)")
+                .optional(),
         }))
-            .min(1, "At least one stop is required").optional(),
+            .min(1, "At least one stop is required")
+            .optional(),
         bus_number: zod_1.z.string().min(1, "Bus number is required").optional(),
         driver_name: zod_1.z.string().min(1, "Driver name is required").optional(),
         contact: zod_1.z.string().regex(/^\+?[0-9]{10,15}$/, "Invalid contact number").optional(),

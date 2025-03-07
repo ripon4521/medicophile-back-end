@@ -37,10 +37,8 @@ exports.PreOrderModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const PreOrderSchema = new mongoose_1.Schema({
     user: { type: String, required: true, ref: "User" },
-    selected_meals_id: { type: String, required: true, ref: "Meal" },
+    selected_meals: [],
     total_price: { type: Number, required: true, min: 0 },
-    pickup_time: { type: String, required: true },
-    payment_method: { type: String, required: true },
     status: { type: String, enum: ["Pending", "Completed", "Cancelled"], required: true, default: "Pending" },
 });
 exports.PreOrderModel = mongoose_1.default.model("PreOrder", PreOrderSchema);

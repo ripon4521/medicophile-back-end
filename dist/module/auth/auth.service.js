@@ -25,28 +25,26 @@ const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    // Validate input
     if (!payload.gmail || !payload.password) {
-        throw { message: 'Mobile and PIN are required', statusCode: 400 };
+        throw { message: 'Gmail and password are required', statusCode: 400 };
     }
-    // Find user by mobile number and select the pin field
-    const user = yield user_model_1.UserModel.findOne({ gmail: payload === null || payload === void 0 ? void 0 : payload.gmail }).select('+password');
+    const user = yield user_model_1.UserModel.findOne({ gmail: payload.gmail }).select('+password');
     if (!user) {
-        throw { message: 'User not found!', statusCode: 404, field: 'mobile' };
+        throw new Error('User not found!');
     }
-    if (user.status !== 'unblocked') {
-        throw { message: 'This user is blocked!', statusCode: 403 };
+    if (user.status === 'blocked') {
+        throw new Error('This user is blocked!');
     }
-    // Check if the pin matches
-    const isPinMatched = yield bcrypt_1.default.compare(payload.password, user.password);
-    if (!isPinMatched) {
-        throw { message: 'Invalid PIN', statusCode: 401, field: 'pin' };
+    const isPasswordMatched = yield bcrypt_1.default.compare(payload.password, user.password);
+    if (!isPasswordMatched) {
+        throw new Error('Invalid password');
     }
-    console.log('isPinMatched', isPinMatched);
-    // JWT Payload
-    const jwtPayload = { gmail: user.gmail, role: user.role, _id: user._id.toString() };
-    // // Generate JWT token
-    const token = jsonwebtoken_1.default.sign(jwtPayload, process.env.JWT_SECRET || "primarytestkey", { expiresIn: '30d' });
+    const jwtPayload = {
+        gmail: user.gmail,
+        role: user.role,
+        _id: user._id.toString(),
+    };
+    const token = jsonwebtoken_1.default.sign(jwtPayload, process.env.JWT_SECRET || 'primarytestkey', { expiresIn: '10d' });
     return { token, user };
 });
 exports.AuthService = {
