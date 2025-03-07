@@ -8,6 +8,15 @@ const adminRouter = Router()
 adminRouter.patch('/users/:userId/block',  adminController.userBlockByAdmin)
 adminRouter.delete('/blogs/:id', adminController.deleteBlogByAdmin)
 
+/* Overview section handel */
+adminRouter.get('/overview', adminController.deleteBlogByAdmin)
+
+
+
+
+
+
+
 export default adminRouter
 
 // /api/admin/users/:userId/block

@@ -11,6 +11,7 @@ import classscheduleRoute from "../module/classschedule/classschedule.router";
 import courseRouter from "../module/course/course.router";
 import preOrderRouter from "../module/preorder/preorder.router";
 import eventRouter from "../module/event/event.router";
+import dashboardRouter from "../module/dashboard/dashboard.router";
 
 
 const router = Router();
@@ -23,6 +24,10 @@ const moduleRoutes = [
     {
         path: '/admin',
         route: adminRouter
+    },
+    {
+        path: '/dashboard',
+        route: dashboardRouter
     },
     {
         path: '/user',
