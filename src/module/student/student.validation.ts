@@ -3,7 +3,6 @@ import { Types } from "mongoose";
 
 export const createstudentValidationSchema = z.object({
   body: z.object({
-    role: z.literal("student"),
     profile_picture: z.string().url().optional(),
     gmail: z.string().email(),
     password: z.string().min(6, "Password must be at least 6 characters long"),
@@ -65,7 +64,7 @@ export const updateStudentValidationSchema = z.object({
       home_address: z.string().min(1, "Home address is required").optional(),
       district: z.string().min(1, "District is required").optional(),
       division: z.string().min(1, "Division is required").optional(),
-    }).partial(), // Makes all fields optional inside contact_info
+    }).optional(), // Makes all fields optional inside contact_info
 
     academic_info: z.object({
       previous_school: z.string().optional(),
@@ -76,7 +75,7 @@ export const updateStudentValidationSchema = z.object({
       class_rank: z.number().int().positive("Class rank must be a positive integer").optional(),
       attendance_percentage: z.number().min(0).max(100, "Attendance percentage must be between 0-100").optional(),
       extracurricular_activities: z.array(z.string()).optional(),
-    }).partial(), // Makes all fields optional inside academic_info
+    }).optional(), // Makes all fields optional inside academic_info
 
     status: z.enum(["unblocked", "blocked"]).optional(),
   }),
