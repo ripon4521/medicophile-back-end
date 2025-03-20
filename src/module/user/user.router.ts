@@ -1,16 +1,15 @@
 import { Router } from 'express'
 import validateRequest from '../../middlewares/validateRequest'
-import { studentsValidation } from '../student/student.validation'
 import { userController } from './user.controller'
-import { facultysValidation } from '../faculty/faculty.validation'
 import { auth } from '../../middlewares/auth'
+import { studentValidationSchema } from '../student/student.validation'
 
 const userRouter = Router()
 
-userRouter.post('/create-admin', userController.createAdmin);
-userRouter.post('/create-student', validateRequest(studentsValidation.createStudentValidationSchema), userController.createStudeent);
-userRouter.get('/profile', auth.authUser('student', 'admin', 'faculty', 'guest', 'canteen_staff'), userController.getProfile);
-userRouter.post('/create-faculty', validateRequest(facultysValidation.createFacultyValidationSchema), userController.createFaculty);
+// userRouter.post('/create-admin', userController.createAdmin);
+userRouter.post('/create-student', validateRequest(studentValidationSchema.createstudentValidationSchema), userController.createStudeent);
+userRouter.get('/profile', auth.authUser('student', 'admin', 'faculty'), userController.getProfile);
+// userRouter.post('/create-faculty', validateRequest(facultysValidation.createFacultyValidationSchema), userController.createFaculty);
 userRouter.get('/', userController.getAllUsers);
 userRouter.delete('/', userController.deleteUsers)
 

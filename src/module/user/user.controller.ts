@@ -15,53 +15,32 @@ const createStudeent = catchAsync(
     )
   });
 
-const createFaculty = catchAsync(
-  async (req, res) => {
-    const payload = req.body
-    const result = await userService.createFacultysIntoDB(payload)
-    sendResponse(res, {
-      statusCode: StatusCodes.CREATED,
-      message: 'Student created successfully',
-      data: result,
-    }
-    )
-});
+// const createFaculty = catchAsync(
+//   async (req, res) => {
+//     const payload = req.body
+//     const result = await userService.createFacultysIntoDB(payload)
+//     sendResponse(res, {
+//       statusCode: StatusCodes.CREATED,
+//       message: 'Student created successfully',
+//       data: result,
+//     }
+//     )
+// });
 
 
-const createGuest = catchAsync(
-  async (req, res) => {
-    const payload = req.body
-    const result = await userService.createStudentsIntoDB(payload)
-    sendResponse(res, {
-      statusCode: StatusCodes.CREATED,
-      message: 'Student created successfully',
-      data: result,
-    }
-    )
-  });
-const createAdmin = catchAsync(
-  async (req, res) => {
-    const payload = req.body
-    const result = await userService.createAdminIntoDB(payload)
-    sendResponse(res, {
-      statusCode: StatusCodes.CREATED,
-      message: 'Student created successfully',
-      data: result,
-    }
-    )
-  });
 
-const createCanteenStaff = catchAsync(
-  async (req, res) => {
-    const payload = req.body
-    const result = await userService.createCanteenStaffsIntoDB(payload)
-    sendResponse(res, {
-      statusCode: StatusCodes.CREATED,
-      message: 'Student created successfully',
-      data: result,
-    }
-    )
-});
+// const createAdmin = catchAsync(
+//   async (req, res) => {
+//     const payload = req.body
+//     const result = await userService.createAdminIntoDB(payload)
+//     sendResponse(res, {
+//       statusCode: StatusCodes.CREATED,
+//       message: 'Student created successfully',
+//       data: result,
+//     }
+//     )
+//   });
+
 
 
 
@@ -103,13 +82,10 @@ const deleteUsers = catchAsync(async (req, res) => {
 
 export const userController = {
   createStudeent,
-  createFaculty,
   getAllUsers,
   deleteUsers,
   getProfile,
-  createAdmin,
-  createGuest,
-  createCanteenStaff
+ 
 
 
 }

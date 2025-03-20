@@ -4,9 +4,14 @@ export interface IUser {
   name: string;
   gmail: string;
   password: string;
+  district:string;
+  division:string;
   contact: string;
+  gender: string;
+  date_of_birth: string;
+  religion: string;
   address: string;
-  role: 'admin' | 'student' | 'faculty' | 'guest' | 'canteen_staff';
+  role: 'admin' | 'student' | 'faculty' ;
   profile_picture?: string;
   registration_date: Date;
   last_login?: Date;

@@ -7,14 +7,21 @@ import config from "../../config";
 const UserSchema = new Schema<IUser>({
   name: { type: String, required: true },
   gmail: { type: String, required: true, unique: true, },
-  password: { type: String, required: true },
-  contact: { type: String, required: true },
-  address: { type: String, required: true },
-  role: { type: String, enum: ["admin", "student", "faculty", "guest", "canteen_staff"], required: true },
+  password: { type: String,require:true },
+  district: { type: String  },
+  division: { type: String },
+  gender: { type: String },
+  religion: { type: String },
+  date_of_birth: { type: String},
+  contact: { type: String},
+  address: { type: String },
+  role: { type: String, enum: ["admin", "student", "faculty"], required: true },
   profile_picture: { type: String },
   registration_date: { type: Date, default: Date.now },
   last_login: { type: Date },
   status: { type: String, enum: ["unblocked", "blocked"], required: true }
+},{
+  timestamps:true
 });
 
 // Pre-save hook to update last_login when user logs in
