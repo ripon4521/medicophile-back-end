@@ -18,8 +18,8 @@ const authUser = (...requiredRoles: TUserRole[]) => {
     }
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, "primarytestkey") as JwtPayload;
-    const { role, email } = decoded;
-    const user = await UserModel.findOne({ email });
+    const { role, gmail } = decoded;
+    const user = await UserModel.findOne({ gmail });
     if (!user) {
       throw new Error('This user is not found!');
     }
@@ -49,6 +49,7 @@ const onlyAdmin = (...requiredRoles: TUserRole[]) => {
     next();
   });
 };
+
 const onlyStudent = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const user = req.user;
@@ -64,6 +65,7 @@ const onlyStudent = (...requiredRoles: TUserRole[]) => {
     next();
   });
 };
+
 const onlyFaculty = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const user = req.user;
@@ -79,36 +81,8 @@ const onlyFaculty = (...requiredRoles: TUserRole[]) => {
     next();
   });
 };
-const onlyGuest = (...requiredRoles: TUserRole[]) => {
-  return catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const user = req.user;
-    if (!user || !user.role) {
-      throw new Error("Access denied. No token provided or invalid format.");
-    }
-    if (user.role !== USER_ROLE.guest) {
-      throw new Error("Access denied only guest");
-    }
-    if (requiredRoles.length && !requiredRoles.includes(user?.role)) {
-      throw new Error('You are not authorized!');
-    }
-    next();
-  });
-};
-const onlyCanteenStaff = (...requiredRoles: TUserRole[]) => {
-  return catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const user = req.user;
-    if (!user || !user.role) {
-      throw new Error("Access denied. No token provided or invalid format.");
-    }
-    if (user.role !== USER_ROLE.guest) {
-      throw new Error("Access denied only oCanteenStaff");
-    }
-    if (requiredRoles.length && !requiredRoles.includes(user?.role)) {
-      throw new Error('You are not authorized!');
-    }
-    next();
-  });
-};
 
-export const auth = { authUser, onlyAdmin, onlyStudent, onlyFaculty, onlyGuest, onlyCanteenStaff };
+
+
+export const auth = { authUser, onlyAdmin, onlyStudent, onlyFaculty };
 
