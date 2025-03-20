@@ -5,7 +5,6 @@ import { IUser } from './user.interface';
 import StudentUserModel from '../student/student.model';
 import { IFacultyUser } from '../faculty/faculty.interface';
 import FacultyUserModel from '../faculty/faculty.model';
-import CanteenstaffUserModel from '../canteenstaff/canteenstaff.model';
 
 
 const createStudentsIntoDB = async (payload: IStudentUser) => {
@@ -100,31 +99,6 @@ const createGuestsIntoDB = async (payload: IStudentUser) => {
   }
 };
 
-const createCanteenStaffsIntoDB = async (payload: IStudentUser) => {
-  const userData: Partial<IUser> = {};
-  userData.name = payload.name;
-  userData.status = payload.status;
-  userData.role = 'canteen_staff';
-  userData.address = payload.address;
-  userData.contact = payload.contact;
-  userData.password = payload.password
-  userData.gmail = payload.gmail;
-
-  const session = await mongoose.startSession();
-  session.startTransaction();
-  try {
-    const newUser = await UserModel.create([userData], { session });
-    payload.user = newUser[0]._id;
-    const canteenstaff = await CanteenstaffUserModel.create([payload], { session });
-    await session.commitTransaction();
-    session.endSession();
-    return { canteenstaff: canteenstaff[0] };
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    throw new Error("Transaction failed: " + error);
-  }
-};
 
 
 const getUSers = async () => {
@@ -154,6 +128,5 @@ export const userService = {
   getPofile,
   createFacultysIntoDB,
   createGuestsIntoDB,
-  createCanteenStaffsIntoDB,
   createAdminIntoDB
 }
