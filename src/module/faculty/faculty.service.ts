@@ -13,108 +13,127 @@ const getAllFacultys = async () => {
 }
 
 const getFacultyById = async (_id: string) => {
-    const result = await FacultyUserModel.findOne({ _id });
+    const result = await FacultyUserModel.findOne({ _id }).populate('userId');
     return result;
 }
 
+const updateFaculty = async (_id: string, updateData: Partial<IFaculty>) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    console.log(updateData);
+  
+    try {
+      const student = await FacultyUserModel.findOne({ _id }).session(session);
+      if (!student) {
+        throw new Error("Faculty not found");
+      }
+  
+      // Update the subjects for a specific class (e.g., class 9)
+      if (updateData.subjects_taught) {
+        for (const subject of updateData.subjects_taught) {
+          const classToUpdate = subject.class;
+          const newSubjects = subject.subjects;
+  
+          // Use the positional operator to update subjects for the specific class
+          await FacultyUserModel.updateOne(
+            { _id, "subjects_taught.class": classToUpdate },
+            {
+              $set: {
+                "subjects_taught.$.subjects": newSubjects,
+              },
+            },
+            { session }
+          );
+        }
+      }
+  
+      // Other updates for faculty details...
+      const updatedStudent = await FacultyUserModel.findOneAndUpdate(
+        { _id },
+        updateData,
+        { new: true, runValidators: true, session }
+      );
+  
+      if (!updatedStudent) {
+        throw new Error("Failed to update faculty");
+      }
+  
+      const userUpdateData: Partial<IUser> = {};
+      const updateStudentData = await FacultyUserModel.findById(_id).session(session);
+  
+      userUpdateData.gmail = updateStudentData?.gmail;
+      userUpdateData.address = updateStudentData?.address;
+      userUpdateData.gender = updateStudentData?.gender;
+      userUpdateData.name = updateStudentData?.full_name;
+      userUpdateData.contact = updateStudentData?.contact;
+      userUpdateData.district = updateStudentData?.district;
+      userUpdateData.division = updateStudentData?.division;
+      userUpdateData.date_of_birth = updateStudentData?.date_of_birth;
+      userUpdateData.religion = updateStudentData?.religion;
+      userUpdateData.status = updateStudentData?.status;
+      userUpdateData.profile_picture = updateStudentData?.profile_picture;
+  
+      // Update user model
+      const updatedUser = await UserModel.findByIdAndUpdate(
+        student.userId,
+        userUpdateData,
+        { new: true, runValidators: true, session }
+      );
+  
+      if (!updatedUser) {
+        throw new Error("Failed to update user");
+      }
+  
+      // Commit transaction if everything is fine
+      await session.commitTransaction();
+      session.endSession();
+  
+      return updatedStudent;
+    } catch (error) {
+      // Rollback transaction if error occurs
+      await session.abortTransaction();
+      session.endSession();
+  
+      throw new Error("Error updating faculty and user");
+    }
+  };
+  
 
-// const updateFacultyFromDb = async (_id: string, payload: Partial<IFaculty>) => {
-//     const session = await startSession();
-//     session.startTransaction();
-
-//     try {
-//         const { faculty_id, department, office_location,courses_taught, user, ...remainingStudentData } = payload;
-//         const modifiedUpdateData: Record<string, unknown> = { ...remainingStudentData };
-       
-      
-
-//         // Update student document with modified data
-//         const updatedStudent = await FacultyUserModel.findByIdAndUpdate(
-//             _id,
-//             modifiedUpdateData,
-//             {
-//                 new: true,
-//                 runValidators: true,
-//                 session,
-//             }
-//         );
-
-//         if (!updatedStudent) {
-//             throw new Error("Student not found");
-//         }
-
-     
-//         // User data update, if any user fields are present
-//         const userFields = [
-//             "name", "gmail", "password", "contact", "address", "role",
-//             "profile_picture", "registration_date", "last_login", "status"
-//         ];
-
-//         const userUpdateData: Partial<IUser> = {};
-//         for (const field of userFields) {
-//             const value = payload[field as keyof IUser];
-//             if (value !== undefined) {
-//                 userUpdateData[field as keyof IUser] = value as any;
-//             }
-//         }
-
-//         if (Object.keys(userUpdateData).length > 0) {
-//             const userId = updatedStudent.user;
-//             await UserModel.findByIdAndUpdate(userId, userUpdateData, {
-//                 new: true,
-//                 runValidators: true,
-//                 session,
-//             });
-//         }
-
-//         // Commit the transaction
-//         await session.commitTransaction();
-//         session.endSession();
-
-//         return updatedStudent;
-
-//     } catch (error) {
-//         // Abort the transaction if anything fails
-//         await session.abortTransaction();
-//         session.endSession();
-//         throw new Error(`Transaction failed:`);
-//     }
-// };
 
 
-// const deleteFacultyById = async (_id: string) => {
-//     const session = await mongoose.startSession();
-//     session.startTransaction();
+const deleteFacultyById = async (_id: string) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
-//     try {
-//         // Faculty ke find kore check kora
-//         const faculty = await FacultyUserModel.findOne({ _id }).session(session);
-//         if (!faculty) {
-//             throw new Error("Faculty not found");
-//         }
-//         // Faculty er associated user er _id niye delete korbo
-//         const userId = faculty.user?._id;
+    try {
+        // Faculty ke find kore check kora
+        const faculty = await FacultyUserModel.findOne({ _id }).session(session);
+        if (!faculty) {
+            throw new Error("Faculty not found");
+        }
+        // Faculty er associated user er _id niye delete korbo
+        const userId = faculty.userId;
 
-//         // FacultyUserModel theke delete
-//         await FacultyUserModel.findOneAndDelete({ _id }).session(session);
+        // FacultyUserModel theke delete
+        await FacultyUserModel.findOneAndDelete({ _id }).session(session);
 
-//         // UserModel theke user delete
-//         if (userId) {
-//             await UserModel.findOneAndDelete({ _id: userId }).session(session);
-//         }
+        // UserModel theke user delete
+        if (userId) {
+            await UserModel.findOneAndDelete({ _id: userId }).session(session);
+        }
 
-//         // Transaction commit
-//         await session.commitTransaction();
-//         session.endSession();
+        // Transaction commit
+        await session.commitTransaction();
+        session.endSession();
 
-//         return { message: "Faculty and associated user deleted successfully" };
-//     } catch (error) {
-//         // Rollback transaction if error occurs
-//         await session.abortTransaction();
-//         session.endSession();
-//         throw error;
-//     }
-// };
+        return { message: "Faculty and associated user deleted successfully" };
+    } catch (error) {
+        // Rollback transaction if error occurs
+        await session.abortTransaction();
+        session.endSession();
+        throw error;
+    }
+};
 
 
 
@@ -123,6 +142,8 @@ const getFacultyById = async (_id: string) => {
 export const facultysService = {
     getAllFacultys,
     getFacultyById,
+    updateFaculty,
+    deleteFacultyById,
  
 
 }

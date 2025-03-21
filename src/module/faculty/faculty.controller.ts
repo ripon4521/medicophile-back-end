@@ -24,28 +24,30 @@ const getSingleFaculty = catchAsync(async (req, res) => {
     });
 })
 
-// const updatedFaculty = catchAsync(async (req, res) => {
-//     const { id } = req.params;
-//     const updatedStudent = await facultysService.updateFacultyFromDb(id, req.body);
-//     sendResponse(res, {
-//         statusCode: StatusCodes.OK,
-//         message: 'Student Updated successfully',
-//         data: updatedStudent,
-//     });
-// })
+const updatedFaculty = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const updatedStudent = await facultysService.updateFaculty(id, req.body);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        message: 'Faculty Updated successfully',
+        data: updatedStudent,
+    });
+})
 
-// const deleteFaculty = catchAsync(async (req, res) => {
-//     const { id } = req.params;
-//    const result =  await facultysService.deleteFacultyById(id);
-//     sendResponse(res, {
-//         statusCode: StatusCodes.OK,
-//         message: 'Student Deleted successfully',
-//         data:result
-//     });
-// })
+const deleteFaculty = catchAsync(async (req, res) => {
+    const { id } = req.params;
+   const result =  await facultysService.deleteFacultyById(id);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        message: 'Faculty Deleted successfully',
+        data:result
+    });
+})
 
 export const facultysController = {
     getAllFaculty,
     getSingleFaculty,
+    updatedFaculty,
+    deleteFaculty
   
 }
