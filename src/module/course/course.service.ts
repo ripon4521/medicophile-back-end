@@ -1,10 +1,21 @@
+import slugify from "slugify";
 import { ICourse } from "./course.interface";
 import { CourseModel } from "./course.model";
+import { nanoid } from "nanoid";
 
-const createCourseIntoDb = async(payload:ICourse) => {
+
+const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
+    const titleSlug = slugify(payload.course_title, {
+        lower: true, 
+        strict: true, 
+        trim: true
+    }).replace(/-/g, ""); 
+    const uniqueId = nanoid(4).toUpperCase();
+    const uniqueCourseCode = `${titleSlug.substring(0, 6).toUpperCase()}-${uniqueId}`;
+    payload.course_code = uniqueCourseCode;
     const result = await CourseModel.create(payload);
     return result;
-}
+};
 
 const getAllCoursesFromDb = async() => {
     const result = await CourseModel.find();
