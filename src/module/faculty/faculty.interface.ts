@@ -1,20 +1,33 @@
 import { Types } from "mongoose";
-import { IUser } from "../user/user.interface";
 
-export interface IFacultyUser extends IUser {
-    // user infoamtion
-    role: 'faculty';
-    user: Types.ObjectId;
-    name: string;
+type Address = {
+    district: string;
+    division: string;
+  };
+  
+  type SubjectTaught = {
+    class: number;
+    subjects: string[];
+  };
+  
+ export type IFaculty = {
+    role:"faculty";
+    userId:Types.ObjectId;
+    full_name: string;
     gmail: string;
-    password: string;
+    password:string;
     contact: string;
+    gender: "Male" | "Female" | "Other";
+    date_of_birth: string;
+    profile_picture:string;
+    religion: string;
     address: string;
-    profile_picture?: string;
-    status: "unblocked" | "blocked";
-    // faculty infomation 
-    faculty_id: string;
-    department: string;
-    office_location: string;
-    courses_taught: string[];
-}
+    district:string;
+    division:string;
+    qualifications: string[];
+    experience: string;
+    subjects_taught: SubjectTaught[];
+    joining_date: string;
+    status: "blocked" | "unblocked";
+  };
+  

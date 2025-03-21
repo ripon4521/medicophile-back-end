@@ -15,17 +15,18 @@ const createStudeent = catchAsync(
     )
   });
 
-// const createFaculty = catchAsync(
-//   async (req, res) => {
-//     const payload = req.body
-//     const result = await userService.createFacultysIntoDB(payload)
-//     sendResponse(res, {
-//       statusCode: StatusCodes.CREATED,
-//       message: 'Student created successfully',
-//       data: result,
-//     }
-//     )
-// });
+const createFaculty = catchAsync(
+  async (req, res) => {
+    const payload = req.body
+    const result = await userService.createFacultysIntoDB(payload);
+    console.log(result)
+    sendResponse(res, {
+      statusCode: StatusCodes.CREATED,
+      message: 'Faculty created successfully',
+      data: result,
+    }
+    )
+});
 
 
 
@@ -82,6 +83,7 @@ const deleteUsers = catchAsync(async (req, res) => {
 
 export const userController = {
   createStudeent,
+  createFaculty,
   getAllUsers,
   deleteUsers,
   getProfile,
