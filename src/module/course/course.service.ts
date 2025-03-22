@@ -1,9 +1,10 @@
-import slugify from "slugify";
+
 import { ICourse } from "./course.interface";
 import { CourseModel } from "./course.model";
 import { nanoid } from "nanoid";
 import QueryBuilder from "../../builder/querybuilder";
 import { searchableFields } from "./coursee.constant";
+import slugify from 'slugify';
 
 
 const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
@@ -19,6 +20,22 @@ const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
     return result;
 };
 
+
+
+// const getAllCategorieFromDb = async (query: Record<string, unknown>) => {
+//     const queryBuilder = new QueryBuilder(CategoriedModel.find(), query);
+  
+//     const result = await queryBuilder
+//       .search(['name', 'description']) 
+//       .filter()
+//       .sort()
+//       .select()
+//       .modelQuery.exec(); // Execute the query
+  
+//     return result;
+//   };
+
+
 const getAllCoursesFromDb = async(query: Record<string, unknown>) => {
     console.log(query)
     const courseQuery = new QueryBuilder(
@@ -28,12 +45,13 @@ const getAllCoursesFromDb = async(query: Record<string, unknown>) => {
         .search(searchableFields)
         .filter()
         .sort()
-        .paginate()
+  
    
     
        
     
       const result = await courseQuery.modelQuery;
+      console.log(result)
       return result;
 }
 

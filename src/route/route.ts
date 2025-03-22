@@ -7,6 +7,7 @@ import facultRoute from "../module/faculty/faculty.router";
 import classscheduleRoute from "../module/classschedule/classschedule.router";
 import courseRouter from "../module/course/course.router";
 import categiryRouter from "../module/category/category.route";
+import enrollmentRoute from "../module/newenrollment/newEnrollment.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -45,6 +46,9 @@ const moduleRoutes = [
   },{
     path:'/category',
     route:categiryRouter
+  },{
+    path:'/enrollment',
+    route:enrollmentRoute
   }
 ];
 moduleRoutes.forEach((route) => {
