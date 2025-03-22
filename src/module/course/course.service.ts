@@ -22,6 +22,8 @@ const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
 
 
 
+
+
 // const getAllCategorieFromDb = async (query: Record<string, unknown>) => {
 //     const queryBuilder = new QueryBuilder(CategoriedModel.find(), query);
   
@@ -36,24 +38,29 @@ const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
 //   };
 
 
-const getAllCoursesFromDb = async(query: Record<string, unknown>) => {
-    console.log(query)
-    const courseQuery = new QueryBuilder(
-        CourseModel.find(),
-        query
-      )
-        .search(searchableFields)
-        .filter()
-        .sort()
+const getAllCoursesFromDb =async () => {
+    const result = await CourseModel.find().populate('category');
+    return result;
+}
+
+// const getAllCoursesFromDb = async(query: Record<string, unknown>) => {
+//     console.log(query)
+//     const courseQuery = new QueryBuilder(
+//         CourseModel.find(),
+//         query
+//       )
+//         .search(searchableFields)
+//         .filter()
+//         .sort()
   
    
     
        
     
-      const result = await courseQuery.modelQuery;
-      console.log(result)
-      return result;
-}
+//       const result = await courseQuery.modelQuery;
+//       console.log(result)
+//       return result;
+// }
 
 const getCourseById = async (_id: string) => {
     const result = await CourseModel.findOne({_id}).populate('category');
