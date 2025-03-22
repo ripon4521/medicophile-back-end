@@ -31,6 +31,12 @@ const EnrollmentSchema = new Schema(
       enum: ['active', 'blocked'],
       default:'blocked'
     },
+    transctionId:{
+        type:String
+    },
+    paymentNumber:{
+        type:String
+    }
   },
   { timestamps: true } 
 );
