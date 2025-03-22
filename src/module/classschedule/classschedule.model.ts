@@ -26,6 +26,8 @@ const ClassScheduleSchema = new Schema<IClassSchedule>({
         type: [daySchema],  
         required: true,
       },
+},{
+    timestamps:true
 });
 
 const ClassScheduleModel = mongoose.model<IClassSchedule>("classSchedules", ClassScheduleSchema);

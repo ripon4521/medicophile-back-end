@@ -1,12 +1,15 @@
+import { Types } from "mongoose";
 import { z } from "zod";
-
+const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
+  message: "Invalid ObjectId format",
+});
 const createCourseSchema = z.object({
   body: z.object({
     course_title: z.string().min(1, { message: "Course title is required" }),
     cover_photo: z.string().min(1, { message: "cover photo  is required" }).optional(),
     totalAdmited: z.number({ message: "Total admitted must be a number" }),
     duration: z.string().min(1, { message: "Duration is required" }),
-    category: z.string().min(1, { message: "Category is required" }),
+    category: ObjectIdSchema,
     preOrder: z.enum(["on", "off"], {
       message: "Pre-order must be 'on' or 'off'",
     }),
@@ -50,7 +53,7 @@ const updateCourseSchema = z.object({
       .number({ message: "Total admitted must be a number" })
       .optional(),
     duration: z.string().min(1, { message: "Duration is required" }).optional(),
-    category: z.string().min(1, { message: "category is required" }).optional(),
+    category:ObjectIdSchema.optional(),
     preOrder: z
       .enum(["on", "off"], { message: "Pre-order must be 'on' or 'off'" })
       .optional(),

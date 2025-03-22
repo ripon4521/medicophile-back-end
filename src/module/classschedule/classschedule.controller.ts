@@ -8,7 +8,7 @@ const createClassschedule = catchAsync(async (req, res) => {
     const students = await classscheduleService.createClassscheduleIntoDB(payload);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
-        message: 'Classschedule Get successfully',
+        message: 'Classschedule Create successfully',
         data: students,
     }
 

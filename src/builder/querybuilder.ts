@@ -1,6 +1,6 @@
 import { FilterQuery, Query } from 'mongoose';
 
-class QueryBuilder<T> {
+class querybuilder<T> {
   public modelQuery: Query<T[], T>;
   public query: Record<string, unknown>;
 
@@ -11,8 +11,6 @@ class QueryBuilder<T> {
 
   search(searchableFields: string[]) {
     const searchTerm = this?.query?.search;
-    console.log(searchTerm)
-    // console.log(searchTerm)
     if (searchTerm) {
       this.modelQuery = this.modelQuery.find({
         $or: searchableFields.map(
@@ -32,7 +30,7 @@ class QueryBuilder<T> {
     const queryObj = { ...this.query }; // copy
 
     // Filtering
-    const excludeFields = ['search', 'sort', 'limit', 'page', 'fields', 'sortBy'];
+    const excludeFields = ['search', 'sort', 'limit', 'page', 'fields'];
 
     excludeFields.forEach((el) => delete queryObj[el]);
 
@@ -41,16 +39,15 @@ class QueryBuilder<T> {
     return this;
   }
 
-  sort() {
 
-    const sortBy = (this.query?.sortBy as string) || 'price';
-    const sortOrder = (this.query?.sort as string) === 'desc' ? -1 : 1; 
-    const sortFields = (this.query?.sort as string)?.split(',').join(' ') || sortBy;
-    this.modelQuery = this.modelQuery.sort({ [sortBy]: sortOrder });
-  
+  sort() {
+    const sort =
+      (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';
+    this.modelQuery = this.modelQuery.sort(sort as string);
+
     return this;
   }
-  
+
 
   paginate() {
     const page = Number(this?.query?.page) || 1;
@@ -78,4 +75,4 @@ class QueryBuilder<T> {
 
 }
 
-export default QueryBuilder;
+export default querybuilder;

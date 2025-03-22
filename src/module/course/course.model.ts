@@ -6,7 +6,7 @@ const CourseSchema = new Schema<ICourse>({
   cover_photo:{type:String , required:true},
   course_title: { type: String, required: true },
   course_type: { type: String, enum: ["online", "offline"], required:true },
-  category: { type: String, required: true },
+  category: { type: Schema.Types.ObjectId, required: true, ref:'Category' },
   duration: { type: String, required: true },
   takeReview: { type: String, enum: ["on", "off"], required: true },
   preOrder: { type: String, enum: ["on", "off"], required: true },

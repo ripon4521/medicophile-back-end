@@ -29,14 +29,16 @@ const getAllCoursesFromDb = async(query: Record<string, unknown>) => {
         .filter()
         .sort()
         .paginate()
-        .fields();
+   
+    
+       
     
       const result = await courseQuery.modelQuery;
       return result;
 }
 
 const getCourseById = async (_id: string) => {
-    const result = await CourseModel.findOne({_id});
+    const result = await CourseModel.findOne({_id}).populate('category');
     return result;
 }
 

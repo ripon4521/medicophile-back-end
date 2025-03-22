@@ -8,7 +8,7 @@ export interface ICourse {
   duration: string;
   preOrder: "on" | "off";
   course_type: "online" | "offline";
-  category: string;
+  category: Types.ObjectId;
   price: number;
   offerPrice: number;
   takeReview: "on" | "off";
