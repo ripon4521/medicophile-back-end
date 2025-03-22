@@ -2,6 +2,8 @@ import slugify from "slugify";
 import { ICourse } from "./course.interface";
 import { CourseModel } from "./course.model";
 import { nanoid } from "nanoid";
+import QueryBuilder from "../../builder/querybuilder";
+import { searchableFields } from "./coursee.constant";
 
 
 const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
@@ -17,9 +19,20 @@ const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
     return result;
 };
 
-const getAllCoursesFromDb = async() => {
-    const result = await CourseModel.find();
-    return result;
+const getAllCoursesFromDb = async(query: Record<string, unknown>) => {
+    console.log(query)
+    const courseQuery = new QueryBuilder(
+        CourseModel.find(),
+        query
+      )
+        .search(searchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+    
+      const result = await courseQuery.modelQuery;
+      return result;
 }
 
 const getCourseById = async (_id: string) => {

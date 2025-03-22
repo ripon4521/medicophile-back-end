@@ -1,5 +1,14 @@
 import mongoose, { Schema } from "mongoose";
 import { IClassSchedule } from "./classschedule.interface";
+import { optional } from "zod";
+
+const daySchema = new mongoose.Schema({
+    day: { type: String, required: true },
+    time: {
+        type: String,
+      
+    },
+  });
 
 const ClassScheduleSchema = new Schema<IClassSchedule>({
     courseId: {
@@ -9,21 +18,14 @@ const ClassScheduleSchema = new Schema<IClassSchedule>({
     },
     facultyId: {
         type: Schema.Types.ObjectId,
-        ref: "Facultys",
+        ref: "Faculty",
         required: true,
     },
-    room: {
-        type: String,
-        required: true,
-    },
-    time: {
-        type: String,
-        required: true,
-    },
+  
     day: {
-        type: String,
+        type: [daySchema],  
         required: true,
-    }
+      },
 });
 
 const ClassScheduleModel = mongoose.model<IClassSchedule>("classSchedules", ClassScheduleSchema);

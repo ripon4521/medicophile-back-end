@@ -38,6 +38,7 @@ const getsingleClassschedule = catchAsync(async (req, res) => {
 
 const updateClassschedule = catchAsync(async (req, res) => {
     const { id } = req.params;
+    
     const updatedStudent = await classscheduleService.updateClassscheduleInDb(id, req.body);
     sendResponse(res, {
         statusCode: StatusCodes.OK,

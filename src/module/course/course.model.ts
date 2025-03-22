@@ -16,6 +16,8 @@ const CourseSchema = new Schema<ICourse>({
   offerPrice: { type: Number, required: true },
   launchingDate: { type: String, required: true },
   course_tag: { type: String, required: true },
+},{
+  timestamps:true
 });
 
 export const CourseModel = mongoose.model<ICourse>("Course", CourseSchema);
