@@ -12,7 +12,7 @@ const ExamSchema = new Schema<IExam>(
     TotalQuestion: { type: Number, required: true, min: 1 },
     positiveMark: { type: Number, required: true, min: 0 },
     negativeMark: { type: Number, required: true, min: 0 },
-    Duration: { type: Number, required: true, min: 1 }, // Duration in minutes
+    duration: { type: Number, required: true, min: 1 }, // Duration in minutes
     launchingDate: { type: String, required: true }, // ISO date format
     validDate: { type: String, required: true }, // ISO date format
     status: { type: String, enum: ["published", "drafted"], required: true, default:'published' },

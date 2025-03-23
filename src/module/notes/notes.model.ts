@@ -10,7 +10,7 @@ const NotesSchema = new Schema<INotes>(
       noteFile: { type: String, required: true }, // Should store file URL
       classTime: { type: String, required: true },
       launchingDate: { type: String, required: true },
-      status: { type: String, enum: ["published", "drafted"], required: true },
+      status: { type: String, enum: ["published", "drafted"], required: true, default:'published' },
     },
     { timestamps: true }
   );

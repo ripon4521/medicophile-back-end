@@ -6,7 +6,7 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 });
 
 const createNotesSchema = z.object({
-  bod: z.object({
+  body: z.object({
     noteTitle: z.string().min(1, "Note title is required"),
     description: z.string().min(1, "Description is required").optional(),
     createdBy: ObjectIdSchema,
@@ -19,7 +19,7 @@ const createNotesSchema = z.object({
 });
 
 const updateNotesSchema = z.object({
-  bod: z.object({
+  body: z.object({
     noteTitle: z.string().min(1, "Note title is required").optional(),
     description: z.string().min(1, "Description is required").optional(),
     noteFile: z.string().url("Invalid file URL").optional(),
