@@ -17,7 +17,7 @@ const updateNote = catchAsync(async (req, res) => {
   const payload = req.body;
   const result = await noteService.updateNote(id, payload);
   sendResponse(res, {
-    statusCode: StatusCodes.CREATED,
+    statusCode: StatusCodes.OK,
     message: "Note updated successfully",
     data: result,
   });
@@ -27,7 +27,7 @@ const deleteNote = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await noteService.deleteNote(id);
   sendResponse(res, {
-    statusCode: StatusCodes.CREATED,
+    statusCode: StatusCodes.OK,
     message: "Note deleted successfully",
     data: result,
   });
@@ -37,7 +37,7 @@ const getSingleNote = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await noteService.getSingleNotes(id);
   sendResponse(res, {
-    statusCode: StatusCodes.CREATED,
+    statusCode: StatusCodes.OK,
     message: "Single Note get successfully",
     data: result,
   });
@@ -46,7 +46,7 @@ const getSingleNote = catchAsync(async (req, res) => {
 const getAllNotes = catchAsync(async (req, res) => {
   const result = await noteService.getAllNotes();
   sendResponse(res, {
-    statusCode: StatusCodes.CREATED,
+    statusCode: StatusCodes.OK,
     message: " Notes get successfully",
     data: result,
   });
