@@ -7,7 +7,6 @@ export interface INotes {
     createdBy:Types.ObjectId;
     courseId:Types.ObjectId;
     noteFile:File;
-    TotalQuestion:number;
     classTime:string;
     launchingDate:string;
     status:'published'|'drafted';

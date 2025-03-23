@@ -8,7 +8,6 @@ const NotesSchema = new Schema<INotes>(
       createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
       courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
       noteFile: { type: String, required: true }, // Should store file URL
-      TotalQuestion: { type: Number, required: true, min: 0 },
       classTime: { type: String, required: true },
       launchingDate: { type: String, required: true },
       status: { type: String, enum: ["published", "drafted"], required: true },
