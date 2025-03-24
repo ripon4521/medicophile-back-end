@@ -8,16 +8,16 @@ const createCourseCategorySchema = z.object({
     title: z.string().min(1, "Title is required"),
     cover_photo: z.string().url("Invalid cover photo URL"),
     createdBy: ObjectIdSchema,
-    deletedAt: z.string().nullable().optional(),
+    deletedAt: z.date().nullable().optional(), // `Date` ভ্যালিডেশন
     isDeleted: z.boolean(),
   }),
 });
 
 const updateCourseCategorySchema = z.object({
-  title: z.string().min(1, "Title is required").optional(),
-  cover_photo: z.string().url("Invalid cover photo URL").optional(),
-  deletedAt: z.string().nullable().optional(),
-  isDeleted: z.boolean(),
+  body: z.object({
+    title: z.string().min(1, "Title is required").optional(),
+    cover_photo: z.string().url("Invalid cover photo URL").optional(),
+  }),
 });
 
 export const courseCategoryValidation = {
