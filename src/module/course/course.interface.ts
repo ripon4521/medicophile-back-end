@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 
 export interface ICourse {
   course_code: string;
+  slug:string;
   cover_photo:string;
   course_title: string;
   totalAdmited: number;
@@ -14,5 +15,5 @@ export interface ICourse {
   takeReview: "on" | "off";
   launchingDate: string;
   status: "active" | "inactive";
-  course_tag:string;
+  course_tag:string[];
 }

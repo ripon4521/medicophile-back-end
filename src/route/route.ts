@@ -12,6 +12,7 @@ import lectureRouter from "../module/lecture/lecture.route";
 import examRouter from "../module/exam/exam.route";
 import noteRouter from "../module/notes/notes.router";
 import moduleRouter from "../module/modules/modules.router";
+import courseCategoryRoute from "../module/courseCategory/courseCategory.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -65,6 +66,9 @@ const moduleRoutes = [
   },{
     path:'/module',
     route:moduleRouter
+  },{
+    path:'/courseCategory',
+    route:courseCategoryRoute
   }
 ];
 moduleRoutes.forEach((route) => {

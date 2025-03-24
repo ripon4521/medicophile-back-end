@@ -8,6 +8,9 @@ import { handleGenericError } from "../helpers/handleGenericError"
 import { handleValidationError } from "../helpers/handlerValidationError"
 import { handlerZodError } from "../helpers/handleZodError"
 import { CustomError } from "../helpers/handleCustomError"
+import AppError from "../helpers/AppError"
+import { StatusCodes } from "http-status-codes"
+import { TErrorMessages } from "./error.interface"
 // import { handlerZodError } from "../helpers/handleZodError";
 
 type TErrorResponse = {
@@ -15,6 +18,17 @@ type TErrorResponse = {
     message: string
     error: any
 }
+
+
+let statusCode = StatusCodes.INTERNAL_SERVER_ERROR as number;
+let message = 'Something went wrong';
+
+let errorMessages: TErrorMessages = [
+    {
+        path: '',
+        message: 'Something went wrong',
+    },
+];
 
 export const globalErrorHandler = (err: any, req: Request, res: Response, _next: NextFunction) => {
 
@@ -56,6 +70,16 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, _next:
     else if (err instanceof Error) {
         handleGenericError(err, res)
     }
+    else if (err instanceof AppError) {
+      statusCode = err?.statusCode;
+      message = err?.message;
+      errorMessages = [
+          {
+              path: '',
+              message: err?.message,
+          },
+      ];
+  } 
 }
 
 
