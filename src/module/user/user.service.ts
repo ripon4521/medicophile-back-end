@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 import { UserModel } from './user.model';
 import { IUser } from './user.interface';
 import StudentUserModel from '../student/student.model';
-import FacultyUserModel from '../faculty/faculty.model';
+import FacultyUserModel from '../teacher/faculty.model';
 import { IStudent } from '../student/student.interface';
-import { IFaculty } from '../faculty/faculty.interface';
+import { IFaculty } from '../teacher/faculty.interface';
 
 
 const createStudentsIntoDB = async (payload: IStudent) => {

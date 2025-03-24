@@ -3,7 +3,7 @@ import validateRequest from '../../middlewares/validateRequest'
 import { userController } from './user.controller'
 import { auth } from '../../middlewares/auth'
 import { studentValidationSchema } from '../student/student.validation'
-import { facultysValidation } from '../faculty/faculty.validation'
+import { facultysValidation } from '../teacher/faculty.validation'
 
 const userRouter = Router()
 
