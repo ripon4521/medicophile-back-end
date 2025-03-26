@@ -3,6 +3,8 @@ import { IUser } from "../user/user.interface";
 import FacultyUserModel from "./faculty.model";
 import { UserModel } from "../user/user.model";
 import { IFaculty } from "./faculty.interface";
+import AppError from "../../helpers/AppError";
+import { StatusCodes } from "http-status-codes";
 
 const getAllFacultys = async () => {
   const result = await FacultyUserModel.find().populate("userId");
@@ -14,86 +16,66 @@ const getFacultyById = async (_id: string) => {
   return result;
 };
 
-// const updateFaculty = async (_id: string, updateData: Partial<IFaculty>) => {
-//   const session = await mongoose.startSession();
-//   session.startTransaction();
+const updateFaculty = async (_id: string, updateData: Partial<IFaculty>) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-//   try {
-//     const student = await FacultyUserModel.findOne({ _id }).session(session);
-//     if (!student) {
-//       throw new Error("Faculty not found");
-//     }
+  try {
+    const teacher = await FacultyUserModel.findOne({ _id }).session(session);
+    if (!teacher) {
+      throw new AppError(StatusCodes.FORBIDDEN,"Faculty not found");
+    }
 
-//     // Update the subjects for a specific class (e.g., class 9)
-//     if (updateData.subjects_taught) {
-//       for (const subject of updateData.subjects_taught) {
-//         const classToUpdate = subject.class;
-//         const newSubjects = subject.subjects;
+   
 
-//         // Use the positional operator to update subjects for the specific class
-//         await FacultyUserModel.updateOne(
-//           { _id, "subjects_taught.class": classToUpdate },
-//           {
-//             $set: {
-//               "subjects_taught.$.subjects": newSubjects,
-//             },
-//           },
-//           { session }
-//         );
-//       }
-//     }
+    // Other updates for faculty details...
+    const updatedStudent = await FacultyUserModel.findOneAndUpdate(
+      { _id },
+      updateData,
+      { new: true, runValidators: true, session }
+    );
 
-//     // Other updates for faculty details...
-//     const updatedStudent = await FacultyUserModel.findOneAndUpdate(
-//       { _id },
-//       updateData,
-//       { new: true, runValidators: true, session }
-//     );
+    if (!updatedStudent) {
+      throw new Error("Failed to update faculty");
+    }
 
-//     if (!updatedStudent) {
-//       throw new Error("Failed to update faculty");
-//     }
+    const userUpdateData: Partial<IUser> = {};
+    const updateStudentData =
+      await FacultyUserModel.findById(_id).session(session);
+      console.log(updatedStudent)
 
-//     const userUpdateData: Partial<IUser> = {};
-//     const updateStudentData =
-//       await FacultyUserModel.findById(_id).session(session);
+    userUpdateData.email = updateStudentData?.email;
+    userUpdateData.name = updateStudentData?.name;
+    userUpdateData.phone = updateStudentData?.phone;
+    userUpdateData.status = updateStudentData?.status;
+    userUpdateData.deletedAt = updateStudentData?.deletedAt;
+    userUpdateData.isDeleted = updateStudentData?.isDeleted;
+    userUpdateData.profile_picture = updateStudentData?.profile_picture;
 
-//     userUpdateData.gmail = updateStudentData?.gmail;
-//     userUpdateData.address = updateStudentData?.address;
-//     userUpdateData.gender = updateStudentData?.gender;
-//     userUpdateData.name = updateStudentData?.full_name;
-//     userUpdateData.contact = updateStudentData?.contact;
-//     userUpdateData.district = updateStudentData?.district;
-//     userUpdateData.division = updateStudentData?.division;
-//     userUpdateData.date_of_birth = updateStudentData?.date_of_birth;
-//     userUpdateData.religion = updateStudentData?.religion;
-//     userUpdateData.status = updateStudentData?.status;
-//     userUpdateData.profile_picture = updateStudentData?.profile_picture;
+    // Update user model
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      teacher.userId,
+      userUpdateData,
+      { new: true, runValidators: true, session }
+    );
 
-//     // Update user model
-//     const updatedUser = await UserModel.findByIdAndUpdate(
-//       student.userId,
-//       userUpdateData,
-//       { new: true, runValidators: true, session }
-//     );
+    if (!updatedUser) {
+      throw new AppError(StatusCodes.FORBIDDEN,"Failed to update user");
+    }
 
-//     if (!updatedUser) {
-//       throw new Error("Failed to update user");
-//     }
+    // Commit transaction if everything is fine
+    await session.commitTransaction();
+    session.endSession();
 
-//     // Commit transaction if everything is fine
-//     await session.commitTransaction();
-//     session.endSession();
+    return updatedStudent;
+  } catch (error) {
+    // Rollback transaction if error occurs
+    await session.abortTransaction();
+    session.endSession();
 
-//     return updatedStudent;
-//   } catch (error) {
-//     // Rollback transaction if error occurs
-//     await session.abortTransaction();
-//     session.endSession();
-
-//     throw new Error("Error updating faculty and user");
-//   }
-// };
+    throw new AppError(StatusCodes.FORBIDDEN,"Error updating faculty and user");
+  }
+};
 
 const deleteFacultyById = async (_id: string) => {
   const session = await mongoose.startSession();
@@ -133,4 +115,5 @@ export const facultysService = {
   getAllFacultys,
   getFacultyById,
   deleteFacultyById,
+  updateFaculty
 };
