@@ -3,6 +3,8 @@ import { IUser } from '../user/user.interface'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { UserModel } from '../user/user.model'
+import AppError from '../../helpers/AppError'
+import { StatusCodes } from 'http-status-codes'
 
 const register = async (payload: IUser) => {
   const result = await UserModel.create(payload)
@@ -14,42 +16,42 @@ const register = async (payload: IUser) => {
   
 }
 
-const login = async (payload: { gmail: string; password: string }) => {
+const login = async (payload: { phone: string; password: string }) => {
  
 
-  if (!payload.gmail || !payload.password) {
+  if (!payload.phone || !payload.password) {
   
-    throw { message: 'Gmail and password are required', statusCode: 400 };
+    throw new AppError ( StatusCodes.BAD_REQUEST,  'Gmail and password are required')
   }
 
-  const user = await UserModel.findOne({ gmail: payload.gmail }).select('+password');
+  const user = await UserModel.findOne({ phone: payload.phone }).select('+password');
 
 
   if (!user) {
 
-    throw new Error('User not found!'); 
+    throw new AppError(StatusCodes.BAD_REQUEST,'User not found!'); 
 
   }
 
-  if (user.status === 'blocked') {
+  if (user.status === 'Blocked') {
   
-    throw new Error('This user is blocked!' );
+    throw new AppError(StatusCodes.UNAUTHORIZED,'This user is blocked!' );
   }
 
   const isPasswordMatched = await bcrypt.compare(payload.password, user.password);
 
   if (!isPasswordMatched) {
   
-    throw new Error('Invalid password' );
+    throw new AppError(StatusCodes.FORBIDDEN,'Invalid password' );
   }
 
   const jwtPayload = {
-    gmail: user.gmail,
+    phone: user.phone,
     role: user.role,
     _id: user._id.toString(),
   };
 
-  const token = jwt.sign(jwtPayload, process.env.JWT_SECRET || 'primarytestkey', { expiresIn: '10d' });
+  const token = jwt.sign(jwtPayload, process.env.JWT_SECRET || 'primarytestkey', { expiresIn: '100d' });
 
   
   return { token, user };

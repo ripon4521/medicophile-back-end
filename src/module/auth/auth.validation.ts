@@ -2,9 +2,9 @@ import { z } from 'zod'
 
 const loginValidationSchema = z.object({
   body: z.object({
-    gmail: z.string({
-      required_error: "Email must be provided and must be a string",
-  }).email(),
+    phone: z.string({
+      required_error: "Phone number must be valid and 11 charchters ",
+  }),
     password: z.string({ required_error: 'Password is required' }),
   }),
 })

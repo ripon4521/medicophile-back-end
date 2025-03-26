@@ -1,11 +1,12 @@
 export const USER_ROLE = {
-    student: 'student',
+    superAdmin: 'superAdmin',
     admin: 'admin',
-    faculty: 'faculty',
+    teacher: 'teacher',
 
 } as const;
 
 export const USER_STATUS = {
-    unblocked: 'unblocked',
-    blocked: 'blocked',
+    Active: 'Active',
+    Blocked: 'Blocked',
 } as const;
+

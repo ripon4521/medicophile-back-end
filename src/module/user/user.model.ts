@@ -6,31 +6,20 @@ import config from "../../config";
 
 const UserSchema = new Schema<IUser>({
   name: { type: String, required: true },
-  gmail: { type: String, required: true, unique: true, },
+  email: { type: String, required: true, unique: true, },
   password: { type: String,require:true },
-  district: { type: String  },
-  division: { type: String },
-  gender: { type: String },
-  religion: { type: String },
-  date_of_birth: { type: String},
-  contact: { type: String},
-  address: { type: String },
-  role: { type: String, enum: ["admin", "student", "faculty"], required: true },
+  phone: { type: String},
+  role: { type: String, enum: ["superAdmin", "admin", "teacher"], required: true },
   profile_picture: { type: String },
-  registration_date: { type: Date, default: Date.now },
-  last_login: { type: Date },
-  status: { type: String, enum: ["unblocked", "blocked"], required: true }
-},{
-  timestamps:true
+  status: { type: String, enum: ["Active", "Blocked"], required: true },
+  isDeleted: { type: Boolean, required:true},
+  deletedAt: { type : Date , default:null }
+
+},  {
+  timestamps: { currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000) }, // ✅ BD Time (UTC+6)
 });
 
-// Pre-save hook to update last_login when user logs in
-UserSchema.pre("save", function (next) {
-  if (this.isModified("password") || this.isNew) {
-    this.last_login = new Date();
-  }
-  next();
-});
+
 
 UserSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias

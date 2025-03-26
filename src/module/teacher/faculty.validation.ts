@@ -7,7 +7,6 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 const createFacultyValidationSchema = z.object({
   body: z.object({
     role: z.enum(["superAdmin", "admin", "teacher"]),
-    userId: ObjectIdSchema,
     name: z.string().min(3, "Name must be at least 3 characters"),
     phone: z
       .string()
