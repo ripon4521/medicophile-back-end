@@ -2,16 +2,20 @@ import { Types } from "mongoose";
 
 
 export interface IExam {
+    slug:string;
     examTitle:string;
-    description:string;
     createdBy:Types.ObjectId;
     courseId:Types.ObjectId;
+    moduleId:Types.ObjectId;
     examType:'MCQ'|'CQ'|'Fill in the gaps';
-    TotalQuestion:number;
+    totalQuestion:number;
     positiveMark:number;
     negativeMark:number;
-    duration:number;
-    launchingDate:string;
-    validDate:string;
+    mcqDuration:number;
+    cqMark:number;
+    resultStatus:'pending'|'completed'|'failed';
+    validTime:string;
     status:'published'|'drafted';
+    deletedAt:Date | null;
+    isDeleted:boolean;
 }

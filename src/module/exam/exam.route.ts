@@ -6,8 +6,8 @@ import { examController } from "./exam.controller";
 const examRouter = Router();
 examRouter.post('/create-exam', validateRequest(examValidation.createExamSchema), examController.createExam);
 examRouter.get('/', examController.getExam);
-examRouter.get('/:id', examController.getSingleExam);
-examRouter.delete('/:id', examController.deleteExam);
-examRouter.patch('/:id', validateRequest(examValidation.updateExammSchema), examController.updateExam);
+examRouter.get('/:slug', examController.getSingleExam);
+examRouter.delete('/:slug', examController.deleteExam);
+examRouter.patch('/:slug', validateRequest(examValidation.updateExamSchema), examController.updateExam);
 
 export default examRouter;

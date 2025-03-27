@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { courseService } from "./course.service";
+import AppError from "../../helpers/AppError";
 
 const createCourse = catchAsync(async(req, res) => {
     const result = await courseService.createCourseIntoDb(req.body);
@@ -26,7 +27,7 @@ const getAllCourses = catchAsync(async(req, res) => {
 
 const getSingleCourse = catchAsync(async(req, res) => {
 
-    const result = await courseService.getCourseById(req.params.id);
+    const result = await courseService.getCourseById(req.params.slug);
     if (!result) {
         throw new Error('Course not found');
     }
@@ -38,7 +39,7 @@ const getSingleCourse = catchAsync(async(req, res) => {
 });
 
 const updateCourse = catchAsync(async(req, res) => {
-    const result = await courseService.updateCourseInDb(req.params.id, req.body);
+    const result = await courseService.updateCourseInDb(req.params.slug, req.body);
     if (!result) {
         throw new Error('Course not found');
     }
@@ -50,9 +51,9 @@ const updateCourse = catchAsync(async(req, res) => {
 })
 
 const deleteCourse = catchAsync(async(req, res) => {
-    const result = await courseService.deleteCourseFromDb(req.params.id);
+    const result = await courseService.deleteCourseFromDb(req.params.slug);
     if (!result) {
-        throw new Error('Course not found');
+        throw new AppError(StatusCodes.BAD_REQUEST,'Course not found, please reload and try again');
     }
     sendResponse(res, {
         statusCode: StatusCodes.OK,

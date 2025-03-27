@@ -24,8 +24,8 @@ const createExam = catchAsync(async (req, res) => {
 
 
   const getSingleExam = catchAsync(async (req, res) => {
-    const {id} = req.params;
-    const result = await examServices.getSingleExam(id);
+    const {slug} = req.params;
+    const result = await examServices.getSingleExam(slug);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       message: "Single Exam fatched successfully",
@@ -35,8 +35,8 @@ const createExam = catchAsync(async (req, res) => {
   
 
   const deleteExam = catchAsync(async (req, res) => {
-    const {id} = req.params;
-    const result = await examServices.deleteExam(id);
+    const {slug} = req.params;
+    const result = await examServices.deleteExam(slug);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       message: "  Exam Delete successfully",
@@ -46,9 +46,9 @@ const createExam = catchAsync(async (req, res) => {
 
   
   const updateExam = catchAsync(async (req, res) => {
-    const {id} = req.params;
+    const {slug} = req.params;
     const payload = req.body;
-    const result = await examServices.updateExam(id, payload);
+    const result = await examServices.updateExam(slug, payload);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       message: " Exam Update successfully",

@@ -2,6 +2,7 @@
 Completed Module 
 1.Course Category
 2. User and Teacher Creation 
-3. Auth
+3. Auth - baki ase inly otp
+4. course - baki ase only query 
 
  -->

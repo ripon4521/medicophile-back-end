@@ -1,24 +1,51 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 import { IExam } from "./exam.interface";
+import slugify from "slugify";
 
 
 const ExamSchema = new Schema<IExam>(
-  {
-    examTitle: { type: String, required: true },
-    description: { type: String, required: true },
-    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
-    examType: { type: String, enum: ["MCQ", "CQ", "Fill in the gaps"], required: true },
-    TotalQuestion: { type: Number, required: true, min: 1 },
-    positiveMark: { type: Number, required: true, min: 0 },
-    negativeMark: { type: Number, required: true, min: 0 },
-    duration: { type: Number, required: true, min: 1 }, // Duration in minutes
-    launchingDate: { type: String, required: true }, // ISO date format
-    validDate: { type: String, required: true }, // ISO date format
-    status: { type: String, enum: ["published", "drafted"], required: true, default:'published' },
-  },
-  { timestamps: true }
+ {
+  slug: { type: String },
+  examTitle: { type: String, required: true },
+  createdBy: { type: Schema.Types.ObjectId, ref: "User", required:true },  
+  courseId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },  
+  moduleId: { type: Schema.Types.ObjectId, required: true, ref: "Module" },
+  examType: { type: String, enum: ['MCQ', 'CQ', 'Fill in the gaps'], required: true },
+  totalQuestion: { type: Number, required: true },
+  positiveMark: { type: Number, required: true },
+  negativeMark: { type: Number, required: true },
+  mcqDuration: { type: Number, required: true },
+  cqMark: { type: Number, required: true },
+  resultStatus: { type: String, enum: ['pending', 'completed', 'failed'], required: true },
+  validTime: { type: String, required: true },
+  status: { type: String, enum: ['published', 'drafted'], required: true },
+  deletedAt: { type: Date, default: null },
+  isDeleted: { type: Boolean, default: false },
+
+ },
+ {
+  timestamps: { currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000) }, // UTC+6 (Bangladesh Time)
+}
 );
+
+
+ExamSchema.pre("save", function (next) {
+  if (this.isModified("examTitle")) {
+    this.slug = slugify(this.examTitle, { lower: true, strict: true });
+  }
+  next();
+});
+
+ExamSchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate() as Record<string, any>; 
+  if (update?.examTitle) {
+    update.slug = slugify(update.examTitle, { lower: true, strict: true });
+  }
+  next();
+});
+
+
+
 
 const ExamModel = mongoose.model<IExam>("Exam", ExamSchema);
 
