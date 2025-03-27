@@ -1,19 +1,24 @@
 import { Types } from "mongoose";
 
 export interface ICourse {
-  course_code: string;
   slug:string;
   cover_photo:string;
   course_title: string;
-  totalAdmited: number;
+  description:string;
   duration: string;
   preOrder: "on" | "off";
   course_type: "online" | "offline";
   category: Types.ObjectId;
+  createdBy:Types.ObjectId;
+  expireTime:Date;
+  daySchedule:[string];
+  timeShedule:[string];
   price: number;
   offerPrice: number;
   takeReview: "on" | "off";
-  launchingDate: string;
   status: "active" | "inactive";
   course_tag:string[];
+  isDeleted:true;
+  deletedAt:Date | null;
+  
 }

@@ -1,22 +1,16 @@
 
 import { ICourse } from "./course.interface";
-import { CourseModel } from "./course.model";
 import { nanoid } from "nanoid";
 import QueryBuilder from "../../builder/querybuilder";
 import { searchableFields } from "./coursee.constant";
 import slugify from 'slugify';
+import courseModel from "./course.model";
+import AppError from "../../helpers/AppError";
+import { StatusCodes } from "http-status-codes";
 
 
 const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
-    const titleSlug = slugify(payload.course_title, {
-        lower: true, 
-        strict: true, 
-        trim: true
-    }).replace(/-/g, ""); 
-    const uniqueId = nanoid(4).toUpperCase();
-    const uniqueCourseCode = `${titleSlug.substring(0, 6).toUpperCase()}-${uniqueId}`;
-    payload.course_code = uniqueCourseCode;
-    const result = await CourseModel.create(payload);
+    const result = await courseModel.create(payload);
     return result;
 };
 
@@ -38,42 +32,66 @@ const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
 //   };
 
 
-const getAllCoursesFromDb =async () => {
-    const result = await CourseModel.find().populate('category');
-    return result;
-}
+// const getAllCoursesFromDb =async () => {
+//     const result = await courseModel.find().populate('category');
+//     return result;
+// }
 
-// const getAllCoursesFromDb = async(query: Record<string, unknown>) => {
-//     console.log(query)
-//     const courseQuery = new QueryBuilder(
-//         CourseModel.find(),
-//         query
-//       )
-//         .search(searchableFields)
-//         .filter()
-//         .sort()
+const getAllCoursesFromDb = async(query: Record<string, unknown>) => {
+    console.log(query)
+    const courseQuery = new QueryBuilder(
+        courseModel.find(),
+        query
+      )
+        .search(searchableFields)
+        .filter()
+        .sort()
   
    
     
        
     
-//       const result = await courseQuery.modelQuery;
-//       console.log(result)
-//       return result;
-// }
+      const result = await courseQuery.modelQuery;
+      console.log(result)
+      return result;
+}
 
-const getCourseById = async (_id: string) => {
-    const result = await CourseModel.findOne({_id}).populate('category');
+const getCourseById = async (slug: string) => {
+    const result = await courseModel.findOne({slug}).populate('category');
+     if (!result) {
+        throw new AppError(
+          StatusCodes.BAD_REQUEST,
+          "Failed to get Course Ctaegory. Slug is not valid, reload or go back and try again"
+        );
+      }
     return result;
 }
 
-const updateCourseInDb = async(_id: string, payload: Partial<ICourse>) => {
-    const result = await CourseModel.findOneAndUpdate({_id}, payload, {new: true});
-    return result;
+const updateCourseInDb = async(slug: string, payload: Partial<ICourse>) => {
+    const update = await courseModel.findOneAndUpdate({slug}, payload, {new: true, runValidators:true});
+      if (!update) {
+        throw new AppError(
+          StatusCodes.BAD_REQUEST,
+          "Failed to update Course Ctaegory. Slug is not valid, reload or go back and try again"
+        );
+      }
+    
+    return update;
 }
 
-const deleteCourseFromDb = async (_id: string) => {
-    const result = await CourseModel.findOneAndDelete({_id});
+const deleteCourseFromDb = async (slug: string) => {
+    const result = await courseModel.findOneAndUpdate(
+        { slug },
+        {
+          isDeleted: true,
+          deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
+        },
+        { new: true }
+      );
+
+      if (!result) {
+        throw new AppError(StatusCodes.BAD_REQUEST, 'PLease Try Again ')
+      }
     return result;
 }
 

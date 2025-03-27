@@ -13,8 +13,9 @@ const createCourse = catchAsync(async(req, res) => {
 });
 
 const getAllCourses = catchAsync(async(req, res) => {
+    const query = req.query;
 
-    const result = await courseService.getAllCoursesFromDb();
+    const result = await courseService.getAllCoursesFromDb(query);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,

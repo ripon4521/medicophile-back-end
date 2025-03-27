@@ -1,97 +1,61 @@
-import { Types } from "mongoose";
-import { z } from "zod";
+import { z } from 'zod';
+import { Types } from 'mongoose';
+
+
 const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
   message: "Invalid ObjectId format",
 });
-const createCourseSchema = z.object({
-  body: z.object({
-    course_title: z.string().min(1, { message: "Course title is required" }),
-    cover_photo: z.string().min(1, { message: "cover photo  is required" }).optional(),
-    totalAdmited: z.number({ message: "Total admitted must be a number" }),
-    duration: z.string().min(1, { message: "Duration is required" }),
-    category: ObjectIdSchema,
-    preOrder: z.enum(["on", "off"], {
-      message: "Pre-order must be 'on' or 'off'",
-    }),
-    takeReview: z.enum(["on", "off"], {
-      message: "Take review must be 'on' or 'off'",
-    }),
-    course_type: z.enum(["online", "offline"], {
-      message: "Course type must be 'online' or 'offline'",
-    }),
-    price: z
-      .number()
-      .positive({ message: "Price must be a positive number" })
-      .min(1, { message: "Price must be at least 1" }),
-    offerPrice: z
-      .number()
-      .positive({ message: "Offer price must be a positive number" })
-      .min(1, { message: "Offer price must be at least 1" }),
-    launchingDate: z.string().min(1, { message: "Launching Date is required" }),
-    course_tag: z.string().min(1, { message: "Course Tag is required" }).optional(),
-    status: z.enum(["active", "inactive"], {
-      message: "Status must be 'active' or 'unactive'",
-    }),
-  }),
+
+ const createCourseSchema = z.object({
+  body:z.object({
+  cover_photo: z.string().min(1, { message: "Cover photo URL is required." }),
+  course_title: z.string().min(1, { message: "Course title is required." }),
+  description: z.string().min(1, { message: "Description is required." }),
+  duration: z.string().min(1, { message: "Duration is required." }),
+  preOrder: z.enum(["on", "off"], { message: "PreOrder must be either 'on' or 'off'." }),
+  course_type: z.enum(["online", "offline"], { message: "Course type must be either 'online' or 'offline'." }),
+  category:ObjectIdSchema,
+  createdBy: ObjectIdSchema,
+  expireTime: z.string({ message: "Expire time must be a valid date." }),
+  daySchedule: z.array(z.string()).nonempty({ message: "Day schedule cannot be empty." }),
+  timeShedule: z.array(z.string()).nonempty({ message: "Time schedule cannot be empty." }),
+  price: z.number().min(0, { message: "Price must be a non-negative number." }),
+  offerPrice: z.number().min(0, { message: "Offer price must be a non-negative number." }),
+  takeReview: z.enum(["on", "off"], { message: "Take review must be either 'on' or 'off'." }),
+  status: z.enum(["active", "inactive"], { message: "Status must be either 'active' or 'inactive'." }),
+  course_tag: z.array(z.string()).nonempty({ message: "At least one course tag is required." }),
+  isDeleted: z.literal(true, { message: "isDeleted must always be true." }),
+  deletedAt: z.union([z.date().nullable(), z.null()]).optional()
+
+})
 });
 
 const updateCourseSchema = z.object({
-  body: z.object({
-    course_code: z
-      .string()
-      .min(1, { message: "Course code is required" })
-      .optional(),
-    cover_photo: z
-      .string()
-      .min(1, { message: "cover photo  is required" })
-      .optional(),
-    course_title: z
-      .string()
-      .min(1, { message: "Course title is required" })
-      .optional(),
-    totalAdmited: z
-      .number({ message: "Total admitted must be a number" })
-      .optional(),
-    duration: z.string().min(1, { message: "Duration is required" }).optional(),
-    category:ObjectIdSchema.optional(),
-    preOrder: z
-      .enum(["on", "off"], { message: "Pre-order must be 'on' or 'off'" })
-      .optional(),
-    takeReview: z
-      .enum(["on", "off"], { message: "Take review must be 'on' or 'off'" })
-      .optional(),
-    course_type: z
-      .enum(["online", "offline"], {
-        message: "Course type must be 'online' or 'offline'",
-      })
-      .optional(),
-    price: z
-      .number()
-      .positive({ message: "Price must be a positive number" })
-      .min(1, { message: "Price must be at least 1" })
-      .optional(),
-    offerPrice: z
-      .number()
-      .positive({ message: "Offer price must be a positive number" })
-      .min(1, { message: "Offer price must be at least 1" })
-      .optional(),
-    launchingDate: z
-      .string()
-      .min(1, { message: "Launching Date is required" })
-      .optional(),
-    course_tag: z
-      .string()
-      .min(1, { message: "Course Tag is required" })
-      .optional(),
-    status: z
-      .enum(["active", "inactive"], {
-        message: "Status must be 'active' or 'unactive'",
-      })
-      .optional(),
-  }),
+  body:z.object({
+  cover_photo: z.string().min(1, { message: "Cover photo URL is required." }).optional(),
+  course_title: z.string().min(1, { message: "Course title is required." }).optional(),
+  description: z.string().min(1, { message: "Description is required." }).optional(),
+  duration: z.string().min(1, { message: "Duration is required." }).optional(),
+  preOrder: z.enum(["on", "off"], { message: "PreOrder must be either 'on' or 'off'." }).optional(),
+  course_type: z.enum(["online", "offline"], { message: "Course type must be either 'online' or 'offline'." }).optional(),
+  category:ObjectIdSchema.optional(),
+  createdBy: ObjectIdSchema.optional(),
+  expireTime: z.date({ message: "Expire time must be a valid date." }).optional(),
+  daySchedule: z.array(z.string()).nonempty({ message: "Day schedule cannot be empty." }).optional(),
+  timeShedule: z.array(z.string()).nonempty({ message: "Time schedule cannot be empty." }).optional(),
+  price: z.number().min(0, { message: "Price must be a non-negative number." }).optional(),
+  offerPrice: z.number().min(0, { message: "Offer price must be a non-negative number." }).optional(),
+  takeReview: z.enum(["on", "off"], { message: "Take review must be either 'on' or 'off'." }).optional(),
+  status: z.enum(["active", "inactive"], { message: "Status must be either 'active' or 'inactive'." }).optional(),
+  course_tag: z.array(z.string()).nonempty({ message: "At least one course tag is required." }).optional(),
+  isDeleted: z.literal(true, { message: "isDeleted must always be true." }).optional(),
+  deletedAt: z.union([z.date().nullable(), z.null()]).optional()
+
+})
 });
 
+
 export const courseValidation = {
-  createCourseSchema,
   updateCourseSchema,
-};
+  createCourseSchema,
+}
