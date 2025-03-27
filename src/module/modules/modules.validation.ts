@@ -8,27 +8,25 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 
 const createModuleSchema = z.object({
   body: z.object({
-    serialNumber: z.number().min(1, "Serial number must be at least 1"),
-    moduleTitle: z.string().min(1, "Module title is required"),
-    description: z.string().optional(),
+    moduleTitle: z.string().min(1),
     courseId: ObjectIdSchema,
     createdBy: ObjectIdSchema,
-    status: z.enum(["published", "drafted"]),
-    launchingDate: z.string().datetime("Invalid date format"),
+    deletedAt: z.union([z.date().optional(), z.null()]),
+    isDeleted: z.boolean(),
   }),
 });
 
 const updateModuleSchema = z.object({
   body: z.object({
-    serialNumber: z.number().min(1, "Serial number must be at least 1").optional(),
-    moduleTitle: z.string().min(1, "Module title is required").optional(),
-    description: z.string().optional(),
-    status: z.enum(["published", "drafted"]).optional(),
-    launchingDate: z.string().datetime("Invalid date format").optional(),
+    moduleTitle: z.string().min(1).optional(),
+    courseId: ObjectIdSchema.optional(),
+    createdBy: ObjectIdSchema.optional(),
+    deletedAt: z.union([z.date().optional(), z.null()]).optional(),
+    isDeleted: z.boolean().optional(),
   }),
 });
 
 export const moduleValidation = {
-    createModuleSchema,
-    updateModuleSchema
-}
+  createModuleSchema,
+  updateModuleSchema,
+};

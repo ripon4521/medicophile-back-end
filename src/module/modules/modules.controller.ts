@@ -13,9 +13,9 @@ const createModule = catchAsync(async (req, res) => {
 });
 
 const updateModule = catchAsync(async (req, res) => {
-  const { id } = req.params;
+  const {slug } = req.params;
   const payload = req.body;
-  const result = await moduleService.updateModule(id, payload);
+  const result = await moduleService.updateModule(slug, payload);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Module updated successfully",
@@ -24,8 +24,8 @@ const updateModule = catchAsync(async (req, res) => {
 });
 
 const deleteModule = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const result = await moduleService.deleteModule(id);
+  const { slug } = req.params;
+  const result = await moduleService.deleteModule(slug);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Module deleted successfully",
@@ -34,8 +34,8 @@ const deleteModule = catchAsync(async (req, res) => {
 });
 
 const getSingleModule = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const result = await moduleService.getSingleModule(id);
+  const { slug } = req.params;
+  const result = await moduleService.getSingleModule(slug);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Single Module get successfully",

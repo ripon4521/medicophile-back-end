@@ -6,7 +6,10 @@ import ExamModel from "./exam.model";
 const createExam = async (payload: IExam) => {
   const result = await ExamModel.create(payload);
   if (!result) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'Failed To Create Exam, Please cheack and try again')
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Failed To Create Exam, Please cheack and try again"
+    );
   }
   return result;
 };
@@ -19,9 +22,12 @@ const getAllExam = async () => {
       populate: { path: "category" },
     });
 
-    if (!result) {
-      throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to load data, please try again')
-    }
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Failed to load data, please try again"
+    );
+  }
 
   return result;
 };
@@ -33,11 +39,14 @@ const getSingleExam = async (slug: string) => {
       path: "courseId",
       populate: { path: "category" },
     });
-    console.log(result)
+  console.log(result);
 
-    if (!result) {
-      throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to load data , please try again')
-    }
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Failed to load data , please try again"
+    );
+  }
   return result;
 };
 
@@ -49,7 +58,10 @@ const updateExam = async (slug: string, payload: Partial<IExam>) => {
     });
 
     if (!update) {
-      throw new AppError(StatusCodes.BAD_REQUEST,"Exam not found or update failed.");
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        "Exam not found or update failed."
+      );
     }
 
     return update;
@@ -59,8 +71,15 @@ const updateExam = async (slug: string, payload: Partial<IExam>) => {
   }
 };
 
-const deleteExam = async (_id: string) => {
-  const result = await ExamModel.findOneAndDelete({ _id });
+const deleteExam = async (slug: string) => {
+  const result = await ExamModel.findOneAndUpdate(
+    { slug },
+    {
+      isDeleted: true,
+      deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
+    },
+    { new: true }
+  );
   return result;
 };
 

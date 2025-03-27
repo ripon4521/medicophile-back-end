@@ -10,12 +10,12 @@ moduleRouter.post(
   modulesController.createModule
 );
 moduleRouter.patch(
-  "/:id",
+  "/:slug",
   validateRequest(moduleValidation.updateModuleSchema),
   modulesController.updateModule
 );
 moduleRouter.get("/", modulesController.getAllModule);
-moduleRouter.get("/:id", modulesController.getSingleModule);
-moduleRouter.delete("/:id", modulesController.deleteModule);
+moduleRouter.get("/:slug", modulesController.getSingleModule);
+moduleRouter.delete("/:slug", modulesController.deleteModule);
 
 export default moduleRouter;

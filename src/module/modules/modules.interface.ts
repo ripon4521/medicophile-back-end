@@ -1,11 +1,10 @@
 import { Types } from "mongoose";
 
 export interface IModules {
-    serialNumber:number;
-    moduleTitle:string;
-    description:string;
-    courseId:Types.ObjectId;
-    createdBy:Types.ObjectId;
-    status:'published'|'drafted';
-    launchingDate:string;
+  slug: string;
+  moduleTitle: string;
+  courseId: Types.ObjectId;
+  createdBy: Types.ObjectId;
+  deletedAt: Date | null;
+  isDeleted: boolean;
 }
