@@ -12,7 +12,10 @@ const ModuleSchema = new Schema<IModules>(
       deletedAt:{ type: Date, default:null},
       isDeleted:{ type: Boolean, required:true}
     },
-    { timestamps: true }
+    { 
+      timestamps: { currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000) }, // UTC+6 (Bangladesh Time)
+
+    }
   );
 
 

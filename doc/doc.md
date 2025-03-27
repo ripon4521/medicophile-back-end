@@ -4,5 +4,7 @@ Completed Module
 2. User and Teacher Creation 
 3. Auth - baki ase inly otp
 4. course - baki ase only query 
+5. module 
+6. exam 
 
  -->
