@@ -10,7 +10,7 @@ const createCourseCategory = async (payload: ICourseCategory) => {
 };
 
 const getAllCourseCategory = async () => {
-  const result = await CourseCategory.find({isDeleted:false});
+  const result = await CourseCategory.find({ isDeleted: false });
   return result;
 };
 
@@ -19,7 +19,7 @@ const getSingleCourseCatgeory = async (slug: string) => {
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to get Course Ctaegory. Slug is not valid, reload or go back and try again"
+      "Failed to get Course Ctaegory. Slug is not valid, reload or go back and try again",
     );
   }
   return result;
@@ -27,7 +27,7 @@ const getSingleCourseCatgeory = async (slug: string) => {
 
 const updateCourseCategory = async (
   slug: string,
-  payload: Partial<ICourseCategory>
+  payload: Partial<ICourseCategory>,
 ) => {
   // Update operation
   const update = await CourseCategory.findOneAndUpdate({ slug }, payload, {
@@ -38,7 +38,7 @@ const updateCourseCategory = async (
   if (!update) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to update Course Ctaegory. Slug is not valid, reload or go back and try again"
+      "Failed to update Course Ctaegory. Slug is not valid, reload or go back and try again",
     );
   }
 
@@ -52,7 +52,7 @@ const deleteCourseCategory = async (slug: string) => {
       isDeleted: true,
       deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
     },
-    { new: true }
+    { new: true },
   );
   return result;
 };

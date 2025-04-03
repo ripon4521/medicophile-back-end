@@ -36,7 +36,7 @@ const updateCourseCategory = catchAsync(async (req, res) => {
   const payload = req.body;
   const result = await courseCategoryService.updateCourseCategory(
     slug,
-    payload
+    payload,
   );
   sendResponse(res, {
     statusCode: StatusCodes.OK,

@@ -13,7 +13,7 @@ const createFacultyValidationSchema = z.object({
       .regex(/^\+?(88)?01[3-9]\d{8}$/, "Invalid Bangladeshi phone number"),
     email: z.string().email("Invalid email format"),
     password: z.string().min(6, "Password must be at least 6 characters"),
-    profile_picture: z.string().url("Invalid URL format"),
+    profile_picture: z.string().url("Invalid URL format").optional(),
     status: z.enum(["Active", "Blocked"]),
     deletedAt: z.date().nullable().optional(),
     isDeleted: z.boolean(),

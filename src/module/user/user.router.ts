@@ -1,20 +1,30 @@
-import { Router } from 'express'
-import validateRequest from '../../middlewares/validateRequest'
-import { userController } from './user.controller'
-import { auth } from '../../middlewares/auth'
-import { studentValidationSchema } from '../student/student.validation'
-import { facultyValidation } from '../teacher/faculty.validation'
-import { facultysController } from '../teacher/faculty.controller'
+import { Router } from "express";
+import validateRequest from "../../middlewares/validateRequest";
+import { userController } from "./user.controller";
+import { auth } from "../../middlewares/auth";
+// import { studentValidationSchema } from "../student/student.validation";
+import { facultyValidation } from "../teacher/faculty.validation";
+import { facultysController } from "../teacher/faculty.controller";
 
-const userRouter = Router()
+const userRouter = Router();
 
 // userRouter.post('/create-admin', userController.createAdmin);
-userRouter.post('/create-student', validateRequest(studentValidationSchema.createstudentValidationSchema), userController.createStudeent);
-userRouter.get('/profile', auth.authUser('superAdmin', 'admin', 'teacher'), userController.getProfile);
-userRouter.post('/create-faculty', validateRequest(facultyValidation.createFacultyValidationSchema), userController.createFaculty);
-userRouter.get('/', userController.getAllUsers);
-userRouter.delete('/', userController.deleteUsers)
-
-
+// userRouter.post(
+//   "/create-student",
+//   validateRequest(studentValidationSchema.createstudentValidationSchema),
+//   userController.createStudeent,
+// );
+userRouter.get(
+  "/profile",
+  auth.authUser("superAdmin", "admin", "teacher"),
+  userController.getProfile,
+);
+userRouter.post(
+  "/create-faculty",
+  validateRequest(facultyValidation.createFacultyValidationSchema),
+  userController.createFaculty,
+);
+userRouter.get("/", userController.getAllUsers);
+userRouter.delete("/", userController.deleteUsers);
 
 export default userRouter;

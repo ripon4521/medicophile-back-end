@@ -18,18 +18,18 @@ const createIModuleDetailsSchema = z.object({
 });
 
 const updateIModuleDetailsSchema = z.object({
-    body: z.object({
-      courseId: ObjectId.optional(),
-      moduleId: ObjectId.optional(),
-      content_type: z.enum(["lecture", "notes", "exam"]).optional(),
-      contentId: ObjectId.optional(),
-      status: z.enum(["published", "drafted"]).optional(),
-      deletedAt: z.date().nullable().optional(),
-      isDeleted: z.boolean().optional(),
-    }),
-  });
+  body: z.object({
+    courseId: ObjectId.optional(),
+    moduleId: ObjectId.optional(),
+    content_type: z.enum(["lecture", "notes", "exam"]).optional(),
+    contentId: ObjectId.optional(),
+    status: z.enum(["published", "drafted"]).optional(),
+    deletedAt: z.date().nullable().optional(),
+    isDeleted: z.boolean().optional(),
+  }),
+});
 
-  export const moduleDetailsValidation = {
-    createIModuleDetailsSchema,
-    updateIModuleDetailsSchema
-  }
+export const moduleDetailsValidation = {
+  createIModuleDetailsSchema,
+  updateIModuleDetailsSchema,
+};

@@ -2,7 +2,7 @@ import { Router } from "express";
 import authRouter from "../module/auth/auth.router";
 import adminRouter from "../module/admin/admin.router";
 import userRouter from "../module/user/user.router";
-import studentRoute from "../module/student/student.router";
+// import studentRoute from "../module/student/student.router";
 import facultRoute from "../module/teacher/faculty.router";
 import classscheduleRoute from "../module/classschedule/classschedule.router";
 import courseRouter from "../module/course/course.router";
@@ -30,14 +30,11 @@ const moduleRoutes = [
     path: "/user",
     route: userRouter,
   },
-  {
-    path: "/student",
-    route: studentRoute,
-  },
-  {
-    path: "/student",
-    route: studentRoute,
-  },
+
+  // {
+  //   path: "/student",
+  //   route: studentRoute,
+  // },
   {
     path: "/faculty",
     route: facultRoute,
@@ -49,31 +46,39 @@ const moduleRoutes = [
   {
     path: "/course",
     route: courseRouter,
-  },{
-    path:'/category',
-    route:categiryRouter
-  },{
-    path:'/enrollment',
-    route:enrollmentRoute
-  },{
-    path:'/lecture',
-    route:lectureRouter
-  },{
-    path:'/exam',
-    route:examRouter
-  },{
-    path:'/note',
-    route:noteRouter
-  },{
-    path:'/module',
-    route:moduleRouter
-  },{
-    path:'/courseCategory',
-    route:courseCategoryRoute
-  },{
-    path:'/moduleDetails', 
-    route:moduleDetailsRouter
-  }
+  },
+  {
+    path: "/category",
+    route: categiryRouter,
+  },
+  {
+    path: "/enrollment",
+    route: enrollmentRoute,
+  },
+  {
+    path: "/lecture",
+    route: lectureRouter,
+  },
+  {
+    path: "/exam",
+    route: examRouter,
+  },
+  {
+    path: "/note",
+    route: noteRouter,
+  },
+  {
+    path: "/module",
+    route: moduleRouter,
+  },
+  {
+    path: "/courseCategory",
+    route: courseCategoryRoute,
+  },
+  {
+    path: "/moduleDetails",
+    route: moduleDetailsRouter,
+  },
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);

@@ -7,14 +7,14 @@ const categiryRouter = Router();
 categiryRouter.post(
   "/create-category",
   validateRequest(categoryvalidation.createCategorySchema),
-  categoryController.createCategory
+  categoryController.createCategory,
 );
 categiryRouter.get("/", categoryController.getAllCategory);
 categiryRouter.get("/:id", categoryController.getSingleCategory);
 categiryRouter.patch(
   "/:id",
   validateRequest(categoryvalidation.updateCategoryValidationSchema),
-  categoryController.updateCategory
+  categoryController.updateCategory,
 );
 categiryRouter.delete("/:id", categoryController.deleteCategory);
 

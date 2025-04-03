@@ -3,7 +3,6 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { lectureServices } from "./lecture.service";
 
-
 const createLecture = catchAsync(async (req, res) => {
   const result = await lectureServices.createLecture(req.body);
   sendResponse(res, {
@@ -21,7 +20,7 @@ const getLecture = catchAsync(async (req, res) => {
   });
 });
 const getSingleLecture = catchAsync(async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
   const result = await lectureServices.getSingleLecture(id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -30,9 +29,9 @@ const getSingleLecture = catchAsync(async (req, res) => {
   });
 });
 const updateLecture = catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const payload=req.body;
-  const result = await lectureServices.updateLecture(id,payload);
+  const { id } = req.params;
+  const payload = req.body;
+  const result = await lectureServices.updateLecture(id, payload);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: " Lecture Updated successfully",
@@ -40,7 +39,7 @@ const updateLecture = catchAsync(async (req, res) => {
   });
 });
 const deleteLecture = catchAsync(async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
   const result = await lectureServices.deleteLecture(id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -50,9 +49,9 @@ const deleteLecture = catchAsync(async (req, res) => {
 });
 
 export const lectureController = {
-    createLecture,
-    getLecture,
-    getSingleLecture,
-    deleteLecture,
-    updateLecture
-}
+  createLecture,
+  getLecture,
+  getSingleLecture,
+  deleteLecture,
+  updateLecture,
+};

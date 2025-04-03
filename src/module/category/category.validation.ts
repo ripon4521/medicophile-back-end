@@ -13,8 +13,7 @@ const updateCategoryValidationSchema = z.object({
   }),
 });
 
-
 export const categoryvalidation = {
-    createCategorySchema,
-    updateCategoryValidationSchema
-}
+  createCategorySchema,
+  updateCategoryValidationSchema,
+};

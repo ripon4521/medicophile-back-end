@@ -7,9 +7,6 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 const daySchema = z.object({
   day: z.string().min(1, { message: "Day is required" }),
   time: z.string().min(1, { message: "Time is required" }).optional(),
- 
-
-  
 });
 
 export const classScheduleSchema = z.object({

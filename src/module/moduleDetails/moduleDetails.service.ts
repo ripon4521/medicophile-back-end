@@ -8,7 +8,7 @@ const createModuleDetails = async (payload: IModuleDetails) => {
   if (!result) {
     throw new AppError(
       StatusCodes.INTERNAL_SERVER_ERROR,
-      "Failed to create module details, please try again"
+      "Failed to create module details, please try again",
     );
   }
   return result;
@@ -30,7 +30,7 @@ const getSingleModuleDetails = async (_id: string) => {
   if (!result) {
     throw new AppError(
       StatusCodes.INTERNAL_SERVER_ERROR,
-      "Failed to load data , please reload and try again"
+      "Failed to load data , please reload and try again",
     );
   }
   return result;
@@ -43,12 +43,12 @@ const deleteModuleDetails = async (_id: string) => {
       isDeleted: true,
       deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
     },
-    { new: true }
+    { new: true },
   );
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to delete data, please reload and try again"
+      "Failed to delete data, please reload and try again",
     );
   }
 };
@@ -61,7 +61,7 @@ const updateModuleDetails = async (_id: string, payload: IModuleDetails) => {
   if (!update) {
     throw new AppError(
       StatusCodes.INTERNAL_SERVER_ERROR,
-      "Failed to updated data, reload and check your updated data and try again"
+      "Failed to updated data, reload and check your updated data and try again",
     );
   }
 
@@ -69,9 +69,9 @@ const updateModuleDetails = async (_id: string, payload: IModuleDetails) => {
 };
 
 export const moduleDetailsService = {
-    createModuleDetails,
-    getAllModuleDetails,
-    getSingleModuleDetails,
-    updateModuleDetails,
-    deleteModuleDetails
-}
+  createModuleDetails,
+  getAllModuleDetails,
+  getSingleModuleDetails,
+  updateModuleDetails,
+  deleteModuleDetails,
+};

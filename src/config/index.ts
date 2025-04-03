@@ -17,15 +17,14 @@ if (!DB_NAME) {
   throw new Error("DATABASE_NAME is not defined");
 }
 
-const port = process.env.PORT || "3000" ;
+const port = process.env.PORT || "3000";
 
 // Updated database URL with DB_NAME
 const databaseUrl = `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASS}@cluster0.b1mistq.mongodb.net/${DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
 
-
 export default {
-  database_url:databaseUrl,
+  database_url: databaseUrl,
   port: process.env.PORT,
   bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
   stripe_private_key: process.env.STRIPE_PRIVATE_KEY,
-}
+};

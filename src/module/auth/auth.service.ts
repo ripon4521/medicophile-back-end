@@ -1,48 +1,46 @@
-import { CustomError } from '../../helpers/handleCustomError'
-import { IUser } from '../user/user.interface'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import { UserModel } from '../user/user.model'
-import AppError from '../../helpers/AppError'
-import { StatusCodes } from 'http-status-codes'
+import { CustomError } from "../../helpers/handleCustomError";
+import { IUser } from "../user/user.interface";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { UserModel } from "../user/user.model";
+import AppError from "../../helpers/AppError";
+import { StatusCodes } from "http-status-codes";
 
 const register = async (payload: IUser) => {
-  const result = await UserModel.create(payload)
+  const result = await UserModel.create(payload);
   if (!result) {
-    throw new CustomError('Failed to create user', 500);
+    throw new CustomError("Failed to create user", 500);
   }
-  return result
-
-  
-}
+  return result;
+};
 
 const login = async (payload: { phone: string; password: string }) => {
- 
-
   if (!payload.phone || !payload.password) {
-  
-    throw new AppError ( StatusCodes.BAD_REQUEST,  'Gmail and password are required')
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Gmail and password are required",
+    );
   }
 
-  const user = await UserModel.findOne({ phone: payload.phone }).select('+password');
-
+  const user = await UserModel.findOne({ phone: payload.phone }).select(
+    "+password",
+  );
 
   if (!user) {
-
-    throw new AppError(StatusCodes.BAD_REQUEST,'User not found!'); 
-
+    throw new AppError(StatusCodes.BAD_REQUEST, "User not found!");
   }
 
-  if (user.status === 'Blocked') {
-  
-    throw new AppError(StatusCodes.UNAUTHORIZED,'This user is blocked!' );
+  if (user.status === "Blocked") {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "This user is blocked!");
   }
 
-  const isPasswordMatched = await bcrypt.compare(payload.password, user.password);
+  const isPasswordMatched = await bcrypt.compare(
+    payload.password,
+    user.password,
+  );
 
   if (!isPasswordMatched) {
-  
-    throw new AppError(StatusCodes.FORBIDDEN,'Invalid password' );
+    throw new AppError(StatusCodes.FORBIDDEN, "Invalid password");
   }
 
   const jwtPayload = {
@@ -51,16 +49,16 @@ const login = async (payload: { phone: string; password: string }) => {
     _id: user._id.toString(),
   };
 
-  const token = jwt.sign(jwtPayload, process.env.JWT_SECRET || 'primarytestkey', { expiresIn: '100d' });
+  const token = jwt.sign(
+    jwtPayload,
+    process.env.JWT_SECRET || "primarytestkey",
+    { expiresIn: "100d" },
+  );
 
-  
   return { token, user };
 };
-
-
-
 
 export const AuthService = {
   register,
   login,
-}
+};

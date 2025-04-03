@@ -1,106 +1,93 @@
-
 import { ICourse } from "./course.interface";
 import { nanoid } from "nanoid";
 import QueryBuilder from "../../builder/querybuilder";
 import { searchableFields } from "./coursee.constant";
-import slugify from 'slugify';
+import slugify from "slugify";
 import courseModel from "./course.model";
 import AppError from "../../helpers/AppError";
 import { StatusCodes } from "http-status-codes";
 
-
 const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
-    const result = await courseModel.create(payload);
-    return result;
+  const result = await courseModel.create(payload);
+  return result;
 };
-
-
-
-
 
 // const getAllCategorieFromDb = async (query: Record<string, unknown>) => {
 //     const queryBuilder = new QueryBuilder(CategoriedModel.find(), query);
-  
+
 //     const result = await queryBuilder
-//       .search(['name', 'description']) 
+//       .search(['name', 'description'])
 //       .filter()
 //       .sort()
 //       .select()
 //       .modelQuery.exec(); // Execute the query
-  
+
 //     return result;
 //   };
-
 
 // const getAllCoursesFromDb =async () => {
 //     const result = await courseModel.find().populate('category');
 //     return result;
 // }
 
-const getAllCoursesFromDb = async(query: Record<string, unknown>) => {
-    console.log(query)
-    const courseQuery = new QueryBuilder(
-        courseModel.find(),
-        query
-      )
-        .search(searchableFields)
-        .filter()
-        .sort()
-  
-   
-    
-       
-    
-      const result = await courseQuery.modelQuery;
-      console.log(result)
-      return result;
-}
+const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
+  console.log(query);
+  const courseQuery = new QueryBuilder(courseModel.find(), query)
+    .search(searchableFields)
+    .filter()
+    .sort();
+
+  const result = await courseQuery.modelQuery;
+  console.log(result);
+  return result;
+};
 
 const getCourseById = async (slug: string) => {
-    const result = await courseModel.findOne({slug}).populate('category');
-     if (!result) {
-        throw new AppError(
-          StatusCodes.BAD_REQUEST,
-          "Failed to get Course Ctaegory. Slug is not valid, reload or go back and try again"
-        );
-      }
-    return result;
-}
+  const result = await courseModel.findOne({ slug }).populate("category");
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Failed to get Course Ctaegory. Slug is not valid, reload or go back and try again",
+    );
+  }
+  return result;
+};
 
-const updateCourseInDb = async(slug: string, payload: Partial<ICourse>) => {
-    const update = await courseModel.findOneAndUpdate({slug}, payload, {new: true, runValidators:true});
-      if (!update) {
-        throw new AppError(
-          StatusCodes.BAD_REQUEST,
-          "Failed to update Course Ctaegory. Slug is not valid, reload or go back and try again"
-        );
-      }
-    
-    return update;
-}
+const updateCourseInDb = async (slug: string, payload: Partial<ICourse>) => {
+  const update = await courseModel.findOneAndUpdate({ slug }, payload, {
+    new: true,
+    runValidators: true,
+  });
+  if (!update) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Failed to update Course Ctaegory. Slug is not valid, reload or go back and try again",
+    );
+  }
+
+  return update;
+};
 
 const deleteCourseFromDb = async (slug: string) => {
-    const result = await courseModel.findOneAndUpdate(
-        { slug },
-        {
-          isDeleted: true,
-          deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
-        },
-        { new: true }
-      );
+  const result = await courseModel.findOneAndUpdate(
+    { slug },
+    {
+      isDeleted: true,
+      deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
+    },
+    { new: true },
+  );
 
-      if (!result) {
-        throw new AppError(StatusCodes.BAD_REQUEST, 'PLease Try Again ')
-      }
-    return result;
-}
-
+  if (!result) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "PLease Try Again ");
+  }
+  return result;
+};
 
 export const courseService = {
-    createCourseIntoDb,
-    getAllCoursesFromDb,
-    getCourseById,
-    updateCourseInDb,
-    deleteCourseFromDb,
- 
-}
+  createCourseIntoDb,
+  getAllCoursesFromDb,
+  getCourseById,
+  updateCourseInDb,
+  deleteCourseFromDb,
+};

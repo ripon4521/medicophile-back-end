@@ -8,7 +8,7 @@ const createModule = async (payload: IModules) => {
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to create module, please try again and check your from data "
+      "Failed to create module, please try again and check your from data ",
     );
   }
   return result;
@@ -24,7 +24,7 @@ const getAllModule = async () => {
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to load data , Please try again"
+      "Failed to load data , Please try again",
     );
   }
   return result;
@@ -50,7 +50,7 @@ const updateModule = async (slug: string, payload: Partial<IModules>) => {
   if (!update) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to update data , please check data and try again"
+      "Failed to update data , please check data and try again",
     );
   }
   return update;
@@ -63,10 +63,13 @@ const deleteModule = async (slug: string) => {
       isDeleted: true,
       deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
     },
-    { new: true }
+    { new: true },
   );
   if (!result) {
-    throw new AppError(StatusCodes.BAD_REQUEST, ' Failed to delete data, please reload and try again ')
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      " Failed to delete data, please reload and try again ",
+    );
   }
   return result;
 };

@@ -32,7 +32,7 @@ const courseSchema = new Schema<ICourse>(
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     }, // UTC+6 (Bangladesh Time)
-  }
+  },
 );
 
 courseSchema.pre("save", function (next) {

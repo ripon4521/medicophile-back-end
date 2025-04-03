@@ -7,12 +7,12 @@ const moduleRouter = Router();
 moduleRouter.post(
   "/create-module",
   validateRequest(moduleValidation.createModuleSchema),
-  modulesController.createModule
+  modulesController.createModule,
 );
 moduleRouter.patch(
   "/:slug",
   validateRequest(moduleValidation.updateModuleSchema),
-  modulesController.updateModule
+  modulesController.updateModule,
 );
 moduleRouter.get("/", modulesController.getAllModule);
 moduleRouter.get("/:slug", modulesController.getSingleModule);

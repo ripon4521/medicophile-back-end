@@ -23,16 +23,14 @@ const updateFaculty = async (_id: string, updateData: Partial<IFaculty>) => {
   try {
     const teacher = await FacultyUserModel.findOne({ _id }).session(session);
     if (!teacher) {
-      throw new AppError(StatusCodes.FORBIDDEN,"Faculty not found");
+      throw new AppError(StatusCodes.FORBIDDEN, "Faculty not found");
     }
-
-   
 
     // Other updates for faculty details...
     const updatedStudent = await FacultyUserModel.findOneAndUpdate(
       { _id },
       updateData,
-      { new: true, runValidators: true, session }
+      { new: true, runValidators: true, session },
     );
 
     if (!updatedStudent) {
@@ -42,7 +40,7 @@ const updateFaculty = async (_id: string, updateData: Partial<IFaculty>) => {
     const userUpdateData: Partial<IUser> = {};
     const updateStudentData =
       await FacultyUserModel.findById(_id).session(session);
-      console.log(updatedStudent)
+    console.log(updatedStudent);
 
     userUpdateData.email = updateStudentData?.email;
     userUpdateData.name = updateStudentData?.name;
@@ -56,11 +54,11 @@ const updateFaculty = async (_id: string, updateData: Partial<IFaculty>) => {
     const updatedUser = await UserModel.findByIdAndUpdate(
       teacher.userId,
       userUpdateData,
-      { new: true, runValidators: true, session }
+      { new: true, runValidators: true, session },
     );
 
     if (!updatedUser) {
-      throw new AppError(StatusCodes.FORBIDDEN,"Failed to update user");
+      throw new AppError(StatusCodes.FORBIDDEN, "Failed to update user");
     }
 
     // Commit transaction if everything is fine
@@ -73,7 +71,10 @@ const updateFaculty = async (_id: string, updateData: Partial<IFaculty>) => {
     await session.abortTransaction();
     session.endSession();
 
-    throw new AppError(StatusCodes.FORBIDDEN,"Error updating faculty and user");
+    throw new AppError(
+      StatusCodes.FORBIDDEN,
+      "Error updating faculty and user",
+    );
   }
 };
 
@@ -115,5 +116,5 @@ export const facultysService = {
   getAllFacultys,
   getFacultyById,
   deleteFacultyById,
-  updateFaculty
+  updateFaculty,
 };

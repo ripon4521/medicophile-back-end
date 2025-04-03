@@ -6,5 +6,6 @@ Completed Module
 4. course - baki ase only query 
 5. module 
 6. exam 
+7. module Details
 
  -->

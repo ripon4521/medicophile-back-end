@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import { Response } from "express";
 
-
 // export const handlerZodError = (err: any, res: Response) => {
 //     const issues = err.issues.map((item: any) => {
 //         return {
@@ -29,7 +28,7 @@ export const handlerZodError = (err: ZodError, res: Response) => {
     statusCode: 400,
     error: {
       details: err.errors.map((issue) => ({
-        path: issue.path.join('.'),
+        path: issue.path.join("."),
         message: issue.message,
       })),
     },

@@ -5,7 +5,7 @@ export interface IEnrollment {
   courseId: Types.ObjectId;
   paidAmont: number;
   paymentMethod: "cash" | "bikash" | "nagad" | "roket";
-  paymentNumber?:string;
-  transctionId?:string;
+  paymentNumber?: string;
+  transctionId?: string;
   status: "active" | "blocked";
 }

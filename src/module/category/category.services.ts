@@ -8,22 +8,19 @@ const createCategory = async (payload: ICategory) => {
   return result;
 };
 
-const getallCategory = async(query: Record<string, unknown>) => {
-    const courseQuery = new QueryBuilder(
-        Category.find(),
-        query
-      )
-        .search(searchableFields)
-        .filter()
-        .sort()
-        .paginate()
-        .fields();
-    
-      const result = await courseQuery.modelQuery;
-      return result;
-}
+const getallCategory = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(Category.find(), query)
+    .search(searchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-const updateCatgory = async (_id: string, payload:ICategory) => {
+  const result = await courseQuery.modelQuery;
+  return result;
+};
+
+const updateCatgory = async (_id: string, payload: ICategory) => {
   const result = await Category.findOneAndUpdate({ _id }, payload);
   return result;
 };

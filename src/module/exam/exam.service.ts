@@ -8,7 +8,7 @@ const createExam = async (payload: IExam) => {
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed To Create Exam, Please cheack and try again"
+      "Failed To Create Exam, Please cheack and try again",
     );
   }
   return result;
@@ -25,7 +25,7 @@ const getAllExam = async () => {
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to load data, please try again"
+      "Failed to load data, please try again",
     );
   }
 
@@ -44,7 +44,7 @@ const getSingleExam = async (slug: string) => {
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to load data , please try again"
+      "Failed to load data , please try again",
     );
   }
   return result;
@@ -60,7 +60,7 @@ const updateExam = async (slug: string, payload: Partial<IExam>) => {
     if (!update) {
       throw new AppError(
         StatusCodes.BAD_REQUEST,
-        "Exam not found or update failed."
+        "Exam not found or update failed.",
       );
     }
 
@@ -78,7 +78,7 @@ const deleteExam = async (slug: string) => {
       isDeleted: true,
       deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
     },
-    { new: true }
+    { new: true },
   );
   return result;
 };

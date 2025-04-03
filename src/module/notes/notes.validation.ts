@@ -31,5 +31,5 @@ const updateNotesSchema = z.object({
 
 export const noteValidation = {
   createNotesSchema,
-  updateNotesSchema
+  updateNotesSchema,
 };

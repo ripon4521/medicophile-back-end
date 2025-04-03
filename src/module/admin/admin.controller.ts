@@ -4,41 +4,30 @@ import sendResponse from "../../utils/sendResponse";
 import { adminService } from "./admin.service";
 
 const userBlockByAdmin = catchAsync(async (req, res) => {
-    
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        message: 'User blocked successfully',
-        data: [],
-    });
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "User blocked successfully",
+    data: [],
+  });
 });
 
 const deleteBlogByAdmin = catchAsync(async (req, res) => {
-   
-    if (!req.user || req.user.role !== 'admin') {
-        throw new Error('User is not authenticated or authorized');
-    }
+  if (!req.user || req.user.role !== "admin") {
+    throw new Error("User is not authenticated or authorized");
+  }
 
-    const { id: blogId } = req.params; 
+  const { id: blogId } = req.params;
 
-
-   
-
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        message: 'Blog deleted successfully',
-        data: undefined,
-    });
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Blog deleted successfully",
+    data: undefined,
+  });
 });
 
 /* Overview  handel  */
 
-
-
-
-
-
-
 export const adminController = {
-    userBlockByAdmin,
-    deleteBlogByAdmin,
+  userBlockByAdmin,
+  deleteBlogByAdmin,
 };

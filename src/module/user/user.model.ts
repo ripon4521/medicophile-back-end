@@ -1,27 +1,32 @@
 import { model, Schema } from "mongoose";
 import { IUser } from "./user.interface";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import config from "../../config";
 
+const UserSchema = new Schema<IUser>(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, require: true },
+    phone: { type: String },
+    role: {
+      type: String,
+      enum: ["superAdmin", "admin", "teacher"],
+      required: true,
+    },
+    profile_picture: { type: String },
+    status: { type: String, enum: ["Active", "Blocked"], required: true },
+    isDeleted: { type: Boolean, required: true },
+    deletedAt: { type: Date, default: null },
+  },
+  {
+    timestamps: {
+      currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+    }, // ✅ BD Time (UTC+6)
+  },
+);
 
-const UserSchema = new Schema<IUser>({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true, },
-  password: { type: String,require:true },
-  phone: { type: String},
-  role: { type: String, enum: ["superAdmin", "admin", "teacher"], required: true },
-  profile_picture: { type: String },
-  status: { type: String, enum: ["Active", "Blocked"], required: true },
-  isDeleted: { type: Boolean, required:true},
-  deletedAt: { type : Date , default:null }
-
-},  {
-  timestamps: { currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000) }, // ✅ BD Time (UTC+6)
-});
-
-
-
-UserSchema.pre('save', async function (next) {
+UserSchema.pre("save", async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
   user.password = await bcrypt.hash(
@@ -31,10 +36,9 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-UserSchema.post('save', async function (doc, next) {
-  doc.password = '';
+UserSchema.post("save", async function (doc, next) {
+  doc.password = "";
   next();
 });
 
-
-export const UserModel = model<IUser>('User', UserSchema);
+export const UserModel = model<IUser>("User", UserSchema);

@@ -7,12 +7,18 @@ const createEnrollment = async (payload: IEnrollment) => {
 };
 
 const getAllEnrollment = async () => {
-  const result = await enrollMentModel.find().populate('studentId').populate('courseId');
+  const result = await enrollMentModel
+    .find()
+    .populate("studentId")
+    .populate("courseId");
   return result;
 };
 
 const getSingleEnrollment = async (_id: string) => {
-  const result = await enrollMentModel.findOne({ _id }).populate('studentId').populate('courseId');
+  const result = await enrollMentModel
+    .findOne({ _id })
+    .populate("studentId")
+    .populate("courseId");
   return result;
 };
 

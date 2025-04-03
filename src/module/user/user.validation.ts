@@ -9,8 +9,9 @@ export const createUserValidationSchema = z.object({
     role: z.enum(["superAdmin", "admin", "teacher"]),
     profile_picture: z.string().url().optional(),
     status: z.enum(["Active", "Blocked"]),
-    deletedAt: z.date().nullable().optional(),
-    deletedAt: z.date().nullable()
+    isDeleted: z.boolean(),
+    deletedAt: z.date().optional(),
+
   }),
 });
 

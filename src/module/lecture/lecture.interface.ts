@@ -8,7 +8,7 @@ export type IDuraction = {
 
 export interface ILeecture {
   courseId: Types.ObjectId;
-  createdBy:Types.ObjectId;
+  createdBy: Types.ObjectId;
   lectureTitle: string;
   description?: string;
   serveer: string;

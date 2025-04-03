@@ -13,7 +13,7 @@ const createModule = catchAsync(async (req, res) => {
 });
 
 const updateModule = catchAsync(async (req, res) => {
-  const {slug } = req.params;
+  const { slug } = req.params;
   const payload = req.body;
   const result = await moduleService.updateModule(slug, payload);
   sendResponse(res, {
@@ -53,9 +53,9 @@ const getAllModule = catchAsync(async (req, res) => {
 });
 
 export const modulesController = {
-    createModule,
-    updateModule,
-    deleteModule,
-    getAllModule,
-    getSingleModule
-}
+  createModule,
+  updateModule,
+  deleteModule,
+  getAllModule,
+  getSingleModule,
+};

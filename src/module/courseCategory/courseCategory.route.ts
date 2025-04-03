@@ -8,20 +8,23 @@ const courseCategoryRoute = Router();
 courseCategoryRoute.post(
   "/",
   validateRequest(courseCategoryValidation.createCourseCategorySchema),
-  coursCategoryController.createCourseCategory
+  coursCategoryController.createCourseCategory,
 );
 
 courseCategoryRoute.get("/", coursCategoryController.getAllCourseCategory);
 courseCategoryRoute.get(
   "/:slug",
-  coursCategoryController.getSingleCourseCategory
+  coursCategoryController.getSingleCourseCategory,
 );
 courseCategoryRoute.patch(
   "/:slug",
   validateRequest(courseCategoryValidation.updateCourseCategorySchema),
-  coursCategoryController.updateCourseCategory
+  coursCategoryController.updateCourseCategory,
 );
 
-courseCategoryRoute.delete('/:slug', coursCategoryController.deletdCourseCategory)
+courseCategoryRoute.delete(
+  "/:slug",
+  coursCategoryController.deletdCourseCategory,
+);
 
 export default courseCategoryRoute;
