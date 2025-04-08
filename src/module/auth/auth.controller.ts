@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import { AuthService } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
+import { getDeviceInfo } from "../../middlewares/getDeviceInfo";
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.register(req.body);
@@ -15,7 +16,8 @@ const register = catchAsync(async (req: Request, res: Response) => {
 });
 
 const login = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthService.login(req.body);
+  const meta = getDeviceInfo(req);
+  const result = await AuthService.login(req.body, meta);
 
   sendResponse(res, {
     statusCode: StatusCodes.ACCEPTED,
@@ -28,7 +30,22 @@ const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+const logout = catchAsync ( async (req:Request, res: Response ) => {
+  const meta = getDeviceInfo(req);
+  const payload = req.body;
+  const result = await AuthService.logout(payload, meta)
+  sendResponse(res, {
+    statusCode: StatusCodes.ACCEPTED,
+    status: true,
+    message: "Logout successful",
+    data: result,
+  });
+
+})
+
 export const AuthControllers = {
   register,
   login,
+  logout
 };

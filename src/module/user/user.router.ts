@@ -15,7 +15,7 @@ userRouter.post(
 );
 userRouter.get(
   "/profile",
-  auth.authUser("superAdmin", "admin", "teacher"),
+  auth.authUser("superAdmin", "admin", "teacher", "student"),
   userController.getProfile,
 );
 userRouter.post(

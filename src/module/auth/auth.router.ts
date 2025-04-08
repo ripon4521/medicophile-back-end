@@ -12,6 +12,8 @@ authRouter.post(
   AuthControllers.login,
 );
 
+authRouter.patch('/logout', AuthControllers.logout  )
+
 authRouter.use(globalErrorHandler);
 
 export default authRouter;

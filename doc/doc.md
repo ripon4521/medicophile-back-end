@@ -1,14 +1,15 @@
 <!-- 
 Completed Module 
 1.Course Category
-2. User and Teacher Creation 
-3. Auth - baki ase inly otp
-4. course 
-5. module 
-6. exam 
-7. notes
-8. lecture
-9. module Details
+2. User , Teacher, Student Creation 
+3. Auth 
+4. user credentials
+5. course 
+6. module 
+7. exam 
+8. notes
+9. lecture
+10. module Details
 
  -->
 <!-- 

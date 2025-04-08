@@ -15,6 +15,7 @@ import moduleRouter from "../module/modules/modules.router";
 import courseCategoryRoute from "../module/courseCategory/courseCategory.route";
 import moduleDetailsRouter from "../module/moduleDetails/moduleDetails.route";
 import studentRoute from "../module/student/student.router";
+import userCredentialsRoute from "../module/userCredentials/userCredentials.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -79,7 +80,10 @@ const moduleRoutes = [
   {
     path: "/moduleDetails",
     route: moduleDetailsRouter,
-  },
+  },{
+    path:'/user-credentials',
+    route: userCredentialsRoute
+  }
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);
