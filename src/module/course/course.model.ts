@@ -25,7 +25,7 @@ const courseSchema = new Schema<ICourse>(
     takeReview: { type: String, enum: ["on", "off"], required: true },
     status: { type: String, enum: ["active", "inactive"], required: true },
     course_tag: { type: [String], required: true },
-    isDeleted: { type: Boolean, default: true, required: true },
+    isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null },
   },
   {

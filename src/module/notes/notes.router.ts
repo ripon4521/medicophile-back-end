@@ -10,12 +10,12 @@ noteRouter.post(
   notesController.createNote,
 );
 noteRouter.get("/", notesController.getAllNotes);
-noteRouter.get("/:id", notesController.getSingleNote);
+noteRouter.get("/:slug", notesController.getSingleNote);
 noteRouter.patch(
-  "/:id",
+  "/:slug",
   validateRequest(noteValidation.updateNotesSchema),
   notesController.updateNote,
 );
-noteRouter.delete("/:id", notesController.deleteNote);
+noteRouter.delete("/:slug", notesController.deleteNote);
 
 export default noteRouter;

@@ -12,35 +12,26 @@ const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
   return result;
 };
 
-// const getAllCategorieFromDb = async (query: Record<string, unknown>) => {
-//     const queryBuilder = new QueryBuilder(CategoriedModel.find(), query);
-
-//     const result = await queryBuilder
-//       .search(['name', 'description'])
-//       .filter()
-//       .sort()
-//       .select()
-//       .modelQuery.exec(); // Execute the query
-
-//     return result;
-//   };
-
-// const getAllCoursesFromDb =async () => {
-//     const result = await courseModel.find().populate('category');
-//     return result;
-// }
-
 const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
-  console.log(query);
-  const courseQuery = new QueryBuilder(courseModel.find(), query)
+  const courseQuery = new QueryBuilder(courseModel, query) 
     .search(searchableFields)
     .filter()
-    .sort();
+    .sort()
+    .paginate()
+    .fields()
+    .populate({
+      path:'category',
+      populate: { path: 'createdBy'}
+    })
+    .populate(['createdBy'])
+    
 
-  const result = await courseQuery.modelQuery;
-  console.log(result);
+   
+
+  const result = await courseQuery.exec(); 
   return result;
 };
+
 
 const getCourseById = async (slug: string) => {
   const result = await courseModel.findOne({ slug }).populate("category");

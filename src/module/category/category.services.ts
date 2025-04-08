@@ -9,7 +9,7 @@ const createCategory = async (payload: ICategory) => {
 };
 
 const getallCategory = async (query: Record<string, unknown>) => {
-  const courseQuery = new QueryBuilder(Category.find(), query)
+  const courseQuery = new QueryBuilder(Category, query)
     .search(searchableFields)
     .filter()
     .sort()

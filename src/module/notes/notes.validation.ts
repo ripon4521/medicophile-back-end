@@ -7,25 +7,27 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 
 const createNotesSchema = z.object({
   body: z.object({
-    noteTitle: z.string().min(1, "Note title is required"),
-    description: z.string().min(1, "Description is required").optional(),
+  
+    title: z.string().min(1, "Title is required"),
+    description: z.string().min(1, "Description is required"),
     createdBy: ObjectIdSchema,
+    moduleId: ObjectIdSchema,
     courseId: ObjectIdSchema,
-    noteFile: z.string().url("Invalid file URL"),
-    classTime: z.string().datetime("Invalid date format"),
-    launchingDate: z.string().datetime("Invalid date format"),
+    noteFile: z.string().optional(),
     status: z.enum(["published", "drafted"]),
+    deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
+    isDeleted: z.boolean().optional()
   }),
 });
 
 const updateNotesSchema = z.object({
   body: z.object({
-    noteTitle: z.string().min(1, "Note title is required").optional(),
+    title: z.string().min(1, "Title is required").optional(),
     description: z.string().min(1, "Description is required").optional(),
-    noteFile: z.string().url("Invalid file URL").optional(),
-    classTime: z.string().datetime("Invalid date format").optional(),
-    launchingDate: z.string().datetime("Invalid date format").optional(),
+    noteFile: z.string().optional(),
     status: z.enum(["published", "drafted"]).optional(),
+    deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
+    isDeleted: z.boolean().optional()
   }),
 });
 

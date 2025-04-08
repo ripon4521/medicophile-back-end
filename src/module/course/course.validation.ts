@@ -41,7 +41,7 @@ const createCourseSchema = z.object({
     course_tag: z
       .array(z.string())
       .nonempty({ message: "At least one course tag is required." }),
-    isDeleted: z.literal(true, { message: "isDeleted must always be true." }),
+    isDeleted: z.boolean(),
     deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
   }),
 });
@@ -109,8 +109,7 @@ const updateCourseSchema = z.object({
       .array(z.string())
       .nonempty({ message: "At least one course tag is required." })
       .optional(),
-    isDeleted: z
-      .literal(true, { message: "isDeleted must always be true." })
+    isDeleted: z.boolean()
       .optional(),
     deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
   }),
