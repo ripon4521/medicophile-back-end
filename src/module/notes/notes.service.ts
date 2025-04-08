@@ -9,12 +9,13 @@ const createNote = async (paload: INotes) => {
 };
 
 const getAllNotes = async () => {
-  const result = await NotesModel.find()
+  const result = await NotesModel.find({isDeleted: false})
     .populate("createdBy")
     .populate({
       path: "courseId",
       populate: { path: "category" },
-    });
+    })
+    .populate('moduleId')
    
   return result;
 };

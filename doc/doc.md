@@ -6,6 +6,7 @@ Completed Module
 4. course 
 5. module 
 6. exam 
-7. module Details
+7. notes
+8. module Details
 
  -->
