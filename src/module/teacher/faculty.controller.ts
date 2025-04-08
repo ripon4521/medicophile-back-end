@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { facultysService } from "./faculty.service";
+import AppError from "../../helpers/AppError";
 
 const getAllFaculty = catchAsync(async (req, res) => {
   const students = await facultysService.getAllFacultys();
@@ -23,8 +24,15 @@ const getSingleFaculty = catchAsync(async (req, res) => {
 });
 
 const updatedFaculty = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const updatedStudent = await facultysService.updateFaculty(id, req.body);
+  const { _id }  = req.body;
+  const payload = req.body;
+  delete payload._id;
+  if (!_id) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Please provide id ')
+  }
+
+ 
+  const updatedStudent = await facultysService.updateFaculty(_id, payload);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Faculty Updated successfully",
@@ -33,8 +41,11 @@ const updatedFaculty = catchAsync(async (req, res) => {
 });
 
 const deleteFaculty = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const result = await facultysService.deleteFacultyById(id);
+  const { _id } = req.body;
+  if (!_id) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Please provide id ')
+  }
+  const result = await facultysService.deleteFacultyById(_id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Faculty Deleted successfully",

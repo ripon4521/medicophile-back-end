@@ -8,10 +8,10 @@ const facultRoute = express.Router();
 facultRoute.get("/", facultysController.getAllFaculty);
 facultRoute.get("/:id", facultysController.getSingleFaculty);
 facultRoute.patch(
-  "/:id",
+  "/update-faculty",
   validateRequest(facultyValidation.updateFacultyValidationSchema),
   facultysController.updatedFaculty,
 );
-facultRoute.delete("/:id", facultysController.deleteFaculty);
+facultRoute.delete("/delete-faculty", facultysController.deleteFaculty);
 
 export default facultRoute;
