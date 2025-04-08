@@ -10,12 +10,12 @@ lectureRouter.post(
   lectureController.createLecture,
 );
 lectureRouter.patch(
-  "/:id",
+  "/:slug",
   validateRequest(lectureValidation.updateLectureSchema),
   lectureController.updateLecture,
 );
 lectureRouter.get("/", lectureController.getLecture);
-lectureRouter.get("/:id", lectureController.getSingleLecture);
-lectureRouter.delete("/:id", lectureController.deleteLecture);
+lectureRouter.get("/:slug", lectureController.getSingleLecture);
+lectureRouter.delete("/:slug", lectureController.deleteLecture);
 
 export default lectureRouter;

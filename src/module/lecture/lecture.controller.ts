@@ -20,8 +20,8 @@ const getLecture = catchAsync(async (req, res) => {
   });
 });
 const getSingleLecture = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const result = await lectureServices.getSingleLecture(id);
+  const { slug } = req.params;
+  const result = await lectureServices.getSingleLecture(slug);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Single Lecture fatched successfully",
@@ -29,9 +29,9 @@ const getSingleLecture = catchAsync(async (req, res) => {
   });
 });
 const updateLecture = catchAsync(async (req, res) => {
-  const { id } = req.params;
+  const { slug } = req.params;
   const payload = req.body;
-  const result = await lectureServices.updateLecture(id, payload);
+  const result = await lectureServices.updateLecture(slug, payload);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: " Lecture Updated successfully",
@@ -39,8 +39,8 @@ const updateLecture = catchAsync(async (req, res) => {
   });
 });
 const deleteLecture = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const result = await lectureServices.deleteLecture(id);
+  const { slug } = req.params;
+  const result = await lectureServices.deleteLecture(slug);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: " Lecture Deleted successfully",
