@@ -5,37 +5,38 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
   message: "Invalid ObjectId format",
 });
 
-const DurationSchema = z.object({
-  hour: z.number().min(0, "Hour must be a positive number"),
-  minute: z.number().min(0, "Minute must be a positive number"),
-  second: z.number().min(0, "Second must be a positive number"),
-});
 
 const createLectureSchema = z.object({
   body: z.object({
-    courseId: ObjectIdSchema,
-    createdBy: ObjectIdSchema,
-    lectureTitle: z.string().min(1, "Lecture title is required"),
-    description: z.string().optional(),
-    serveer: z.string().min(1, "Server is required"),
-    videoLink: z.string().url("Invalid video link"),
-    duration: DurationSchema,
-    isFree: z.enum(["yes", "no"]),
-    status: z.enum(["published", "drafted"]),
-    sheduleDate: z.string().datetime("Invalid date format"),
+  courseId: ObjectIdSchema,
+  createdBy: ObjectIdSchema,
+  moduleId: ObjectIdSchema,
+  title: z.string().min(1, "Title is required"),
+  server: z.string().min(1, "Server is required"),
+  videoLink: z.string().url("Invalid video URL"),
+  duration: z.number().min(1, "Duration must be greater than 0"),
+  isFree: z.boolean(),
+  status: z.enum(["Published", "Drafted"]),
+  tags: z.array(z.string()),
+  deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
+  isDeleted: z.boolean().optional(),
   }),
 });
 
 const updateLectureSchema = z.object({
   body: z.object({
-    lectureTitle: z.string().min(1, "Lecture title is required").optional(),
-    description: z.string().optional(),
-    serveer: z.string().min(1, "Server is required").optional(),
-    videoLink: z.string().url("Invalid video link").optional(),
-    duration: DurationSchema.optional(),
-    isFree: z.enum(["yes", "no"]).optional(),
-    status: z.enum(["published", "drafted"]).optional(),
-    sheduleDate: z.string().datetime("Invalid date format").optional(),
+    courseId: ObjectIdSchema.optional(),
+    createdBy: ObjectIdSchema.optional(),
+    moduleId: ObjectIdSchema.optional(),
+    title: z.string().min(1, "Title is required").optional(),
+    server: z.string().min(1, "Server is required").optional(),
+    videoLink: z.string().url("Invalid video URL").optional(),
+    duration: z.number().min(1, "Duration must be greater than 0").optional(),
+    isFree: z.boolean().optional(),
+    status: z.enum(["Published", "Drafted"]).optional(),
+    tags: z.array(z.string()).optional(),
+    deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
+    isDeleted: z.boolean().optional(),
   }),
 });
 

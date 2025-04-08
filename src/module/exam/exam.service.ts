@@ -15,12 +15,13 @@ const createExam = async (payload: IExam) => {
 };
 
 const getAllExam = async () => {
-  const result = await ExamModel.find()
+  const result = await ExamModel.find({isDeleted:false})
     .populate("createdBy")
     .populate({
       path: "courseId",
       populate: { path: "category" },
-    });
+    })
+    .populate('moduleId')
 
   if (!result) {
     throw new AppError(

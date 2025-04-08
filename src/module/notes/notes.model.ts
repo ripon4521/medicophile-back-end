@@ -4,14 +4,14 @@ import slugify from "slugify";
 
 const NotesSchema = new Schema<INotes>(
   {
-    slug: { type: String, unique: true },
+    slug: { type: String },
     title: { type: String, required: true },
     description: { type: String, required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     moduleId: { type: Schema.Types.ObjectId, ref: "Module", required: true },
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     noteFile: { type: String },
-    status: { type: String, enum: ["published", "drafted"], required: true, default:'published' },
+    status: { type: String, enum: ["Published", "Drafted"], required: true, default:'Published' },
     deletedAt: { type: Date, default:null },
     isDeleted: { type: Boolean, default: false },
   },

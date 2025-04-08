@@ -14,7 +14,7 @@ const createNotesSchema = z.object({
     moduleId: ObjectIdSchema,
     courseId: ObjectIdSchema,
     noteFile: z.string().optional(),
-    status: z.enum(["published", "drafted"]),
+    status: z.enum(["Published", "Drafted"]),
     deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
     isDeleted: z.boolean().optional()
   }),
@@ -22,6 +22,9 @@ const createNotesSchema = z.object({
 
 const updateNotesSchema = z.object({
   body: z.object({
+    createdBy: ObjectIdSchema.optional(),
+    moduleId: ObjectIdSchema.optional(),
+    courseId: ObjectIdSchema.optional(),
     title: z.string().min(1, "Title is required").optional(),
     description: z.string().min(1, "Description is required").optional(),
     noteFile: z.string().optional(),

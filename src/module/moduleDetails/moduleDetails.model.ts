@@ -11,7 +11,7 @@ const moduleDetailsSchema = new Schema<IModuleDetails>(
     moduleId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Module", // Assuming there is a 'Module' model, adjust if necessary
+      ref: "Module", 
     },
     content_type: {
       type: String,
@@ -21,7 +21,7 @@ const moduleDetailsSchema = new Schema<IModuleDetails>(
     contentId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Content", // Adjust if needed
+      ref: "Content", 
     },
     status: {
       type: String,

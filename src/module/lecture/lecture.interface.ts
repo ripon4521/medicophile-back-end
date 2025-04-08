@@ -1,20 +1,20 @@
 import { Types } from "mongoose";
 
-export type IDuraction = {
-  hour: number;
-  minute: number;
-  second: number;
-};
+
 
 export interface ILeecture {
+  slug:string;
   courseId: Types.ObjectId;
   createdBy: Types.ObjectId;
-  lectureTitle: string;
-  description?: string;
-  serveer: string;
+  moduleId:Types.ObjectId;
+  title: string
+  server: 'Youtube' | 'Vimeo' | 'Bunny' | 'Others';
   videoLink: string;
-  duration: IDuraction;
-  isFree: "yes" | "no";
-  status: "published" | "drafted";
-  sheduleDate: string;
+  duration: number;
+  isFree: boolean;
+  status: "Published" | "Drafted";
+  tags: string[];
+  deletedAt: Date | null;
+  isDeleted: boolean;
+  
 }
