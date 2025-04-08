@@ -38,11 +38,9 @@ const createCourseSchema = z.object({
     status: z.enum(["active", "inactive"], {
       message: "Status must be either 'active' or 'inactive'.",
     }),
-    course_tag: z
-      .array(z.string())
-      .nonempty({ message: "At least one course tag is required." }),
-    isDeleted: z.boolean(),
-    deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
+    // course_tag: z
+    //   .array(z.string())
+    //   .nonempty({ message: "At least one course tag is required." }),
   }),
 });
 
@@ -109,9 +107,6 @@ const updateCourseSchema = z.object({
       .array(z.string())
       .nonempty({ message: "At least one course tag is required." })
       .optional(),
-    isDeleted: z.boolean()
-      .optional(),
-    deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
   }),
 });
 

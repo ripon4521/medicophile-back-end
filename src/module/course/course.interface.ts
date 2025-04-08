@@ -19,5 +19,5 @@ export interface ICourse {
   status: "active" | "inactive";
   course_tag: string[];
   isDeleted: boolean;
-  deletedAt: Date | null;
+  deletedAt: Date  ;
 }

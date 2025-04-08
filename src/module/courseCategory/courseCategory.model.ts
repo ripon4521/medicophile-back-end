@@ -7,7 +7,7 @@ const courseCategorySchema = new Schema(
     slug: { type: String, unique: true },
     cover_photo: { type: String, required: true },
     createdBy: { type: Types.ObjectId, ref: "User", required: true },
-    deletedAt: { type: Date, default: null },
+    deletedAt: { type: Date, default: '' },
     isDeleted: { type: Boolean, default: false },
   },
   {

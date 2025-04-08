@@ -4,9 +4,9 @@ import slugify from "slugify";
 
 const courseSchema = new Schema<ICourse>(
   {
-    slug: { type: String },
+    slug: { type: String, unique:true },
     cover_photo: { type: String, required: true },
-    course_title: { type: String, required: true },
+    course_title: { type: String, required: true , unique:true},
     description: { type: String, required: true },
     duration: { type: String, required: true },
     preOrder: { type: String, enum: ["on", "off"], required: true },
@@ -26,7 +26,7 @@ const courseSchema = new Schema<ICourse>(
     status: { type: String, enum: ["active", "inactive"], required: true },
     course_tag: { type: [String], required: true },
     isDeleted: { type: Boolean, default: false },
-    deletedAt: { type: Date, default: null },
+    deletedAt: { type: Date},
   },
   {
     timestamps: {
