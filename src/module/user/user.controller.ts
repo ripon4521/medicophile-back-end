@@ -3,15 +3,15 @@ import { userService } from "./user.service";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 
-// const createStudeent = catchAsync(async (req, res) => {
-//   const payload = req.body;
-//   const result = await userService.createStudentsIntoDB(payload);
-//   sendResponse(res, {
-//     statusCode: StatusCodes.CREATED,
-//     message: "Student created successfully",
-//     data: result,
-//   });
-// });
+const createStudeent = catchAsync(async (req, res) => {
+  const payload = req.body;
+  const result = await userService.createStudentsIntoDB(payload);
+  sendResponse(res, {
+    statusCode: StatusCodes.CREATED,
+    message: "Student created successfully",
+    data: result,
+  });
+});
 
 const createFaculty = catchAsync(async (req, res) => {
   const payload = req.body;
@@ -67,7 +67,7 @@ const getProfile = catchAsync(async (req, res) => {
 });
 
 export const userController = {
-  // createStudeent,
+  createStudeent,
   createFaculty,
   getAllUsers,
   deleteUsers,

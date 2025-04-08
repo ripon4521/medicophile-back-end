@@ -7,6 +7,11 @@ Completed Module
 5. module 
 6. exam 
 7. notes
-8. module Details
+8. lecture
+9. module Details
 
+ -->
+<!-- 
+Notes
+*Image Upload on Cloudnery
  -->

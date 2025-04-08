@@ -14,6 +14,7 @@ import noteRouter from "../module/notes/notes.router";
 import moduleRouter from "../module/modules/modules.router";
 import courseCategoryRoute from "../module/courseCategory/courseCategory.route";
 import moduleDetailsRouter from "../module/moduleDetails/moduleDetails.route";
+import studentRoute from "../module/student/student.router";
 
 const router = Router();
 const moduleRoutes = [
@@ -31,10 +32,10 @@ const moduleRoutes = [
     route: userRouter,
   },
 
-  // {
-  //   path: "/student",
-  //   route: studentRoute,
-  // },
+  {
+    path: "/student",
+    route: studentRoute,
+  },
   {
     path: "/faculty",
     route: facultRoute,

@@ -11,7 +11,7 @@ const LectureSchema = new Schema<ILeecture>(
     moduleId: { type: Schema.Types.ObjectId, ref: "Module", required: true },
     title: { type: String, required: true },
     server: { type: String, enum: ["Youtube", "Vimeo", "Bunny", "Others"], default:'Youtube'},
-    videoLink: { type: String, required: true },
+    videoId: { type: String, required: true },
     duration: { type: Number, required: true },
     isFree: { type: Boolean },
     status: { type: String, enum: ["Published", "Drafted"], default: "Published" },

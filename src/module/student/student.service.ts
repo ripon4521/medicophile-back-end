@@ -1,120 +1,136 @@
-// import mongoose, { startSession } from "mongoose";
-// import { UserModel } from "../user/user.model";
-// import StudentUserModel from "./student.model";
-// import { IUser } from "../user/user.interface";
-// import { IStudent } from "./student.interface";
+import mongoose, { startSession } from "mongoose";
+import { UserModel } from "../user/user.model";
 
-// const getAllStudents = async () => {
-//   const result = await StudentUserModel.find().populate("userId");
-//   return result;
-// };
+import { IUser } from "../user/user.interface";
+import { IStudent } from "./student.interface";
+import studentModel from "./student.model";
 
-// const getStudentById = async (_id: string) => {
-//   const result = await StudentUserModel.findOne({ _id }).populate("userId");
-//   return result;
-// };
+const getAllStudents = async () => {
+  const result = await studentModel
+    .find({ isDeleted: false })
+    .populate("userId");
+  return result;
+};
 
-// const deleteStudentById = async (_id: string) => {
-//   const session = await mongoose.startSession();
-//   session.startTransaction();
+const getStudentById = async (_id: string) => {
+  const result = await studentModel.findOne({ _id }).populate("userId");
+  return result;
+};
 
-//   try {
-//     // Student ke find kore check kora
-//     const student = await StudentUserModel.findOne({ _id }).session(session);
-//     if (!student) {
-//       throw new Error("Student not found");
-//     }
+const deleteStudentById = async (_id: string) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-//     // Student er associated user er _id niye delete korbo
-//     const userId = student.userId;
+  try {
+    // Student ke find kore check kora
+    const student = await studentModel.findOne({ _id }).session(session);
+    if (!student) {
+      throw new Error("Student not found");
+    }
 
-//     // StudentUserModel theke delete
-//     await StudentUserModel.findOneAndDelete({ _id }).session(session);
+    // Student er associated user er _id niye delete korbo
+    const userId = student.userId;
 
-//     // UserModel theke user delete
-//     if (userId) {
-//       await UserModel.findOneAndDelete({ _id: userId }).session(session);
-//     }
+    // StudentUserModel theke delete
+    await studentModel
+      .findOneAndUpdate(
+        { _id },
+        {
+          isDeleted: true,
+          deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+        },
+        { new: true }
+      )
+      .session(session);
 
-//     // Transaction commit
-//     await session.commitTransaction();
-//     session.endSession();
+    // UserModel theke user delete
+    if (userId) {
+      await UserModel.findOneAndUpdate(
+        { _id: userId },
+        {
+          isDeleted: true,
+          deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+        },
+        { new: true }
+      ).session(session);
+    }
 
-//     return { message: "Student and associated user deleted successfully" };
-//   } catch (error) {
-//     // Rollback transaction if error occurs
-//     await session.abortTransaction();
-//     session.endSession();
-//     throw error;
-//   }
-// };
+    // Transaction commit
+    await session.commitTransaction();
+    session.endSession();
 
-// const updateStudent = async (_id: string, updateData: Partial<IStudent>) => {
-//   const session = await mongoose.startSession();
-//   session.startTransaction();
+    return { message: "Student and associated user deleted successfully" };
+  } catch (error) {
+    // Rollback transaction if error occurs
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
+};
 
-//   try {
-//     const student = await StudentUserModel.findById(_id).session(session);
-//     if (!student) {
-//       throw new Error("Student not found");
-//     }
+const updateStudent = async (_id: string, updateData: Partial<IStudent>) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-//     // Update Student model
-//     const updatedStudent = await StudentUserModel.findByIdAndUpdate(
-//       _id,
-//       updateData,
-//       { new: true, runValidators: true, session },
-//     );
+  try {
+    const student = await studentModel.findById(_id).session(session);
+    if (!student) {
+      throw new Error("Student not found");
+    }
 
-//     if (!updatedStudent) {
-//       throw new Error("Failed to update student");
-//     }
+    // Update Student model
+    const updatedStudent = await studentModel.findByIdAndUpdate(
+      _id,
+      updateData,
+      { new: true, runValidators: true, session }
+    );
 
-//     const userUpdateData: Partial<IUser> = {};
+    if (!updatedStudent) {
+      throw new Error("Failed to update student");
+    }
 
-//     const updateStudentData =
-//       await StudentUserModel.findById(_id).session(session);
-//     console.log(updateStudentData);
-//     userUpdateData.gmail = updateStudentData?.gmail;
-//     userUpdateData.address = updateStudentData?.contact_info.home_address;
-//     userUpdateData.gender = updateStudentData?.gender;
-//     userUpdateData.name = updateStudentData?.full_name;
-//     userUpdateData.contact = updateStudentData?.contact_info.student_phone;
-//     userUpdateData.district = updateStudentData?.contact_info.district;
-//     userUpdateData.division = updateStudentData?.contact_info.division;
-//     userUpdateData.date_of_birth = updateStudentData?.date_of_birth;
-//     userUpdateData.religion = updateStudentData?.religion;
-//     userUpdateData.status = updateStudentData?.status;
-//     userUpdateData.profile_picture = updateStudentData?.profile_picture;
+    const userUpdateData: Partial<IUser> = {};
 
-//     // Update user model
-//     const updatedUser = await UserModel.findByIdAndUpdate(
-//       student.userId,
-//       userUpdateData,
-//       { new: true, runValidators: true, session },
-//     );
+    const updateStudentData = await studentModel.findById(_id).session(
+      session
+    );
+    userUpdateData.email = updateStudentData?.email;
+    userUpdateData.role = updateStudentData?.role;
+    userUpdateData.name = updateStudentData?.name;
+    userUpdateData.phone = updateStudentData?.phone;
+    userUpdateData.status = updateStudentData?.status;
+    userUpdateData.profile_picture = updateStudentData?.profile_picture;
+    userUpdateData.isDeleted = updateStudentData?.isDeleted;
+    userUpdateData.deletedAt = updateStudentData?.deletedAt;
 
-//     if (!updatedUser) {
-//       throw new Error("Failed to update user");
-//     }
+    // Update user model
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      student.userId,
+      userUpdateData,
+      { new: true, runValidators: true, session }
+    );
 
-//     // Commit transaction if everything is fine
-//     await session.commitTransaction();
-//     session.endSession();
+    if (!updatedUser) {
+      throw new Error("Failed to update user");
+    }
 
-//     return updatedStudent;
-//   } catch (error) {
-//     // Rollback transaction if error occurs
-//     await session.abortTransaction();
-//     session.endSession();
+    // Commit transaction if everything is fine
+    await session.commitTransaction();
+    session.endSession();
 
-//     throw new Error("Error updating student and user");
-//   }
-// };
+    return updatedStudent;
+  } catch (error) {
+    // Rollback transaction if error occurs
+    await session.abortTransaction();
+    session.endSession();
 
-// export const studentsService = {
-//   getAllStudents,
-//   getStudentById,
-//   deleteStudentById,
-//   updateStudent,
-// };
+    throw new Error("Error updating student and user");
+  }
+};
+
+export const studentsService = {
+  getAllStudents,
+  getStudentById,
+  deleteStudentById,
+  updateStudent,
+};

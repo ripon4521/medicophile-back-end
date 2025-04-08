@@ -7,7 +7,7 @@ export type IFaculty = {
   phone: string;
   email: string;
   password: string;
-  profile_picture: string;
+  profile_picture?: string | null | undefined;
   status: "Active" | "Blocked";
   deletedAt: Date | null;
   isDeleted: boolean;

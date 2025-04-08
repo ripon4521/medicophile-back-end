@@ -1,4 +1,6 @@
 import mongoose, { Schema, Types } from "mongoose";
+import bcrypt from 'bcrypt';
+import config from "../../config";
 
 const facultySchema = new Schema(
   {
@@ -9,8 +11,8 @@ const facultySchema = new Schema(
     },
     userId: { type: Types.ObjectId, ref: "User", required: true },
     name: { type: String, required: true },
-    phone: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
+    phone: { type: String, required: true, unique:true},
+    email: { type: String, required: true, unique:true},
     password: { type: String, required: true },
     profile_picture: { type: String },
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
@@ -25,15 +27,32 @@ const facultySchema = new Schema(
 );
 
 // ✅ Middleware: Delete হলে `deletedAt` BD Time অনুযায়ী সেট হবে
-// facultySchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
+facultySchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate() as Record<string, any>;
 
-//   if (update?.isDeleted === true) {
-//     update.deletedAt = new Date(new Date().getTime() + 6 * 60 * 60 * 1000); // ✅ BD Time (UTC+6)
-//   }
+  if (update?.isDeleted === true) {
+    update.deletedAt = new Date(new Date().getTime() + 6 * 60 * 60 * 1000); // ✅ BD Time (UTC+6)
+  }
 
-//   next();
-// });
+  next();
+});
 
-const Faculty = mongoose.model("Faculty", facultySchema);
-export default Faculty;
+facultySchema.pre("save", async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
+
+facultySchema.post("save", async function (doc, next) {
+  doc.password = "";
+  next();
+});
+
+
+
+const FacultyUserModel = mongoose.model("Faculty", facultySchema);
+export default FacultyUserModel;

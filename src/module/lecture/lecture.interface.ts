@@ -9,7 +9,7 @@ export interface ILeecture {
   moduleId:Types.ObjectId;
   title: string
   server: 'Youtube' | 'Vimeo' | 'Bunny' | 'Others';
-  videoLink: string;
+  videoId: string;
   duration: number;
   isFree: boolean;
   status: "Published" | "Drafted";
