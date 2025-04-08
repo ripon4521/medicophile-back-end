@@ -29,6 +29,7 @@ const getAllModule = async () => {
   }
   return result;
 };
+
 const getSingleModule = async (slug: string) => {
   const result = await ModuleModel.findOne({ slug })
     .populate("createdBy")

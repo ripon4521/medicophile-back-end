@@ -15,8 +15,6 @@ const createFacultyValidationSchema = z.object({
     password: z.string().min(6, "Password must be at least 6 characters"),
     profile_picture: z.string().url("Invalid URL format").optional(),
     status: z.enum(["Active", "Blocked"]),
-    deletedAt: z.date().nullable().optional(),
-    isDeleted: z.boolean(),
   }),
 });
 
@@ -35,8 +33,7 @@ const updateFacultyValidationSchema = z.object({
       .optional(),
     profile_picture: z.string().url("Invalid URL format").optional(),
     status: z.enum(["Active", "Blocked"]).optional(),
-    deletedAt: z.date().nullable().optional(),
-    isDeleted: z.boolean().optional(),
+    
   }),
 });
 

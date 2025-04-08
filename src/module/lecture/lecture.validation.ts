@@ -18,8 +18,7 @@ const createLectureSchema = z.object({
   isFree: z.boolean(),
   status: z.enum(["Published", "Drafted"]),
   tags: z.array(z.string()),
-  deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
-  isDeleted: z.boolean().optional(),
+
   }),
 });
 
@@ -35,8 +34,7 @@ const updateLectureSchema = z.object({
     isFree: z.boolean().optional(),
     status: z.enum(["Published", "Drafted"]).optional(),
     tags: z.array(z.string()).optional(),
-    deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
-    isDeleted: z.boolean().optional(),
+ 
   }),
 });
 

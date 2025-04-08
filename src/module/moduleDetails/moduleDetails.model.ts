@@ -15,13 +15,13 @@ const moduleDetailsSchema = new Schema<IModuleDetails>(
     },
     content_type: {
       type: String,
-      enum: ["lecture", "notes", "exam"],
+      enum: ["Lecture", "Notes", "Exam"],
       required: true,
     },
     contentId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Content", 
+      refPath: "content_type", // Dynamically resolved from content_type
     },
     status: {
       type: String,
@@ -30,7 +30,7 @@ const moduleDetailsSchema = new Schema<IModuleDetails>(
     },
     deletedAt: {
       type: Date,
-      default: null,
+    
     },
     isDeleted: {
       type: Boolean,

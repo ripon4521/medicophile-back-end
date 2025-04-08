@@ -8,8 +8,6 @@ const createCourseCategorySchema = z.object({
     title: z.string().min(1, "Title is required"),
     cover_photo: z.string().url("Invalid cover photo URL"),
     createdBy: ObjectIdSchema,
-    deletedAt: z.date().nullable().optional(), // `Date` ভ্যালিডেশন
-    isDeleted: z.boolean(),
   }),
 });
 

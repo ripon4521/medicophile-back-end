@@ -12,9 +12,9 @@ moduleDetailsRouter.post(
 moduleDetailsRouter.get("/", moduleDetailsController.getAllModuleDetails);
 moduleDetailsRouter.get("/:id", moduleDetailsController.getSingleModuleDetails);
 moduleDetailsRouter.patch(
-  "/:id",
+  "/update-moduleDetails",
   validateRequest(moduleDetailsValidation.updateIModuleDetailsSchema),
   moduleDetailsController.updateModuleDetails,
 );
-moduleDetailsRouter.delete("/:id", moduleDetailsController.deleteModuleDetails);
+moduleDetailsRouter.delete("/delete-moduleDetails", moduleDetailsController.deleteModuleDetails);
 export default moduleDetailsRouter;

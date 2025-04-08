@@ -9,6 +9,6 @@ export type IFaculty = {
   password: string;
   profile_picture?: string | null | undefined;
   status: "Active" | "Blocked";
-  deletedAt: Date | null;
+  deletedAt: Date ;
   isDeleted: boolean;
 };

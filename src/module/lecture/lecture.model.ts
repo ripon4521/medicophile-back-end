@@ -16,7 +16,7 @@ const LectureSchema = new Schema<ILeecture>(
     isFree: { type: Boolean },
     status: { type: String, enum: ["Published", "Drafted"], default: "Published" },
     tags: { type: [String], default: [] },
-    deletedAt: { type: Date, default: null },
+    deletedAt: { type: Date},
     isDeleted: { type: Boolean, default: false },
   },
   {

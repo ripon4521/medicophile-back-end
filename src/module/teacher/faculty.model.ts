@@ -16,7 +16,7 @@ const facultySchema = new Schema(
     password: { type: String, required: true },
     profile_picture: { type: String },
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
-    deletedAt: { type: Date, default: null },
+    deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
   },
   {

@@ -9,11 +9,10 @@ const createIModuleDetailsSchema = z.object({
   body: z.object({
     courseId: ObjectId,
     moduleId: ObjectId,
-    content_type: z.enum(["lecture", "notes", "exam"]),
+    content_type: z.enum(["Lecture", "Notes", "Exam"]),
     contentId: ObjectId,
     status: z.enum(["published", "drafted"]),
-    deletedAt: z.date().nullable(),
-    isDeleted: z.boolean(),
+ 
   }),
 });
 
@@ -21,11 +20,10 @@ const updateIModuleDetailsSchema = z.object({
   body: z.object({
     courseId: ObjectId.optional(),
     moduleId: ObjectId.optional(),
-    content_type: z.enum(["lecture", "notes", "exam"]).optional(),
+    content_type: z.enum(["Lecture", "Notes", "Exam"]).optional(),
     contentId: ObjectId.optional(),
     status: z.enum(["published", "drafted"]).optional(),
-    deletedAt: z.date().nullable().optional(),
-    isDeleted: z.boolean().optional(),
+   
   }),
 });
 

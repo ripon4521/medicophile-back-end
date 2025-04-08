@@ -14,7 +14,7 @@ export interface ILeecture {
   isFree: boolean;
   status: "Published" | "Drafted";
   tags: string[];
-  deletedAt: Date | null;
+  deletedAt: Date;
   isDeleted: boolean;
   
 }
