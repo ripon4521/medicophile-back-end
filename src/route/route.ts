@@ -21,6 +21,7 @@ import pdfRouter from "../module/pdf/pdf.route";
 import cqQuestionRouter from "../module/classQuizeQuestion/classQuizeQuestion.route";
 import cqAttempRouter from "../module/cqAttemp/cqAttemp.route";
 import cqMarkingRouter from "../module/cqMarking/cqMarking.route";
+import docsRouter from "../module/docs/docs.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -103,7 +104,10 @@ const moduleRoutes = [
     route:cqAttempRouter
   },{
     path:'/cq-marking',
-    route:cqMarkingRouter
+    route:cqMarkingRouter 
+  },{
+    path:'/docs',
+    route:docsRouter
   }
 ];
 moduleRoutes.forEach((route) => {

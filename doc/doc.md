@@ -4,12 +4,18 @@ Completed Module
 2. User , Teacher, Student Creation 
 3. Auth 
 4. user credentials
-5. course -- cover photo upload sstem baki ase
+5. course 
 6. module 
 7. exam 
 8. notes
 9.  lecture
 10. module Details
+11. cq question
+12. cq attemps
+13. cq marking
+14. pdf
+15. image
+16. docs
 
  -->
 <!-- 
