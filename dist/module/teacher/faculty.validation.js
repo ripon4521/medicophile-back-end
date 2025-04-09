@@ -15,14 +15,12 @@ const createFacultyValidationSchema = zod_1.z.object({
             .regex(/^\+?(88)?01[3-9]\d{8}$/, "Invalid Bangladeshi phone number"),
         email: zod_1.z.string().email("Invalid email format"),
         password: zod_1.z.string().min(6, "Password must be at least 6 characters"),
-        profile_picture: zod_1.z.string().url("Invalid URL format"),
+        profile_picture: zod_1.z.string().url("Invalid URL format").optional(),
         status: zod_1.z.enum(["Active", "Blocked"]),
-        deletedAt: zod_1.z.date().nullable().optional(),
-        isDeleted: zod_1.z.boolean(),
     }),
 });
 const updateFacultyValidationSchema = zod_1.z.object({
-    bod: zod_1.z.object({
+    body: zod_1.z.object({
         role: zod_1.z.enum(["superAdmin", "admin", "teacher"]).optional(),
         name: zod_1.z.string().min(3, "Name must be at least 3 characters").optional(),
         phone: zod_1.z
@@ -36,8 +34,6 @@ const updateFacultyValidationSchema = zod_1.z.object({
             .optional(),
         profile_picture: zod_1.z.string().url("Invalid URL format").optional(),
         status: zod_1.z.enum(["Active", "Blocked"]).optional(),
-        deletedAt: zod_1.z.date().nullable().optional(),
-        isDeleted: zod_1.z.boolean().optional(),
     }),
 });
 exports.facultyValidation = {

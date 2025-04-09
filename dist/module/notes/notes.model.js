@@ -32,22 +32,40 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const slugify_1 = __importDefault(require("slugify"));
 const NotesSchema = new mongoose_1.Schema({
-    noteTitle: { type: String, required: true, trim: true },
-    description: { type: String, required: true, trim: true },
+    slug: { type: String },
+    title: { type: String, required: true },
+    description: { type: String, required: true },
     createdBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
+    moduleId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Module", required: true },
     courseId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Course", required: true },
-    noteFile: { type: String, required: true }, // Should store file URL
-    classTime: { type: String, required: true },
-    launchingDate: { type: String, required: true },
-    status: {
-        type: String,
-        enum: ["published", "drafted"],
-        required: true,
-        default: "published",
-    },
-}, { timestamps: true });
+    noteFile: { type: String },
+    status: { type: String, enum: ["Published", "Drafted"], required: true, default: 'Published' },
+    deletedAt: { type: Date },
+    isDeleted: { type: Boolean, default: false },
+}, {
+    timestamps: {
+        currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+    }, // UTC+6 (Bangladesh Time)
+});
+NotesSchema.pre("save", function (next) {
+    if (this.isModified("title")) {
+        this.slug = (0, slugify_1.default)(this.title, { lower: true, strict: true });
+    }
+    next();
+});
+NotesSchema.pre("findOneAndUpdate", function (next) {
+    const update = this.getUpdate();
+    if (update === null || update === void 0 ? void 0 : update.title) {
+        update.slug = (0, slugify_1.default)(update.title, { lower: true, strict: true });
+    }
+    next();
+});
 const NotesModel = mongoose_1.default.model("Notes", NotesSchema);
 exports.default = NotesModel;

@@ -32,24 +32,44 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const DurationSchema = new mongoose_1.Schema({
-    hour: { type: Number, required: true, min: 0 },
-    minute: { type: Number, required: true, min: 0 },
-    second: { type: Number, required: true, min: 0 },
-});
+const slugify_1 = __importDefault(require("slugify"));
 const LectureSchema = new mongoose_1.Schema({
+    slug: { type: String },
     courseId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Course", required: true },
     createdBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
-    lectureTitle: { type: String, required: true },
-    description: { type: String },
-    serveer: { type: String, required: true },
-    videoLink: { type: String, required: true },
-    duration: { type: DurationSchema, required: true },
-    isFree: { type: String, enum: ["yes", "no"], required: true },
-    status: { type: String, enum: ["published", "drafted"], required: true },
-    sheduleDate: { type: String, required: true },
-}, { timestamps: true });
+    moduleId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Module", required: true },
+    title: { type: String, required: true },
+    server: { type: String, enum: ["Youtube", "Vimeo", "Bunny", "Others"], default: 'Youtube' },
+    videoId: { type: String, required: true },
+    duration: { type: Number, required: true },
+    isFree: { type: Boolean },
+    status: { type: String, enum: ["Published", "Drafted"], default: "Published" },
+    tags: { type: [String], default: [] },
+    deletedAt: { type: Date },
+    isDeleted: { type: Boolean, default: false },
+}, {
+    timestamps: {
+        currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+    }
+});
+LectureSchema.pre("save", function (next) {
+    if (this.isModified("title")) {
+        this.slug = (0, slugify_1.default)(this.title, { lower: true, strict: true });
+    }
+    next();
+});
+// ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
+LectureSchema.pre("findOneAndUpdate", function (next) {
+    const update = this.getUpdate();
+    if (update === null || update === void 0 ? void 0 : update.title) {
+        update.slug = (0, slugify_1.default)(update.title, { lower: true, strict: true });
+    }
+    next();
+});
 const LectureModel = mongoose_1.default.model("Lecture", LectureSchema);
 exports.default = LectureModel;

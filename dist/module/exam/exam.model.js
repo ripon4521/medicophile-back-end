@@ -61,7 +61,7 @@ const ExamSchema = new mongoose_1.Schema({
     },
     validTime: { type: String, required: true },
     status: { type: String, enum: ["published", "drafted"], required: true },
-    deletedAt: { type: Date, default: null },
+    deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
 }, {
     timestamps: {

@@ -39,12 +39,12 @@ const EnrollmentSchema = new mongoose_1.Schema({
     studentId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: "Students",
+        ref: 'Students',
     },
     courseId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: "Course",
+        ref: 'Course',
     },
     paidAmont: {
         type: Number,
@@ -54,21 +54,21 @@ const EnrollmentSchema = new mongoose_1.Schema({
     paymentMethod: {
         type: String,
         required: true,
-        enum: ["cash", "bikash", "nagad", "roket"],
+        enum: ['cash', 'bikash', 'nagad', 'roket'],
     },
     status: {
         type: String,
         required: true,
-        enum: ["active", "blocked"],
-        default: "blocked",
+        enum: ['active', 'blocked'],
+        default: 'blocked'
     },
     transctionId: {
-        type: String,
+        type: String
     },
     paymentNumber: {
-        type: String,
-    },
+        type: String
+    }
 }, { timestamps: true });
 // Create a Mongoose model from the schema
-const enrollMentModel = mongoose_1.default.model("Enrollments", EnrollmentSchema);
+const enrollMentModel = mongoose_1.default.model('Enrollments', EnrollmentSchema);
 exports.default = enrollMentModel;

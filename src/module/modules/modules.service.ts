@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import AppError from "../../helpers/AppError";
 import { IModules } from "./modules.interface";
 import ModuleModel from "./modules.model";
+import QueryBuilder from "../../builder/querybuilder";
 
 const createModule = async (payload: IModules) => {
   const result = await ModuleModel.create(payload);
@@ -14,20 +15,44 @@ const createModule = async (payload: IModules) => {
   return result;
 };
 
-const getAllModule = async () => {
-  const result = await ModuleModel.find()
-    .populate("createdBy")
-    .populate({
-      path: "courseId",
-      populate: { path: "category" },
-    });
-  if (!result) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Failed to load data , Please try again",
-    );
-  }
-  return result;
+const getAllModule = async (query: Record<string, unknown>) => {
+
+   const courseQuery = new QueryBuilder(ModuleModel, query) 
+      .search(['moduleTitle'])
+      .filter()
+      .sort()
+      .paginate()
+      .fields()
+      .populate({
+        path:'courseId',
+        populate: { path: 'category'}
+      })
+      .populate(['createdBy'])
+      
+
+     
+  
+    const result = await courseQuery.exec(); 
+    if (!result) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        "Failed to load data , Please try again",
+      );
+    }
+    return result;
+
+  //   .populate("createdBy")
+  //   .populate({
+  //     path: "courseId",
+  //     populate: { path: "category" },
+  //   });
+  // if (!result) {
+  //   throw new AppError(
+  //     StatusCodes.BAD_REQUEST,
+  //     "Failed to load data , Please try again",
+  //   );
+  // }
+  // return result;
 };
 
 const getSingleModule = async (slug: string) => {

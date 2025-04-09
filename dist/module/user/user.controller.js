@@ -17,15 +17,15 @@ const http_status_codes_1 = require("http-status-codes");
 const user_service_1 = require("./user.service");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-// const createStudeent = catchAsync(async (req, res) => {
-//   const payload = req.body;
-//   const result = await userService.createStudentsIntoDB(payload);
-//   sendResponse(res, {
-//     statusCode: StatusCodes.CREATED,
-//     message: "Student created successfully",
-//     data: result,
-//   });
-// });
+const createStudeent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.body;
+    const result = yield user_service_1.userService.createStudentsIntoDB(payload);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.CREATED,
+        message: "Student created successfully",
+        data: result,
+    });
+}));
 const createFaculty = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
     const result = yield user_service_1.userService.createFacultysIntoDB(payload);
@@ -74,7 +74,7 @@ const getProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 exports.userController = {
-    // createStudeent,
+    createStudeent,
     createFaculty,
     getAllUsers,
     deleteUsers,

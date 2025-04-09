@@ -1,17 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class QueryBuilder {
-    constructor(modelQuery, query) {
-        this.modelQuery = modelQuery;
+    constructor(model, query) {
+        this.model = model;
         this.query = query;
+        this.modelQuery = this.model.find({ isDeleted: false }); // Default query
     }
     search(searchableFields) {
         const searchTerm = this.query.search;
-        console.log(searchTerm);
         if (searchTerm) {
             const searchQuery = {
-                $or: searchableFields.map((field) => ({
-                    [field]: { $regex: new RegExp(searchTerm, "i") },
+                $or: searchableFields
+                    .filter((field) => {
+                    const schemaType = this.model.schema.paths[field];
+                    return (schemaType === null || schemaType === void 0 ? void 0 : schemaType.instance) === 'String';
+                })
+                    .map((field) => ({
+                    [field]: { $regex: new RegExp(searchTerm, 'i') },
                 })),
             };
             this.modelQuery = this.modelQuery.find(searchQuery);
@@ -19,32 +24,37 @@ class QueryBuilder {
         return this;
     }
     filter() {
-        const queryObj = Object.assign({}, this.query); // copy
-        // Filtering
-        const excludeFields = ["searchTerm", "sort", "limit", "page", "fields"];
-        excludeFields.forEach((el) => delete queryObj[el]);
+        const queryObj = Object.assign({}, this.query);
+        const excludeFields = ['search', 'sort', 'limit', 'page', 'fields'];
+        excludeFields.forEach((field) => delete queryObj[field]);
         this.modelQuery = this.modelQuery.find(queryObj);
         return this;
     }
     sort() {
-        var _a, _b, _c;
-        const sort = ((_c = (_b = (_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.sort) === null || _b === void 0 ? void 0 : _b.split(",")) === null || _c === void 0 ? void 0 : _c.join(" ")) || "price";
-        this.modelQuery = this.modelQuery.sort(sort);
+        var _a;
+        const sortBy = ((_a = this.query.sort) === null || _a === void 0 ? void 0 : _a.split(',').join(' ')) || '-createdAt';
+        this.modelQuery = this.modelQuery.sort(sortBy);
         return this;
     }
     paginate() {
-        var _a, _b;
-        const page = Number((_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.page) || 1;
-        const limit = Number((_b = this === null || this === void 0 ? void 0 : this.query) === null || _b === void 0 ? void 0 : _b.limit) || 10;
+        const page = Number(this.query.page) || 1;
+        const limit = Number(this.query.limit) || 10;
         const skip = (page - 1) * limit;
         this.modelQuery = this.modelQuery.skip(skip).limit(limit);
         return this;
     }
     fields() {
-        var _a, _b, _c;
-        const fields = ((_c = (_b = (_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.fields) === null || _b === void 0 ? void 0 : _b.split(",")) === null || _c === void 0 ? void 0 : _c.join(" ")) || "-__v";
+        var _a;
+        const fields = ((_a = this.query.fields) === null || _a === void 0 ? void 0 : _a.split(',').join(' ')) || '-__v';
         this.modelQuery = this.modelQuery.select(fields);
         return this;
+    }
+    populate(path) {
+        this.modelQuery = this.modelQuery.populate(path);
+        return this;
+    }
+    exec() {
+        return this.modelQuery;
     }
 }
 exports.default = QueryBuilder;

@@ -34,8 +34,8 @@ const getLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const getSingleLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const result = yield lecture_service_1.lectureServices.getSingleLecture(id);
+    const { slug } = req.params;
+    const result = yield lecture_service_1.lectureServices.getSingleLecture(slug);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Single Lecture fatched successfully",
@@ -43,9 +43,9 @@ const getSingleLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 
     });
 }));
 const updateLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
+    const { slug } = req.params;
     const payload = req.body;
-    const result = yield lecture_service_1.lectureServices.updateLecture(id, payload);
+    const result = yield lecture_service_1.lectureServices.updateLecture(slug, payload);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: " Lecture Updated successfully",
@@ -53,8 +53,8 @@ const updateLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 const deleteLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const result = yield lecture_service_1.lectureServices.deleteLecture(id);
+    const { slug } = req.params;
+    const result = yield lecture_service_1.lectureServices.deleteLecture(slug);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: " Lecture Deleted successfully",

@@ -22,28 +22,19 @@ const createCourseIntoDb = (payload) => __awaiter(void 0, void 0, void 0, functi
     const result = yield course_model_1.default.create(payload);
     return result;
 });
-// const getAllCategorieFromDb = async (query: Record<string, unknown>) => {
-//     const queryBuilder = new QueryBuilder(CategoriedModel.find(), query);
-//     const result = await queryBuilder
-//       .search(['name', 'description'])
-//       .filter()
-//       .sort()
-//       .select()
-//       .modelQuery.exec(); // Execute the query
-//     return result;
-//   };
-// const getAllCoursesFromDb =async () => {
-//     const result = await courseModel.find().populate('category');
-//     return result;
-// }
 const getAllCoursesFromDb = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(query);
-    const courseQuery = new querybuilder_1.default(course_model_1.default.find(), query)
+    const courseQuery = new querybuilder_1.default(course_model_1.default, query)
         .search(coursee_constant_1.searchableFields)
         .filter()
-        .sort();
-    const result = yield courseQuery.modelQuery;
-    console.log(result);
+        .sort()
+        .paginate()
+        .fields()
+        .populate({
+        path: 'category',
+        populate: { path: 'createdBy' }
+    })
+        .populate(['createdBy']);
+    const result = yield courseQuery.exec();
     return result;
 });
 const getCourseById = (slug) => __awaiter(void 0, void 0, void 0, function* () {

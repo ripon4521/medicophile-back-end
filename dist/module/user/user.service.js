@@ -19,36 +19,34 @@ const user_model_1 = require("./user.model");
 const faculty_model_1 = __importDefault(require("../teacher/faculty.model"));
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const http_status_codes_1 = require("http-status-codes");
-// const createStudentsIntoDB = async (payload: IStudent) => {
-//   const userData: Partial<IUser> = {};
-//   userData.name = payload.full_name;
-//   userData.status = payload.status;
-//   userData.role = payload.role;
-//   userData.profile_picture = payload.profile_picture;
-//   userData.address = payload.contact_info.home_address;
-//   userData.district = payload.contact_info.district;
-//   userData.division = payload.contact_info.division;
-//   userData.contact = payload.contact_info.student_phone;
-//   userData.password = payload.password
-//   userData.gmail = payload.gmail;
-//   userData.gender = payload.gender;
-//   userData.date_of_birth = payload.date_of_birth;
-//   userData.religion=payload.religion
-//   const session = await mongoose.startSession();
-//   session.startTransaction();
-//   try {
-//     const newUser = await UserModel.create([userData], { session });
-//     payload.userId = newUser[0]._id;
-//     const student = await StudentUserModel.create([payload], { session });
-//     await session.commitTransaction();
-//     session.endSession();
-//     return { student: student[0] };
-//   } catch (error) {
-//     await session.abortTransaction();
-//     session.endSession();
-//     throw new Error("Transaction failed: " + error);
-//   }
-// };
+const student_model_1 = __importDefault(require("../student/student.model"));
+const createStudentsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = {};
+    userData.name = payload.name;
+    userData.status = payload.status;
+    userData.role = payload.role;
+    userData.profile_picture = payload.profile_picture;
+    userData.phone = payload.phone;
+    userData.password = payload.password;
+    userData.email = payload.email;
+    userData.isDeleted = payload.isDeleted;
+    userData.deletedAt = payload.deletedAt;
+    const session = yield mongoose_1.default.startSession();
+    session.startTransaction();
+    try {
+        const newUser = yield user_model_1.UserModel.create([userData], { session });
+        payload.userId = newUser[0]._id;
+        const student = yield student_model_1.default.create([payload], { session });
+        yield session.commitTransaction();
+        session.endSession();
+        return { student: student[0] };
+    }
+    catch (error) {
+        yield session.abortTransaction();
+        session.endSession();
+        throw new Error("Transaction failed: " + error);
+    }
+});
 // const createAdminIntoDB = async (payload: ) => {
 //   const userData: Partial<IUser> = {};
 //   userData.name = payload.name;
@@ -107,6 +105,7 @@ const getPofile = (phone) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.userService = {
     createFacultysIntoDB,
+    createStudentsIntoDB,
     getUSers,
     deleteUser,
     getPofile,

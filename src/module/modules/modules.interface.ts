@@ -5,6 +5,6 @@ export interface IModules {
   moduleTitle: string;
   courseId: Types.ObjectId;
   createdBy: Types.ObjectId;
-  deletedAt: Date | null;
+  deletedAt: Date;
   isDeleted: boolean;
 }

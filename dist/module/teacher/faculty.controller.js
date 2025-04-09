@@ -17,6 +17,7 @@ const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const faculty_service_1 = require("./faculty.service");
+const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const getAllFaculty = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const students = yield faculty_service_1.facultysService.getAllFacultys();
     (0, sendResponse_1.default)(res, {
@@ -35,8 +36,13 @@ const getSingleFaculty = (0, catchAsync_1.default)((req, res) => __awaiter(void 
     });
 }));
 const updatedFaculty = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const updatedStudent = yield faculty_service_1.facultysService.updateFaculty(id, req.body);
+    const { _id } = req.body;
+    const payload = req.body;
+    delete payload._id;
+    if (!_id) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, 'Please provide id ');
+    }
+    const updatedStudent = yield faculty_service_1.facultysService.updateFaculty(_id, payload);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Faculty Updated successfully",
@@ -44,8 +50,11 @@ const updatedFaculty = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
     });
 }));
 const deleteFaculty = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const result = yield faculty_service_1.facultysService.deleteFacultyById(id);
+    const { _id } = req.body;
+    if (!_id) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, 'Please provide id ');
+    }
+    const result = yield faculty_service_1.facultysService.deleteFacultyById(_id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Faculty Deleted successfully",

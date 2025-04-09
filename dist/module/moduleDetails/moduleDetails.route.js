@@ -11,6 +11,6 @@ const moduleDetailsRouter = (0, express_1.Router)();
 moduleDetailsRouter.post("/create-moduleDetails", (0, validateRequest_1.default)(moduleDetails_validation_1.moduleDetailsValidation.createIModuleDetailsSchema), moduleDetails_controller_1.moduleDetailsController.createModuleDetails);
 moduleDetailsRouter.get("/", moduleDetails_controller_1.moduleDetailsController.getAllModuleDetails);
 moduleDetailsRouter.get("/:id", moduleDetails_controller_1.moduleDetailsController.getSingleModuleDetails);
-moduleDetailsRouter.patch("/:id", (0, validateRequest_1.default)(moduleDetails_validation_1.moduleDetailsValidation.updateIModuleDetailsSchema), moduleDetails_controller_1.moduleDetailsController.updateModuleDetails);
-moduleDetailsRouter.delete("/:id", moduleDetails_controller_1.moduleDetailsController.deleteModuleDetails);
+moduleDetailsRouter.patch("/update-moduleDetails", (0, validateRequest_1.default)(moduleDetails_validation_1.moduleDetailsValidation.updateIModuleDetailsSchema), moduleDetails_controller_1.moduleDetailsController.updateModuleDetails);
+moduleDetailsRouter.delete("/delete-moduleDetails", moduleDetails_controller_1.moduleDetailsController.deleteModuleDetails);
 exports.default = moduleDetailsRouter;

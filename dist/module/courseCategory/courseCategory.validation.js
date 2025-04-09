@@ -11,8 +11,6 @@ const createCourseCategorySchema = zod_1.z.object({
         title: zod_1.z.string().min(1, "Title is required"),
         cover_photo: zod_1.z.string().url("Invalid cover photo URL"),
         createdBy: ObjectIdSchema,
-        deletedAt: zod_1.z.date().nullable().optional(), // `Date` ভ্যালিডেশন
-        isDeleted: zod_1.z.boolean(),
     }),
 });
 const updateCourseCategorySchema = zod_1.z.object({

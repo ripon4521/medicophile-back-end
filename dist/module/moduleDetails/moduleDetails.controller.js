@@ -17,6 +17,7 @@ const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const moduleDetails_service_1 = require("./moduleDetails.service");
+const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const createModuleDetails = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield moduleDetails_service_1.moduleDetailsService.createModuleDetails(req.body);
     (0, sendResponse_1.default)(res, {
@@ -26,7 +27,14 @@ const createModuleDetails = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     });
 }));
 const updateModuleDetails = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield moduleDetails_service_1.moduleDetailsService.updateModuleDetails(req.params.id, req.body);
+    const { _id } = req.body;
+    const payload = req.body;
+    delete payload._id;
+    // console.log(object)
+    if (!_id) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, 'Please provide _id ');
+    }
+    const result = yield moduleDetails_service_1.moduleDetailsService.updateModuleDetails(_id, payload);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Module Details updated successfully",
@@ -34,7 +42,8 @@ const updateModuleDetails = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     });
 }));
 const deleteModuleDetails = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield moduleDetails_service_1.moduleDetailsService.deleteModuleDetails(req.params.id);
+    const { _id } = req.body;
+    const result = yield moduleDetails_service_1.moduleDetailsService.deleteModuleDetails(_id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Module Details deleted successfully",
@@ -50,7 +59,8 @@ const getSingleModuleDetails = (0, catchAsync_1.default)((req, res) => __awaiter
     });
 }));
 const getAllModuleDetails = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield moduleDetails_service_1.moduleDetailsService.getAllModuleDetails();
+    const query = req.query;
+    const result = yield moduleDetails_service_1.moduleDetailsService.getAllModuleDetails(query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Module Details get successfully",

@@ -8,23 +8,23 @@ const ObjectIdSchema = zod_1.z.string().refine((val) => mongoose_1.Types.ObjectI
 });
 const createNotesSchema = zod_1.z.object({
     body: zod_1.z.object({
-        noteTitle: zod_1.z.string().min(1, "Note title is required"),
-        description: zod_1.z.string().min(1, "Description is required").optional(),
+        title: zod_1.z.string().min(1, "Title is required"),
+        description: zod_1.z.string().min(1, "Description is required"),
         createdBy: ObjectIdSchema,
+        moduleId: ObjectIdSchema,
         courseId: ObjectIdSchema,
-        noteFile: zod_1.z.string().url("Invalid file URL"),
-        classTime: zod_1.z.string().datetime("Invalid date format"),
-        launchingDate: zod_1.z.string().datetime("Invalid date format"),
-        status: zod_1.z.enum(["published", "drafted"]),
+        noteFile: zod_1.z.string().optional(),
+        status: zod_1.z.enum(["Published", "Drafted"]),
     }),
 });
 const updateNotesSchema = zod_1.z.object({
     body: zod_1.z.object({
-        noteTitle: zod_1.z.string().min(1, "Note title is required").optional(),
+        createdBy: ObjectIdSchema.optional(),
+        moduleId: ObjectIdSchema.optional(),
+        courseId: ObjectIdSchema.optional(),
+        title: zod_1.z.string().min(1, "Title is required").optional(),
         description: zod_1.z.string().min(1, "Description is required").optional(),
-        noteFile: zod_1.z.string().url("Invalid file URL").optional(),
-        classTime: zod_1.z.string().datetime("Invalid date format").optional(),
-        launchingDate: zod_1.z.string().datetime("Invalid date format").optional(),
+        noteFile: zod_1.z.string().optional(),
         status: zod_1.z.enum(["published", "drafted"]).optional(),
     }),
 });

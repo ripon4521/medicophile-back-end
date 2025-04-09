@@ -19,6 +19,8 @@ const notes_router_1 = __importDefault(require("../module/notes/notes.router"));
 const modules_router_1 = __importDefault(require("../module/modules/modules.router"));
 const courseCategory_route_1 = __importDefault(require("../module/courseCategory/courseCategory.route"));
 const moduleDetails_route_1 = __importDefault(require("../module/moduleDetails/moduleDetails.route"));
+const student_router_1 = __importDefault(require("../module/student/student.router"));
+const userCredentials_route_1 = __importDefault(require("../module/userCredentials/userCredentials.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -33,10 +35,10 @@ const moduleRoutes = [
         path: "/user",
         route: user_router_1.default,
     },
-    // {
-    //   path: "/student",
-    //   route: studentRoute,
-    // },
+    {
+        path: "/student",
+        route: student_router_1.default,
+    },
     {
         path: "/faculty",
         route: faculty_router_1.default,
@@ -80,7 +82,10 @@ const moduleRoutes = [
     {
         path: "/moduleDetails",
         route: moduleDetails_route_1.default,
-    },
+    }, {
+        path: '/user-credentials',
+        route: userCredentials_route_1.default
+    }
 ];
 moduleRoutes.forEach((route) => {
     router.use(route.path, route.route);

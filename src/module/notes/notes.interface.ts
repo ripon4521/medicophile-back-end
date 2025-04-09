@@ -7,8 +7,8 @@ export interface INotes {
   createdBy: Types.ObjectId;
   moduleId:Types.ObjectId;
   courseId: Types.ObjectId;
-  noteFile: File;
-  status: "published" | "drafted";
+  noteFile: string;
+  status: "Published" | "Drafted";
   deletedAt:Date;
-  isDeleted:boolean | null;
+  isDeleted:boolean;
 }

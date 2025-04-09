@@ -13,38 +13,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.noteService = void 0;
+const http_status_codes_1 = require("http-status-codes");
+const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const notes_model_1 = __importDefault(require("./notes.model"));
 const createNote = (paload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield notes_model_1.default.create(paload);
     return result;
 });
 const getAllNotes = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield notes_model_1.default.find()
+    const result = yield notes_model_1.default.find({ isDeleted: false })
         .populate("createdBy")
         .populate({
         path: "courseId",
         populate: { path: "category" },
-    });
+    })
+        .populate('moduleId');
     return result;
 });
-const getSingleNotes = (_id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield notes_model_1.default.findOne({ _id })
+const getSingleNotes = (slug) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield notes_model_1.default.findOne({ slug })
         .populate("createdBy")
         .populate({
         path: "courseId",
         populate: { path: "category" },
-    });
+    })
+        .populate("moduleId");
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Notes. Slug is not valid, reload or go back and try again");
+    }
     return result;
 });
-const updateNote = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const update = yield notes_model_1.default.findOneAndUpdate({ _id }, payload, {
+const updateNote = (slug, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const update = yield notes_model_1.default.findOneAndUpdate({ slug }, payload, {
         new: true,
         runValidators: true,
     });
+    if (!update) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to update Notes. Slug is not valid, reload or go back and try again");
+    }
     return update;
 });
-const deleteNote = (_id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield notes_model_1.default.findOneAndDelete({ _id });
+const deleteNote = (slug) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield notes_model_1.default.findOneAndUpdate({ slug }, {
+        isDeleted: true,
+        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
+    }, { new: true });
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "PLease Try Again ");
+    }
     return result;
 });
 exports.noteService = {

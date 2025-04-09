@@ -19,7 +19,7 @@ const user_model_1 = require("../user/user.model");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const http_status_codes_1 = require("http-status-codes");
 const getAllFacultys = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield faculty_model_1.default.find().populate("userId");
+    const result = yield faculty_model_1.default.find({ isDeleted: false }).populate("userId");
     return result;
 });
 const getFacultyById = (_id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -78,10 +78,16 @@ const deleteFacultyById = (_id) => __awaiter(void 0, void 0, void 0, function* (
         // Faculty er associated user er _id niye delete korbo
         const userId = faculty.userId;
         // FacultyUserModel theke delete
-        yield faculty_model_1.default.findOneAndDelete({ _id }).session(session);
+        yield faculty_model_1.default.findOneAndUpdate({ _id }, {
+            isDeleted: true,
+            deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
+        }).session(session);
         // UserModel theke user delete
         if (userId) {
-            yield user_model_1.UserModel.findOneAndDelete({ _id: userId }).session(session);
+            yield user_model_1.UserModel.findOneAndUpdate({ _id: userId }, {
+                isDeleted: true,
+                deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
+            }).session(session);
         }
         // Transaction commit
         yield session.commitTransaction();

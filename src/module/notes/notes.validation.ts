@@ -15,8 +15,7 @@ const createNotesSchema = z.object({
     courseId: ObjectIdSchema,
     noteFile: z.string().optional(),
     status: z.enum(["Published", "Drafted"]),
-    deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
-    isDeleted: z.boolean().optional()
+  
   }),
 });
 
@@ -29,8 +28,7 @@ const updateNotesSchema = z.object({
     description: z.string().min(1, "Description is required").optional(),
     noteFile: z.string().optional(),
     status: z.enum(["published", "drafted"]).optional(),
-    deletedAt: z.union([z.date().nullable(), z.null()]).optional(),
-    isDeleted: z.boolean().optional()
+ 
   }),
 });
 

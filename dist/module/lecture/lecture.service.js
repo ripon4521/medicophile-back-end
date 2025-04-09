@@ -13,19 +13,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lectureServices = void 0;
+const http_status_codes_1 = require("http-status-codes");
+const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const lecture_model_1 = __importDefault(require("./lecture.model"));
 const createLecture = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const create = yield lecture_model_1.default.create(payload);
+    if (!create) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Faled to create, PLease try again");
+    }
     return create;
 });
-const updateLecture = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+const updateLecture = (slug, payload) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const update = yield lecture_model_1.default.findOneAndUpdate({ _id }, payload, {
+        const update = yield lecture_model_1.default.findOneAndUpdate({ slug }, payload, {
             new: true,
             runValidators: true,
         });
         if (!update) {
-            throw new Error("Lecture not found or update failed.");
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Lecture not found or update failed.");
         }
         return update;
     }
@@ -34,26 +39,37 @@ const updateLecture = (_id, payload) => __awaiter(void 0, void 0, void 0, functi
         throw error;
     }
 });
-const deleteLecture = (_id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield lecture_model_1.default.findOneAndDelete({ _id });
-    return result;
+const deleteLecture = (slug) => __awaiter(void 0, void 0, void 0, function* () {
+    const deleted = yield lecture_model_1.default.findOneAndUpdate({ slug }, {
+        isDeleted: true,
+        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
+    }, { new: true });
+    if (!deleted) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to delete, please relaod or go back and try again");
+    }
+    return deleted;
 });
 const getAllLecture = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield lecture_model_1.default.find()
+    const result = yield lecture_model_1.default.find({ isDeleted: false })
         .populate("createdBy")
         .populate({
         path: "courseId",
         populate: { path: "category" },
-    });
+    })
+        .populate('moduleId');
     return result;
 });
-const getSingleLecture = (_id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield lecture_model_1.default.findOne({ _id })
+const getSingleLecture = (slug) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield lecture_model_1.default.findOne({ slug })
         .populate("createdBy")
         .populate({
         path: "courseId",
         populate: { path: "category" },
-    });
+    })
+        .populate('moduleId');
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Slug is not valid, Please reload or go back and try again ");
+    }
     return result;
 });
 exports.lectureServices = {

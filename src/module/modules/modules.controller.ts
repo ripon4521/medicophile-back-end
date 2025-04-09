@@ -44,7 +44,8 @@ const getSingleModule = catchAsync(async (req, res) => {
 });
 
 const getAllModule = catchAsync(async (req, res) => {
-  const result = await moduleService.getAllModule();
+  const query = req.query;
+  const result = await moduleService.getAllModule(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: " Module get successfully",

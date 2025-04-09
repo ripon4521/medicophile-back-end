@@ -24,12 +24,13 @@ const createExam = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getAllExam = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield exam_model_1.default.find()
+    const result = yield exam_model_1.default.find({ isDeleted: false })
         .populate("createdBy")
         .populate({
         path: "courseId",
         populate: { path: "category" },
-    });
+    })
+        .populate('moduleId');
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to load data, please try again");
     }

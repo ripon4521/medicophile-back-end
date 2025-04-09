@@ -11,6 +11,6 @@ const faculty_validation_1 = require("./faculty.validation");
 const facultRoute = express_1.default.Router();
 facultRoute.get("/", faculty_controller_1.facultysController.getAllFaculty);
 facultRoute.get("/:id", faculty_controller_1.facultysController.getSingleFaculty);
-facultRoute.patch("/:id", (0, validateRequest_1.default)(faculty_validation_1.facultyValidation.updateFacultyValidationSchema), faculty_controller_1.facultysController.updatedFaculty);
-facultRoute.delete("/:id", faculty_controller_1.facultysController.deleteFaculty);
+facultRoute.patch("/update-faculty", (0, validateRequest_1.default)(faculty_validation_1.facultyValidation.updateFacultyValidationSchema), faculty_controller_1.facultysController.updatedFaculty);
+facultRoute.delete("/delete-faculty", faculty_controller_1.facultysController.deleteFaculty);
 exports.default = facultRoute;

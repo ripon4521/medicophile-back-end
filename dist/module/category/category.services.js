@@ -21,7 +21,7 @@ const createCategory = (payload) => __awaiter(void 0, void 0, void 0, function* 
     return result;
 });
 const getallCategory = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const courseQuery = new querybuilder_1.default(cateegory_model_1.default.find(), query)
+    const courseQuery = new querybuilder_1.default(cateegory_model_1.default, query)
         .search(category_constant_1.searchableFields)
         .filter()
         .sort()

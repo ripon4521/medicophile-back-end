@@ -26,9 +26,9 @@ const createNote = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const updateNote = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
+    const { slug } = req.params;
     const payload = req.body;
-    const result = yield notes_service_1.noteService.updateNote(id, payload);
+    const result = yield notes_service_1.noteService.updateNote(slug, payload);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Note updated successfully",
@@ -36,8 +36,8 @@ const updateNote = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const deleteNote = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const result = yield notes_service_1.noteService.deleteNote(id);
+    const { slug } = req.params;
+    const result = yield notes_service_1.noteService.deleteNote(slug);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Note deleted successfully",
@@ -45,8 +45,8 @@ const deleteNote = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const getSingleNote = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const result = yield notes_service_1.noteService.getSingleNotes(id);
+    const { slug } = req.params;
+    const result = yield notes_service_1.noteService.getSingleNotes(slug);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Single Note get successfully",

@@ -16,6 +16,7 @@ exports.moduleDetailsService = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const moduleDetails_model_1 = __importDefault(require("./moduleDetails.model"));
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createModuleDetails = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield moduleDetails_model_1.default.create(payload);
     if (!result) {
@@ -23,11 +24,15 @@ const createModuleDetails = (payload) => __awaiter(void 0, void 0, void 0, funct
     }
     return result;
 });
-const getAllModuleDetails = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield moduleDetails_model_1.default.find()
-        .populate("courseId")
-        .populate("moduleId")
-        .populate("contentId");
+const getAllModuleDetails = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(moduleDetails_model_1.default, query)
+        .filter()
+        .paginate()
+        .fields()
+        .populate(['courseId'])
+        .populate(['moduleId'])
+        .populate(['contentId']);
+    const result = yield courseQuery.exec();
     return result;
 });
 const getSingleModuleDetails = (_id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -41,23 +46,32 @@ const getSingleModuleDetails = (_id) => __awaiter(void 0, void 0, void 0, functi
     return result;
 });
 const deleteModuleDetails = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!_id) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "id not found ");
+    }
     const result = yield moduleDetails_model_1.default.findOneAndUpdate({ _id }, {
         isDeleted: true,
         deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
     }, { new: true });
     if (!result) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to delete data, please reload and try again");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to delete data, please provide a valid id");
     }
 });
 const updateModuleDetails = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const update = yield moduleDetails_model_1.default.findOneAndUpdate({ _id }, payload, {
-        new: true,
-        runValidators: true,
-    });
-    if (!update) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, "Failed to updated data, reload and check your updated data and try again");
+    try {
+        const update = yield moduleDetails_model_1.default.findByIdAndUpdate(_id, payload, {
+            new: true,
+            runValidators: true,
+        });
+        if (!update) {
+            throw new Error("No data found with the provided ID");
+        }
+        return update;
     }
-    return update;
+    catch (error) {
+        console.error(error);
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, "An unexpected error occurred while updating");
+    }
 });
 exports.moduleDetailsService = {
     createModuleDetails,

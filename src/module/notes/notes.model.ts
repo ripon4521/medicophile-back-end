@@ -12,7 +12,7 @@ const NotesSchema = new Schema<INotes>(
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     noteFile: { type: String },
     status: { type: String, enum: ["Published", "Drafted"], required: true, default:'Published' },
-    deletedAt: { type: Date, default:null },
+    deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
   },
   {

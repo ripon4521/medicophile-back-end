@@ -39,11 +39,9 @@ const createCourseSchema = zod_1.z.object({
         status: zod_1.z.enum(["active", "inactive"], {
             message: "Status must be either 'active' or 'inactive'.",
         }),
-        course_tag: zod_1.z
-            .array(zod_1.z.string())
-            .nonempty({ message: "At least one course tag is required." }),
-        isDeleted: zod_1.z.literal(true, { message: "isDeleted must always be true." }),
-        deletedAt: zod_1.z.union([zod_1.z.date().nullable(), zod_1.z.null()]).optional(),
+        // course_tag: z
+        //   .array(z.string())
+        //   .nonempty({ message: "At least one course tag is required." }),
     }),
 });
 const updateCourseSchema = zod_1.z.object({
@@ -109,10 +107,6 @@ const updateCourseSchema = zod_1.z.object({
             .array(zod_1.z.string())
             .nonempty({ message: "At least one course tag is required." })
             .optional(),
-        isDeleted: zod_1.z
-            .literal(true, { message: "isDeleted must always be true." })
-            .optional(),
-        deletedAt: zod_1.z.union([zod_1.z.date().nullable(), zod_1.z.null()]).optional(),
     }),
 });
 exports.courseValidation = {

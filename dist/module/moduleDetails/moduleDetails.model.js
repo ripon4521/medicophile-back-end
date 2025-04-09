@@ -43,17 +43,17 @@ const moduleDetailsSchema = new mongoose_1.Schema({
     moduleId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: "Module", // Assuming there is a 'Module' model, adjust if necessary
+        ref: "Module",
     },
     content_type: {
         type: String,
-        enum: ["lecture", "notes", "exam"],
+        enum: ["Lecture", "Notes", "Exam"],
         required: true,
     },
     contentId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: "Content", // Adjust if needed
+        refPath: "content_type", // Dynamically resolved from content_type
     },
     status: {
         type: String,
@@ -62,7 +62,6 @@ const moduleDetailsSchema = new mongoose_1.Schema({
     },
     deletedAt: {
         type: Date,
-        default: null,
     },
     isDeleted: {
         type: Boolean,
