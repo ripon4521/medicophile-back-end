@@ -27,4 +27,7 @@ export default {
   port: process.env.PORT,
   bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
   stripe_private_key: process.env.STRIPE_PRIVATE_KEY,
+  cloudinaryCloudName:process.env.CLOUDINARY_CLOUD_NAME,
+  cloudinaryApiKey:process.env.CLOUDINARY_API_KEY,
+  cloudinaryApiSecret:process.env.CLOUDINARY_API_SECRET
 };

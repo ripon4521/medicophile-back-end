@@ -15,8 +15,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/multer": "^1.4.12",
     "@types/node-cron": "^3.0.11",
     "bcrypt": "^5.1.1",
+    "cloudinary": "^2.6.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -29,6 +31,7 @@
     "multer": "^1.4.5-lts.1",
     "nanoid": "^3.3.11",
     "node-cron": "^3.0.3",
+    "sharp": "^0.34.1",
     "slugify": "^1.6.6",
     "stripe": "^17.6.0",
     "zod": "^3.24.2"

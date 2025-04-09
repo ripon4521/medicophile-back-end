@@ -16,6 +16,8 @@ import courseCategoryRoute from "../module/courseCategory/courseCategory.route";
 import moduleDetailsRouter from "../module/moduleDetails/moduleDetails.route";
 import studentRoute from "../module/student/student.router";
 import userCredentialsRoute from "../module/userCredentials/userCredentials.route";
+import imageUploadRouter from "../module/imageUpload/imageUpload.route";
+import pdfRouter from "../module/pdf/pdf.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -84,7 +86,13 @@ const moduleRoutes = [
   {
     path: "/user-credentials",
     route: userCredentialsRoute,
-  },
+  },{
+    path:'/images',
+    route:imageUploadRouter
+  },{
+    path:'/pdf',
+    route:pdfRouter
+  }
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);
