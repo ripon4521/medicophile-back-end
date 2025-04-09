@@ -20,6 +20,7 @@ import imageUploadRouter from "../module/imageUpload/imageUpload.route";
 import pdfRouter from "../module/pdf/pdf.route";
 import cqQuestionRouter from "../module/classQuizeQuestion/classQuizeQuestion.route";
 import cqAttempRouter from "../module/cqAttemp/cqAttemp.route";
+import cqMarkingRouter from "../module/cqMarking/cqMarking.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -100,6 +101,9 @@ const moduleRoutes = [
   },{
     path:'/cq-attemp',
     route:cqAttempRouter
+  },{
+    path:'/cq-marking',
+    route:cqMarkingRouter
   }
 ];
 moduleRoutes.forEach((route) => {
