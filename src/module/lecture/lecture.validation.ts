@@ -5,20 +5,18 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
   message: "Invalid ObjectId format",
 });
 
-
 const createLectureSchema = z.object({
   body: z.object({
-  courseId: ObjectIdSchema,
-  createdBy: ObjectIdSchema,
-  moduleId: ObjectIdSchema,
-  title: z.string().min(1, "Title is required"),
-  server: z.string().min(1, "Server is required"),
-  videoId: z.string().url("Invalid video URL"),
-  duration: z.number().min(1, "Duration must be greater than 0"),
-  isFree: z.boolean(),
-  status: z.enum(["Published", "Drafted"]),
-  tags: z.array(z.string()),
-
+    courseId: ObjectIdSchema,
+    createdBy: ObjectIdSchema,
+    moduleId: ObjectIdSchema,
+    title: z.string().min(1, "Title is required"),
+    server: z.string().min(1, "Server is required"),
+    videoId: z.string().url("Invalid video URL"),
+    duration: z.number().min(1, "Duration must be greater than 0"),
+    isFree: z.boolean(),
+    status: z.enum(["Published", "Drafted"]),
+    tags: z.array(z.string()),
   }),
 });
 
@@ -34,7 +32,6 @@ const updateLectureSchema = z.object({
     isFree: z.boolean().optional(),
     status: z.enum(["Published", "Drafted"]).optional(),
     tags: z.array(z.string()).optional(),
- 
   }),
 });
 

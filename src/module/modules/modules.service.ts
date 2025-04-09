@@ -16,30 +16,26 @@ const createModule = async (payload: IModules) => {
 };
 
 const getAllModule = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(ModuleModel, query)
+    .search(["moduleTitle"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .populate({
+      path: "courseId",
+      populate: { path: "category" },
+    })
+    .populate(["createdBy"]);
 
-   const courseQuery = new QueryBuilder(ModuleModel, query) 
-      .search(['moduleTitle'])
-      .filter()
-      .sort()
-      .paginate()
-      .fields()
-      .populate({
-        path:'courseId',
-        populate: { path: 'category'}
-      })
-      .populate(['createdBy'])
-      
-
-     
-  
-    const result = await courseQuery.exec(); 
-    if (!result) {
-      throw new AppError(
-        StatusCodes.BAD_REQUEST,
-        "Failed to load data , Please try again",
-      );
-    }
-    return result;
+  const result = await courseQuery.exec();
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Failed to load data , Please try again",
+    );
+  }
+  return result;
 
   //   .populate("createdBy")
   //   .populate({

@@ -30,22 +30,20 @@ const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
-const logout = catchAsync ( async (req:Request, res: Response ) => {
+const logout = catchAsync(async (req: Request, res: Response) => {
   const meta = getDeviceInfo(req);
   const payload = req.body;
-  const result = await AuthService.logout(payload, meta)
+  const result = await AuthService.logout(payload, meta);
   sendResponse(res, {
     statusCode: StatusCodes.ACCEPTED,
     status: true,
     message: "Logout successful",
     data: result,
   });
-
-})
+});
 
 export const AuthControllers = {
   register,
   login,
-  logout
+  logout,
 };

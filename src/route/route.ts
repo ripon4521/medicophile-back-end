@@ -80,10 +80,11 @@ const moduleRoutes = [
   {
     path: "/moduleDetails",
     route: moduleDetailsRouter,
-  },{
-    path:'/user-credentials',
-    route: userCredentialsRoute
-  }
+  },
+  {
+    path: "/user-credentials",
+    route: userCredentialsRoute,
+  },
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);

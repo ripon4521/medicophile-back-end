@@ -16,5 +16,8 @@ moduleDetailsRouter.patch(
   validateRequest(moduleDetailsValidation.updateIModuleDetailsSchema),
   moduleDetailsController.updateModuleDetails,
 );
-moduleDetailsRouter.delete("/delete-moduleDetails", moduleDetailsController.deleteModuleDetails);
+moduleDetailsRouter.delete(
+  "/delete-moduleDetails",
+  moduleDetailsController.deleteModuleDetails,
+);
 export default moduleDetailsRouter;

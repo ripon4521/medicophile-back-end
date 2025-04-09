@@ -12,7 +12,7 @@ authRouter.post(
   AuthControllers.login,
 );
 
-authRouter.patch('/logout', AuthControllers.logout  )
+authRouter.patch("/logout", AuthControllers.logout);
 
 authRouter.use(globalErrorHandler);
 

@@ -6,7 +6,10 @@ import LectureModel from "./lecture.model";
 const createLecture = async (payload: ILeecture) => {
   const create = await LectureModel.create(payload);
   if (!create) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Faled to create, PLease try again")
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Faled to create, PLease try again",
+    );
   }
   return create;
 };
@@ -19,7 +22,10 @@ const updateLecture = async (slug: string, payload: Partial<ILeecture>) => {
     });
 
     if (!update) {
-      throw new AppError(StatusCodes.BAD_REQUEST,"Lecture not found or update failed.");
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        "Lecture not found or update failed.",
+      );
     }
 
     return update;
@@ -39,19 +45,22 @@ const deleteLecture = async (slug: string) => {
     { new: true },
   );
   if (!deleted) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Failed to delete, please relaod or go back and try again")
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Failed to delete, please relaod or go back and try again",
+    );
   }
   return deleted;
 };
 
 const getAllLecture = async () => {
-  const result = await LectureModel.find({isDeleted:false})
+  const result = await LectureModel.find({ isDeleted: false })
     .populate("createdBy")
     .populate({
       path: "courseId",
       populate: { path: "category" },
     })
-    .populate('moduleId');
+    .populate("moduleId");
 
   return result;
 };
@@ -63,10 +72,13 @@ const getSingleLecture = async (slug: string) => {
       path: "courseId",
       populate: { path: "category" },
     })
-    .populate('moduleId');
-    if (!result) {
-      throw new AppError(StatusCodes.BAD_REQUEST, "Slug is not valid, Please reload or go back and try again ")
-    }
+    .populate("moduleId");
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Slug is not valid, Please reload or go back and try again ",
+    );
+  }
   return result;
 };
 

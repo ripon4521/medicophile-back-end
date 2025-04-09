@@ -33,7 +33,6 @@ const updateFacultyValidationSchema = z.object({
       .optional(),
     profile_picture: z.string().url("Invalid URL format").optional(),
     status: z.enum(["Active", "Blocked"]).optional(),
-    
   }),
 });
 

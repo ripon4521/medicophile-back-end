@@ -27,12 +27,12 @@ const login = async (
     ipAddress: string;
     deviceType: string;
     deviceName: string;
-  }
+  },
 ) => {
   if (!payload.phone || !payload.password) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Phone and password are required"
+      "Phone and password are required",
     );
   }
 
@@ -55,14 +55,16 @@ const login = async (
 
     const isPasswordMatched = await bcrypt.compare(
       payload.password,
-      user.password
+      user.password,
     );
 
     if (!isPasswordMatched) {
       throw new AppError(StatusCodes.FORBIDDEN, "Invalid password");
     }
 
-    const student = await studentModel.findOne({ userId: user._id }).session(session);
+    const student = await studentModel
+      .findOne({ userId: user._id })
+      .session(session);
     if (!student) {
       throw new AppError(StatusCodes.NOT_FOUND, "Student not found");
     }
@@ -71,24 +73,22 @@ const login = async (
       studentId: student._id,
       phone: payload.phone,
       isDeleted: false,
-
     }).session(session);
 
-   
-
-    if ( existingCredential &&(
-        existingCredential.ipAddress !== meta.ipAddress ||
+    if (
+      existingCredential &&
+      (existingCredential.ipAddress !== meta.ipAddress ||
         existingCredential.deviceType !== meta.deviceType ||
-        existingCredential.deviceName !== meta.deviceName )
+        existingCredential.deviceName !== meta.deviceName)
     ) {
-
-
-      await UserCredentialsModel.findOneAndUpdate({ })
+      await UserCredentialsModel.findOneAndUpdate({});
       existingCredential.isDeleted = true;
-      existingCredential.deletedAt = new Date(new Date().getTime() + 6 * 60 * 60 * 1000);
+      existingCredential.deletedAt = new Date(
+        new Date().getTime() + 6 * 60 * 60 * 1000,
+      );
       await existingCredential.save({ session });
     }
-  
+
     await UserCredentialsModel.create(
       [
         {
@@ -101,7 +101,7 @@ const login = async (
           deletedAt: null,
         },
       ],
-      { session }
+      { session },
     );
 
     const jwtPayload = {
@@ -110,9 +110,13 @@ const login = async (
       _id: user._id.toString(),
     };
 
-    const token = jwt.sign(jwtPayload, process.env.JWT_SECRET || "primarytestkey", {
-      expiresIn: "100d",
-    });
+    const token = jwt.sign(
+      jwtPayload,
+      process.env.JWT_SECRET || "primarytestkey",
+      {
+        expiresIn: "100d",
+      },
+    );
 
     await session.commitTransaction();
     session.endSession();
@@ -126,7 +130,10 @@ const login = async (
 };
 
 // Logout function
-const logout = async (payload: { phone: string }, meta: { ipAddress: string; deviceType: string; deviceName: string }) => {
+const logout = async (
+  payload: { phone: string },
+  meta: { ipAddress: string; deviceType: string; deviceName: string },
+) => {
   // Find the user credentials using phone and device info
   const existingCredential = await UserCredentialsModel.findOne({
     phone: payload.phone,
@@ -143,7 +150,7 @@ const logout = async (payload: { phone: string }, meta: { ipAddress: string; dev
   // Mark the current session as deleted
   existingCredential.isDeleted = true;
   existingCredential.deletedAt = new Date();
-  
+
   // Save the updated credential status
   await existingCredential.save();
 
@@ -153,5 +160,5 @@ const logout = async (payload: { phone: string }, meta: { ipAddress: string; dev
 export const AuthService = {
   register,
   login,
-  logout
+  logout,
 };

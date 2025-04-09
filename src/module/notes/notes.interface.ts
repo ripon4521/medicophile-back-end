@@ -1,14 +1,14 @@
 import { Types } from "mongoose";
 
 export interface INotes {
-  slug:string;
+  slug: string;
   title: string;
   description: string;
   createdBy: Types.ObjectId;
-  moduleId:Types.ObjectId;
+  moduleId: Types.ObjectId;
   courseId: Types.ObjectId;
   noteFile: string;
   status: "Published" | "Drafted";
-  deletedAt:Date;
-  isDeleted:boolean;
+  deletedAt: Date;
+  isDeleted: boolean;
 }

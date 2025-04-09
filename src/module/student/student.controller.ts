@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { studentsService } from "./student.service";
+import AppError from "../../helpers/AppError";
 
 const getAllStudents = catchAsync(async (req, res) => {
   const students = await studentsService.getAllStudents();
@@ -23,8 +24,13 @@ const getSingleStudent = catchAsync(async (req, res) => {
 });
 
 const deleteStudent = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const result = await studentsService.deleteStudentById(id);
+  const { _id } = req.body;
+
+  if (!_id) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide _id");
+  }
+
+  const result = await studentsService.deleteStudentById(_id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Student Deleted successfully",
@@ -33,9 +39,13 @@ const deleteStudent = catchAsync(async (req, res) => {
 });
 
 const updateStudent = catchAsync(async (req, res) => {
-  const { id } = req.params;
+  const { _id } = req.body;
+  if (!_id) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide _id");
+  }
   const data = req.body;
-  const result = await studentsService.updateStudent(id, data);
+  delete data._id;
+  const result = await studentsService.updateStudent(_id, data);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Student & Nested User Updated successfully",

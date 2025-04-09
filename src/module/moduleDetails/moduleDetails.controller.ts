@@ -14,18 +14,15 @@ const createModuleDetails = catchAsync(async (req, res) => {
 });
 
 const updateModuleDetails = catchAsync(async (req, res) => {
-  const {_id} = req.body;
+  const { _id } = req.body;
   const payload = req.body;
   delete payload._id;
   // console.log(object)
   if (!_id) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'Please provide _id ')
+    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide _id ");
   }
 
-  const result = await moduleDetailsService.updateModuleDetails(
-    _id,
-    payload,
-  );
+  const result = await moduleDetailsService.updateModuleDetails(_id, payload);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Module Details updated successfully",

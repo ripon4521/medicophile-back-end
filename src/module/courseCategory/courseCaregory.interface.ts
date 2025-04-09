@@ -5,6 +5,6 @@ export interface ICourseCategory {
   slug: string;
   cover_photo: string;
   createdBy: Types.ObjectId;
-  deletedAt: Date | '';
+  deletedAt: Date | "";
   isDeleted: boolean;
 }

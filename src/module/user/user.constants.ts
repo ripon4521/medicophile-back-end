@@ -2,7 +2,7 @@ export const USER_ROLE = {
   superAdmin: "superAdmin",
   admin: "admin",
   teacher: "teacher",
-  student:'student'
+  student: "student",
 } as const;
 
 export const USER_STATUS = {

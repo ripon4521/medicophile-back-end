@@ -17,12 +17,10 @@ const createStudentsIntoDB = async (payload: IStudent) => {
   userData.role = payload.role;
   userData.profile_picture = payload.profile_picture;
   userData.phone = payload.phone;
-  userData.password = payload.password
+  userData.password = payload.password;
   userData.email = payload.email;
   userData.isDeleted = payload.isDeleted;
   userData.deletedAt = payload.deletedAt;
-
-
 
   const session = await mongoose.startSession();
   session.startTransaction();

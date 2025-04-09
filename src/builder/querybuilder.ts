@@ -1,4 +1,4 @@
-import { FilterQuery, Model, PopulateOptions, Query } from 'mongoose';
+import { FilterQuery, Model, PopulateOptions, Query } from "mongoose";
 
 class QueryBuilder<T> {
   private model: Model<T>;
@@ -8,7 +8,7 @@ class QueryBuilder<T> {
   constructor(model: Model<T>, query: Record<string, unknown>) {
     this.model = model;
     this.query = query;
-    this.modelQuery = this.model.find({ isDeleted: false}); // Default query
+    this.modelQuery = this.model.find({ isDeleted: false }); // Default query
   }
 
   search(searchableFields: string[]) {
@@ -19,10 +19,10 @@ class QueryBuilder<T> {
         $or: searchableFields
           .filter((field) => {
             const schemaType = (this.model.schema as any).paths[field];
-            return schemaType?.instance === 'String';
+            return schemaType?.instance === "String";
           })
           .map((field) => ({
-            [field]: { $regex: new RegExp(searchTerm, 'i') },
+            [field]: { $regex: new RegExp(searchTerm, "i") },
           })),
       };
 
@@ -35,7 +35,7 @@ class QueryBuilder<T> {
   filter() {
     const queryObj = { ...this.query };
 
-    const excludeFields = ['search', 'sort', 'limit', 'page', 'fields'];
+    const excludeFields = ["search", "sort", "limit", "page", "fields"];
     excludeFields.forEach((field) => delete queryObj[field]);
 
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
@@ -44,7 +44,8 @@ class QueryBuilder<T> {
   }
 
   sort() {
-    const sortBy = (this.query.sort as string)?.split(',').join(' ') || '-createdAt';
+    const sortBy =
+      (this.query.sort as string)?.split(",").join(" ") || "-createdAt";
     this.modelQuery = this.modelQuery.sort(sortBy);
 
     return this;
@@ -61,7 +62,8 @@ class QueryBuilder<T> {
   }
 
   fields() {
-    const fields = (this.query.fields as string)?.split(',').join(' ') || '-__v';
+    const fields =
+      (this.query.fields as string)?.split(",").join(" ") || "-__v";
     this.modelQuery = this.modelQuery.select(fields);
 
     return this;

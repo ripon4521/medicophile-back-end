@@ -7,7 +7,6 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 
 const createNotesSchema = z.object({
   body: z.object({
-  
     title: z.string().min(1, "Title is required"),
     description: z.string().min(1, "Description is required"),
     createdBy: ObjectIdSchema,
@@ -15,7 +14,6 @@ const createNotesSchema = z.object({
     courseId: ObjectIdSchema,
     noteFile: z.string().optional(),
     status: z.enum(["Published", "Drafted"]),
-  
   }),
 });
 
@@ -28,7 +26,6 @@ const updateNotesSchema = z.object({
     description: z.string().min(1, "Description is required").optional(),
     noteFile: z.string().optional(),
     status: z.enum(["published", "drafted"]).optional(),
- 
   }),
 });
 

@@ -1,6 +1,6 @@
-import mongoose, {  Schema, Types } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 import { IStudent } from "./student.interface";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import config from "../../config";
 
 const stundetSchema = new Schema<IStudent>(
@@ -12,22 +12,21 @@ const stundetSchema = new Schema<IStudent>(
     },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     name: { type: String, required: true },
-    phone: { type: String, required: true, unique:true },
-    email: { type: String, required: true , unique:true },
+    phone: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    gurdianName:{ type:String},
-    gurdianPhone: { type: String},
-    profile_picture: { type: String},
-    address:{ type: String, required:true},
+    gurdianName: { type: String },
+    gurdianPhone: { type: String },
+    profile_picture: { type: String },
+    address: { type: String, required: true },
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
-    deletedAt: { type: Date, default: null },
+    deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
-    
   },
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }, 
+    },
   },
 );
 
@@ -56,10 +55,6 @@ stundetSchema.post("save", async function (doc, next) {
   doc.password = "";
   next();
 });
-
-
-
-
 
 const studentModel = mongoose.model("Students", stundetSchema);
 export default studentModel;

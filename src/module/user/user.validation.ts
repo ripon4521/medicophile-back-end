@@ -11,7 +11,5 @@ export const createUserValidationSchema = z.object({
     status: z.enum(["Active", "Blocked"]),
     isDeleted: z.boolean(),
     deletedAt: z.date().optional(),
-
   }),
 });
-

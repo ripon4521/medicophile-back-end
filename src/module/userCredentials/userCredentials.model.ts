@@ -6,7 +6,7 @@ const userCredentialsSchema = new Schema(
   {
     studentId: {
       type: Types.ObjectId,
-      ref: "Students", 
+      ref: "Students",
       required: true,
     },
     phone: {
@@ -37,8 +37,11 @@ const userCredentialsSchema = new Schema(
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }
-  }
+    },
+  },
 );
 
-export const UserCredentialsModel = model("UserCredentials", userCredentialsSchema);
+export const UserCredentialsModel = model(
+  "UserCredentials",
+  userCredentialsSchema,
+);

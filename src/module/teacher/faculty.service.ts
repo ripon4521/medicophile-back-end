@@ -7,7 +7,9 @@ import AppError from "../../helpers/AppError";
 import { StatusCodes } from "http-status-codes";
 
 const getAllFacultys = async () => {
-  const result = await FacultyUserModel.find({isDeleted:false}).populate("userId");
+  const result = await FacultyUserModel.find({ isDeleted: false }).populate(
+    "userId",
+  );
   return result;
 };
 
@@ -92,17 +94,23 @@ const deleteFacultyById = async (_id: string) => {
     const userId = faculty.userId;
 
     // FacultyUserModel theke delete
-    await FacultyUserModel.findOneAndUpdate({ _id }, {
-      isDeleted:true,
-      deletedAt:new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
-    }).session(session);
+    await FacultyUserModel.findOneAndUpdate(
+      { _id },
+      {
+        isDeleted: true,
+        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+      },
+    ).session(session);
 
     // UserModel theke user delete
     if (userId) {
-      await UserModel.findOneAndUpdate({ _id: userId }, {
-        isDeleted:true,
-        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
-      }).session(session);
+      await UserModel.findOneAndUpdate(
+        { _id: userId },
+        {
+          isDeleted: true,
+          deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+        },
+      ).session(session);
     }
 
     // Transaction commit

@@ -11,7 +11,7 @@ const moduleDetailsSchema = new Schema<IModuleDetails>(
     moduleId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Module", 
+      ref: "Module",
     },
     content_type: {
       type: String,
@@ -30,7 +30,6 @@ const moduleDetailsSchema = new Schema<IModuleDetails>(
     },
     deletedAt: {
       type: Date,
-    
     },
     isDeleted: {
       type: Boolean,

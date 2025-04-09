@@ -11,7 +11,6 @@ const createModuleSchema = z.object({
     moduleTitle: z.string().min(1),
     courseId: ObjectIdSchema,
     createdBy: ObjectIdSchema,
- 
   }),
 });
 
@@ -20,7 +19,6 @@ const updateModuleSchema = z.object({
     moduleTitle: z.string().min(1).optional(),
     courseId: ObjectIdSchema.optional(),
     createdBy: ObjectIdSchema.optional(),
- 
   }),
 });
 

@@ -39,7 +39,7 @@ const deleteStudentById = async (_id: string) => {
           isDeleted: true,
           deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
         },
-        { new: true }
+        { new: true },
       )
       .session(session);
 
@@ -51,7 +51,7 @@ const deleteStudentById = async (_id: string) => {
           isDeleted: true,
           deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
         },
-        { new: true }
+        { new: true },
       ).session(session);
     }
 
@@ -82,7 +82,7 @@ const updateStudent = async (_id: string, updateData: Partial<IStudent>) => {
     const updatedStudent = await studentModel.findByIdAndUpdate(
       _id,
       updateData,
-      { new: true, runValidators: true, session }
+      { new: true, runValidators: true, session },
     );
 
     if (!updatedStudent) {
@@ -91,9 +91,7 @@ const updateStudent = async (_id: string, updateData: Partial<IStudent>) => {
 
     const userUpdateData: Partial<IUser> = {};
 
-    const updateStudentData = await studentModel.findById(_id).session(
-      session
-    );
+    const updateStudentData = await studentModel.findById(_id).session(session);
     userUpdateData.email = updateStudentData?.email;
     userUpdateData.role = updateStudentData?.role;
     userUpdateData.name = updateStudentData?.name;
@@ -107,7 +105,7 @@ const updateStudent = async (_id: string, updateData: Partial<IStudent>) => {
     const updatedUser = await UserModel.findByIdAndUpdate(
       student.userId,
       userUpdateData,
-      { new: true, runValidators: true, session }
+      { new: true, runValidators: true, session },
     );
 
     if (!updatedUser) {

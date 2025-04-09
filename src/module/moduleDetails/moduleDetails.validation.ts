@@ -12,7 +12,6 @@ const createIModuleDetailsSchema = z.object({
     content_type: z.enum(["Lecture", "Notes", "Exam"]),
     contentId: ObjectId,
     status: z.enum(["published", "drafted"]),
- 
   }),
 });
 
@@ -23,7 +22,6 @@ const updateIModuleDetailsSchema = z.object({
     content_type: z.enum(["Lecture", "Notes", "Exam"]).optional(),
     contentId: ObjectId.optional(),
     status: z.enum(["published", "drafted"]).optional(),
-   
   }),
 });
 

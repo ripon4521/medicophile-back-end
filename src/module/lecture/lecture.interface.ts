@@ -1,14 +1,12 @@
 import { Types } from "mongoose";
 
-
-
 export interface ILeecture {
-  slug:string;
+  slug: string;
   courseId: Types.ObjectId;
   createdBy: Types.ObjectId;
-  moduleId:Types.ObjectId;
-  title: string
-  server: 'Youtube' | 'Vimeo' | 'Bunny' | 'Others';
+  moduleId: Types.ObjectId;
+  title: string;
+  server: "Youtube" | "Vimeo" | "Bunny" | "Others";
   videoId: string;
   duration: number;
   isFree: boolean;
@@ -16,5 +14,4 @@ export interface ILeecture {
   tags: string[];
   deletedAt: Date;
   isDeleted: boolean;
-  
 }

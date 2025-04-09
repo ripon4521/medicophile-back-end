@@ -9,14 +9,14 @@ const createNote = async (paload: INotes) => {
 };
 
 const getAllNotes = async () => {
-  const result = await NotesModel.find({isDeleted: false})
+  const result = await NotesModel.find({ isDeleted: false })
     .populate("createdBy")
     .populate({
       path: "courseId",
       populate: { path: "category" },
     })
-    .populate('moduleId')
-   
+    .populate("moduleId");
+
   return result;
 };
 
@@ -28,12 +28,12 @@ const getSingleNotes = async (slug: string) => {
       populate: { path: "category" },
     })
     .populate("moduleId");
-    if (!result) {
-      throw new AppError(
-        StatusCodes.BAD_REQUEST,
-        "Failed to get Notes. Slug is not valid, reload or go back and try again",
-      );
-    }
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Failed to get Notes. Slug is not valid, reload or go back and try again",
+    );
+  }
   return result;
 };
 
@@ -58,7 +58,7 @@ const deleteNote = async (slug: string) => {
       isDeleted: true,
       deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
     },
-    { new: true }
+    { new: true },
   );
 
   if (!result) {

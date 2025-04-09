@@ -13,25 +13,21 @@ const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
 };
 
 const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
-  const courseQuery = new QueryBuilder(courseModel, query) 
+  const courseQuery = new QueryBuilder(courseModel, query)
     .search(searchableFields)
     .filter()
     .sort()
     .paginate()
     .fields()
     .populate({
-      path:'category',
-      populate: { path: 'createdBy'}
+      path: "category",
+      populate: { path: "createdBy" },
     })
-    .populate(['createdBy'])
-    
+    .populate(["createdBy"]);
 
-   
-
-  const result = await courseQuery.exec(); 
+  const result = await courseQuery.exec();
   return result;
 };
-
 
 const getCourseById = async (slug: string) => {
   const result = await courseModel.findOne({ slug }).populate("category");

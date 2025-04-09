@@ -16,21 +16,16 @@ const createModuleDetails = async (payload: IModuleDetails) => {
 };
 
 const getAllModuleDetails = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(ModuleDetails, query)
+    .filter()
+    .paginate()
+    .fields()
+    .populate(["courseId"])
+    .populate(["moduleId"])
+    .populate(["contentId"]);
 
-  const courseQuery = new QueryBuilder(ModuleDetails, query) 
-      .filter()
-      .paginate()
-      .fields()
-      .populate(['courseId'])
-      .populate(['moduleId'])
-      .populate(['contentId'])
-      
-  
-     
-  
-    const result = await courseQuery.exec(); 
-    return result;
-
+  const result = await courseQuery.exec();
+  return result;
 };
 
 const getSingleModuleDetails = async (_id: string) => {
@@ -49,7 +44,7 @@ const getSingleModuleDetails = async (_id: string) => {
 
 const deleteModuleDetails = async (_id: string) => {
   if (!_id) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "id not found ")
+    throw new AppError(StatusCodes.BAD_REQUEST, "id not found ");
   }
   const result = await ModuleDetails.findOneAndUpdate(
     { _id },
@@ -68,28 +63,24 @@ const deleteModuleDetails = async (_id: string) => {
 };
 
 const updateModuleDetails = async (_id: string, payload: IModuleDetails) => {
-  
-  
   try {
     const update = await ModuleDetails.findByIdAndUpdate(_id, payload, {
       new: true,
       runValidators: true,
     });
-  
+
     if (!update) {
       throw new Error("No data found with the provided ID");
     }
-  
+
     return update;
   } catch (error) {
     console.error(error);
     throw new AppError(
       StatusCodes.INTERNAL_SERVER_ERROR,
-       "An unexpected error occurred while updating"
+      "An unexpected error occurred while updating",
     );
   }
-  
-
 };
 
 export const moduleDetailsService = {

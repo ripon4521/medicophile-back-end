@@ -1,16 +1,42 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+var __awaiter =
+  (this && this.__awaiter) ||
+  function (thisArg, _arguments, P, generator) {
+    function adopt(value) {
+      return value instanceof P
+        ? value
+        : new P(function (resolve) {
+            resolve(value);
+          });
+    }
     return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      function fulfilled(value) {
+        try {
+          step(generator.next(value));
+        } catch (e) {
+          reject(e);
+        }
+      }
+      function rejected(value) {
+        try {
+          step(generator["throw"](value));
+        } catch (e) {
+          reject(e);
+        }
+      }
+      function step(result) {
+        result.done
+          ? resolve(result.value)
+          : adopt(result.value).then(fulfilled, rejected);
+      }
+      step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+  };
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
@@ -18,41 +44,49 @@ const auth_service_1 = require("./auth.service");
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const http_status_codes_1 = require("http-status-codes");
 const getDeviceInfo_1 = require("../../middlewares/getDeviceInfo");
-const register = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const register = (0, catchAsync_1.default)((req, res) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthService.register(req.body);
     (0, sendResponse_1.default)(res, {
-        statusCode: http_status_codes_1.StatusCodes.CREATED,
-        status: true,
-        message: "User registered successfully",
-        data: result,
+      statusCode: http_status_codes_1.StatusCodes.CREATED,
+      status: true,
+      message: "User registered successfully",
+      data: result,
     });
-}));
-const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+  }),
+);
+const login = (0, catchAsync_1.default)((req, res) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const meta = (0, getDeviceInfo_1.getDeviceInfo)(req);
     const result = yield auth_service_1.AuthService.login(req.body, meta);
     (0, sendResponse_1.default)(res, {
-        statusCode: http_status_codes_1.StatusCodes.ACCEPTED,
-        status: true,
-        message: "Login successful",
-        data: {
-            token: (result === null || result === void 0 ? void 0 : result.token) || "",
-            user: (result === null || result === void 0 ? void 0 : result.user) || {},
-        },
+      statusCode: http_status_codes_1.StatusCodes.ACCEPTED,
+      status: true,
+      message: "Login successful",
+      data: {
+        token:
+          (result === null || result === void 0 ? void 0 : result.token) || "",
+        user:
+          (result === null || result === void 0 ? void 0 : result.user) || {},
+      },
     });
-}));
-const logout = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+  }),
+);
+const logout = (0, catchAsync_1.default)((req, res) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     const meta = (0, getDeviceInfo_1.getDeviceInfo)(req);
     const payload = req.body;
     const result = yield auth_service_1.AuthService.logout(payload, meta);
     (0, sendResponse_1.default)(res, {
-        statusCode: http_status_codes_1.StatusCodes.ACCEPTED,
-        status: true,
-        message: "Logout successful",
-        data: result,
+      statusCode: http_status_codes_1.StatusCodes.ACCEPTED,
+      status: true,
+      message: "Logout successful",
+      data: result,
     });
-}));
+  }),
+);
 exports.AuthControllers = {
-    register,
-    login,
-    logout
+  register,
+  login,
+  logout,
 };

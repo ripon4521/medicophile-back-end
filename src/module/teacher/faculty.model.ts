@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types } from "mongoose";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import config from "../../config";
 
 const facultySchema = new Schema(
@@ -11,8 +11,8 @@ const facultySchema = new Schema(
     },
     userId: { type: Types.ObjectId, ref: "User", required: true },
     name: { type: String, required: true },
-    phone: { type: String, required: true, unique:true},
-    email: { type: String, required: true, unique:true},
+    phone: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     profile_picture: { type: String },
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
@@ -51,8 +51,6 @@ facultySchema.post("save", async function (doc, next) {
   doc.password = "";
   next();
 });
-
-
 
 const FacultyUserModel = mongoose.model("Faculty", facultySchema);
 export default FacultyUserModel;

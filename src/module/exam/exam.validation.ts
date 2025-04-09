@@ -19,7 +19,6 @@ const createExamSchema = z.object({
     resultStatus: z.enum(["pending", "completed", "failed"]),
     validTime: z.string(),
     status: z.enum(["published", "drafted"]),
-   
   }),
 });
 
@@ -38,7 +37,6 @@ const updateExamSchema = z.object({
     resultStatus: z.enum(["pending", "completed", "failed"]).optional(),
     validTime: z.string().optional(),
     status: z.enum(["published", "drafted"]).optional(),
-  
   }),
 });
 

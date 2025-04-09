@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document } from 'mongoose';
-import { Types } from 'mongoose';
-import { IEnrollment } from './newEnrollment.interface';
+import mongoose, { Schema, Document } from "mongoose";
+import { Types } from "mongoose";
+import { IEnrollment } from "./newEnrollment.interface";
 
 // Define the Mongoose schema
 const EnrollmentSchema = new Schema(
@@ -8,12 +8,12 @@ const EnrollmentSchema = new Schema(
     studentId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'Students', 
+      ref: "Students",
     },
     courseId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'Course', 
+      ref: "Course",
     },
     paidAmont: {
       type: Number,
@@ -23,25 +23,28 @@ const EnrollmentSchema = new Schema(
     paymentMethod: {
       type: String,
       required: true,
-      enum: ['cash', 'bikash', 'nagad', 'roket'],
+      enum: ["cash", "bikash", "nagad", "roket"],
     },
     status: {
       type: String,
       required: true,
-      enum: ['active', 'blocked'],
-      default:'blocked'
+      enum: ["active", "blocked"],
+      default: "blocked",
     },
-    transctionId:{
-        type:String
+    transctionId: {
+      type: String,
     },
-    paymentNumber:{
-        type:String
-    }
+    paymentNumber: {
+      type: String,
+    },
   },
-  { timestamps: true } 
+  { timestamps: true },
 );
 
 // Create a Mongoose model from the schema
-const enrollMentModel = mongoose.model<IEnrollment & Document>('Enrollments', EnrollmentSchema);
+const enrollMentModel = mongoose.model<IEnrollment & Document>(
+  "Enrollments",
+  EnrollmentSchema,
+);
 
 export default enrollMentModel;

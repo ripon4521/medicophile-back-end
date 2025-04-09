@@ -11,7 +11,12 @@ const NotesSchema = new Schema<INotes>(
     moduleId: { type: Schema.Types.ObjectId, ref: "Module", required: true },
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     noteFile: { type: String },
-    status: { type: String, enum: ["Published", "Drafted"], required: true, default:'Published' },
+    status: {
+      type: String,
+      enum: ["Published", "Drafted"],
+      required: true,
+      default: "Published",
+    },
     deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
   },
@@ -21,7 +26,6 @@ const NotesSchema = new Schema<INotes>(
     }, // UTC+6 (Bangladesh Time)
   },
 );
-
 
 NotesSchema.pre("save", function (next) {
   if (this.isModified("title")) {
