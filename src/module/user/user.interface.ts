@@ -1,6 +1,9 @@
+import { Types } from "mongoose";
 import { USER_ROLE, USER_STATUS } from "./user.constants";
 
 export interface IUser {
+  // studentId:Types.ObjectId;
+  // teacherId:Types.ObjectId
   name: string;
   email: string;
   password: string;

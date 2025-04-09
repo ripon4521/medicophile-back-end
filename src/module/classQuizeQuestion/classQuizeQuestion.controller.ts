@@ -18,7 +18,7 @@ const getAllCqQuestion = catchAsync(async(req:Request, res:Response) => {
     const query = req.query;
     const result = await cqQuestionService.getALlCqQuestion(query);
     sendResponse(res, {
-        statusCode: StatusCodes.CREATED,
+        statusCode: StatusCodes.OK,
         message: "CQ Question fatched successfully",
         data: result,
       });
@@ -32,7 +32,7 @@ const updateCqQuestion =catchAsync(async ( req:Request, res:Response) => {
     delete payload._id;
     const update = await cqQuestionService.updateCqQuestion(_id, payload);
     sendResponse(res, {
-        statusCode: StatusCodes.CREATED,
+        statusCode: StatusCodes.OK,
         message: "CQ Question updated successfully",
         data: update,
       });
@@ -43,7 +43,7 @@ const deleteCqQuestion = catchAsync(async(req:Request, res:Response) => {
     const { _id } = req.body;
     const result = await cqQuestionService.deleteCqQuestion(_id);
     sendResponse(res, {
-        statusCode: StatusCodes.CREATED,
+        statusCode: StatusCodes.OK,
         message: "CQ Question deleted successfully",
         data: '',
       });

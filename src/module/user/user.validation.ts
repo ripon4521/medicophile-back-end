@@ -1,7 +1,14 @@
-import { z } from "zod";
+import { Types } from "mongoose";
+import { object, z } from "zod";
+
+// const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
+//   message: "Invalid ObjectId format",
+// });
 
 export const createUserValidationSchema = z.object({
   body: z.object({
+    // studentId:ObjectIdSchema.optional(),
+    // teacherId:ObjectIdSchema.optional(),
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid Gmail address"),
     password: z.string().min(6, "Password must be at least 6 characters long"),
