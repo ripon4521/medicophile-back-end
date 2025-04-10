@@ -22,6 +22,7 @@ import cqQuestionRouter from "../module/classQuizeQuestion/classQuizeQuestion.ro
 import cqAttempRouter from "../module/cqAttemp/cqAttemp.route";
 import cqMarkingRouter from "../module/cqMarking/cqMarking.route";
 import docsRouter from "../module/docs/docs.route";
+import gapsQuestionRouter from "../module/gapsQuestion/gapsQuestion.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -108,6 +109,10 @@ const moduleRoutes = [
   },{
     path:'/docs',
     route:docsRouter
+  },{
+    path:'/gap-question',
+    route:gapsQuestionRouter,
+
   }
 ];
 moduleRoutes.forEach((route) => {
