@@ -8,12 +8,15 @@ import GapAttempModel from "../gapsAttemp/gapAttemp.model";
 
 import mongoose from 'mongoose';
 
-const cretaeGapsAnswer = async (payload: IGapAnswer) => {
+const cretaeGapsAnswer = async (payload:any) => {
   const session = await mongoose.startSession();  
   session.startTransaction();  
 
   try {
-    // Create the gap answer
+
+    const submissionDate = new Date(new Date().getTime() + 6 * 60 * 60 * 1000); 
+
+
     const result = await GapAnswerModel.create([payload], { session });
     if (!result) {
       throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create Gaps Answer. Please check and try again");
@@ -34,22 +37,41 @@ const cretaeGapsAnswer = async (payload: IGapAnswer) => {
 
     const score = isCorrect ? question?.mark : 0;
 
+    // result.durationDate should be the deadline
+const durationTime = await GapsQuestionModel.findOne({_id:result[0].questionId}).session(session);
+// console.log(durationTime)
+
+
+let submissionStatus: "In Time" | "Late" = "In Time";
+
+if (durationTime?.durationDate && submissionDate > durationTime?.durationDate) {
+  submissionStatus = "Late";
+} else {
+  submissionStatus = "In Time";
+}
+
+console.log(submissionStatus)
+
     // Create or update the attempt record
     if (!attempt) {
       attempt = new GapAttempModel({
         studentId: result[0]?.studentId,
         examId: result[0]?.examId,
+        questionId:result[0]?.questionId,
         score: score,
         totalMarks: score,
-        submissionStatus: 'In Time',
-        attemptedAt: new Date(),
+        submittedTime: submissionDate,
+        submissionStatus: submissionStatus,
+        attemptedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
         isDeleted: false,
         deletedAt: null
       });
     } else {
       attempt.score += score;
       attempt.totalMarks += score;  // Adjust this logic if needed
-      attempt.submittedTime = new Date();
+      attempt.submittedTime = new Date(new Date().getTime() + 6 * 60 * 60 * 1000);
+      attempt.submissionStatus = submissionStatus;
+      
     }
 
     // Save the attempt record

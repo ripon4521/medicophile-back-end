@@ -7,6 +7,7 @@ export interface IGapsQuestion {
     answer:string[];
     duration:number;
     mark:number;
+    durationDate:Date;
     isDeleted:boolean;
     deletedAt:Date;
 }

@@ -13,6 +13,11 @@ const gapAttempSchema = new Schema<IGapAttemp>({
       required: true,
       ref: 'Exam',  
     },
+    questionId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'GapsQuestion',  
+    },
     score: {
       type: Number,
       required: true,
