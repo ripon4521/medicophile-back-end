@@ -24,6 +24,23 @@ const createCqMarking = catchAsync(async (req: Request, res: Response) => {
       data: result,
     });
   });
+
+  const getSpecificCqMarking = catchAsync(async (req: Request, res: Response) => {
+    const {studentId} = req.body;
+    const {examId} = req.body;
+    const {questionId} = req.body;
+    if (!studentId || !examId || !questionId) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Provide valid student id, exam id, question id")
+    }
+    const result = await cqMarkingService.getSpecifUserCqMarking(studentId,examId,questionId);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      message: "CQ Marking fatched successfully",
+      data: result,
+    });
+  });
+
+
   
 
   const updateCqMarking = catchAsync(async (req: Request, res: Response) => {
@@ -60,5 +77,6 @@ export const cqMarkingContoller = {
     createCqMarking,
     updateCqMarking,
     deleteCqMarking,
-    getAllCqMarking
+    getAllCqMarking,
+    getSpecificCqMarking
 }

@@ -9,4 +9,5 @@ cqMarkingRouter.post('/create-cqmarking', validateRequest(cqMarkingValidation.cr
 cqMarkingRouter.get('/', cqMarkingContoller.getAllCqMarking);
 cqMarkingRouter.patch('/update-cqmarking', validateRequest(cqMarkingValidation.updateCqMarkingSchema), cqMarkingContoller.updateCqMarking);
 cqMarkingRouter.delete('/delete-cqmarking', cqMarkingContoller.deleteCqMarking);
+cqMarkingRouter.get('/get-specificcqmarking', cqMarkingContoller.getSpecificCqMarking)
 export default cqMarkingRouter;

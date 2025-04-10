@@ -50,8 +50,6 @@ if (durationTime?.durationDate && submissionDate > durationTime?.durationDate) {
   submissionStatus = "In Time";
 }
 
-console.log(submissionStatus)
-
     // Create or update the attempt record
     if (!attempt) {
       attempt = new GapAttempModel({

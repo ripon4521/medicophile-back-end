@@ -22,6 +22,16 @@ const getAllCqMarking = async () => {
 }
 
 
+
+const getSpecifUserCqMarking = async(studentId:string, examId:string,questionId:string ) => {
+    const result = await CqMarkingModel.find({studentId:studentId, examId:examId, questionId:questionId});
+    if (!result) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "Failed to get Specefic Cq Marking. Please cheack and try again")
+    }
+    return result;
+}
+
+
 const updateCqMarking = async (_id:string, payload:ICqMarking) => {
 
     const update = await CqMarkingModel.findOneAndUpdate({_id}, payload , {
@@ -57,6 +67,7 @@ export const cqMarkingService = {
     createCqMarking,
     deleteCqMarking,
     updateCqMarking,
-    getAllCqMarking
+    getAllCqMarking,
+    getSpecifUserCqMarking
 }
 

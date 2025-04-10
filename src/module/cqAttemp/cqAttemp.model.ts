@@ -5,16 +5,16 @@ const cqAttempSchema = new Schema<ICqAttemps>(
   {
     studentId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
     examId: { type: Schema.Types.ObjectId, required: true, ref: "Exam" },
-    checkedBy: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-    submitedPdf: { type: String, required: true },
-    score: { type: Number, required: true },
+    questionId: { type: Schema.Types.ObjectId, required: true, ref: "CqQuestions" },
+    submitedPdf: { type: String },
+    score: { type: Number},
     submissionStatus: {
       type: String,
       enum: ["In Time", "Late"],
-      required: true,
+     
     },
-    startTime: { type: Date },
-    submittedTime: { type: Date },
+
+    submittedTime: { type: Date, default:new Date(new Date().getTime() + 6 * 60 * 60 * 1000) },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },
   },

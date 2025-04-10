@@ -8,7 +8,7 @@ Completed Module
 6. module 
 7. exam 
 8. notes
-9.  lecture
+9. lecture
 10. module Details
 11. cq question
 12. cq attemps
@@ -16,6 +16,9 @@ Completed Module
 14. pdf
 15. image
 16. docs
+17. gap question
+18. gap answer
+19. gap attemp
 
  -->
 <!-- 

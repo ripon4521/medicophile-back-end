@@ -19,6 +19,7 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
   body:z.object({
   examId: ObjectIdSchema.optional(), 
   createdBy: ObjectIdSchema.optional(), 
+  durationDate:z.string().optional(),
   question: z.string().min(1, 'Question cannot be empty').optional(), 
   status: z.enum(['Published', 'Drafted']).optional(), 
 })
