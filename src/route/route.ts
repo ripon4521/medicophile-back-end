@@ -23,6 +23,8 @@ import cqAttempRouter from "../module/cqAttemp/cqAttemp.route";
 import cqMarkingRouter from "../module/cqMarking/cqMarking.route";
 import docsRouter from "../module/docs/docs.route";
 import gapsQuestionRouter from "../module/gapsQuestion/gapsQuestion.route";
+import gapAnswerRoute from "../module/gapAnswer/gapAnswer.route";
+import gapAttempRouter from "../module/gapsAttemp/gapAttemp.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -113,6 +115,12 @@ const moduleRoutes = [
     path:'/gap-question',
     route:gapsQuestionRouter,
 
+  },{
+    path:'/gap-answer',
+    route:gapAnswerRoute
+  },{
+    path:'/gap-attemp',
+    route:gapAttempRouter
   }
 ];
 moduleRoutes.forEach((route) => {

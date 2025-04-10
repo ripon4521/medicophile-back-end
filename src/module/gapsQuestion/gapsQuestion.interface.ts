@@ -5,6 +5,8 @@ export interface IGapsQuestion {
     createdBy:Types.ObjectId;
     question:string;
     answer:string[];
+    duration:number;
+    mark:number;
     isDeleted:boolean;
     deletedAt:Date;
 }
