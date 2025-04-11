@@ -4,7 +4,7 @@ import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import { uploadImageService } from "./imageUpload.service";
 
-export const uploadImage = catchAsync(async (req:any, res: any) => {
+export const uploadImage = catchAsync(async (req: any, res: any) => {
   const file = req.file;
   if (!file) {
     return res

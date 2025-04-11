@@ -8,7 +8,6 @@ import AppError from "../../helpers/AppError";
 const createCqAttemp = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
 
-
   const result = await cqAttemService.createCqAttemps(payload);
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,

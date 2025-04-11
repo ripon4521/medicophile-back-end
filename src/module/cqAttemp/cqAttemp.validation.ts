@@ -28,8 +28,7 @@ const updateCqAttemptValidationSchema = z.object({
   }),
 });
 
-
 export const cqAttempsValidation = {
-    createCqAttemptValidationSchema,
-    updateCqAttemptValidationSchema
-}
+  createCqAttemptValidationSchema,
+  updateCqAttemptValidationSchema,
+};

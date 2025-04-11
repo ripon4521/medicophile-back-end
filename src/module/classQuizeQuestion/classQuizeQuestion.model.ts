@@ -14,7 +14,7 @@ const CqQuestionSchema = new Schema<ICqQuestion>(
       ref: "User",
     },
     question: { type: String, required: true },
-    durationDate:{type:Date},
+    durationDate: { type: Date },
     status: { type: String, enum: ["Published", "Drafted"], required: true },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },
@@ -22,13 +22,13 @@ const CqQuestionSchema = new Schema<ICqQuestion>(
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }, 
-  }
+    },
+  },
 );
 
 const CqQuestionModel = mongoose.model<ICqQuestion>(
   "CqQuestion",
-  CqQuestionSchema
+  CqQuestionSchema,
 );
 
 export default CqQuestionModel;

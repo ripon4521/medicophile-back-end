@@ -4,54 +4,51 @@ import { cqQuestionService } from "./classQuizeQuestion.service";
 import sendResponse from "../../utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
 
-const createCqQuestion = catchAsync(async(req:Request, res : Response) => {
-    const payload = req.body;
-    const  result = await cqQuestionService.createCqQuestion(payload);
-    sendResponse(res, {
-        statusCode: StatusCodes.CREATED,
-        message: "CQ Question Created successfully",
-        data: result,
-      });
-})
+const createCqQuestion = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+  const result = await cqQuestionService.createCqQuestion(payload);
+  sendResponse(res, {
+    statusCode: StatusCodes.CREATED,
+    message: "CQ Question Created successfully",
+    data: result,
+  });
+});
 
-const getAllCqQuestion = catchAsync(async(req:Request, res:Response) => {
-    const query = req.query;
-    const result = await cqQuestionService.getALlCqQuestion(query);
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        message: "CQ Question fatched successfully",
-        data: result,
-      });
+const getAllCqQuestion = catchAsync(async (req: Request, res: Response) => {
+  const query = req.query;
+  const result = await cqQuestionService.getALlCqQuestion(query);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "CQ Question fatched successfully",
+    data: result,
+  });
+});
 
-})
+const updateCqQuestion = catchAsync(async (req: Request, res: Response) => {
+  const { _id } = req.body;
+  const payload = req.body;
+  delete payload._id;
+  const update = await cqQuestionService.updateCqQuestion(_id, payload);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "CQ Question updated successfully",
+    data: update,
+  });
+});
 
-
-const updateCqQuestion =catchAsync(async ( req:Request, res:Response) => {
-    const { _id } = req.body;
-    const payload= req.body;
-    delete payload._id;
-    const update = await cqQuestionService.updateCqQuestion(_id, payload);
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        message: "CQ Question updated successfully",
-        data: update,
-      });
-})
-
-
-const deleteCqQuestion = catchAsync(async(req:Request, res:Response) => {
-    const { _id } = req.body;
-    const result = await cqQuestionService.deleteCqQuestion(_id);
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        message: "CQ Question deleted successfully",
-        data: '',
-      });
-})
+const deleteCqQuestion = catchAsync(async (req: Request, res: Response) => {
+  const { _id } = req.body;
+  const result = await cqQuestionService.deleteCqQuestion(_id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "CQ Question deleted successfully",
+    data: "",
+  });
+});
 
 export const cqQuestionController = {
-    createCqQuestion,
-    updateCqQuestion,
-    deleteCqQuestion,
-    getAllCqQuestion
-}
+  createCqQuestion,
+  updateCqQuestion,
+  deleteCqQuestion,
+  getAllCqQuestion,
+};

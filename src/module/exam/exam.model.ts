@@ -17,8 +17,8 @@ const ExamSchema = new Schema<IExam>(
     totalQuestion: { type: Number },
     positiveMark: { type: Number },
     negativeMark: { type: Number },
-    mcqDuration: { type: Number},
-    cqMark: { type: Number},
+    mcqDuration: { type: Number },
+    cqMark: { type: Number },
     resultStatus: {
       type: String,
       enum: ["pending", "completed", "failed"],

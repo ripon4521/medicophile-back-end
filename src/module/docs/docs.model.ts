@@ -1,12 +1,10 @@
-
 import { Schema, model } from "mongoose";
 import { IDocs } from "./docs.interface";
 import slugify from "slugify";
 
-
 const docsSchema = new Schema<IDocs>(
   {
-    slug: { type: String,  unique: true, trim: true },
+    slug: { type: String, unique: true, trim: true },
     title: { type: String, required: true, trim: true },
     document: { type: String, required: true },
     isDeleted: { type: Boolean, default: false },
@@ -16,7 +14,7 @@ const docsSchema = new Schema<IDocs>(
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
-  }
+  },
 );
 
 docsSchema.pre("save", function (next) {
@@ -35,8 +33,6 @@ docsSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
+const DocsModel = model<IDocs>("Docs", docsSchema);
 
-
- const DocsModel = model<IDocs>("Docs", docsSchema);
-
- export default DocsModel;
+export default DocsModel;

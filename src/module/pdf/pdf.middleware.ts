@@ -1,9 +1,9 @@
-import multer from 'multer';
-import path from 'path';
+import multer from "multer";
+import path from "path";
 
 const pdfStorage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    cb(null, path.join(process.cwd(), 'uploads'));
+    cb(null, path.join(process.cwd(), "uploads"));
   },
   filename: (_req, file, cb) => {
     const ext = path.extname(file.originalname);
@@ -15,10 +15,10 @@ const pdfStorage = multer.diskStorage({
 export const uploadPdf = multer({
   storage: pdfStorage,
   fileFilter: (_req, file, cb) => {
-    if (file.mimetype === 'application/pdf') {
+    if (file.mimetype === "application/pdf") {
       cb(null, true);
     } else {
-      cb(new Error('Only PDF files are allowed!'));
+      cb(new Error("Only PDF files are allowed!"));
     }
   },
-}).single('pdf'); // <-- field name should be 'pdf'
+}).single("pdf"); // <-- field name should be 'pdf'

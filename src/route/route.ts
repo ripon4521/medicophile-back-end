@@ -93,35 +93,43 @@ const moduleRoutes = [
   {
     path: "/user-credentials",
     route: userCredentialsRoute,
-  },{
-    path:'/images',
-    route:imageUploadRouter
-  },{
-    path:'/pdf',
-    route:pdfRouter
-  },{
-    path:'/cq-question',
-    route:cqQuestionRouter
-  },{
-    path:'/cq-attemp',
-    route:cqAttempRouter
-  },{
-    path:'/cq-marking',
-    route:cqMarkingRouter 
-  },{
-    path:'/docs',
-    route:docsRouter
-  },{
-    path:'/gap-question',
-    route:gapsQuestionRouter,
-
-  },{
-    path:'/gap-answer',
-    route:gapAnswerRoute
-  },{
-    path:'/gap-attemp',
-    route:gapAttempRouter
-  }
+  },
+  {
+    path: "/images",
+    route: imageUploadRouter,
+  },
+  {
+    path: "/pdf",
+    route: pdfRouter,
+  },
+  {
+    path: "/cq-question",
+    route: cqQuestionRouter,
+  },
+  {
+    path: "/cq-attemp",
+    route: cqAttempRouter,
+  },
+  {
+    path: "/cq-marking",
+    route: cqMarkingRouter,
+  },
+  {
+    path: "/docs",
+    route: docsRouter,
+  },
+  {
+    path: "/gap-question",
+    route: gapsQuestionRouter,
+  },
+  {
+    path: "/gap-answer",
+    route: gapAnswerRoute,
+  },
+  {
+    path: "/gap-attemp",
+    route: gapAttempRouter,
+  },
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);

@@ -1,10 +1,10 @@
-import { v2 as cloudinary } from 'cloudinary';
-import multer, { Multer } from 'multer';
-import httpStatus from 'http-status';
+import { v2 as cloudinary } from "cloudinary";
+import multer, { Multer } from "multer";
+import httpStatus from "http-status";
 
-import path from 'path';
-import AppError from '../helpers/AppError';
-import config from '../config';
+import path from "path";
+import AppError from "../helpers/AppError";
+import config from "../config";
 
 export interface ICloudinaryResponse {
   format: string;
@@ -18,9 +18,9 @@ export interface ICloudinaryResponse {
 
 // Cloudinary configuration
 cloudinary.config({
-  cloud_name: config.cloudinaryCloudName || 'dpy7b0pzi',
-  api_key: config.cloudinaryApiKey || '744272462512389',
-  api_secret: config.cloudinaryApiSecret || 'qt4JkEurFxNa42MIwSJOnaImCxo',
+  cloud_name: config.cloudinaryCloudName || "dpy7b0pzi",
+  api_key: config.cloudinaryApiKey || "744272462512389",
+  api_secret: config.cloudinaryApiSecret || "qt4JkEurFxNa42MIwSJOnaImCxo",
   secure: true,
 });
 
@@ -32,7 +32,7 @@ cloudinary.config({
  */
 export const sendImageToCloudinary = async (
   imageName: string,
-  filePath: string
+  filePath: string,
 ): Promise<ICloudinaryResponse> => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
@@ -41,7 +41,7 @@ export const sendImageToCloudinary = async (
         aspect_ratio: 1,
         width: 400,
         quality: 60,
-        fetch_format: 'auto',
+        fetch_format: "auto",
       },
     });
 
@@ -49,8 +49,8 @@ export const sendImageToCloudinary = async (
   } catch (error: any) {
     throw new AppError(
       httpStatus.CONFLICT,
-      'Image upload failed to Cloudinary',
-      error?.message
+      "Image upload failed to Cloudinary",
+      error?.message,
     );
   }
 };
@@ -58,7 +58,7 @@ export const sendImageToCloudinary = async (
 // Multer storage configuration
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    cb(null, path.join(process.cwd(), 'uploads'));
+    cb(null, path.join(process.cwd(), "uploads"));
   },
   filename: (_req, file, cb) => {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;

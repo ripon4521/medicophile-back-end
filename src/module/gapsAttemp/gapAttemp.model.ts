@@ -1,37 +1,35 @@
 import mongoose, { Schema } from "mongoose";
 import { IGapAttemp } from "./gapAttemp.interface";
 
-
-const gapAttempSchema = new Schema<IGapAttemp>({
+const gapAttempSchema = new Schema<IGapAttemp>(
+  {
     studentId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'User',  
+      ref: "User",
     },
     examId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'Exam',  
+      ref: "Exam",
     },
     questionId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'GapsQuestion',  
+      ref: "GapsQuestion",
     },
     score: {
       type: Number,
       required: true,
-      min: 0, 
-      max: 100,  
+      min: 0,
+      max: 100,
     },
     totalMarks: {
       type: Number,
-   
-     
     },
     submissionStatus: {
       type: String,
-      enum: ['In Time', 'Late'],  
+      enum: ["In Time", "Late"],
       required: true,
     },
 
@@ -41,19 +39,20 @@ const gapAttempSchema = new Schema<IGapAttemp>({
     },
     isDeleted: {
       type: Boolean,
-   
+
       default: false,
     },
     deletedAt: {
       type: Date,
-    
     },
-  },{
+  },
+  {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
-  });
+  },
+);
 
-  const GapAttempModel = mongoose.model<IGapAttemp>('GapAttemp', gapAttempSchema);
+const GapAttempModel = mongoose.model<IGapAttemp>("GapAttemp", gapAttempSchema);
 
 export default GapAttempModel;

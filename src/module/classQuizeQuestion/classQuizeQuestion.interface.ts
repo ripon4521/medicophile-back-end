@@ -1,12 +1,11 @@
 import { Types } from "mongoose";
 
 export interface ICqQuestion {
-    examId:Types.ObjectId;
-    createdBy:Types.ObjectId;
-    question:string;
-    status:'Published' | 'Drafted';
-    durationDate:Date;
-    isDeleted:boolean;
-    deletedAt:Date;
-    
+  examId: Types.ObjectId;
+  createdBy: Types.ObjectId;
+  question: string;
+  status: "Published" | "Drafted";
+  durationDate: Date;
+  isDeleted: boolean;
+  deletedAt: Date;
 }
