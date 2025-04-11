@@ -45,6 +45,7 @@ const login = async (
       .select("+password")
       .session(session);
 
+
     if (!user) {
       throw new AppError(StatusCodes.BAD_REQUEST, "User not found!");
     }
@@ -62,11 +63,11 @@ const login = async (
       throw new AppError(StatusCodes.FORBIDDEN, "Invalid password");
     }
 
-    const student = await studentModel
-      .findOne({ userId: user._id })
+    const student = await UserModel
+      .findOne({ _id: user._id })
       .session(session);
     if (!student) {
-      throw new AppError(StatusCodes.NOT_FOUND, "Student not found");
+      throw new AppError(StatusCodes.NOT_FOUND, "User not found");
     }
 
     const existingCredential = await UserCredentialsModel.findOne({

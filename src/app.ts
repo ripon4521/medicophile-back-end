@@ -4,6 +4,8 @@ import notFound from "./middlewares/notFound";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import router from "./route/route";
+import { auth } from "./middlewares/auth";
+import { onlySuperAdmin } from "./DB/onlySuperAdmin";
 
 const app = express();
 //parsers
@@ -13,13 +15,14 @@ app.use(cors({ origin: ["http://localhost:5173", "iconadmissionaid.com", "admin.
 
 // middleware
 app.use(express.json());
-
+// router.use(  auth.authUser('admin'), onlySuperAdmin);
 app.use("/api/v1", router);
+
 const getAcontroller = (req: Request, res: Response) => {
-  res.send("Welcome to the School Mangement System ");
+  res.send("🚀 Welcome SuperAdmin to the School Management System");
 };
 
-app.get("/", getAcontroller);
+app.get("/",  auth.authUser("superAdmin"), onlySuperAdmin, getAcontroller);
 
 app.use(globalErrorHandler);
 app.use(notFound);

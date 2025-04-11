@@ -23,7 +23,7 @@ userRouter.post(
   validateRequest(facultyValidation.createFacultyValidationSchema),
   userController.createFaculty,
 );
-userRouter.get("/", userController.getAllUsers);
-userRouter.delete("/", userController.deleteUsers);
+userRouter.get("/", auth.authUser('teacher') , userController.getAllUsers);
+userRouter.delete("/",  auth.authUser('admin'), userController.deleteUsers);
 
 export default userRouter;

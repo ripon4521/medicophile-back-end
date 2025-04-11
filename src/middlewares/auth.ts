@@ -59,36 +59,36 @@ const onlyAdmin = (...requiredRoles: TUserRole[]) => {
   );
 };
 
-// const onlyStudent = (...requiredRoles: TUserRole[]) => {
-//   return catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-//     const user = req.user;
-//     if (!user || !user.role) {
-//       throw new Error("Access denied. No token provided or invalid format.");
-//     }
-//     if (user.role !== USER_ROLE.student) {
-//       throw new Error("Access denied only student");
-//     }
-//     if (requiredRoles.length && !requiredRoles.includes(user?.role)) {
-//       throw new Error('You are not authorized!');
-//     }
-//     next();
-//   });
-// };
+const onlyStudent = (...requiredRoles: TUserRole[]) => {
+  return catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const user = req.user;
+    if (!user || !user.role) {
+      throw new Error("Access denied. No token provided or invalid format.");
+    }
+    if (user.role !== USER_ROLE.student) {
+      throw new Error("Access denied only student");
+    }
+    if (requiredRoles.length && !requiredRoles.includes(user?.role)) {
+      throw new Error('You are not authorized!');
+    }
+    next();
+  });
+};
 
-// const onlyFaculty = (...requiredRoles: TUserRole[]) => {
-//   return catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-//     const user = req.user;
-//     if (!user || !user.role) {
-//       throw new Error("Access denied. No token provided or invalid format.");
-//     }
-//     if (user.role !== USER_ROLE.faculty) {
-//       throw new Error("Access denied only faculty");
-//     }
-//     if (requiredRoles.length && !requiredRoles.includes(user?.role)) {
-//       throw new Error('You are not authorized!');
-//     }
-//     next();
-//   });
-// };
+const onlyFaculty = (...requiredRoles: TUserRole[]) => {
+  return catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const user = req.user;
+    if (!user || !user.role) {
+      throw new Error("Access denied. No token provided or invalid format.");
+    }
+    if (user.role !== USER_ROLE.teacher) {
+      throw new Error("Access denied only faculty");
+    }
+    if (requiredRoles.length && !requiredRoles.includes(user?.role)) {
+      throw new Error('You are not authorized!');
+    }
+    next();
+  });
+};
 
-export const auth = { authUser, onlyAdmin };
+export const auth = { authUser, onlyAdmin, onlyFaculty};

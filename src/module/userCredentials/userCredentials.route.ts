@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { userCredentialsController } from "./userCredentials.controller";
+import { auth } from "../../middlewares/auth";
 
 const userCredentialsRoute = Router();
-userCredentialsRoute.get("/", userCredentialsController.getAllCredentials);
+userCredentialsRoute.get("/", auth.authUser('admin'), userCredentialsController.getAllCredentials);
 userCredentialsRoute.get(
   "/:id",
   userCredentialsController.getSingleCredentials,

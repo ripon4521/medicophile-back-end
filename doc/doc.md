@@ -25,4 +25,6 @@ Completed Module
 Notes
 *Image Upload on Cloudnery
 * Password change use phone message with link 
+* skip currier 
+* ssl commerce
  -->
