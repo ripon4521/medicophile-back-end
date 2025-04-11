@@ -17,8 +17,7 @@ const createStudentSchema = z.object({
       .optional(),
     address: z.string().min(1, "address is required"),
     status: z.enum(["Active", "Blocked"]),
-    deletedAt: z.date().nullable().optional(),
-    isDeleted: z.boolean().optional(),
+
   }),
 });
 
@@ -44,8 +43,7 @@ const updateStudentSchema = z.object({
       .optional(),
     address: z.string().min(1, "address is required").optional(),
     status: z.enum(["Active", "Blocked"]).optional(),
-    deletedAt: z.date().nullable().optional(),
-    isDeleted: z.boolean().optional(),
+  
   }),
 });
 
