@@ -5,10 +5,6 @@ import mongoose from "mongoose";
 
  const createMediaZodSchema = z.object({
     body:z.object({
-
-  slug: z.string({ required_error: "Slug is required" })
-    .min(1, { message: "Slug cannot be empty" }),
-
   title: z.string({ required_error: "Title is required" })
     .min(1, { message: "Title cannot be empty" }),
 
@@ -26,10 +22,6 @@ import mongoose from "mongoose";
 
 const updateMediaZodSchema = z.object({
     body:z.object({
-   
-    slug: z.string({ required_error: "Slug is required" })
-      .min(1, { message: "Slug cannot be empty" }).optional(),
-  
     title: z.string({ required_error: "Title is required" })
       .min(1, { message: "Title cannot be empty" }).optional(),
   

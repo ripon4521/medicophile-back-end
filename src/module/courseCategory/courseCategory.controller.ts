@@ -13,7 +13,8 @@ const createCourseCategory = catchAsync(async (req, res) => {
 });
 
 const getAllCourseCategory = catchAsync(async (req, res) => {
-  const result = await courseCategoryService.getAllCourseCategory();
+  const query = req.query;
+  const result = await courseCategoryService.getAllCourseCategory(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Course Category fathced successfully",

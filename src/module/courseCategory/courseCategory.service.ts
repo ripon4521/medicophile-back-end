@@ -3,15 +3,24 @@ import { ICourseCategory } from "./courseCaregory.interface";
 import CourseCategory from "./courseCategory.model";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../helpers/AppError";
+import QueryBuilder from "../../builder/querybuilder";
 
 const createCourseCategory = async (payload: ICourseCategory) => {
   const result = await CourseCategory.create(payload);
   return result;
 };
 
-const getAllCourseCategory = async () => {
-  const result = await CourseCategory.find({ isDeleted: false });
-  return result;
+const getAllCourseCategory = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(CourseCategory, query)
+  .search(["title"])
+  .filter()
+  .sort()
+  .paginate()
+  .fields()
+  .populate(["createdBy"]);
+
+const result = await courseQuery.exec();
+return result;
 };
 
 const getSingleCourseCatgeory = async (slug: string) => {

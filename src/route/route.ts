@@ -27,6 +27,7 @@ import gapAnswerRoute from "../module/gapAnswer/gapAnswer.route";
 import gapAttempRouter from "../module/gapsAttemp/gapAttemp.route";
 import liveClassRouter from "../module/liveClass/liveClass.route";
 import mediaRoute from "../module/media/media.route";
+import blogCategoryRoute from "../module/blogCategory/blogController.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -137,6 +138,9 @@ const moduleRoutes = [
   },{
     path:'/media',
     route:mediaRoute
+  },{
+    path:'/blog-category',
+    route:blogCategoryRoute
   }
 ];
 moduleRoutes.forEach((route) => {
