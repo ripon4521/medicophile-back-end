@@ -20,7 +20,7 @@ function server() {
         try {
             yield mongoose_1.default.connect(config_1.default.database_url);
             app_1.default.listen(3000, () => {
-                console.log(`School Mangement  Server is running on port ${3000} - Alhamdulillah`);
+                console.log(`School Mangement  Server is running on port ${config_1.default.port} - Alhamdulillah`);
             });
         }
         catch (error) {

@@ -8,7 +8,7 @@ async function server() {
 
     app.listen(3000, () => {
       console.log(
-        `School Mangement  Server is running on port ${3000} - Alhamdulillah`,
+        `School Mangement  Server is running on port ${config.port} - Alhamdulillah`,
       );
     });
   } catch (error) {
