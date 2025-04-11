@@ -4,6 +4,8 @@ import { z } from "zod";
 import mongoose from "mongoose";
 
  const createMediaZodSchema = z.object({
+    body:z.object({
+
   slug: z.string({ required_error: "Slug is required" })
     .min(1, { message: "Slug cannot be empty" }),
 
@@ -17,11 +19,14 @@ import mongoose from "mongoose";
     .refine((val) => mongoose.Types.ObjectId.isValid(val), {
       message: "Invalid CreatedBy ObjectId",
     }),
-
+        
+})
 });
 
 
 const updateMediaZodSchema = z.object({
+    body:z.object({
+   
     slug: z.string({ required_error: "Slug is required" })
       .min(1, { message: "Slug cannot be empty" }).optional(),
   
@@ -35,7 +40,8 @@ const updateMediaZodSchema = z.object({
       .refine((val) => mongoose.Types.ObjectId.isValid(val), {
         message: "Invalid CreatedBy ObjectId",
       }).optional(),
-  
+       
+    })
   });
 
 

@@ -19,7 +19,7 @@ const createLiveClass = catchAsync(async (req, res) => {
 const getAllLiveClass = catchAsync(async (req, res) => {
     const result = await liveClassService.getAllLiveClass();
     sendResponse(res, {
-      statusCode: StatusCodes.CREATED,
+      statusCode: StatusCodes.OK,
       message: "Live Class fatched successfully",
       data: result,
     });
@@ -36,7 +36,7 @@ const getAllLiveClass = catchAsync(async (req, res) => {
       }
     const result = await liveClassService.singleGetLiveClass(slug);
     sendResponse(res, {
-      statusCode: StatusCodes.CREATED,
+      statusCode: StatusCodes.OK,
       message: "Single Live Class fatched successfully",
       data: result,
     });
@@ -54,7 +54,7 @@ const getAllLiveClass = catchAsync(async (req, res) => {
       }
     const result = await liveClassService.deleteLiveClass(slug);
     sendResponse(res, {
-      statusCode: StatusCodes.CREATED,
+      statusCode: StatusCodes.OK,
       message: " Live Class deleted successfully",
       data: result,
     });
@@ -74,7 +74,7 @@ const getAllLiveClass = catchAsync(async (req, res) => {
       }
     const result = await liveClassService.updateLiveClass(slug, payload);
     sendResponse(res, {
-      statusCode: StatusCodes.CREATED,
+      statusCode: StatusCodes.OK,
       message: " Live Class updated successfully",
       data: result,
     });

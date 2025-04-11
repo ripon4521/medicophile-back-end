@@ -26,6 +26,7 @@ import gapsQuestionRouter from "../module/gapsQuestion/gapsQuestion.route";
 import gapAnswerRoute from "../module/gapAnswer/gapAnswer.route";
 import gapAttempRouter from "../module/gapsAttemp/gapAttemp.route";
 import liveClassRouter from "../module/liveClass/liveClass.route";
+import mediaRoute from "../module/media/media.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -133,6 +134,9 @@ const moduleRoutes = [
   },{
     path:'/live-class',
     route:liveClassRouter
+  },{
+    path:'/media',
+    route:mediaRoute
   }
 ];
 moduleRoutes.forEach((route) => {
