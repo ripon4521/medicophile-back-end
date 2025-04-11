@@ -25,6 +25,7 @@ import docsRouter from "../module/docs/docs.route";
 import gapsQuestionRouter from "../module/gapsQuestion/gapsQuestion.route";
 import gapAnswerRoute from "../module/gapAnswer/gapAnswer.route";
 import gapAttempRouter from "../module/gapsAttemp/gapAttemp.route";
+import liveClassRouter from "../module/liveClass/liveClass.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -129,7 +130,10 @@ const moduleRoutes = [
   {
     path: "/gap-attemp",
     route: gapAttempRouter,
-  },
+  },{
+    path:'/live-class',
+    route:liveClassRouter
+  }
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);

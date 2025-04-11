@@ -9,7 +9,7 @@ const app = express();
 //parsers
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: ["http://localhost:5173"] }));
+app.use(cors({ origin: ["http://localhost:5173", "iconadmissionaid.com", "admin.iconadmissionaid.com "] }));
 
 // middleware
 app.use(express.json());
