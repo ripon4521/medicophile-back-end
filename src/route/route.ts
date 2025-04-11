@@ -28,6 +28,7 @@ import gapAttempRouter from "../module/gapsAttemp/gapAttemp.route";
 import liveClassRouter from "../module/liveClass/liveClass.route";
 import mediaRoute from "../module/media/media.route";
 import blogCategoryRoute from "../module/blogCategory/blogController.route";
+import blogRoute from "../module/blog/blog.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -141,6 +142,9 @@ const moduleRoutes = [
   },{
     path:'/blog-category',
     route:blogCategoryRoute
+  },{
+    path:'/blog',
+    route:blogRoute
   }
 ];
 moduleRoutes.forEach((route) => {
