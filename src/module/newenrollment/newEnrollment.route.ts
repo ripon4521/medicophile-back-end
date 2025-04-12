@@ -10,7 +10,11 @@ enrollmentRoute.post(
   validateRequest(enrolemntValidation.createEnrollmentSchema),
   enrollmentControlleer.createEnrollment,
 );
-enrollmentRoute.get("/",auth.authUser('admin'), enrollmentControlleer.getEnrollment);
+enrollmentRoute.get(
+  "/",
+  auth.authUser("admin"),
+  enrollmentControlleer.getEnrollment,
+);
 enrollmentRoute.get("/:id", enrollmentControlleer.getSingleEnrollment);
 enrollmentRoute.delete("/:id", enrollmentControlleer.deleteEnrollment);
 enrollmentRoute.patch(

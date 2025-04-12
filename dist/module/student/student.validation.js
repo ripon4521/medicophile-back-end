@@ -18,8 +18,6 @@ const createStudentSchema = zod_1.z.object({
             .optional(),
         address: zod_1.z.string().min(1, "address is required"),
         status: zod_1.z.enum(["Active", "Blocked"]),
-        deletedAt: zod_1.z.date().nullable().optional(),
-        isDeleted: zod_1.z.boolean().optional(),
     }),
 });
 const updateStudentSchema = zod_1.z.object({
@@ -44,8 +42,6 @@ const updateStudentSchema = zod_1.z.object({
             .optional(),
         address: zod_1.z.string().min(1, "address is required").optional(),
         status: zod_1.z.enum(["Active", "Blocked"]).optional(),
-        deletedAt: zod_1.z.date().nullable().optional(),
-        isDeleted: zod_1.z.boolean().optional(),
     }),
 });
 exports.studentValidation = {

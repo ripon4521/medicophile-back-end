@@ -1,15 +1,11 @@
-
-
 import { Schema, model, Types } from "mongoose";
 import { IBlog } from "./blog.interface";
 import slugify from "slugify";
-
 
 const blogSchema = new Schema<IBlog>(
   {
     slug: {
       type: String,
-    
     },
     title: {
       type: String,
@@ -22,27 +18,26 @@ const blogSchema = new Schema<IBlog>(
     },
     categoryId: {
       type: Schema.Types.ObjectId,
-      ref: "BlogCategory", 
+      ref: "BlogCategory",
       required: [true, "Category ID is required"],
     },
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: "User", 
+      ref: "User",
       required: [true, "CreatedBy is required"],
     },
     tags: {
       type: [String],
-      default:[]
+      default: [],
     },
     status: {
       type: String,
       enum: ["Published", "Drafted"],
       required: [true, "Status is required"],
-      default:"Published"
+      default: "Published",
     },
     coverPhoto: {
       type: String,
-     
     },
     isDeleted: {
       type: Boolean,
@@ -59,15 +54,12 @@ const blogSchema = new Schema<IBlog>(
   },
 );
 
-
-
 blogSchema.pre("save", function (next) {
   if (this.isModified("title")) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }
   next();
 });
-
 
 blogSchema.pre("findOneAndUpdate", function (next) {
   const update = this.getUpdate() as Record<string, any>;
@@ -77,5 +69,5 @@ blogSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
- const BlogModel = model<IBlog>("Blog", blogSchema);
-export default  BlogModel;
+const BlogModel = model<IBlog>("Blog", blogSchema);
+export default BlogModel;

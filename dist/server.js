@@ -15,10 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
 const config_1 = __importDefault(require("./config"));
+const DB_1 = __importDefault(require("./DB"));
 function server() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield mongoose_1.default.connect(config_1.default.database_url);
+            (0, DB_1.default)();
             app_1.default.listen(3000, () => {
                 console.log(`School Mangement  Server is running on port ${config_1.default.port} - Alhamdulillah`);
             });

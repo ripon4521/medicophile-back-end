@@ -1,4 +1,3 @@
-
 import { USER_ROLE, USER_STATUS } from "./user.constants";
 
 export interface IUser {

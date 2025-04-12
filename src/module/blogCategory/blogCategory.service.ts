@@ -1,5 +1,3 @@
-
-
 import slugify from "slugify";
 
 import { StatusCodes } from "http-status-codes";
@@ -20,20 +18,20 @@ const createBlogCategory = async (payload: IBlogCategory) => {
 };
 
 const getAllBlogCategory = async (query: Record<string, unknown>) => {
-    const courseQuery = new QueryBuilder(BlogCategory, query)
+  const courseQuery = new QueryBuilder(BlogCategory, query)
     .search(["title"])
     .filter()
     .sort()
     .paginate()
     .fields()
     .populate(["createdBy"]);
-  
+
   const result = await courseQuery.exec();
   return result;
 };
 
 const getSingleBlogCatgeory = async (slug: string) => {
-  const result = await BlogCategory.findOne({ slug }).populate('createdBy');
+  const result = await BlogCategory.findOne({ slug }).populate("createdBy");
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
@@ -68,7 +66,7 @@ const deleteBlogCategory = async (slug: string) => {
     { slug },
     {
       isDeleted: true,
-      deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), 
+      deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
     { new: true },
   );
@@ -80,5 +78,5 @@ export const blogCategoryService = {
   updateBlogCategory,
   deleteBlogCategory,
   getAllBlogCategory,
-  getSingleBlogCatgeory
+  getSingleBlogCatgeory,
 };

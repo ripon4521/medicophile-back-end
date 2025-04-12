@@ -57,34 +57,34 @@ const onlyAdmin = (...requiredRoles) => {
         next();
     }));
 };
-// const onlyStudent = (...requiredRoles: TUserRole[]) => {
-//   return catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-//     const user = req.user;
-//     if (!user || !user.role) {
-//       throw new Error("Access denied. No token provided or invalid format.");
-//     }
-//     if (user.role !== USER_ROLE.student) {
-//       throw new Error("Access denied only student");
-//     }
-//     if (requiredRoles.length && !requiredRoles.includes(user?.role)) {
-//       throw new Error('You are not authorized!');
-//     }
-//     next();
-//   });
-// };
-// const onlyFaculty = (...requiredRoles: TUserRole[]) => {
-//   return catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-//     const user = req.user;
-//     if (!user || !user.role) {
-//       throw new Error("Access denied. No token provided or invalid format.");
-//     }
-//     if (user.role !== USER_ROLE.faculty) {
-//       throw new Error("Access denied only faculty");
-//     }
-//     if (requiredRoles.length && !requiredRoles.includes(user?.role)) {
-//       throw new Error('You are not authorized!');
-//     }
-//     next();
-//   });
-// };
-exports.auth = { authUser, onlyAdmin };
+const onlyStudent = (...requiredRoles) => {
+    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const user = req.user;
+        if (!user || !user.role) {
+            throw new Error("Access denied. No token provided or invalid format.");
+        }
+        if (user.role !== user_constants_1.USER_ROLE.student) {
+            throw new Error("Access denied only student");
+        }
+        if (requiredRoles.length && !requiredRoles.includes(user === null || user === void 0 ? void 0 : user.role)) {
+            throw new Error("You are not authorized!");
+        }
+        next();
+    }));
+};
+const onlyFaculty = (...requiredRoles) => {
+    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const user = req.user;
+        if (!user || !user.role) {
+            throw new Error("Access denied. No token provided or invalid format.");
+        }
+        if (user.role !== user_constants_1.USER_ROLE.teacher) {
+            throw new Error("Access denied only faculty");
+        }
+        if (requiredRoles.length && !requiredRoles.includes(user === null || user === void 0 ? void 0 : user.role)) {
+            throw new Error("You are not authorized!");
+        }
+        next();
+    }));
+};
+exports.auth = { authUser, onlyAdmin, onlyFaculty };

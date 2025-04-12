@@ -12,15 +12,15 @@ const createCourseCategory = async (payload: ICourseCategory) => {
 
 const getAllCourseCategory = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(CourseCategory, query)
-  .search(["title"])
-  .filter()
-  .sort()
-  .paginate()
-  .fields()
-  .populate(["createdBy"]);
+    .search(["title"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .populate(["createdBy"]);
 
-const result = await courseQuery.exec();
-return result;
+  const result = await courseQuery.exec();
+  return result;
 };
 
 const getSingleCourseCatgeory = async (slug: string) => {

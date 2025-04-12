@@ -4,7 +4,6 @@ import sendResponse from "../../utils/sendResponse";
 import { blogCategoryService } from "./blogCategory.service";
 import AppError from "../../helpers/AppError";
 
-
 const createBlogCategory = catchAsync(async (req, res) => {
   const result = await blogCategoryService.createBlogCategory(req.body);
   sendResponse(res, {
@@ -27,7 +26,7 @@ const getAllBlogCategory = catchAsync(async (req, res) => {
 const getSingleBlogCategory = catchAsync(async (req, res) => {
   const { slug } = req.params;
   if (!slug) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide a valid slug")
+    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide a valid slug");
   }
   const result = await blogCategoryService.getSingleBlogCatgeory(slug);
   sendResponse(res, {
@@ -40,13 +39,10 @@ const getSingleBlogCategory = catchAsync(async (req, res) => {
 const updateBlogCategory = catchAsync(async (req, res) => {
   const { slug } = req.params;
   if (!slug) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide a valid slug")
+    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide a valid slug");
   }
   const payload = req.body;
-  const result = await blogCategoryService.updateBlogCategory(
-    slug,
-    payload,
-  );
+  const result = await blogCategoryService.updateBlogCategory(slug, payload);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Blog Category updated successfully",
@@ -57,7 +53,7 @@ const updateBlogCategory = catchAsync(async (req, res) => {
 const deleteBlogCategory = catchAsync(async (req, res) => {
   const { slug } = req.params;
   if (!slug) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide a valid slug")
+    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide a valid slug");
   }
   const result = await blogCategoryService.deleteBlogCategory(slug);
   sendResponse(res, {
@@ -68,9 +64,9 @@ const deleteBlogCategory = catchAsync(async (req, res) => {
 });
 
 export const blogCategoryController = {
- createBlogCategory,
- deleteBlogCategory,
- updateBlogCategory,
- getAllBlogCategory,
- getSingleBlogCategory
+  createBlogCategory,
+  deleteBlogCategory,
+  updateBlogCategory,
+  getAllBlogCategory,
+  getSingleBlogCategory,
 };

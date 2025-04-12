@@ -3,7 +3,6 @@ import validateRequest from "../../middlewares/validateRequest";
 import { blogCategoryValidation } from "./blogCategory.validation";
 import { blogCategoryController } from "./blogCategory.controller";
 
-
 const blogCategoryRoute = Router();
 
 blogCategoryRoute.post(
@@ -13,19 +12,13 @@ blogCategoryRoute.post(
 );
 
 blogCategoryRoute.get("/", blogCategoryController.getAllBlogCategory);
-blogCategoryRoute.get(
-  "/:slug",
-  blogCategoryController.getSingleBlogCategory,
-);
+blogCategoryRoute.get("/:slug", blogCategoryController.getSingleBlogCategory);
 blogCategoryRoute.patch(
   "/:slug",
   validateRequest(blogCategoryValidation.updateBlogCategorySchema),
   blogCategoryController.updateBlogCategory,
 );
 
-blogCategoryRoute.delete(
-  "/:slug",
-  blogCategoryController.deleteBlogCategory,
-);
+blogCategoryRoute.delete("/:slug", blogCategoryController.deleteBlogCategory);
 
 export default blogCategoryRoute;

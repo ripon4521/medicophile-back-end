@@ -1,5 +1,3 @@
-
-
 import mongoose, { Schema, Types } from "mongoose";
 import slugify from "slugify";
 
@@ -18,14 +16,12 @@ const blogCategorySchema = new Schema(
   },
 );
 
-
 blogCategorySchema.pre("save", function (next) {
   if (this.isModified("title")) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }
   next();
 });
-
 
 blogCategorySchema.pre("findOneAndUpdate", function (next) {
   const update = this.getUpdate() as Record<string, any>;

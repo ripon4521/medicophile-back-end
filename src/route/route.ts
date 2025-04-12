@@ -133,19 +133,23 @@ const moduleRoutes = [
   {
     path: "/gap-attemp",
     route: gapAttempRouter,
-  },{
-    path:'/live-class',
-    route:liveClassRouter
-  },{
-    path:'/media',
-    route:mediaRoute
-  },{
-    path:'/blog-category',
-    route:blogCategoryRoute
-  },{
-    path:'/blog',
-    route:blogRoute
-  }
+  },
+  {
+    path: "/live-class",
+    route: liveClassRouter,
+  },
+  {
+    path: "/media",
+    route: mediaRoute,
+  },
+  {
+    path: "/blog-category",
+    route: blogCategoryRoute,
+  },
+  {
+    path: "/blog",
+    route: blogRoute,
+  },
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);

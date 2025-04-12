@@ -1,15 +1,11 @@
-
-
 import { Schema, model, Types } from "mongoose";
 import { IMedia } from "./media.interface";
 import slugify from "slugify";
-
 
 const mediaSchema = new Schema<IMedia>(
   {
     slug: {
       type: String,
-     
     },
     title: {
       type: String,
@@ -23,12 +19,11 @@ const mediaSchema = new Schema<IMedia>(
     createdBy: {
       type: Schema.Types.ObjectId,
       required: [true, "CreatedBy is required"],
-      ref: "User", 
+      ref: "User",
     },
     isDeleted: {
       type: Boolean,
       default: false,
-      
     },
     deletedAt: {
       type: Date,
@@ -38,9 +33,8 @@ const mediaSchema = new Schema<IMedia>(
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
-  }
+  },
 );
-
 
 mediaSchema.pre("save", function (next) {
   if (this.isModified("title")) {
@@ -48,7 +42,6 @@ mediaSchema.pre("save", function (next) {
   }
   next();
 });
-
 
 mediaSchema.pre("findOneAndUpdate", function (next) {
   const update = this.getUpdate() as Record<string, any>;
@@ -58,5 +51,5 @@ mediaSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
- const MediaModel = model<IMedia>("Media", mediaSchema);
-export default  MediaModel;
+const MediaModel = model<IMedia>("Media", mediaSchema);
+export default MediaModel;

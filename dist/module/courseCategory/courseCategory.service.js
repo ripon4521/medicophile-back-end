@@ -16,12 +16,20 @@ exports.courseCategoryService = void 0;
 const courseCategory_model_1 = __importDefault(require("./courseCategory.model"));
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createCourseCategory = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield courseCategory_model_1.default.create(payload);
     return result;
 });
-const getAllCourseCategory = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield courseCategory_model_1.default.find({ isDeleted: false });
+const getAllCourseCategory = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(courseCategory_model_1.default, query)
+        .search(["title"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .populate(["createdBy"]);
+    const result = yield courseQuery.exec();
     return result;
 });
 const getSingleCourseCatgeory = (slug) => __awaiter(void 0, void 0, void 0, function* () {

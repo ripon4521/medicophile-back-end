@@ -30,6 +30,10 @@ const docs_route_1 = __importDefault(require("../module/docs/docs.route"));
 const gapsQuestion_route_1 = __importDefault(require("../module/gapsQuestion/gapsQuestion.route"));
 const gapAnswer_route_1 = __importDefault(require("../module/gapAnswer/gapAnswer.route"));
 const gapAttemp_route_1 = __importDefault(require("../module/gapsAttemp/gapAttemp.route"));
+const liveClass_route_1 = __importDefault(require("../module/liveClass/liveClass.route"));
+const media_route_1 = __importDefault(require("../module/media/media.route"));
+const blogController_route_1 = __importDefault(require("../module/blogCategory/blogController.route"));
+const blog_route_1 = __importDefault(require("../module/blog/blog.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -131,6 +135,22 @@ const moduleRoutes = [
     {
         path: "/gap-attemp",
         route: gapAttemp_route_1.default,
+    },
+    {
+        path: "/live-class",
+        route: liveClass_route_1.default,
+    },
+    {
+        path: "/media",
+        route: media_route_1.default,
+    },
+    {
+        path: "/blog-category",
+        route: blogController_route_1.default,
+    },
+    {
+        path: "/blog",
+        route: blog_route_1.default,
     },
 ];
 moduleRoutes.forEach((route) => {

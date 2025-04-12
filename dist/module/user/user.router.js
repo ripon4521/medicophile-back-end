@@ -14,6 +14,6 @@ const userRouter = (0, express_1.Router)();
 userRouter.post("/create-student", (0, validateRequest_1.default)(student_validation_1.studentValidation.createStudentSchema), user_controller_1.userController.createStudeent);
 userRouter.get("/profile", auth_1.auth.authUser("superAdmin", "admin", "teacher", "student"), user_controller_1.userController.getProfile);
 userRouter.post("/create-faculty", (0, validateRequest_1.default)(faculty_validation_1.facultyValidation.createFacultyValidationSchema), user_controller_1.userController.createFaculty);
-userRouter.get("/", user_controller_1.userController.getAllUsers);
-userRouter.delete("/", user_controller_1.userController.deleteUsers);
+userRouter.get("/", auth_1.auth.authUser("teacher"), user_controller_1.userController.getAllUsers);
+userRouter.delete("/", auth_1.auth.authUser("admin"), user_controller_1.userController.deleteUsers);
 exports.default = userRouter;

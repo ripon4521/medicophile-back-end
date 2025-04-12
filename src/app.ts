@@ -11,7 +11,15 @@ const app = express();
 //parsers
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: ["http://localhost:5173", "iconadmissionaid.com", "admin.iconadmissionaid.com "] }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "iconadmissionaid.com",
+      "admin.iconadmissionaid.com ",
+    ],
+  }),
+);
 
 // middleware
 app.use(express.json());
@@ -22,7 +30,7 @@ const getAcontroller = (req: Request, res: Response) => {
   res.send("🚀 Welcome SuperAdmin to the School Management System");
 };
 
-app.get("/",  auth.authUser("superAdmin"), onlySuperAdmin, getAcontroller);
+app.get("/", auth.authUser("superAdmin"), onlySuperAdmin, getAcontroller);
 
 app.use(globalErrorHandler);
 app.use(notFound);

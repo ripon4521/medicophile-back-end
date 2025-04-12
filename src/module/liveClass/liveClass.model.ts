@@ -1,16 +1,11 @@
-
-
 import { Schema, model, Types } from "mongoose";
 import { ILiveClass } from "./liveClass.inerface";
 import slugify from "slugify";
-
 
 const liveClassSchema = new Schema<ILiveClass>(
   {
     slug: {
       type: String,
-      
-    
     },
     courseId: {
       type: Schema.Types.ObjectId,
@@ -29,7 +24,6 @@ const liveClassSchema = new Schema<ILiveClass>(
     },
     description: {
       type: String,
-    
     },
     status: {
       type: String,
@@ -39,7 +33,6 @@ const liveClassSchema = new Schema<ILiveClass>(
     isDeleted: {
       type: Boolean,
       default: false,
-  
     },
     deletedAt: {
       type: Date,
@@ -59,7 +52,6 @@ liveClassSchema.pre("save", function (next) {
   next();
 });
 
-
 liveClassSchema.pre("findOneAndUpdate", function (next) {
   const update = this.getUpdate() as Record<string, any>;
   if (update?.title) {
@@ -68,7 +60,5 @@ liveClassSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-
-
- const LiveClassModel = model<ILiveClass>("LiveClass", liveClassSchema);
- export default  LiveClassModel;
+const LiveClassModel = model<ILiveClass>("LiveClass", liveClassSchema);
+export default LiveClassModel;

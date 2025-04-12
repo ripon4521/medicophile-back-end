@@ -20,7 +20,6 @@ const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const handleCustomError_1 = require("../../helpers/handleCustomError");
 const user_model_1 = require("../user/user.model");
-const student_model_1 = __importDefault(require("../student/student.model"));
 const userCredentials_model_1 = require("../userCredentials/userCredentials.model");
 const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.create(payload);
@@ -49,11 +48,9 @@ const login = (payload, meta) => __awaiter(void 0, void 0, void 0, function* () 
         if (!isPasswordMatched) {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Invalid password");
         }
-        const student = yield student_model_1.default
-            .findOne({ userId: user._id })
-            .session(session);
+        const student = yield user_model_1.UserModel.findOne({ _id: user._id }).session(session);
         if (!student) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Student not found");
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "User not found");
         }
         const existingCredential = yield userCredentials_model_1.UserCredentialsModel.findOne({
             studentId: student._id,
