@@ -24,8 +24,15 @@ const createTeam = async (payload: ITeams) => {
       .sort()
       .paginate()
       .fields()
-      .populate(["createdBy"])
-      .populate(["members"]);
+      .populate({
+        path: "members",
+        select: "name email phone profile_picture role", 
+      })
+      .populate({
+        path: "createdBy",
+        select: "name email phone profile_picture role", 
+      })
+     
   
     const result = await courseQuery.exec();
     if (!result) {
@@ -39,7 +46,14 @@ const createTeam = async (payload: ITeams) => {
 
 
   const getSingleTeam = async (slug: string) => {
-    const result = await Team.findOne({slug});
+    const result = await Team.findOne({slug}).populate({
+        path: "members",
+        select: "name email phone profile_picture role", 
+      })
+      .populate({
+        path: "createdBy",
+        select: "name email phone profile_picture role", 
+      });
     if (!result) {
       throw new AppError(
         StatusCodes.BAD_REQUEST,
