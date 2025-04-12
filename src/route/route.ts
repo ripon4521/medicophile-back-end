@@ -29,6 +29,7 @@ import liveClassRouter from "../module/liveClass/liveClass.route";
 import mediaRoute from "../module/media/media.route";
 import blogCategoryRoute from "../module/blogCategory/blogController.route";
 import blogRoute from "../module/blog/blog.route";
+import teamRoute from "../module/team/team.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -149,7 +150,10 @@ const moduleRoutes = [
   {
     path: "/blog",
     route: blogRoute,
-  },
+  },{
+    path:"/team",
+    route:teamRoute
+  }
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);
