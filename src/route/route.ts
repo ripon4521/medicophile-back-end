@@ -30,6 +30,7 @@ import mediaRoute from "../module/media/media.route";
 import blogCategoryRoute from "../module/blogCategory/blogController.route";
 import blogRoute from "../module/blog/blog.route";
 import teamRoute from "../module/team/team.route";
+import blogCommentRouter from "../module/blogComment/blogComment.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -153,6 +154,9 @@ const moduleRoutes = [
   },{
     path:"/team",
     route:teamRoute
+  },{
+    path:"blog-comment",
+    route:blogCommentRouter
   }
 ];
 moduleRoutes.forEach((route) => {
