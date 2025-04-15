@@ -31,6 +31,7 @@ import blogCategoryRoute from "../module/blogCategory/blogController.route";
 import blogRoute from "../module/blog/blog.route";
 import teamRoute from "../module/team/team.route";
 import blogCommentRouter from "../module/blogComment/blogComment.route";
+import couponRoute from "../module/coupon/coupon.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -157,6 +158,9 @@ const moduleRoutes = [
   },{
     path:"/blog-comment",
     route:blogCommentRouter
+  },{
+    path:'/coupon',
+    route:couponRoute
   }
 ];
 moduleRoutes.forEach((route) => {
