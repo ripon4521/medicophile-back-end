@@ -70,10 +70,26 @@ const createBlogComment = catchAsync(async (req, res) => {
   });
 
 
+  const getSpecificBlogComment = catchAsync(async (req, res) => {
+    const { blogId } = req.body;
+    if (!blogId) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Please provide a valid blogId");
+    }
+    const result = await blogCommentService.getSpecificBlogComment(blogId);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      message: "Blog Comment get successfully",
+      data: result,
+    });
+  });
+
+
+
   export const blogCommentController = {
     createBlogComment,
     updateBlogComment,
     getAllBlogComment,
     getSingleBlogComment,
-    deleteBlogComment
+    deleteBlogComment,
+    getSpecificBlogComment
   }

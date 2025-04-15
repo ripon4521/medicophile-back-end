@@ -25,7 +25,7 @@ Completed Module
 23. teams
 24. blog
 25. blog category
-26. 
+26. blog comment
 
  -->
 <!-- 

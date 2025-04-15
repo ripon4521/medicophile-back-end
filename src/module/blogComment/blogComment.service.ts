@@ -75,11 +75,18 @@ const createBlogComment = async (payload: IBlogComment) => {
     return result;
   };
   
+  const getSpecificBlogComment = async(blogId:string) => {
+    const result  = await BlogComment.find({blogId:blogId, isDeleted:false});
+    return result
+  }
+
+
 
 export const blogCommentService = {
     createBlogComment,
     updateBlogComment,
     deleteBlogComment,
     getAllBlogComment,
-    getSingleBlogComment
+    getSingleBlogComment,
+    getSpecificBlogComment
 }

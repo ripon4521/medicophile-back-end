@@ -155,7 +155,7 @@ const moduleRoutes = [
     path:"/team",
     route:teamRoute
   },{
-    path:"blog-comment",
+    path:"/blog-comment",
     route:blogCommentRouter
   }
 ];

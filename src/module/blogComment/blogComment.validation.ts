@@ -13,7 +13,6 @@ const createBlogCommentSchema = z.object({
     blogId: ObjectIdSchema,
     comment: z.string().min(1), 
     status: z.enum(["approved", "pending", "rejected"]),
-         
 })
   });
 
