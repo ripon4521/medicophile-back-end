@@ -6,14 +6,26 @@ import slugify from "slugify";
 import courseModel from "./course.model";
 import AppError from "../../helpers/AppError";
 import { StatusCodes } from "http-status-codes";
+import { UserModel } from "../user/user.model";
+import { addMonths, isAfter } from "date-fns";
 
 const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
+ const id = payload.createdBy;
+ const user = UserModel.findOne({_id:id});
+ if (!user) {
+  throw new AppError(StatusCodes.BAD_REQUEST, "User not found. Please provide valid user id")
+ }
   const result = await courseModel.create(payload);
   return result;
 };
 
 const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
-  const courseQuery = new QueryBuilder(courseModel, query)
+  const finalQuery = {
+    ...query,
+    status: "active", 
+  };
+
+  const courseQuery = new QueryBuilder(courseModel, finalQuery)
     .search(searchableFields)
     .filter()
     .sort()
@@ -26,8 +38,27 @@ const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
     .populate(["createdBy"]);
 
   const result = await courseQuery.exec();
-  return result;
+  const currentDateBD = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" })
+  );
+
+  // Filter out expired courses
+  const ongoingCourses = result.filter((course: any) => {
+    if (!course.createdAt || !course.duration) return false;
+
+    const durationMatch = course.duration.match(/(\d+)\s*months?/i);
+    if (!durationMatch) return false;
+
+    const months = parseInt(durationMatch[1]);
+    const endDate = addMonths(new Date(course.createdAt), months);
+
+    return isAfter(endDate, currentDateBD); 
+  });
+
+  return ongoingCourses;
 };
+  
+
 
 const getCourseById = async (slug: string) => {
   const result = await courseModel.findOne({ slug }).populate("category");

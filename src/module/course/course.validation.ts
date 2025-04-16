@@ -7,7 +7,7 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 
 const createCourseSchema = z.object({
   body: z.object({
-    cover_photo: z.string().min(1, { message: "Cover photo URL is required." }),
+    cover_photo: z.string().min(1, { message: "Cover photo URL is required." }).optional(),
     course_title: z.string().min(1, { message: "Course title is required." }),
     description: z.string().min(1, { message: "Description is required." }),
     duration: z.string().min(1, { message: "Duration is required." }),
@@ -19,7 +19,7 @@ const createCourseSchema = z.object({
     }),
     category: ObjectIdSchema,
     createdBy: ObjectIdSchema,
-    expireTime: z.string({ message: "Expire time must be a valid date." }),
+    expireTime:z.string({required_error:"expire time is requried"}),
     daySchedule: z
       .array(z.string())
       .nonempty({ message: "Day schedule cannot be empty." }),
