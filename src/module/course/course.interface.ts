@@ -10,6 +10,7 @@ export interface ICourse {
   course_type: "online" | "offline";
   category: Types.ObjectId;
   createdBy: Types.ObjectId;
+  expireTime: string;
   daySchedule: [string];
   timeShedule: [string];
   price: number;
@@ -19,4 +20,6 @@ export interface ICourse {
   course_tag: string[];
   isDeleted: boolean;
   deletedAt: Date;
+  createdAt: Date;  
+  updatedAt: Date;
 }
