@@ -4,9 +4,9 @@ Completed Module
 2. User , Teacher, Student Creation 
 3. Auth 
 4. user credentials
-5. course 
+5. course - updated
 6. module 
-7. exam 
+7. exam - updated
 8. notes
 9. lecture
 10. module Details
@@ -30,7 +30,7 @@ Completed Module
  -->
 <!-- 
 Notes
-*Image Upload on Cloudnery
+*Image Upload on Cloudnery - ok
 * Password change use phone message with link 
 * skip currier 
 * ssl commerce
