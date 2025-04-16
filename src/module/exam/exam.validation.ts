@@ -6,21 +6,28 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 
 const createExamSchema = z.object({
   body: z.object({
-    examTitle: z.string().min(1),
+    examTitle: z.string().min(1, "Exam title is required"),
     createdBy: ObjectIdSchema,
     courseId: ObjectIdSchema,
     moduleId: ObjectIdSchema,
-    examType: z.enum(["MCQ", "CQ", "Fill in the gaps"]),
-    totalQuestion: z.number().int().min(1).optional(),
-    positiveMark: z.number().min(0).optional(),
-    negativeMark: z.number().min(0).optional(),
-    mcqDuration: z.number().min(0).optional(),
-    cqMark: z.number().min(0).optional(),
-    resultStatus: z.enum(["pending", "completed", "failed"]),
-    validTime: z.string(),
-    status: z.enum(["published", "drafted"]),
+    examType: z.enum(["MCQ", "CQ", "Fill in the gaps"], {
+      required_error: "Exam type is required",
+    }),
+    totalQuestion: z.number().int().min(1, "Must be at least 1").optional(),
+    positiveMark: z.number().min(0, "Positive mark must be 0 or more").optional(),
+    negativeMark: z.number().min(0, "Negative mark must be 0 or more").optional(),
+    mcqDuration: z.number().int().min(1, "MCQ duration must be at least 1 minute").optional(),
+    cqMark: z.number().min(0, "CQ mark must be 0 or more").optional(),
+    resultStatus: z.enum(["pending", "completed", "failed"], {
+      required_error: "Result status is required",
+    }),
+    validTime: z.coerce.date({ errorMap: () => ({ message: "Valid time must be a valid date" }) }),
+    status: z.enum(["published", "drafted"], {
+      required_error: "Status is required",
+    }),
   }),
 });
+
 
 const updateExamSchema = z.object({
   body: z.object({
@@ -35,7 +42,7 @@ const updateExamSchema = z.object({
     mcqDuration: z.number().min(0).optional(),
     cqMark: z.number().min(0).optional(),
     resultStatus: z.enum(["pending", "completed", "failed"]).optional(),
-    validTime: z.string().optional(),
+    validTime: z.coerce.date({ errorMap: () => ({ message: "Valid time must be a valid date" }) }).optional(),
     status: z.enum(["published", "drafted"]).optional(),
   }),
 });

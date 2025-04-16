@@ -13,8 +13,8 @@ export interface IExam {
   mcqDuration: number;
   cqMark: number;
   resultStatus: "pending" | "completed" | "failed";
-  validTime: string;
+  validTime: Date;
   status: "published" | "drafted";
-  deletedAt: Date | null;
+  deletedAt: Date ;
   isDeleted: boolean;
 }

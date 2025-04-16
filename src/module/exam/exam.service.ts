@@ -2,8 +2,23 @@ import { StatusCodes } from "http-status-codes";
 import AppError from "../../helpers/AppError";
 import { IExam } from "./exam.interface";
 import ExamModel from "./exam.model";
+import ModuleModel from "../modules/modules.model";
+import { UserModel } from "../user/user.model";
 
 const createExam = async (payload: IExam) => {
+  const moduleId = payload.moduleId;
+  const createdBy = payload.createdBy;
+  const courseId = payload.courseId;
+  const module = await ModuleModel.findOne({_id:moduleId});
+  const user = await UserModel.findOne({_id:createdBy});
+  const course = await UserModel.findOne({_id:courseId});
+  if (!module) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Module is not avileable. Please provide a valid module id")
+  } else if ( !user ) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "User is not avileable. Please provide a valid user id")
+  }else if ( !course ) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Course is not avileable. Please provide a valid Course id")
+  }
   const result = await ExamModel.create(payload);
   if (!result) {
     throw new AppError(
