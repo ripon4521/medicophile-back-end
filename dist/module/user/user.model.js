@@ -17,6 +17,7 @@ const UserSchema = new mongoose_1.Schema({
     status: { type: String, enum: ["Active", "Blocked"] },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },
+    pin: { type: String }
 }, {
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),

@@ -51,6 +51,7 @@ const createStudentsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
             email: createdStudent[0].email,
             isDeleted: createdStudent[0].isDeleted,
             deletedAt: createdStudent[0].deletedAt,
+            pin: plainPassword
         };
         const newUser = yield user_model_1.UserModel.create([userData], { session });
         // Step 5: Update student with userId
@@ -96,6 +97,7 @@ const createAdmiIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
             email: (_f = createdAdmin[0]) === null || _f === void 0 ? void 0 : _f.email,
             isDeleted: (_g = createdAdmin[0]) === null || _g === void 0 ? void 0 : _g.isDeleted,
             deletedAt: (_h = createdAdmin[0]) === null || _h === void 0 ? void 0 : _h.deletedAt,
+            pin: plainPassword
         };
         const newUser = yield user_model_1.UserModel.create([userData], { session });
         // Step 3: Update admin with the newly created userId
@@ -139,6 +141,7 @@ const createFacultysIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
             email: (_f = createdFaculty[0]) === null || _f === void 0 ? void 0 : _f.email,
             isDeleted: (_g = createdFaculty[0]) === null || _g === void 0 ? void 0 : _g.isDeleted,
             deletedAt: (_h = createdFaculty[0]) === null || _h === void 0 ? void 0 : _h.deletedAt,
+            pin: plainPassword
         };
         const newUser = yield user_model_1.UserModel.create([userData], { session });
         // Step 3: Update admin with the newly created userId
@@ -153,47 +156,6 @@ const createFacultysIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
         throw new Error("Transaction failed: " + error);
     }
 });
-// const createFacultysIntoDB = async (payload: IFaculty) => {
-//   const session = await mongoose.startSession();
-//   session.startTransaction();
-//   try {
-//     const generatedPassword = generate6DigitPassword();
-//    const sms = await sendSMS(payload.phone, `Your Faculty Login Password is: ${generatedPassword}`);
-//     // if (sms?.response_code != 202	) {
-//     //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create teacher. Please try again")
-//     // }
-//     const hashedPassword = await bcrypt.hash(generatedPassword, 12);
-//     const createdFaculty = await FacultyUserModel.create([payload], { session });
-//     const userData: Partial<IUser> = {
-//       name: createdFaculty[0]?.name,
-//       status: createdFaculty[0]?.status,
-//       role: createdFaculty[0]?.role,
-//       profile_picture: createdFaculty[0]?.profile_picture,
-//       phone: createdFaculty[0]?.phone,
-//       email: createdFaculty[0]?.email,
-//       password: hashedPassword,
-//       isDeleted: createdFaculty[0]?.isDeleted,
-//       deletedAt: createdFaculty[0]?.deletedAt,
-//     };
-//     const createdUser = await UserModel.create([userData], { session });
-//     await adminModel.updateOne(
-//       { _id: createdFaculty[0]._id },
-//       { userId: createdUser[0]._id },
-//       { session }
-//     );
-//     await session.commitTransaction();
-//     session.endSession();
-//     return {
-//       faculty: createdFaculty[0],
-//       user: createdUser[0],
-//     };
-//   } catch (error) {
-//     console.error("Transaction Error:", error);
-//     await session.abortTransaction();
-//     session.endSession();
-//     throw new Error("Transaction failed: " + error);
-//   }
-// };
 const changePassword = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { phone, oldPassword, newPassword, confirmPassword } = payload;
     const user = yield user_model_1.UserModel.findOne({ phone });
