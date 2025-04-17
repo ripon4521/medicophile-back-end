@@ -76,6 +76,18 @@ const getProfile = catchAsync(async (req, res) => {
   });
 });
 
+const changePassord = catchAsync(async (req, res) => {
+  const data = req.body;
+  // console.log(data);
+
+  const result = await userService.changePassword(data); 
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Password change successfully",
+    data: result,
+  });
+});
+
 export const userController = {
   createStudeent,
   createFaculty,
@@ -83,4 +95,5 @@ export const userController = {
   getAllUsers,
   deleteUsers,
   getProfile,
+  changePassord
 };

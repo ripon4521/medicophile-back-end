@@ -5,6 +5,7 @@ import { auth } from "../../middlewares/auth";
 import { facultyValidation } from "../teacher/faculty.validation";
 import { studentValidation } from "../student/student.validation";
 import { adminValidation } from "../admin/admin.validation";
+import { changePasswordValidation } from "./user.validation";
 
 const userRouter = Router();
 
@@ -31,5 +32,6 @@ userRouter.post(
 );
 userRouter.get("/", userController.getAllUsers);
 userRouter.delete("/", auth.authUser("admin"), userController.deleteUsers);
+userRouter.patch("/change-password", validateRequest(changePasswordValidation), userController.changePassord)
 
 export default userRouter;

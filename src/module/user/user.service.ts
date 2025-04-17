@@ -13,6 +13,8 @@ import { IAdmin } from "../admin/admin.interface";
 import adminModel from "../admin/admin.model";
 import bcrypt from 'bcrypt';
 import { sendSMS } from "../../utils/sendSms";
+import { IChangePasswordPayload } from "./changepassord.interface";
+import httpStatus from 'http-status';
 
 const generate6DigitPassword = () => Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -185,6 +187,38 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
 
 
 
+const changePassword = async (payload: IChangePasswordPayload): Promise<string> => {
+  const { phone, oldPassword, newPassword, confirmPassword } = payload;
+
+  const user = await UserModel.findOne({ phone });
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found with this phone number");
+  }
+
+  // Check if old password matches
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Old password is incorrect");
+  }
+
+  // Check if new password and confirm password match
+  if (newPassword !== confirmPassword) {
+    throw new AppError(httpStatus.BAD_REQUEST, "New password and confirm password do not match");
+  }
+
+  // Hash and update new password
+  const hashedPassword = await bcrypt.hash(newPassword, 12);
+  user.password = hashedPassword;
+  await user.save();
+
+  return "Password changed successfully";
+};
+
+
+
+
+
 
 
 
@@ -219,5 +253,6 @@ export const userService = {
   getUSers,
   deleteUser,
   getPofile,
-  createAdmiIntoDB
+  createAdmiIntoDB,
+  changePassword
 };
