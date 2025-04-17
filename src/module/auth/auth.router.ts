@@ -12,6 +12,12 @@ authRouter.post(
   AuthControllers.login,
 );
 
+authRouter.post(
+  "/reset-passord",
+  validateRequest(AuthValidation.resetValidationSchema),
+  AuthControllers.resetPassword,
+);
+
 authRouter.patch("/logout", AuthControllers.logout);
 
 authRouter.use(globalErrorHandler);

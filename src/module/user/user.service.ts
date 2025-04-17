@@ -12,8 +12,9 @@ import studentModel from "../student/student.model";
 import { IAdmin } from "../admin/admin.interface";
 import adminModel from "../admin/admin.model";
 import bcrypt from 'bcrypt';
+import { sendSMS } from "../../utils/sendSms";
 
-
+const generate6DigitPassword = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 
 const createStudentsIntoDB = async (payload: IStudent) => {
@@ -27,6 +28,10 @@ const createStudentsIntoDB = async (payload: IStudent) => {
 
     const createdStudent = await studentModel.create([studentData], { session });
     const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
+   const sms = await sendSMS(payload.phone, `Your login password is: ${plainPassword}`);
+    if (sms?.response_code != 202	) {
+      throw new AppError(StatusCodes.FORBIDDEN, "Failed to create student. Please try again")
+    }
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
 
     // Step 4: Create user using data from createdStudent
@@ -67,6 +72,8 @@ const createStudentsIntoDB = async (payload: IStudent) => {
 };
 
 
+
+
 const createAdmiIntoDB = async (payload: IAdmin) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -75,7 +82,14 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
     const adminData = { ...payload };
 
     const createdAdmin = await adminModel.create([adminData], { session });
-
+    const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
+    // console.log(plainPassword)
+  const sms =   await sendSMS(payload.phone, `Your login password is: ${plainPassword}`);
+  // console.log(sms)
+  if (sms?.response_code != 202	) {
+    throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
+  }
+    const hashedPassword = await bcrypt.hash(plainPassword, 12);
     // Step 2: Now create the user using createdAdmin data
     const userData: Partial<IUser> = {
       name: createdAdmin[0]?.name,
@@ -83,7 +97,7 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
       role: createdAdmin[0]?.role,
       profile_picture: createdAdmin[0]?.profile_picture,
       phone: createdAdmin[0]?.phone,
-      password: createdAdmin[0]?.password,
+      password:hashedPassword,
       email: createdAdmin[0]?.email,
       isDeleted: createdAdmin[0]?.isDeleted,
       deletedAt: createdAdmin[0]?.deletedAt,
@@ -114,34 +128,58 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
 
 
 const createFacultysIntoDB = async (payload: IFaculty) => {
-  const userData: Partial<IUser> = {};
-  userData.name = payload.name;
-  userData.status = payload.status;
-  userData.role = payload.role;
-  userData.profile_picture = payload.profile_picture;
-  userData.phone = payload.phone;
-  userData.password = payload.password;
-  userData.email = payload.email;
-  userData.isDeleted = payload.isDeleted;
-  userData.deletedAt = payload.deletedAt;
-
   const session = await mongoose.startSession();
   session.startTransaction();
+
   try {
-    const newUser = await UserModel.create([userData], { session });
-    payload.userId = newUser[0]._id;
-    const faculty = await FacultyUserModel.create([payload], { session });
+ 
+    const generatedPassword = generate6DigitPassword();
+
+  
+   const sms = await sendSMS(payload.phone, `Your Faculty Login Password is: ${generatedPassword}`);
+    if (sms?.response_code != 202	) {
+      throw new AppError(StatusCodes.FORBIDDEN, "Failed to create teacher. Please try again")
+    }
+  
+    const hashedPassword = await bcrypt.hash(generatedPassword, 12);
+
+
+    const createdFaculty = await FacultyUserModel.create([payload], { session });
+
+
+    const userData: Partial<IUser> = {
+      name: payload.name,
+      status: payload.status,
+      role: payload.role,
+      profile_picture: payload.profile_picture,
+      phone: payload.phone,
+      email: payload.email,
+      password: hashedPassword,
+      isDeleted: payload.isDeleted,
+      deletedAt: payload.deletedAt,
+    };
+
+    const createdUser = await UserModel.create([userData], { session });
+    await adminModel.updateOne(
+      { _id: createdFaculty[0]._id },
+      { userId: createdUser[0]._id },
+      { session }
+    );
+
     await session.commitTransaction();
     session.endSession();
-    return { faculty: faculty[0] };
+
+    return {
+      faculty: createdFaculty[0],
+      user: createdUser[0],
+    };
   } catch (error) {
-    console.log("error", error);
+    console.error("Transaction Error:", error);
     await session.abortTransaction();
     session.endSession();
-    new Error("Transaction failed: " + error);
+    throw new Error("Transaction failed: " + error);
   }
 };
-
 
 
 

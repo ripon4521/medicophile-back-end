@@ -10,7 +10,7 @@ const UserSchema = new Schema<IUser>(
     password: { type: String},
     // studentId:{ type: mongoose.Schema.ObjectId},
     // teacherId: {type:mongoose.Schema.ObjectId},
-    phone: { type: String  , required:true},
+    phone: { type: String  , required:true, unique:true},
     role: {
       type: String,
       enum: ["superAdmin", "admin", "teacher", "student"],
