@@ -23,6 +23,7 @@ const user_model_1 = require("../user/user.model");
 const userCredentials_model_1 = require("../userCredentials/userCredentials.model");
 const http_status_1 = __importDefault(require("http-status"));
 const axios_1 = __importDefault(require("axios"));
+const config_1 = __importDefault(require("../../config"));
 const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.create(payload);
     if (!result) {
@@ -59,11 +60,21 @@ const login = (payload, meta) => __awaiter(void 0, void 0, void 0, function* () 
             phone: payload.phone,
             isDeleted: false,
         }).session(session);
+        const jwtPayload = {
+            phone: user.phone,
+            role: user.role,
+            _id: user._id.toString(),
+        };
+        const accessToken = jsonwebtoken_1.default.sign(jwtPayload, config_1.default.accessSecret, {
+            expiresIn: "1h",
+        });
+        const refreshToken = jsonwebtoken_1.default.sign(jwtPayload, config_1.default.refreshSecret, {
+            expiresIn: "30d",
+        });
         if (existingCredential &&
             (existingCredential.ipAddress !== meta.ipAddress ||
                 existingCredential.deviceType !== meta.deviceType ||
                 existingCredential.deviceName !== meta.deviceName)) {
-            yield userCredentials_model_1.UserCredentialsModel.findOneAndUpdate({});
             existingCredential.isDeleted = true;
             existingCredential.deletedAt = new Date(new Date().getTime() + 6 * 60 * 60 * 1000);
             yield existingCredential.save({ session });
@@ -76,20 +87,14 @@ const login = (payload, meta) => __awaiter(void 0, void 0, void 0, function* () 
                 deviceType: meta.deviceType,
                 deviceName: meta.deviceName,
                 isDeleted: false,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
                 deletedAt: null,
             },
         ], { session });
-        const jwtPayload = {
-            phone: user.phone,
-            role: user.role,
-            _id: user._id.toString(),
-        };
-        const token = jsonwebtoken_1.default.sign(jwtPayload, process.env.JWT_SECRET || "primarytestkey", {
-            expiresIn: "100d",
-        });
         yield session.commitTransaction();
         session.endSession();
-        return { token, user };
+        return { accessToken, refreshToken, user };
     }
     catch (error) {
         yield session.abortTransaction();

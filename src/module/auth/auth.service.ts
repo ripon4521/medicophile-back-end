@@ -11,6 +11,8 @@ import studentModel from "../student/student.model";
 import { UserCredentialsModel } from "../userCredentials/userCredentials.model";
 import httpStatus from "http-status";
 import axios from "axios";
+import config from "../../config";
+import adminModel from "../admin/admin.model";
 
 const register = async (payload: IUser) => {
   const result = await UserModel.create(payload);
@@ -74,6 +76,31 @@ const login = async (
       phone: payload.phone,
       isDeleted: false,
     }).session(session);
+    
+    const jwtPayload = {
+      phone: user.phone,
+      role: user.role,
+      _id: user._id.toString(),
+    };
+
+    const accessToken = jwt.sign(
+      jwtPayload,
+      config.accessSecret as string,
+      {
+        expiresIn: "1h",
+      },
+    );
+
+    const refreshToken = jwt.sign(
+      jwtPayload,
+      
+      config.refreshSecret as string,
+      {
+        expiresIn: "30d",
+      },
+    );
+
+
 
     if (
       existingCredential &&
@@ -81,7 +108,6 @@ const login = async (
         existingCredential.deviceType !== meta.deviceType ||
         existingCredential.deviceName !== meta.deviceName)
     ) {
-      await UserCredentialsModel.findOneAndUpdate({});
       existingCredential.isDeleted = true;
       existingCredential.deletedAt = new Date(
         new Date().getTime() + 6 * 60 * 60 * 1000,
@@ -98,36 +124,27 @@ const login = async (
           deviceType: meta.deviceType,
           deviceName: meta.deviceName,
           isDeleted: false,
+          accessToken:accessToken,
+          refreshToken:refreshToken,
           deletedAt: null,
         },
       ],
       { session },
     );
 
-    const jwtPayload = {
-      phone: user.phone,
-      role: user.role,
-      _id: user._id.toString(),
-    };
-
-    const token = jwt.sign(
-      jwtPayload,
-      process.env.JWT_SECRET || "primarytestkey",
-      {
-        expiresIn: "100d",
-      },
-    );
+   
 
     await session.commitTransaction();
     session.endSession();
 
-    return { token, user };
+    return { accessToken, refreshToken, user };
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
     throw error;
   }
 };
+
 
 // Logout function
 const logout = async (
@@ -211,6 +228,16 @@ const resetPassword = async (phone: string): Promise<string> => {
 
   return "New password sent via SMS and updated successfully.";
 };
+
+
+
+
+
+
+
+
+
+
 
 export const AuthService = {
   register,

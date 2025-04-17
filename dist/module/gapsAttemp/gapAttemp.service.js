@@ -13,12 +13,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.gapAttempService = void 0;
+const http_status_codes_1 = require("http-status-codes");
+const AppError_1 = __importDefault(require("../../helpers/AppError"));
+const exam_model_1 = __importDefault(require("../exam/exam.model"));
+const user_model_1 = require("../user/user.model");
 const gapAttemp_model_1 = __importDefault(require("./gapAttemp.model"));
 const getAllGapAttemp = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield gapAttemp_model_1.default.find({ isDeleted: false });
     return result;
 });
 const getSpecificUserGapsAttempMark = (studentId, examId) => __awaiter(void 0, void 0, void 0, function* () {
+    const student = yield user_model_1.UserModel.findOne({ _id: studentId });
+    const exam = yield exam_model_1.default.findOne({ _id: examId });
+    if (!student) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid student id");
+    }
+    else if (!exam) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid exam id");
+    }
     const result = yield gapAttemp_model_1.default.find({
         studentId,
         examId,

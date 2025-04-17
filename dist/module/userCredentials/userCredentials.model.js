@@ -13,6 +13,14 @@ const userCredentialsSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    accessToken: {
+        type: String,
+        required: true,
+    },
+    refreshToken: {
+        type: String,
+        required: true,
+    },
     ipAddress: {
         type: String,
         required: true,

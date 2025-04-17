@@ -6,6 +6,7 @@ import { UserModel } from "../module/user/user.model";
 import { USER_ROLE, USER_STATUS } from "../module/user/user.constants";
 import AppError from "../helpers/AppError";
 import { StatusCodes } from "http-status-codes";
+import config from "../config";
 
 // Extend Request type to include user
 interface AuthenticatedRequest extends Request {
@@ -13,29 +14,43 @@ interface AuthenticatedRequest extends Request {
 }
 
 const authUser = (...requiredRoles: TUserRole[]) => {
-  return catchAsync(
-    async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  return async (req: any, res: Response, next: NextFunction) => {
+    try {
       const authHeader = req.headers.authorization;
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new Error("You are not authorized!");
+        throw new AppError(StatusCodes.UNAUTHORIZED, "Authorization header missing or invalid.");
       }
-      const token = authHeader.split(" ")[1];
-      const decoded = jwt.verify(token, "primarytestkey") as JwtPayload;
+
+      const accessToken = authHeader.split(" ")[1];
+      let decoded: any;
+
+      try {
+        decoded = jwt.verify(accessToken, config.accessSecret as string);
+      } catch (err) {
+        throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid or expired token.");
+      }
+
       const { role, phone } = decoded;
       const user = await UserModel.findOne({ phone });
+      
       if (!user) {
-        throw new AppError(StatusCodes.FORBIDDEN, "This user is not found!");
+        throw new AppError(StatusCodes.FORBIDDEN, "User not found.");
       }
-      if (user.role === (USER_STATUS.Blocked as string)) {
-        throw new AppError(StatusCodes.FORBIDDEN, "This user is blocked!");
+
+      if (user.status === "Blocked") {
+        throw new AppError(StatusCodes.FORBIDDEN, "This user is blocked.");
       }
+
       if (requiredRoles.length && !requiredRoles.includes(role)) {
-        throw new AppError(StatusCodes.FORBIDDEN, "You are not authorized!");
+        throw new AppError(StatusCodes.FORBIDDEN, "You are not authorized to access this resource.");
       }
-      req.user = decoded; // Attach decoded token to req.user
+
+      req.user = decoded; // Attach user info to req object
       next();
-    },
-  );
+    } catch (error) {
+      next(error);
+    }
+  };
 };
 
 const onlyAdmin = (...requiredRoles: TUserRole[]) => {

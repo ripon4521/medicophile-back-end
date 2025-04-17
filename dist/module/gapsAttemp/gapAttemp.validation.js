@@ -15,6 +15,5 @@ const GapAttempZodSchema = zod_1.z.object({
     totalMarks: zod_1.z
         .number()
         .min(1, { message: "Total marks must be greater than 0" }),
-    submissionStatus: zod_1.z.enum(["In Time", "Late"]),
     attemptedAt: zod_1.z.date(),
 });

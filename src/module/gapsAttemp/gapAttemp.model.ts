@@ -27,11 +27,6 @@ const gapAttempSchema = new Schema<IGapAttemp>(
     totalMarks: {
       type: Number,
     },
-    submissionStatus: {
-      type: String,
-      enum: ["In Time", "Late"],
-      required: true,
-    },
 
     attemptedAt: {
       type: Date,

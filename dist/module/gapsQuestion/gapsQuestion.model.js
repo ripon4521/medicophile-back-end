@@ -10,7 +10,6 @@ const GapsQuestionSchema = new mongoose_1.Schema({
     answer: { type: [String], required: true },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },
-    durationDate: { type: Date, required: true },
 }, {
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),

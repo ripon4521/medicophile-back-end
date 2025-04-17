@@ -14,6 +14,5 @@ const GapAttempZodSchema = z.object({
   totalMarks: z
     .number()
     .min(1, { message: "Total marks must be greater than 0" }),
-  submissionStatus: z.enum(["In Time", "Late"]),
   attemptedAt: z.date(),
 });

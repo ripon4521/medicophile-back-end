@@ -59,11 +59,6 @@ const gapAttempSchema = new mongoose_1.Schema({
     totalMarks: {
         type: Number,
     },
-    submissionStatus: {
-        type: String,
-        enum: ["In Time", "Late"],
-        required: true,
-    },
     attemptedAt: {
         type: Date,
         required: true,

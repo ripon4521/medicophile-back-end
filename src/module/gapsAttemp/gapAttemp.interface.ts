@@ -6,7 +6,6 @@ export interface IGapAttemp {
   questionId: Types.ObjectId;
   score: number;
   totalMarks: number;
-  submissionStatus: "In Time" | "Late";
   submittedTime: Date;
   attemptedAt: Date;
   isDeleted: boolean;

@@ -11,7 +11,6 @@ const GapsQuestionSchema = new Schema<IGapsQuestion>(
     answer: { type: [String], required: true },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },
-    durationDate: { type: Date, required: true },
   },
   {
     timestamps: {

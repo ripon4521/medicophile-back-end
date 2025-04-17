@@ -19,28 +19,40 @@ const user_model_1 = require("../module/user/user.model");
 const user_constants_1 = require("../module/user/user.constants");
 const AppError_1 = __importDefault(require("../helpers/AppError"));
 const http_status_codes_1 = require("http-status-codes");
+const config_1 = __importDefault(require("../config"));
 const authUser = (...requiredRoles) => {
-    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            throw new Error("You are not authorized!");
+    return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const authHeader = req.headers.authorization;
+            if (!authHeader || !authHeader.startsWith("Bearer ")) {
+                throw new AppError_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "Authorization header missing or invalid.");
+            }
+            const accessToken = authHeader.split(" ")[1];
+            let decoded;
+            try {
+                decoded = jsonwebtoken_1.default.verify(accessToken, config_1.default.accessSecret);
+            }
+            catch (err) {
+                throw new AppError_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "Invalid or expired token.");
+            }
+            const { role, phone } = decoded;
+            const user = yield user_model_1.UserModel.findOne({ phone });
+            if (!user) {
+                throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "User not found.");
+            }
+            if (user.status === "Blocked") {
+                throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "This user is blocked.");
+            }
+            if (requiredRoles.length && !requiredRoles.includes(role)) {
+                throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "You are not authorized to access this resource.");
+            }
+            req.user = decoded; // Attach user info to req object
+            next();
         }
-        const token = authHeader.split(" ")[1];
-        const decoded = jsonwebtoken_1.default.verify(token, "primarytestkey");
-        const { role, phone } = decoded;
-        const user = yield user_model_1.UserModel.findOne({ phone });
-        if (!user) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "This user is not found!");
+        catch (error) {
+            next(error);
         }
-        if (user.role === user_constants_1.USER_STATUS.Blocked) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "This user is blocked!");
-        }
-        if (requiredRoles.length && !requiredRoles.includes(role)) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "You are not authorized!");
-        }
-        req.user = decoded; // Attach decoded token to req.user
-        next();
-    }));
+    });
 };
 const onlyAdmin = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

@@ -12,7 +12,6 @@ const createGapsQuestionSchema = zod_1.z.object({
         createdBy: ObjectIdSchema,
         question: zod_1.z.string().min(1, { message: "Question is required" }),
         duration: zod_1.z.number().min(0, "Duration is mustt be need"),
-        durationDate: zod_1.z.string(),
         mark: zod_1.z.number().min(0, "Mark is must be need"),
         answer: zod_1.z
             .array(zod_1.z.string())
@@ -25,7 +24,6 @@ const updateGapsQuestionSchema = zod_1.z.object({
         createdBy: ObjectIdSchema.optional(),
         question: zod_1.z.string().min(1, { message: "Question is required" }).optional(),
         duration: zod_1.z.number().min(0, "Duration is mustt be need").optional(),
-        durationDate: zod_1.z.string().optional(),
         mark: zod_1.z.number().min(0, "Mark is must be need").optional(),
         answer: zod_1.z
             .array(zod_1.z.string())

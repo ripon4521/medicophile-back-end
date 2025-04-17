@@ -19,8 +19,22 @@ const gapAnswer_model_1 = __importDefault(require("./gapAnswer.model"));
 const gapsQuestion_model_1 = __importDefault(require("../gapsQuestion/gapsQuestion.model"));
 const gapAttemp_model_1 = __importDefault(require("../gapsAttemp/gapAttemp.model"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const user_model_1 = require("../user/user.model");
+const exam_model_1 = __importDefault(require("../exam/exam.model"));
 const cretaeGapsAnswer = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e, _f;
+    const user = yield user_model_1.UserModel.findOne({ _id: payload.studentId });
+    const exam = yield exam_model_1.default.findOne({ _id: payload.examId });
+    const question = yield gapsQuestion_model_1.default.findOne({ _id: payload.questionId });
+    if (!user) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid user id");
+    }
+    else if (!exam) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, " invalid exam  id");
+    }
+    else if (!question) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, " invalid question  id");
+    }
     const session = yield mongoose_1.default.startSession();
     session.startTransaction();
     try {
@@ -45,19 +59,11 @@ const cretaeGapsAnswer = (payload) => __awaiter(void 0, void 0, void 0, function
             examId: (_c = result[0]) === null || _c === void 0 ? void 0 : _c.examId,
         }).session(session);
         const score = isCorrect ? question === null || question === void 0 ? void 0 : question.mark : 0;
-        // result.durationDate should be the deadline
-        const durationTime = yield gapsQuestion_model_1.default.findOne({
-            _id: result[0].questionId,
-        }).session(session);
-        // console.log(durationTime)
-        let submissionStatus = "In Time";
-        if ((durationTime === null || durationTime === void 0 ? void 0 : durationTime.durationDate) &&
-            submissionDate > (durationTime === null || durationTime === void 0 ? void 0 : durationTime.durationDate)) {
-            submissionStatus = "Late";
-        }
-        else {
-            submissionStatus = "In Time";
-        }
+        // // result.durationDate should be the deadline
+        // const durationTime = await GapsQuestionModel.findOne({
+        //   _id: result[0].questionId,
+        // }).session(session);
+        // // console.log(durationTime)
         // Create or update the attempt record
         if (!attempt) {
             attempt = new gapAttemp_model_1.default({
@@ -67,17 +73,14 @@ const cretaeGapsAnswer = (payload) => __awaiter(void 0, void 0, void 0, function
                 score: score,
                 totalMarks: score,
                 submittedTime: submissionDate,
-                submissionStatus: submissionStatus,
                 attemptedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
                 isDeleted: false,
-                deletedAt: null,
             });
         }
         else {
             attempt.score += score;
             attempt.totalMarks += score; // Adjust this logic if needed
             attempt.submittedTime = new Date(new Date().getTime() + 6 * 60 * 60 * 1000);
-            attempt.submissionStatus = submissionStatus;
         }
         // Save the attempt record
         yield attempt.save({ session });

@@ -5,7 +5,7 @@ import { auth } from "../../middlewares/auth";
 const userCredentialsRoute = Router();
 userCredentialsRoute.get(
   "/",
-  auth.authUser("admin"),
+  // auth.authUser("admin"),
   userCredentialsController.getAllCredentials,
 );
 userCredentialsRoute.get(
