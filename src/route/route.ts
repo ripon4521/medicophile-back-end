@@ -152,16 +152,19 @@ const moduleRoutes = [
   {
     path: "/blog",
     route: blogRoute,
-  },{
-    path:"/team",
-    route:teamRoute
-  },{
-    path:"/blog-comment",
-    route:blogCommentRouter
-  },{
-    path:'/coupon',
-    route:couponRoute
-  }
+  },
+  {
+    path: "/team",
+    route: teamRoute,
+  },
+  {
+    path: "/blog-comment",
+    route: blogCommentRouter,
+  },
+  {
+    path: "/coupon",
+    route: couponRoute,
+  },
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);

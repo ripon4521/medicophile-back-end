@@ -17,7 +17,15 @@ const createLectureSchema = zod_1.z.object({
         duration: zod_1.z.number().min(1, "Duration must be greater than 0"),
         isFree: zod_1.z.boolean(),
         status: zod_1.z.enum(["Published", "Drafted"]),
-        tags: zod_1.z.array(zod_1.z.string()),
+        scheduleDate: zod_1.z
+            .preprocess((val) => {
+            if (typeof val === "string" || val instanceof Date) {
+                return new Date(val);
+            }
+            return val;
+        }, zod_1.z.date())
+            .optional(),
+        tags: zod_1.z.array(zod_1.z.string()).optional(),
     }),
 });
 const updateLectureSchema = zod_1.z.object({
@@ -30,6 +38,14 @@ const updateLectureSchema = zod_1.z.object({
         videoId: zod_1.z.string().url("Invalid video URL").optional(),
         duration: zod_1.z.number().min(1, "Duration must be greater than 0").optional(),
         isFree: zod_1.z.boolean().optional(),
+        scheduleDate: zod_1.z
+            .preprocess((val) => {
+            if (typeof val === "string" || val instanceof Date) {
+                return new Date(val);
+            }
+            return val;
+        }, zod_1.z.date())
+            .optional(),
         status: zod_1.z.enum(["Published", "Drafted"]).optional(),
         tags: zod_1.z.array(zod_1.z.string()).optional(),
     }),

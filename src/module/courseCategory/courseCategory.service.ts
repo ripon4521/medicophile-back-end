@@ -6,11 +6,13 @@ import AppError from "../../helpers/AppError";
 import QueryBuilder from "../../builder/querybuilder";
 import { UserModel } from "../user/user.model";
 
-
 const createCourseCategory = async (payload: ICourseCategory) => {
-  const user = await UserModel.findOne({_id: payload.createdBy});
-  if (!user || user.role === 'student') {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid user id, only admin and teacher id is valid")
+  const user = await UserModel.findOne({ _id: payload.createdBy });
+  if (!user || user.role === "student") {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Invalid user id, only admin and teacher id is valid",
+    );
   }
 
   const result = await CourseCategory.create(payload);
@@ -27,7 +29,7 @@ const getAllCourseCategory = async (query: Record<string, unknown>) => {
     .populate([
       {
         path: "createdBy",
-        select: "name role phone", 
+        select: "name role phone",
       },
     ]);
 
@@ -37,7 +39,7 @@ const getAllCourseCategory = async (query: Record<string, unknown>) => {
 
 const getSingleCourseCatgeory = async (slug: string) => {
   const result = await CourseCategory.findOne({ slug }).populate({
-    path:"createdBy",
+    path: "createdBy",
     select: "name role phone",
   });
   if (!result) {

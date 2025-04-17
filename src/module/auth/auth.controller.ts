@@ -57,5 +57,5 @@ export const AuthControllers = {
   register,
   login,
   logout,
-  resetPassword
+  resetPassword,
 };

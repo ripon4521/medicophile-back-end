@@ -11,13 +11,13 @@ import { IStudent } from "../student/student.interface";
 import studentModel from "../student/student.model";
 import { IAdmin } from "../admin/admin.interface";
 import adminModel from "../admin/admin.model";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import { sendSMS } from "../../utils/sendSms";
 import { IChangePasswordPayload } from "./changepassord.interface";
-import httpStatus from 'http-status';
+import httpStatus from "http-status";
 
-const generate6DigitPassword = () => Math.floor(100000 + Math.random() * 900000).toString();
-
+const generate6DigitPassword = () =>
+  Math.floor(100000 + Math.random() * 900000).toString();
 
 const createStudentsIntoDB = async (payload: IStudent) => {
   const session = await mongoose.startSession();
@@ -27,10 +27,16 @@ const createStudentsIntoDB = async (payload: IStudent) => {
     // Step 1: Create student first (without userId)
     const studentData = { ...payload };
 
-
-    const createdStudent = await studentModel.create([studentData], { session });
-    const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
-   const sms = await sendSMS(payload.phone, `Your login password is: ${plainPassword}`);
+    const createdStudent = await studentModel.create([studentData], {
+      session,
+    });
+    const plainPassword = Math.floor(
+      100000 + Math.random() * 900000,
+    ).toString();
+    const sms = await sendSMS(
+      payload.phone,
+      `Your login password is: ${plainPassword}`,
+    );
     // if (sms?.response_code != 202	) {
     //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create student. Please try again")
     // }
@@ -55,7 +61,7 @@ const createStudentsIntoDB = async (payload: IStudent) => {
     await studentModel.updateOne(
       { _id: createdStudent[0]._id },
       { userId: newUser[0]._id },
-      { session }
+      { session },
     );
 
     await session.commitTransaction();
@@ -73,9 +79,6 @@ const createStudentsIntoDB = async (payload: IStudent) => {
   }
 };
 
-
-
-
 const createAdmiIntoDB = async (payload: IAdmin) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -84,13 +87,18 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
     const adminData = { ...payload };
 
     const createdAdmin = await adminModel.create([adminData], { session });
-    const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
+    const plainPassword = Math.floor(
+      100000 + Math.random() * 900000,
+    ).toString();
     // console.log(plainPassword)
-  const sms =   await sendSMS(payload.phone, `Your login password is: ${plainPassword}`);
-  // console.log(sms)
-  // if (sms?.response_code != 202	) {
-  //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
-  // }
+    const sms = await sendSMS(
+      payload.phone,
+      `Your login password is: ${plainPassword}`,
+    );
+    // console.log(sms)
+    // if (sms?.response_code != 202	) {
+    //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
+    // }
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
     // Step 2: Now create the user using createdAdmin data
     const userData: Partial<IUser> = {
@@ -99,7 +107,7 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
       role: createdAdmin[0]?.role,
       profile_picture: createdAdmin[0]?.profile_picture,
       phone: createdAdmin[0]?.phone,
-      password:hashedPassword,
+      password: hashedPassword,
       email: createdAdmin[0]?.email,
       isDeleted: createdAdmin[0]?.isDeleted,
       deletedAt: createdAdmin[0]?.deletedAt,
@@ -111,7 +119,7 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
     await adminModel.updateOne(
       { _id: createdAdmin[0]._id },
       { userId: newUser[0]._id },
-      { session }
+      { session },
     );
 
     await session.commitTransaction();
@@ -124,7 +132,6 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
   }
 };
 
-
 const createFacultysIntoDB = async (payload: IFaculty) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -132,14 +139,21 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
     // Step 1: Create admin first (without userId)
     const faculty = { ...payload };
 
-    const createdFaculty = await FacultyUserModel.create([faculty], { session });
-    const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
+    const createdFaculty = await FacultyUserModel.create([faculty], {
+      session,
+    });
+    const plainPassword = Math.floor(
+      100000 + Math.random() * 900000,
+    ).toString();
     // console.log(plainPassword)
-  const sms =   await sendSMS(payload.phone, `Your login password is: ${plainPassword}`);
-  // console.log(sms)
-  // if (sms?.response_code != 202	) {
-  //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
-  // }
+    const sms = await sendSMS(
+      payload.phone,
+      `Your login password is: ${plainPassword}`,
+    );
+    // console.log(sms)
+    // if (sms?.response_code != 202	) {
+    //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
+    // }
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
     // Step 2: Now create the user using createdAdmin data
     const userData: Partial<IUser> = {
@@ -148,7 +162,7 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
       role: createdFaculty[0]?.role,
       profile_picture: createdFaculty[0]?.profile_picture,
       phone: createdFaculty[0]?.phone,
-      password:hashedPassword,
+      password: hashedPassword,
       email: createdFaculty[0]?.email,
       isDeleted: createdFaculty[0]?.isDeleted,
       deletedAt: createdFaculty[0]?.deletedAt,
@@ -160,7 +174,7 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
     await FacultyUserModel.updateOne(
       { _id: createdFaculty[0]._id },
       { userId: newUser[0]._id },
-      { session }
+      { session },
     );
 
     await session.commitTransaction();
@@ -173,30 +187,22 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
   }
 };
 
-
-
-
-
-
 // const createFacultysIntoDB = async (payload: IFaculty) => {
 //   const session = await mongoose.startSession();
 //   session.startTransaction();
 
 //   try {
- 
+
 //     const generatedPassword = generate6DigitPassword();
 
-  
 //    const sms = await sendSMS(payload.phone, `Your Faculty Login Password is: ${generatedPassword}`);
 //     // if (sms?.response_code != 202	) {
 //     //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create teacher. Please try again")
 //     // }
-  
+
 //     const hashedPassword = await bcrypt.hash(generatedPassword, 12);
 
-
 //     const createdFaculty = await FacultyUserModel.create([payload], { session });
-
 
 //     const userData: Partial<IUser> = {
 //       name: createdFaculty[0]?.name,
@@ -232,17 +238,18 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
 //   }
 // };
 
-
-
-
-
-const changePassword = async (payload: IChangePasswordPayload): Promise<string> => {
+const changePassword = async (
+  payload: IChangePasswordPayload,
+): Promise<string> => {
   const { phone, oldPassword, newPassword, confirmPassword } = payload;
 
   const user = await UserModel.findOne({ phone });
 
   if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, "User not found with this phone number");
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "User not found with this phone number",
+    );
   }
 
   // Check if old password matches
@@ -253,7 +260,10 @@ const changePassword = async (payload: IChangePasswordPayload): Promise<string> 
 
   // Check if new password and confirm password match
   if (newPassword !== confirmPassword) {
-    throw new AppError(httpStatus.BAD_REQUEST, "New password and confirm password do not match");
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "New password and confirm password do not match",
+    );
   }
 
   // Hash and update new password
@@ -263,15 +273,6 @@ const changePassword = async (payload: IChangePasswordPayload): Promise<string> 
 
   return "Password changed successfully";
 };
-
-
-
-
-
-
-
-
-
 
 const getUSers = async () => {
   const users = await UserModel.find();
@@ -303,5 +304,5 @@ export const userService = {
   deleteUser,
   getPofile,
   createAdmiIntoDB,
-  changePassword
+  changePassword,
 };

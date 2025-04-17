@@ -1,22 +1,20 @@
-
-import mongoose, { Schema, Document } from 'mongoose';
-import { ITeams } from './team.interface';
-import slugify from 'slugify';
-
+import mongoose, { Schema, Document } from "mongoose";
+import { ITeams } from "./team.interface";
+import slugify from "slugify";
 
 const teamSchema = new Schema<ITeams>(
   {
-    slug:{ type: String},
+    slug: { type: String },
     name: { type: String, required: true },
-    description: { type: String, default:'' },
-    profileImg: { type: String, default:'' },
-    createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    description: { type: String, default: "" },
+    profileImg: { type: String, default: "" },
+    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     status: {
-        type: String,
-        enum: ["Active", "Inactive", "Archived"],
-        default: "Active",
-      },
-    deletedAt: { type: Date},
+      type: String,
+      enum: ["Active", "Inactive", "Archived"],
+      default: "Active",
+    },
+    deletedAt: { type: Date },
     members: [{ type: Schema.Types.ObjectId, ref: "User" }],
     isDeleted: { type: Boolean, default: false },
   },
@@ -26,8 +24,6 @@ const teamSchema = new Schema<ITeams>(
     },
   },
 );
-
-
 
 teamSchema.pre("save", function (next) {
   if (this.isModified("name")) {
@@ -44,6 +40,6 @@ teamSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-const Team = mongoose.model<ITeams>('Team', teamSchema);
+const Team = mongoose.model<ITeams>("Team", teamSchema);
 
 export default Team;

@@ -24,12 +24,16 @@ const getAllModule = async (query: Record<string, unknown>) => {
     .fields()
     .populate({
       path: "courseId",
-      select:"cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
-      populate: { path: "category", select:"title cover_photo" },
+      select:
+        "cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
+      populate: { path: "category", select: "title cover_photo" },
     })
-    .populate([{
-      path:"createdBy", select: "name role phone"
-    }]);
+    .populate([
+      {
+        path: "createdBy",
+        select: "name role phone",
+      },
+    ]);
 
   const result = await courseQuery.exec();
   if (!result) {
@@ -40,11 +44,10 @@ const getAllModule = async (query: Record<string, unknown>) => {
   }
   return result;
 
-
   // .populate([
   //   {
   //     path: "createdBy",
-  //     select: "name role phone", 
+  //     select: "name role phone",
   //   },
   // ]);
   //   .populate("createdBy")

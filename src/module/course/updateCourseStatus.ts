@@ -7,7 +7,7 @@ cron.schedule("0 2 * * *", async () => {
   try {
     // Get current date and time in Bangladesh Time (Asia/Dhaka)
     const currentDateBD = new Date(
-      new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" })
+      new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
     );
 
     // Fetch all active courses that are not deleted
@@ -34,9 +34,11 @@ cron.schedule("0 2 * * *", async () => {
         // Update course status to inactive
         await courseModel.updateOne(
           { _id: course._id },
-          { $set: { status: "inactive" } }
+          { $set: { status: "inactive" } },
         );
-        console.log(`Course "${course.course_title}" set to inactive (expired).`);
+        console.log(
+          `Course "${course.course_title}" set to inactive (expired).`,
+        );
       }
     }
 

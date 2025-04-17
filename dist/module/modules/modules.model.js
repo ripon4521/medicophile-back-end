@@ -44,7 +44,7 @@ const ModuleSchema = new mongoose_1.Schema({
     courseId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Course", required: true },
     createdBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
     deletedAt: { type: Date },
-    isDeleted: { type: Boolean, required: false },
+    isDeleted: { type: Boolean, default: false },
 }, {
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),

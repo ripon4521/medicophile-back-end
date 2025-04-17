@@ -46,7 +46,6 @@ const CqQuestionSchema = new mongoose_1.Schema({
         ref: "User",
     },
     question: { type: String, required: true },
-    durationDate: { type: Date },
     status: { type: String, enum: ["Published", "Drafted"], required: true },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },

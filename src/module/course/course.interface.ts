@@ -20,6 +20,6 @@ export interface ICourse {
   course_tag: string[];
   isDeleted: boolean;
   deletedAt: Date;
-  createdAt: Date;  
+  createdAt: Date;
   updatedAt: Date;
 }

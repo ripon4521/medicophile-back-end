@@ -9,10 +9,12 @@ cron.schedule("0 0 * * *", async () => {
 
     const result = await NoticeModel.updateMany(
       { expiresAt: { $lte: currentDate }, isExpire: false },
-      { isExpire: true }
+      { isExpire: true },
     );
 
-    console.log(`🕛 Cron Job Executed - Expired Notices Updated: ${result.modifiedCount}`);
+    console.log(
+      `🕛 Cron Job Executed - Expired Notices Updated: ${result.modifiedCount}`,
+    );
   } catch (error) {
     console.error("❌ Cron Job Error:", error);
   }

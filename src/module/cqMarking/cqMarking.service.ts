@@ -7,17 +7,17 @@ import ExamModel from "../exam/exam.model";
 import CqQuestionModel from "../classQuizeQuestion/classQuizeQuestion.model";
 
 const createCqMarking = async (payload: ICqMarking) => {
-  const student = await UserModel.findOne({_id:payload.studentId});
-  const exam = await ExamModel.findOne({_id:payload.examId});
-  const question = await CqQuestionModel.findOne({_id:payload.questionId});
-  if (!student ) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid student id.")
-  }else if(!exam){
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid exam id")
-  }else if(!question){
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid question id")
+  const student = await UserModel.findOne({ _id: payload.studentId });
+  const exam = await ExamModel.findOne({ _id: payload.examId });
+  const question = await CqQuestionModel.findOne({ _id: payload.questionId });
+  if (!student) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid student id.");
+  } else if (!exam) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid exam id");
+  } else if (!question) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid question id");
   }
-  
+
   const result = await CqMarkingModel.create(payload);
   if (!result) {
     throw new AppError(
@@ -30,18 +30,18 @@ const createCqMarking = async (payload: ICqMarking) => {
 
 const getAllCqMarking = async () => {
   const result = await CqMarkingModel.find({ isDeleted: false })
-  .populate({
-    path:"studentId",
-    select:"name role phone"
-  })
-  .populate({
-    path:"examId",
-    select:"examTitle examType cqMark"
-  })
-  .populate({
-    path:"questionId",
-    select:"question"
-  })
+    .populate({
+      path: "studentId",
+      select: "name role phone",
+    })
+    .populate({
+      path: "examId",
+      select: "examTitle examType cqMark",
+    })
+    .populate({
+      path: "questionId",
+      select: "question",
+    });
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
@@ -56,19 +56,16 @@ const getSpecifUserCqMarking = async (
   examId: string,
   questionId: string,
 ) => {
-
-  const user = await UserModel.findOne({_id:studentId});
-  const exam = await ExamModel.findOne({_id:examId});
-  const question = await CqQuestionModel.findOne({_id:questionId});
+  const user = await UserModel.findOne({ _id: studentId });
+  const exam = await ExamModel.findOne({ _id: examId });
+  const question = await CqQuestionModel.findOne({ _id: questionId });
   if (!user) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid student id")
-  }else if(!exam){
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid exam id")
-  }else if(!question){
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid question id")
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid student id");
+  } else if (!exam) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid exam id");
+  } else if (!question) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid question id");
   }
-
-
 
   const result = await CqMarkingModel.find({
     studentId: studentId,
@@ -85,10 +82,10 @@ const getSpecifUserCqMarking = async (
 };
 
 const updateCqMarking = async (_id: string, payload: ICqMarking) => {
-const check = await CqMarkingModel.findOne({_id:_id})
-if (!check) {
-  throw new AppError(StatusCodes.BAD_REQUEST, "invalid cq marking id")
-}
+  const check = await CqMarkingModel.findOne({ _id: _id });
+  if (!check) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid cq marking id");
+  }
   const update = await CqMarkingModel.findOneAndUpdate({ _id }, payload, {
     runValidators: true,
     new: true,
@@ -103,9 +100,9 @@ if (!check) {
 };
 
 const deleteCqMarking = async (_id: string) => {
-  const check = await CqMarkingModel.findOne({_id:_id})
+  const check = await CqMarkingModel.findOne({ _id: _id });
   if (!check) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "invalid cq marking id")
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid cq marking id");
   }
   const update = await CqMarkingModel.findOneAndUpdate(
     { _id },

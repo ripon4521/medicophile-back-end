@@ -51,12 +51,19 @@ const deleteLecture = (slug) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getAllLecture = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield lecture_model_1.default.find({ isDeleted: false })
-        .populate("createdBy")
+        .populate({
+        path: "createdBy",
+        select: "name role phone",
+    })
         .populate({
         path: "courseId",
-        populate: { path: "category" },
+        select: "cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
+        populate: { path: "category", select: "title cover_photo" },
     })
-        .populate("moduleId");
+        .populate({
+        path: "moduleId",
+        select: "moduleTitle slug",
+    });
     return result;
 });
 const getSingleLecture = (slug) => __awaiter(void 0, void 0, void 0, function* () {

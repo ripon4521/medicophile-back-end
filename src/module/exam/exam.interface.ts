@@ -15,7 +15,7 @@ export interface IExam {
   resultStatus: "pending" | "completed" | "failed";
   validTime: Date;
   status: "published" | "drafted";
-  scheduleDate:Date;
-  deletedAt: Date ;
+  scheduleDate: Date;
+  deletedAt: Date;
   isDeleted: boolean;
 }

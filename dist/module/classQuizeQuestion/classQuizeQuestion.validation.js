@@ -18,7 +18,6 @@ const updateCqQuestionSchema = zod_1.z.object({
     body: zod_1.z.object({
         examId: ObjectIdSchema.optional(),
         createdBy: ObjectIdSchema.optional(),
-        durationDate: zod_1.z.string().optional(),
         question: zod_1.z.string().min(1, "Question cannot be empty").optional(),
         status: zod_1.z.enum(["Published", "Drafted"]).optional(),
     }),

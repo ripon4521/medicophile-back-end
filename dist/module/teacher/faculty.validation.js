@@ -8,20 +8,15 @@ const ObjectIdSchema = zod_1.z.string().refine((val) => mongoose_1.Types.ObjectI
 });
 const createFacultyValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
-        role: zod_1.z.enum(["superAdmin", "admin", "teacher"]),
         name: zod_1.z.string().min(3, "Name must be at least 3 characters"),
         phone: zod_1.z
             .string()
             .regex(/^\+?(88)?01[3-9]\d{8}$/, "Invalid Bangladeshi phone number"),
-        email: zod_1.z.string().email("Invalid email format"),
-        password: zod_1.z.string().min(6, "Password must be at least 6 characters"),
-        profile_picture: zod_1.z.string().url("Invalid URL format").optional(),
-        status: zod_1.z.enum(["Active", "Blocked"]),
     }),
 });
 const updateFacultyValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
-        role: zod_1.z.enum(["superAdmin", "admin", "teacher"]).optional(),
+        role: zod_1.z.enum(["superAdmin", "admin", "teacher", "student"]).optional(),
         name: zod_1.z.string().min(3, "Name must be at least 3 characters").optional(),
         phone: zod_1.z
             .string()

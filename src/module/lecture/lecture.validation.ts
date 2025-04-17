@@ -16,12 +16,14 @@ const createLectureSchema = z.object({
     duration: z.number().min(1, "Duration must be greater than 0"),
     isFree: z.boolean(),
     status: z.enum(["Published", "Drafted"]),
-    scheduleDate: z.preprocess((val) => {
-      if (typeof val === 'string' || val instanceof Date) {
-        return new Date(val);
-      }
-      return val;
-    }, z.date()).optional(),
+    scheduleDate: z
+      .preprocess((val) => {
+        if (typeof val === "string" || val instanceof Date) {
+          return new Date(val);
+        }
+        return val;
+      }, z.date())
+      .optional(),
     tags: z.array(z.string()).optional(),
   }),
 });
@@ -36,12 +38,14 @@ const updateLectureSchema = z.object({
     videoId: z.string().url("Invalid video URL").optional(),
     duration: z.number().min(1, "Duration must be greater than 0").optional(),
     isFree: z.boolean().optional(),
-    scheduleDate: z.preprocess((val) => {
-      if (typeof val === 'string' || val instanceof Date) {
-        return new Date(val);
-      }
-      return val;
-    }, z.date()).optional(),
+    scheduleDate: z
+      .preprocess((val) => {
+        if (typeof val === "string" || val instanceof Date) {
+          return new Date(val);
+        }
+        return val;
+      }, z.date())
+      .optional(),
     status: z.enum(["Published", "Drafted"]).optional(),
     tags: z.array(z.string()).optional(),
   }),

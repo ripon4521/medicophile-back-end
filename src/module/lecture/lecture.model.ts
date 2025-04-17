@@ -24,7 +24,7 @@ const LectureSchema = new Schema<ILeecture>(
     },
     tags: { type: [String], default: [] },
     deletedAt: { type: Date },
-    scheduleDate:{type:Date},
+    scheduleDate: { type: Date },
     isDeleted: { type: Boolean, default: false },
   },
   {

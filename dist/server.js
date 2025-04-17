@@ -12,21 +12,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.io = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-const app_1 = __importDefault(require("./app"));
+const app_1 = __importDefault(require("./app")); // Your Express app
 const config_1 = __importDefault(require("./config"));
 const DB_1 = __importDefault(require("./DB"));
+const http_1 = __importDefault(require("http")); // HTTP module
+const socket_io_1 = require("socket.io"); // Import Socket.IO
+require("../src/module/notice/notice.cron");
+let io;
 function server() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            // Connect to MongoDB
             yield mongoose_1.default.connect(config_1.default.database_url);
             (0, DB_1.default)();
-            app_1.default.listen(3000, () => {
-                console.log(`School Mangement  Server is running on port ${config_1.default.port} - Alhamdulillah`);
+            // Create HTTP server using your existing Express app
+            const httpServer = http_1.default.createServer(app_1.default);
+            // Initialize Socket.IO with the server
+            exports.io = io = new socket_io_1.Server(httpServer, {
+                cors: {
+                    origin: [
+                        "http://localhost:5173",
+                        "admin.iconadmissionaid.com",
+                        "iconadmissionaid.com", // Removed trailing space
+                    ],
+                    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+                },
+            });
+            // Listen for new connections
+            io.on("connection", (socket) => {
+                console.log("🟢 Client connected with ID:", socket.id); // Log when a client connects
+                // You can also send a message back to the client if needed
+                socket.emit("connection-status", "Connected to Socket.IO server!");
+                // Listen for client disconnect
+                socket.on("disconnect", () => {
+                    console.log(`🔴 Client disconnected with ID: ${socket.id}`);
+                });
+            });
+            // Start the server with the desired port (use `5000` directly or from config)
+            httpServer.listen(5000, () => {
+                console.log(`School Management Server is running on port 5000 - Alhamdulillah`);
             });
         }
         catch (error) {
-            console.error(error);
+            console.error("Error starting server:", error);
         }
     });
 }

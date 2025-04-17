@@ -9,7 +9,7 @@ import { IUser } from "../user/user.interface";
 import { UserModel } from "../user/user.model";
 import studentModel from "../student/student.model";
 import { UserCredentialsModel } from "../userCredentials/userCredentials.model";
-import httpStatus from 'http-status';
+import httpStatus from "http-status";
 import axios from "axios";
 
 const register = async (payload: IUser) => {
@@ -157,14 +157,14 @@ const logout = async (
   return { message: "Logged out successfully" };
 };
 
-
-
-
 const resetPassword = async (phone: string): Promise<string> => {
   const user = await UserModel.findOne({ phone });
 
   if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, "User not found with this phone number");
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "User not found with this phone number",
+    );
   }
 
   // Generate random 6-digit password
@@ -178,9 +178,13 @@ const resetPassword = async (phone: string): Promise<string> => {
   };
 
   try {
-    const response = await axios.post("http://api.greenweb.com.bd/api.php", null, {
-      params: smsPayload,
-    });
+    const response = await axios.post(
+      "http://api.greenweb.com.bd/api.php",
+      null,
+      {
+        params: smsPayload,
+      },
+    );
 
     // Check GreenWeb's response content
     const responseData = response.data.toString().trim().toLowerCase();
@@ -189,8 +193,14 @@ const resetPassword = async (phone: string): Promise<string> => {
       throw new Error(`GreenWeb response: ${responseData}`);
     }
   } catch (error: any) {
-    console.error("SMS sending failed:", error?.response?.data || error.message);
-    throw new AppError(httpStatus.BAD_REQUEST, "SMS sending failed: " + error.message);
+    console.error(
+      "SMS sending failed:",
+      error?.response?.data || error.message,
+    );
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "SMS sending failed: " + error.message,
+    );
   }
 
   // Hash and update the new password
@@ -201,12 +211,9 @@ const resetPassword = async (phone: string): Promise<string> => {
   return "New password sent via SMS and updated successfully.";
 };
 
-
-
-
 export const AuthService = {
   register,
   login,
   logout,
-  resetPassword
+  resetPassword,
 };

@@ -18,7 +18,10 @@ export const sendSMS = async (phone: string, message: string) => {
     // console.log("SMS sent response:", response.data);
     return response.data;
   } catch (error: any) {
-    console.error("SMS sending failed:", error?.response?.data || error.message);
+    console.error(
+      "SMS sending failed:",
+      error?.response?.data || error.message,
+    );
     throw new Error("SMS sending failed");
   }
 };

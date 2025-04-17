@@ -51,8 +51,19 @@ const logout = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0,
         data: result,
     });
 }));
+const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.body;
+    const result = yield auth_service_1.AuthService.resetPassword(payload);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.ACCEPTED,
+        status: true,
+        message: "Password Reset  Successful",
+        data: result,
+    });
+}));
 exports.AuthControllers = {
     register,
     login,
     logout,
+    resetPassword,
 };

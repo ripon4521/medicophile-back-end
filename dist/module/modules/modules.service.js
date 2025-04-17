@@ -33,14 +33,26 @@ const getAllModule = (query) => __awaiter(void 0, void 0, void 0, function* () {
         .fields()
         .populate({
         path: "courseId",
-        populate: { path: "category" },
+        select: "cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
+        populate: { path: "category", select: "title cover_photo" },
     })
-        .populate(["createdBy"]);
+        .populate([
+        {
+            path: "createdBy",
+            select: "name role phone",
+        },
+    ]);
     const result = yield courseQuery.exec();
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to load data , Please try again");
     }
     return result;
+    // .populate([
+    //   {
+    //     path: "createdBy",
+    //     select: "name role phone",
+    //   },
+    // ]);
     //   .populate("createdBy")
     //   .populate({
     //     path: "courseId",

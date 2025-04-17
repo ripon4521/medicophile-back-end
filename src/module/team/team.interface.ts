@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export interface ITeams {
-  slug:string;
+  slug: string;
   name: string;
   description: string;
   profileImg: string;

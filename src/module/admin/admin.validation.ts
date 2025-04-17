@@ -1,5 +1,3 @@
-
-
 import { z } from "zod";
 import { Types } from "mongoose";
 const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
@@ -17,7 +15,7 @@ const createAdminValidationSchema = z.object({
 
 const updateAdminValidationSchema = z.object({
   body: z.object({
-    role: z.enum(["superAdmin", "admin", "teacher" , "student"]).optional(),
+    role: z.enum(["superAdmin", "admin", "teacher", "student"]).optional(),
     name: z.string().min(3, "Name must be at least 3 characters").optional(),
     phone: z
       .string()
@@ -35,5 +33,5 @@ const updateAdminValidationSchema = z.object({
 
 export const adminValidation = {
   createAdminValidationSchema,
-  updateAdminValidationSchema
+  updateAdminValidationSchema,
 };

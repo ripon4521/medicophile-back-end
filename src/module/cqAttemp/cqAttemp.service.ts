@@ -8,41 +8,37 @@ import { UserModel } from "../user/user.model";
 import ExamModel from "../exam/exam.model";
 
 const createCqAttemps = async (payload: ICqAttemps) => {
-
-  const student = await UserModel.findOne({_id:payload.studentId})
-  const exam = await ExamModel.findOne({_id:payload.examId})
-  const question = await CqQuestionModel.findOne({_id:payload.questionId})
+  const student = await UserModel.findOne({ _id: payload.studentId });
+  const exam = await ExamModel.findOne({ _id: payload.examId });
+  const question = await CqQuestionModel.findOne({ _id: payload.questionId });
   if (!student || student.role !== "student") {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid Student Id. ")
-  } else if(!exam){
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid Exam Id")
-  } else if(!question){
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid Question Id")
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid Student Id. ");
+  } else if (!exam) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid Exam Id");
+  } else if (!question) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid Question Id");
   }
 
   const result = await CqAttempModel.create(payload);
   if (!result) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Failed to cerate cq attemp")
+    throw new AppError(StatusCodes.BAD_REQUEST, "Failed to cerate cq attemp");
   }
-
-  
 };
-
 
 const getAllCqAttemps = async () => {
   const result = await CqAttempModel.find({ isDeleted: false })
     .populate({
-      path:"studentId",
-      select:"name role phone"
+      path: "studentId",
+      select: "name role phone",
     })
     .populate({
-      path:"examId",
-      select:"examTitle examType cqMark"
+      path: "examId",
+      select: "examTitle examType cqMark",
     })
     .populate({
-      path:"questionId",
-      select:"question"
-    })
+      path: "questionId",
+      select: "question",
+    });
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,

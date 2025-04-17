@@ -22,25 +22,36 @@ const createNote = (paload) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getAllNotes = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield notes_model_1.default.find({ isDeleted: false })
-        .populate("createdBy")
+        .populate({
+        path: "createdBy",
+        select: "name role phone",
+    })
         .populate({
         path: "courseId",
-        populate: { path: "category" },
+        select: "cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
+        populate: { path: "category", select: "title cover_photo" },
     })
-        .populate("moduleId");
+        .populate({
+        path: "moduleId",
+        select: "moduleTitle slug",
+    });
     return result;
 });
 const getSingleNotes = (slug) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield notes_model_1.default.findOne({ slug })
-        .populate("createdBy")
+        .populate({
+        path: "createdBy",
+        select: "name role phone",
+    })
         .populate({
         path: "courseId",
-        populate: { path: "category" },
+        select: "cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
+        populate: { path: "category", select: "title cover_photo" },
     })
-        .populate("moduleId");
-    if (!result) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Notes. Slug is not valid, reload or go back and try again");
-    }
+        .populate({
+        path: "moduleId",
+        select: "moduleTitle slug",
+    });
     return result;
 });
 const updateNote = (slug, payload) => __awaiter(void 0, void 0, void 0, function* () {

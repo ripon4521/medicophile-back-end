@@ -12,7 +12,7 @@ export interface ILeecture {
   isFree: boolean;
   status: "Published" | "Drafted";
   tags: string[];
-  scheduleDate:Date;
+  scheduleDate: Date;
   deletedAt: Date;
   isDeleted: boolean;
 }

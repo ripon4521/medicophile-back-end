@@ -17,39 +17,40 @@ const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const cqAttemp_model_1 = __importDefault(require("./cqAttemp.model"));
 const classQuizeQuestion_model_1 = __importDefault(require("../classQuizeQuestion/classQuizeQuestion.model"));
-const mongoose_1 = __importDefault(require("mongoose"));
+const user_model_1 = require("../user/user.model");
+const exam_model_1 = __importDefault(require("../exam/exam.model"));
 const createCqAttemps = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const session = yield mongoose_1.default.startSession();
-    session.startTransaction();
-    try {
-        const result = yield cqAttemp_model_1.default.create([payload], { session });
-        const createdAttempt = result[0];
-        const question = yield classQuizeQuestion_model_1.default.findOne({ _id: createdAttempt.questionId }, null, { session });
-        if (!question) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Question not found");
-        }
-        let submissionStatus = "In Time";
-        if (question.durationDate &&
-            createdAttempt.submittedTime > question.durationDate) {
-            submissionStatus = "Late";
-        }
-        // Update the submission status
-        createdAttempt.submissionStatus = submissionStatus;
-        yield createdAttempt.save({ session });
-        yield session.commitTransaction();
-        session.endSession();
-        return createdAttempt;
+    const student = yield user_model_1.UserModel.findOne({ _id: payload.studentId });
+    const exam = yield exam_model_1.default.findOne({ _id: payload.examId });
+    const question = yield classQuizeQuestion_model_1.default.findOne({ _id: payload.questionId });
+    if (!student || student.role !== "student") {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid Student Id. ");
     }
-    catch (error) {
-        yield session.abortTransaction();
-        session.endSession();
-        throw error;
+    else if (!exam) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid Exam Id");
+    }
+    else if (!question) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid Question Id");
+    }
+    const result = yield cqAttemp_model_1.default.create(payload);
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to cerate cq attemp");
     }
 });
 const getAllCqAttemps = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield cqAttemp_model_1.default.find({ isDeleted: false })
-        .populate("studentId")
-        .populate("examId");
+        .populate({
+        path: "studentId",
+        select: "name role phone",
+    })
+        .populate({
+        path: "examId",
+        select: "examTitle examType cqMark",
+    })
+        .populate({
+        path: "questionId",
+        select: "question",
+    });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Cq Attemps . Please try again");
     }

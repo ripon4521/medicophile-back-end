@@ -9,12 +9,20 @@ const ObjectIdSchema = zod_1.z.string().refine((val) => mongoose_1.Types.ObjectI
 const createNotesSchema = zod_1.z.object({
     body: zod_1.z.object({
         title: zod_1.z.string().min(1, "Title is required"),
-        description: zod_1.z.string().min(1, "Description is required"),
+        description: zod_1.z.string().min(1, "Description is required").optional(),
         createdBy: ObjectIdSchema,
         moduleId: ObjectIdSchema,
         courseId: ObjectIdSchema,
         noteFile: zod_1.z.string().optional(),
         status: zod_1.z.enum(["Published", "Drafted"]),
+        scheduleDate: zod_1.z
+            .preprocess((val) => {
+            if (typeof val === "string" || val instanceof Date) {
+                return new Date(val);
+            }
+            return val;
+        }, zod_1.z.date())
+            .optional(),
     }),
 });
 const updateNotesSchema = zod_1.z.object({
@@ -25,7 +33,15 @@ const updateNotesSchema = zod_1.z.object({
         title: zod_1.z.string().min(1, "Title is required").optional(),
         description: zod_1.z.string().min(1, "Description is required").optional(),
         noteFile: zod_1.z.string().optional(),
-        status: zod_1.z.enum(["published", "drafted"]).optional(),
+        status: zod_1.z.enum(["Published", "Drafted"]).optional(),
+        scheduleDate: zod_1.z
+            .preprocess((val) => {
+            if (typeof val === "string" || val instanceof Date) {
+                return new Date(val);
+            }
+            return val;
+        }, zod_1.z.date())
+            .optional(),
     }),
 });
 exports.noteValidation = {

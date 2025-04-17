@@ -23,7 +23,6 @@ const updateCqAttemptValidationSchema = zod_1.z.object({
             .string()
             .url({ message: "Must be a valid PDF URL" })
             .optional(),
-        submissionStatus: zod_1.z.enum(["In Time", "Late"]).optional(),
         submittedTime: zod_1.z.coerce.date().optional(),
     }),
 });

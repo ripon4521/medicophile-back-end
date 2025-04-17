@@ -14,12 +14,14 @@ const createNotesSchema = z.object({
     courseId: ObjectIdSchema,
     noteFile: z.string().optional(),
     status: z.enum(["Published", "Drafted"]),
-    scheduleDate: z.preprocess((val) => {
-      if (typeof val === 'string' || val instanceof Date) {
-        return new Date(val);
-      }
-      return val;
-    }, z.date()).optional(),
+    scheduleDate: z
+      .preprocess((val) => {
+        if (typeof val === "string" || val instanceof Date) {
+          return new Date(val);
+        }
+        return val;
+      }, z.date())
+      .optional(),
   }),
 });
 
@@ -32,12 +34,14 @@ const updateNotesSchema = z.object({
     description: z.string().min(1, "Description is required").optional(),
     noteFile: z.string().optional(),
     status: z.enum(["Published", "Drafted"]).optional(),
-     scheduleDate: z.preprocess((val) => {
-          if (typeof val === 'string' || val instanceof Date) {
-            return new Date(val);
-          }
-          return val;
-        }, z.date()).optional(),
+    scheduleDate: z
+      .preprocess((val) => {
+        if (typeof val === "string" || val instanceof Date) {
+          return new Date(val);
+        }
+        return val;
+      }, z.date())
+      .optional(),
   }),
 });
 

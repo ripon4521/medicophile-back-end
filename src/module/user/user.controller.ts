@@ -80,7 +80,7 @@ const changePassord = catchAsync(async (req, res) => {
   const data = req.body;
   // console.log(data);
 
-  const result = await userService.changePassword(data); 
+  const result = await userService.changePassword(data);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Password change successfully",
@@ -95,5 +95,5 @@ export const userController = {
   getAllUsers,
   deleteUsers,
   getProfile,
-  changePassord
+  changePassord,
 };

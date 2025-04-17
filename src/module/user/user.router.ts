@@ -32,6 +32,10 @@ userRouter.post(
 );
 userRouter.get("/", userController.getAllUsers);
 userRouter.delete("/", auth.authUser("admin"), userController.deleteUsers);
-userRouter.patch("/change-password", validateRequest(changePasswordValidation), userController.changePassord)
+userRouter.patch(
+  "/change-password",
+  validateRequest(changePasswordValidation),
+  userController.changePassord,
+);
 
 export default userRouter;

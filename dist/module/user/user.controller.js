@@ -26,6 +26,15 @@ const createStudeent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
         data: result,
     });
 }));
+const createAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.body;
+    const result = yield user_service_1.userService.createAdmiIntoDB(payload);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.CREATED,
+        message: "Admin created successfully",
+        data: result,
+    });
+}));
 const createFaculty = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
     const result = yield user_service_1.userService.createFacultysIntoDB(payload);
@@ -73,10 +82,22 @@ const getProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: result,
     });
 }));
+const changePassord = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = req.body;
+    // console.log(data);
+    const result = yield user_service_1.userService.changePassword(data);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Password change successfully",
+        data: result,
+    });
+}));
 exports.userController = {
     createStudeent,
     createFaculty,
+    createAdmin,
     getAllUsers,
     deleteUsers,
     getProfile,
+    changePassord,
 };

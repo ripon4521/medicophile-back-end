@@ -8,7 +8,10 @@ const ObjectIdSchema = zod_1.z.string().refine((val) => mongoose_1.Types.ObjectI
 });
 const createCourseSchema = zod_1.z.object({
     body: zod_1.z.object({
-        cover_photo: zod_1.z.string().min(1, { message: "Cover photo URL is required." }),
+        cover_photo: zod_1.z
+            .string()
+            .min(1, { message: "Cover photo URL is required." })
+            .optional(),
         course_title: zod_1.z.string().min(1, { message: "Course title is required." }),
         description: zod_1.z.string().min(1, { message: "Description is required." }),
         duration: zod_1.z.string().min(1, { message: "Duration is required." }),
@@ -20,7 +23,7 @@ const createCourseSchema = zod_1.z.object({
         }),
         category: ObjectIdSchema,
         createdBy: ObjectIdSchema,
-        expireTime: zod_1.z.string({ message: "Expire time must be a valid date." }),
+        expireTime: zod_1.z.string({ required_error: "expire time is requried" }),
         daySchedule: zod_1.z
             .array(zod_1.z.string())
             .nonempty({ message: "Day schedule cannot be empty." }),
@@ -39,9 +42,6 @@ const createCourseSchema = zod_1.z.object({
         status: zod_1.z.enum(["active", "inactive"], {
             message: "Status must be either 'active' or 'inactive'.",
         }),
-        // course_tag: z
-        //   .array(z.string())
-        //   .nonempty({ message: "At least one course tag is required." }),
     }),
 });
 const updateCourseSchema = zod_1.z.object({
@@ -75,7 +75,7 @@ const updateCourseSchema = zod_1.z.object({
         category: ObjectIdSchema.optional(),
         createdBy: ObjectIdSchema.optional(),
         expireTime: zod_1.z
-            .date({ message: "Expire time must be a valid date." })
+            .string({ message: "Expire time must be a valid date." })
             .optional(),
         daySchedule: zod_1.z
             .array(zod_1.z.string())

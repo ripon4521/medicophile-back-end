@@ -10,40 +10,40 @@ const createNote = async (paload: INotes) => {
 
 const getAllNotes = async () => {
   const result = await NotesModel.find({ isDeleted: false })
-  .populate({
-    path:"createdBy",
-     select: "name role phone"
-  
-  })
-  .populate({
-    path: "courseId",
-    select:"cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
-    populate: { path: "category",select:"title cover_photo" },
-  })
-  .populate({
-    path:"moduleId",
-    select:"moduleTitle slug",
-  });
+    .populate({
+      path: "createdBy",
+      select: "name role phone",
+    })
+    .populate({
+      path: "courseId",
+      select:
+        "cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
+      populate: { path: "category", select: "title cover_photo" },
+    })
+    .populate({
+      path: "moduleId",
+      select: "moduleTitle slug",
+    });
 
   return result;
 };
 
 const getSingleNotes = async (slug: string) => {
   const result = await NotesModel.findOne({ slug })
-  .populate({
-    path:"createdBy",
-     select: "name role phone"
-  
-  })
-  .populate({
-    path: "courseId",
-    select:"cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
-    populate: { path: "category",select:"title cover_photo" },
-  })
-  .populate({
-    path:"moduleId",
-    select:"moduleTitle slug",
-  });
+    .populate({
+      path: "createdBy",
+      select: "name role phone",
+    })
+    .populate({
+      path: "courseId",
+      select:
+        "cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
+      populate: { path: "category", select: "title cover_photo" },
+    })
+    .populate({
+      path: "moduleId",
+      select: "moduleTitle slug",
+    });
   return result;
 };
 

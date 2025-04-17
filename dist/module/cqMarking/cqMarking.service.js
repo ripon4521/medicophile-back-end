@@ -16,7 +16,22 @@ exports.cqMarkingService = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const cqMarking_model_1 = __importDefault(require("./cqMarking.model"));
+const user_model_1 = require("../user/user.model");
+const exam_model_1 = __importDefault(require("../exam/exam.model"));
+const classQuizeQuestion_model_1 = __importDefault(require("../classQuizeQuestion/classQuizeQuestion.model"));
 const createCqMarking = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const student = yield user_model_1.UserModel.findOne({ _id: payload.studentId });
+    const exam = yield exam_model_1.default.findOne({ _id: payload.examId });
+    const question = yield classQuizeQuestion_model_1.default.findOne({ _id: payload.questionId });
+    if (!student) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid student id.");
+    }
+    else if (!exam) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid exam id");
+    }
+    else if (!question) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid question id");
+    }
     const result = yield cqMarking_model_1.default.create(payload);
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to create Cq Marking. Please cheack and try again");
@@ -25,15 +40,36 @@ const createCqMarking = (payload) => __awaiter(void 0, void 0, void 0, function*
 });
 const getAllCqMarking = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield cqMarking_model_1.default.find({ isDeleted: false })
-        .populate("studentId")
-        .populate("examId")
-        .populate("questionId");
+        .populate({
+        path: "studentId",
+        select: "name role phone",
+    })
+        .populate({
+        path: "examId",
+        select: "examTitle examType cqMark",
+    })
+        .populate({
+        path: "questionId",
+        select: "question",
+    });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Cq Marking. Please cheack and try again");
     }
     return result;
 });
 const getSpecifUserCqMarking = (studentId, examId, questionId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.UserModel.findOne({ _id: studentId });
+    const exam = yield exam_model_1.default.findOne({ _id: examId });
+    const question = yield classQuizeQuestion_model_1.default.findOne({ _id: questionId });
+    if (!user) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid student id");
+    }
+    else if (!exam) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid exam id");
+    }
+    else if (!question) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid question id");
+    }
     const result = yield cqMarking_model_1.default.find({
         studentId: studentId,
         examId: examId,
@@ -45,6 +81,10 @@ const getSpecifUserCqMarking = (studentId, examId, questionId) => __awaiter(void
     return result;
 });
 const updateCqMarking = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const check = yield cqMarking_model_1.default.findOne({ _id: _id });
+    if (!check) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid cq marking id");
+    }
     const update = yield cqMarking_model_1.default.findOneAndUpdate({ _id }, payload, {
         runValidators: true,
         new: true,
@@ -55,6 +95,10 @@ const updateCqMarking = (_id, payload) => __awaiter(void 0, void 0, void 0, func
     return update;
 });
 const deleteCqMarking = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const check = yield cqMarking_model_1.default.findOne({ _id: _id });
+    if (!check) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid cq marking id");
+    }
     const update = yield cqMarking_model_1.default.findOneAndUpdate({ _id }, {
         isDeleted: true,
         deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),

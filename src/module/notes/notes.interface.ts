@@ -9,7 +9,7 @@ export interface INotes {
   courseId: Types.ObjectId;
   noteFile: string;
   status: "Published" | "Drafted";
-  scheduleDate:Date;
+  scheduleDate: Date;
   deletedAt: Date;
   isDeleted: boolean;
 }

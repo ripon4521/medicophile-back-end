@@ -21,6 +21,8 @@ const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const handleCustomError_1 = require("../../helpers/handleCustomError");
 const user_model_1 = require("../user/user.model");
 const userCredentials_model_1 = require("../userCredentials/userCredentials.model");
+const http_status_1 = __importDefault(require("http-status"));
+const axios_1 = __importDefault(require("axios"));
 const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.create(payload);
     if (!result) {
@@ -115,8 +117,43 @@ const logout = (payload, meta) => __awaiter(void 0, void 0, void 0, function* ()
     yield existingCredential.save();
     return { message: "Logged out successfully" };
 });
+const resetPassword = (phone) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const user = yield user_model_1.UserModel.findOne({ phone });
+    if (!user) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User not found with this phone number");
+    }
+    // Generate random 6-digit password
+    const newPassword = Math.floor(100000 + Math.random() * 900000).toString();
+    // Prepare SMS payload for GreenWeb
+    const smsPayload = {
+        token: process.env.GREENWEB_API_TOKEN,
+        to: phone,
+        message: `Your new password is: ${newPassword}`,
+    };
+    try {
+        const response = yield axios_1.default.post("http://api.greenweb.com.bd/api.php", null, {
+            params: smsPayload,
+        });
+        // Check GreenWeb's response content
+        const responseData = response.data.toString().trim().toLowerCase();
+        if (!responseData.includes("success")) {
+            throw new Error(`GreenWeb response: ${responseData}`);
+        }
+    }
+    catch (error) {
+        console.error("SMS sending failed:", ((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "SMS sending failed: " + error.message);
+    }
+    // Hash and update the new password
+    const hashedPassword = yield bcrypt_1.default.hash(newPassword, 12);
+    user.password = hashedPassword;
+    yield user.save();
+    return "New password sent via SMS and updated successfully.";
+});
 exports.AuthService = {
     register,
     login,
     logout,
+    resetPassword,
 };

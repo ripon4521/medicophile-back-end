@@ -6,25 +6,24 @@ import config from "../../config";
 const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
-    email: { type: String,  },
-    password: { type: String},
+    email: { type: String },
+    password: { type: String },
     // studentId:{ type: mongoose.Schema.ObjectId},
     // teacherId: {type:mongoose.Schema.ObjectId},
-    phone: { type: String  , required:true, unique:true},
+    phone: { type: String, required: true, unique: true },
     role: {
       type: String,
       enum: ["superAdmin", "admin", "teacher", "student"],
-      
     },
     profile_picture: { type: String },
-    status: { type: String, enum: ["Active", "Blocked"], },
-    isDeleted: { type: Boolean, default:false},
-    deletedAt: { type: Date},
+    status: { type: String, enum: ["Active", "Blocked"] },
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date },
   },
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }, 
+    },
   },
 );
 

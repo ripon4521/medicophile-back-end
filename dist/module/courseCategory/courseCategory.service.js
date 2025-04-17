@@ -17,7 +17,12 @@ const courseCategory_model_1 = __importDefault(require("./courseCategory.model")
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
+const user_model_1 = require("../user/user.model");
 const createCourseCategory = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.UserModel.findOne({ _id: payload.createdBy });
+    if (!user || user.role === "student") {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid user id, only admin and teacher id is valid");
+    }
     const result = yield courseCategory_model_1.default.create(payload);
     return result;
 });
@@ -28,12 +33,20 @@ const getAllCourseCategory = (query) => __awaiter(void 0, void 0, void 0, functi
         .sort()
         .paginate()
         .fields()
-        .populate(["createdBy"]);
+        .populate([
+        {
+            path: "createdBy",
+            select: "name role phone",
+        },
+    ]);
     const result = yield courseQuery.exec();
     return result;
 });
 const getSingleCourseCatgeory = (slug) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield courseCategory_model_1.default.findOne({ slug });
+    const result = yield courseCategory_model_1.default.findOne({ slug }).populate({
+        path: "createdBy",
+        select: "name role phone",
+    });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Course Ctaegory. Slug is not valid, reload or go back and try again");
     }

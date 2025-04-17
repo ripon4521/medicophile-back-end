@@ -34,6 +34,9 @@ const liveClass_route_1 = __importDefault(require("../module/liveClass/liveClass
 const media_route_1 = __importDefault(require("../module/media/media.route"));
 const blogController_route_1 = __importDefault(require("../module/blogCategory/blogController.route"));
 const blog_route_1 = __importDefault(require("../module/blog/blog.route"));
+const team_route_1 = __importDefault(require("../module/team/team.route"));
+const blogComment_route_1 = __importDefault(require("../module/blogComment/blogComment.route"));
+const coupon_route_1 = __importDefault(require("../module/coupon/coupon.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -151,6 +154,18 @@ const moduleRoutes = [
     {
         path: "/blog",
         route: blog_route_1.default,
+    },
+    {
+        path: "/team",
+        route: team_route_1.default,
+    },
+    {
+        path: "/blog-comment",
+        route: blogComment_route_1.default,
+    },
+    {
+        path: "/coupon",
+        route: coupon_route_1.default,
     },
 ];
 moduleRoutes.forEach((route) => {

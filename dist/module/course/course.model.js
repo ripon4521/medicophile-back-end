@@ -40,7 +40,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));
 const courseSchema = new mongoose_1.Schema({
     slug: { type: String, unique: true },
-    cover_photo: { type: String, required: true },
+    cover_photo: { type: String, default: "" },
     course_title: { type: String, required: true, unique: true },
     description: { type: String, required: true },
     duration: { type: String, required: true },
@@ -52,14 +52,14 @@ const courseSchema = new mongoose_1.Schema({
         required: true,
     },
     createdBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
-    expireTime: { type: Date, required: true },
-    daySchedule: { type: [String], required: true },
-    timeShedule: { type: [String], required: true },
+    expireTime: { type: String, required: true },
+    daySchedule: { type: [String] },
+    timeShedule: { type: [String] },
     price: { type: Number, required: true, min: 0 },
-    offerPrice: { type: Number, required: true, min: 0 },
+    offerPrice: { type: Number, min: 0 },
     takeReview: { type: String, enum: ["on", "off"], required: true },
     status: { type: String, enum: ["active", "inactive"], required: true },
-    course_tag: { type: [String], required: true },
+    course_tag: { type: [String], default: [] },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },
 }, {

@@ -7,14 +7,10 @@ const cqAttempSchema = new mongoose_1.Schema({
     questionId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: "CqQuestions",
+        ref: "CqQuestion",
     },
     submitedPdf: { type: String },
     score: { type: Number },
-    submissionStatus: {
-        type: String,
-        enum: ["In Time", "Late"],
-    },
     submittedTime: {
         type: Date,
         default: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),

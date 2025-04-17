@@ -10,11 +10,14 @@ import { UserModel } from "../user/user.model";
 import { addMonths, isAfter } from "date-fns";
 
 const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
- const id = payload.createdBy;
- const user = await UserModel.findOne({_id:id});
- if (!user || user?.role === "student") {
-  throw new AppError(StatusCodes.BAD_REQUEST, "User not found. Please provide valid user id. ony admin and teacher is valid")
- }
+  const id = payload.createdBy;
+  const user = await UserModel.findOne({ _id: id });
+  if (!user || user?.role === "student") {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "User not found. Please provide valid user id. ony admin and teacher is valid",
+    );
+  }
   const result = await courseModel.create(payload);
   return result;
 };
@@ -22,7 +25,7 @@ const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
 const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
   const finalQuery = {
     ...query,
-    status: "active", 
+    status: "active",
   };
 
   const courseQuery = new QueryBuilder(courseModel, finalQuery)
@@ -33,18 +36,18 @@ const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
     .fields()
     .populate({
       path: "category",
-      select:"title cover_photo slug"
+      select: "title cover_photo slug",
     })
     .populate([
       {
         path: "createdBy",
-        select: "name role phone", 
+        select: "name role phone",
       },
     ]);
 
   const result = await courseQuery.exec();
   const currentDateBD = new Date(
-    new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" })
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
   );
 
   // Filter out expired courses
@@ -57,22 +60,23 @@ const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
     const months = parseInt(durationMatch[1]);
     const endDate = addMonths(new Date(course.createdAt), months);
 
-    return isAfter(endDate, currentDateBD); 
+    return isAfter(endDate, currentDateBD);
   });
 
   return ongoingCourses;
 };
-  
-
 
 const getCourseById = async (slug: string) => {
-  const result = await courseModel.findOne({ slug }).populate({
-     path: "category",
-      select:"title cover_photo slug"
-  }).populate({
-    path: "createdBy",
-    select: "name role phone",
- });
+  const result = await courseModel
+    .findOne({ slug })
+    .populate({
+      path: "category",
+      select: "title cover_photo slug",
+    })
+    .populate({
+      path: "createdBy",
+      select: "name role phone",
+    });
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,

@@ -6,7 +6,6 @@ import http from "http"; // HTTP module
 import { Server } from "socket.io"; // Import Socket.IO
 import "../src/module/notice/notice.cron";
 
-
 let io: Server;
 
 async function server() {
@@ -22,8 +21,8 @@ async function server() {
     io = new Server(httpServer, {
       cors: {
         origin: [
-          "http://localhost:5173", 
-          "admin.iconadmissionaid.com", 
+          "http://localhost:5173",
+          "admin.iconadmissionaid.com",
           "iconadmissionaid.com", // Removed trailing space
         ],
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
@@ -46,7 +45,7 @@ async function server() {
     // Start the server with the desired port (use `5000` directly or from config)
     httpServer.listen(5000, () => {
       console.log(
-        `School Management Server is running on port 5000 - Alhamdulillah`
+        `School Management Server is running on port 5000 - Alhamdulillah`,
       );
     });
   } catch (error) {

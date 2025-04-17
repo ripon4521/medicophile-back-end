@@ -59,6 +59,7 @@ const LectureSchema = new mongoose_1.Schema({
     },
     tags: { type: [String], default: [] },
     deletedAt: { type: Date },
+    scheduleDate: { type: Date },
     isDeleted: { type: Boolean, default: false },
 }, {
     timestamps: {

@@ -52,6 +52,7 @@ const NotesSchema = new mongoose_1.Schema({
         required: true,
         default: "Published",
     },
+    scheduleDate: { type: Date },
     deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
 }, {

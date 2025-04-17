@@ -10,6 +10,14 @@ const loginValidationSchema = zod_1.z.object({
         password: zod_1.z.string({ required_error: "Password is required" }),
     }),
 });
+const resetValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        phone: zod_1.z.string({
+            required_error: "Phone number must be valid and 11 charchters ",
+        }),
+    }),
+});
 exports.AuthValidation = {
     loginValidationSchema,
+    resetValidationSchema,
 };

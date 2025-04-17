@@ -7,8 +7,8 @@ import { UserModel } from "../user/user.model";
 import ExamModel from "../exam/exam.model";
 
 const createCqQuestion = async (payload: ICqQuestion) => {
-  const user = await UserModel.findOne({_id:payload.createdBy});
-  const exam = await ExamModel.findOne({_id:payload.examId});
+  const user = await UserModel.findOne({ _id: payload.createdBy });
+  const exam = await ExamModel.findOne({ _id: payload.examId });
   if (!user || user.role === "student") {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
@@ -16,12 +16,9 @@ const createCqQuestion = async (payload: ICqQuestion) => {
     );
   }
   if (!exam) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "invalid exam id",
-    );
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid exam id");
   }
-  
+
   const result = await CqQuestionModel.create(payload);
   if (!result) {
     throw new AppError(
@@ -37,14 +34,23 @@ const getALlCqQuestion = async (query: Record<string, unknown>) => {
     .search(["question"])
     .populate({
       path: "examId",
-      select:"examTitle examType totalQuestion positiveMark negativeMark mcqDuration cqMark slug status",
-      populate: [{ path: "courseId" , select:"cover_photo course_title description duration course_type expireTime slug price offerPrice" }, { path: "moduleId" ,
-         select:"moduleTitle slug"}],
+      select:
+        "examTitle examType totalQuestion positiveMark negativeMark mcqDuration cqMark slug status",
+      populate: [
+        {
+          path: "courseId",
+          select:
+            "cover_photo course_title description duration course_type expireTime slug price offerPrice",
+        },
+        { path: "moduleId", select: "moduleTitle slug" },
+      ],
     })
-    .populate([{
-      path:"createdBy",
-      select:"name role phone"
-    }]);
+    .populate([
+      {
+        path: "createdBy",
+        select: "name role phone",
+      },
+    ]);
 
   const result = await courseQuery.exec();
   if (!result) {

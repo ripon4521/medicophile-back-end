@@ -27,6 +27,18 @@ class QueryBuilder {
         const queryObj = Object.assign({}, this.query);
         const excludeFields = ["search", "sort", "limit", "page", "fields"];
         excludeFields.forEach((field) => delete queryObj[field]);
+        // Special case for array filters like tags
+        for (const key in queryObj) {
+            const value = queryObj[key];
+            // Check if the value is a comma-separated string (e.g., "mern,web")
+            if (typeof value === "string" && value.includes(",")) {
+                queryObj[key] = { $in: value.split(",") };
+            }
+            // Optional: if you also want to handle arrays directly passed from Postman like tags[]=mern&tags[]=web
+            if (Array.isArray(value)) {
+                queryObj[key] = { $in: value };
+            }
+        }
         this.modelQuery = this.modelQuery.find(queryObj);
         return this;
     }

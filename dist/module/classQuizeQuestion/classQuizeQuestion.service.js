@@ -17,7 +17,17 @@ const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const classQuizeQuestion_model_1 = __importDefault(require("./classQuizeQuestion.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
+const user_model_1 = require("../user/user.model");
+const exam_model_1 = __importDefault(require("../exam/exam.model"));
 const createCqQuestion = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.UserModel.findOne({ _id: payload.createdBy });
+    const exam = yield exam_model_1.default.findOne({ _id: payload.examId });
+    if (!user || user.role === "student") {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid user id , only admin and teacher create cq question");
+    }
+    if (!exam) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid exam id");
+    }
     const result = yield classQuizeQuestion_model_1.default.create(payload);
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to create CQ Question, Please check and try again");
@@ -29,9 +39,21 @@ const getALlCqQuestion = (query) => __awaiter(void 0, void 0, void 0, function* 
         .search(["question"])
         .populate({
         path: "examId",
-        populate: [{ path: "courseId" }, { path: "moduleId" }],
+        select: "examTitle examType totalQuestion positiveMark negativeMark mcqDuration cqMark slug status",
+        populate: [
+            {
+                path: "courseId",
+                select: "cover_photo course_title description duration course_type expireTime slug price offerPrice",
+            },
+            { path: "moduleId", select: "moduleTitle slug" },
+        ],
     })
-        .populate(["createdBy"]);
+        .populate([
+        {
+            path: "createdBy",
+            select: "name role phone",
+        },
+    ]);
     const result = yield courseQuery.exec();
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Cq Question data. Please check your qury and try again. Query only question filed");

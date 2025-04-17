@@ -1,8 +1,5 @@
-
-
 import { model, Schema, Types } from "mongoose";
 import { ICoupon } from "./coupon.interface";
-
 
 const couponSchema = new Schema<ICoupon>(
   {
@@ -17,7 +14,7 @@ const couponSchema = new Schema<ICoupon>(
     },
     discountAmount: {
       type: Number,
-      required:true
+      required: true,
     },
     status: {
       type: String,
@@ -31,12 +28,11 @@ const couponSchema = new Schema<ICoupon>(
     },
     isDeleted: {
       type: Boolean,
-     
+
       default: false,
     },
     deletedAt: {
       type: Date,
-     
     },
   },
   {
@@ -46,5 +42,5 @@ const couponSchema = new Schema<ICoupon>(
   },
 );
 
- const CouponModel = model<ICoupon>("Coupon", couponSchema);
- export default CouponModel;
+const CouponModel = model<ICoupon>("Coupon", couponSchema);
+export default CouponModel;
