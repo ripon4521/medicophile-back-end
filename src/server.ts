@@ -4,7 +4,7 @@ import config from "./config";
 import seedSuperAdmin from "./DB";
 import http from "http"; // HTTP module
 import { Server } from "socket.io"; // Import Socket.IO
-import "../src/module/notice/notice.cron";
+import "./module/notice/notice.cron";
 
 let io: Server;
 

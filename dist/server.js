@@ -19,7 +19,7 @@ const config_1 = __importDefault(require("./config"));
 const DB_1 = __importDefault(require("./DB"));
 const http_1 = __importDefault(require("http")); // HTTP module
 const socket_io_1 = require("socket.io"); // Import Socket.IO
-require("../dist/module/notice/notice.cron");
+require("./module/notice/notice.cron");
 let io;
 function server() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -51,8 +51,8 @@ function server() {
                 });
             });
             // Start the server with the desired port (use `5000` directly or from config)
-            httpServer.listen(5000, () => {
-                console.log(`School Management Server is running on port 5000 - Alhamdulillah`);
+            httpServer.listen(3000, () => {
+                console.log(`School Management Server is running on port 3000 - Alhamdulillah`);
             });
         }
         catch (error) {
