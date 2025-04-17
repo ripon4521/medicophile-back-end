@@ -18,6 +18,7 @@ const auth_service_1 = require("./auth.service");
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const http_status_codes_1 = require("http-status-codes");
 const getDeviceInfo_1 = require("../../middlewares/getDeviceInfo");
+const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const register = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthService.register(req.body);
     (0, sendResponse_1.default)(res, {
@@ -52,12 +53,20 @@ const logout = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0,
     });
 }));
 const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const payload = req.body;
-    const result = yield auth_service_1.AuthService.resetPassword(payload);
+    let { phone } = req.body;
+    // Handle if phone is nested (defensive coding)
+    if (typeof phone === 'object' && (phone === null || phone === void 0 ? void 0 : phone.phone)) {
+        phone = phone.phone;
+    }
+    if (typeof phone !== 'string') {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid phone number format.");
+    }
+    console.log("Received phone:", phone);
+    const result = yield auth_service_1.AuthService.resetPassword(phone);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.ACCEPTED,
         status: true,
-        message: "Password Reset  Successful",
+        message: "Password Reset Successful",
         data: result,
     });
 }));

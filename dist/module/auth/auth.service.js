@@ -119,7 +119,7 @@ const logout = (payload, meta) => __awaiter(void 0, void 0, void 0, function* ()
 });
 const resetPassword = (phone) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const user = yield user_model_1.UserModel.findOne({ phone });
+    const user = yield user_model_1.UserModel.findOne({ phone: phone });
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User not found with this phone number");
     }
