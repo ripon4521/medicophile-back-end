@@ -13,12 +13,12 @@ const userCredentialsSchema = new Schema(
       type: String,
       required: true,
     },
-    accessToken:{
-      type:String,
+    accessToken: {
+      type: String,
       required: true,
     },
-    refreshToken:{
-      type:String,
+    refreshToken: {
+      type: String,
       required: true,
     },
     ipAddress: {

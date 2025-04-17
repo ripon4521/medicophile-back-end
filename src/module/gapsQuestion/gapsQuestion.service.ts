@@ -7,14 +7,14 @@ import { UserModel } from "../user/user.model";
 import ExamModel from "../exam/exam.model";
 
 const cretaeGapsQuestion = async (payload: IGapsQuestion) => {
-  const user = await UserModel.findOne({_id:payload.createdBy});
-  const exam = await ExamModel.findOne({_id:payload.examId});
+  const user = await UserModel.findOne({ _id: payload.createdBy });
+  const exam = await ExamModel.findOne({ _id: payload.examId });
   if (!exam) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
       "invalid exam id.Please provide a valid exam id",
     );
-  }else if (!user || user.role === "student") {
+  } else if (!user || user.role === "student") {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
       "invalid user id. only admin and teacer create gap question",
@@ -34,14 +34,18 @@ const getAllGapsQuestion = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(GapsQuestionModel, query)
     .search(["question", "answer"])
     .paginate()
-    .populate([{
-      path:"examId",
-      select:"examTitle examType validTime scheduleDate courseId moduleId "
-    }])
-    .populate([{
-      path:"createdBy",
-      select:"name role phone"
-    }]);
+    .populate([
+      {
+        path: "examId",
+        select: "examTitle examType validTime scheduleDate courseId moduleId ",
+      },
+    ])
+    .populate([
+      {
+        path: "createdBy",
+        select: "name role phone",
+      },
+    ]);
 
   const result = await courseQuery.exec();
   if (!result) {
@@ -54,9 +58,9 @@ const getAllGapsQuestion = async (query: Record<string, unknown>) => {
 };
 
 const updateGapsQuestion = async (_id: string, payload: IGapsQuestion) => {
-  const gap = await GapsQuestionModel.findOne({_id:_id});
+  const gap = await GapsQuestionModel.findOne({ _id: _id });
   if (!gap) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "invalid gap id")
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid gap id");
   }
   const result = await GapsQuestionModel.findOneAndUpdate({ _id }, payload, {
     runValidators: true,
@@ -72,9 +76,9 @@ const updateGapsQuestion = async (_id: string, payload: IGapsQuestion) => {
 };
 
 const deleteGapsQuestion = async (_id: string) => {
-  const gap = await GapsQuestionModel.findOne({_id:_id});
+  const gap = await GapsQuestionModel.findOne({ _id: _id });
   if (!gap) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "invalid gap id")
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid gap id");
   }
   const result = await GapsQuestionModel.findOneAndUpdate(
     { _id },

@@ -19,11 +19,7 @@ authRouter.post(
 );
 
 authRouter.patch("/logout", AuthControllers.logout);
-authRouter.post(
-  "/refresh-token",
-  AuthControllers.refreshToken
-);
-
+authRouter.post("/refresh-token", AuthControllers.refreshToken);
 
 authRouter.use(globalErrorHandler);
 

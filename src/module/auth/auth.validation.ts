@@ -21,7 +21,6 @@ const resetValidationSchema = z.object({
   }),
 });
 
-
 export const AuthValidation = {
   loginValidationSchema,
   resetValidationSchema,

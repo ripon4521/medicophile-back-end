@@ -76,31 +76,25 @@ const login = async (
       phone: payload.phone,
       isDeleted: false,
     }).session(session);
-    
+
     const jwtPayload = {
       phone: user.phone,
       role: user.role,
       _id: user._id.toString(),
     };
 
-    const accessToken = jwt.sign(
-      jwtPayload,
-      config.accessSecret as string,
-      {
-        expiresIn: "1h",
-      },
-    );
+    const accessToken = jwt.sign(jwtPayload, config.accessSecret as string, {
+      expiresIn: "1h",
+    });
 
     const refreshToken = jwt.sign(
       jwtPayload,
-      
+
       config.refreshSecret as string,
       {
         expiresIn: "30d",
       },
     );
-
-
 
     if (
       existingCredential &&
@@ -124,15 +118,13 @@ const login = async (
           deviceType: meta.deviceType,
           deviceName: meta.deviceName,
           isDeleted: false,
-          accessToken:accessToken,
-          refreshToken:refreshToken,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
           deletedAt: null,
         },
       ],
       { session },
     );
-
-   
 
     await session.commitTransaction();
     session.endSession();
@@ -144,7 +136,6 @@ const login = async (
     throw error;
   }
 };
-
 
 // Logout function
 const logout = async (
@@ -176,7 +167,6 @@ const logout = async (
 
 const resetPassword = async (phone: string): Promise<string> => {
   const user = await UserModel.findOne({ phone: phone });
- 
 
   if (!user) {
     throw new AppError(
@@ -228,16 +218,6 @@ const resetPassword = async (phone: string): Promise<string> => {
 
   return "New password sent via SMS and updated successfully.";
 };
-
-
-
-
-
-
-
-
-
-
 
 export const AuthService = {
   register,

@@ -9,17 +9,16 @@ import mongoose from "mongoose";
 import { UserModel } from "../user/user.model";
 import ExamModel from "../exam/exam.model";
 
-
 const cretaeGapsAnswer = async (payload: any) => {
-  const user = await UserModel.findOne({_id:payload.studentId})
-  const exam = await ExamModel.findOne({_id:payload.examId})
-  const question = await GapsQuestionModel.findOne({_id:payload.questionId})
+  const user = await UserModel.findOne({ _id: payload.studentId });
+  const exam = await ExamModel.findOne({ _id: payload.examId });
+  const question = await GapsQuestionModel.findOne({ _id: payload.questionId });
   if (!user) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid user id")
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid user id");
   } else if (!exam) {
-    throw new AppError(StatusCodes.BAD_REQUEST, " invalid exam  id")
+    throw new AppError(StatusCodes.BAD_REQUEST, " invalid exam  id");
   } else if (!question) {
-    throw new AppError(StatusCodes.BAD_REQUEST, " invalid question  id")
+    throw new AppError(StatusCodes.BAD_REQUEST, " invalid question  id");
   }
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -62,7 +61,6 @@ const cretaeGapsAnswer = async (payload: any) => {
     // }).session(session);
     // // console.log(durationTime)
 
-   
     // Create or update the attempt record
     if (!attempt) {
       attempt = new GapAttempModel({
@@ -74,7 +72,6 @@ const cretaeGapsAnswer = async (payload: any) => {
         submittedTime: submissionDate,
         attemptedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
         isDeleted: false,
-       
       });
     } else {
       attempt.score += score;
@@ -82,7 +79,6 @@ const cretaeGapsAnswer = async (payload: any) => {
       attempt.submittedTime = new Date(
         new Date().getTime() + 6 * 60 * 60 * 1000,
       );
-     
     }
 
     // Save the attempt record
@@ -103,11 +99,6 @@ const cretaeGapsAnswer = async (payload: any) => {
     throw error;
   }
 };
-
-
-
-
-
 
 const getAllGapsAnswer = async (query: Record<string, unknown>) => {
   const result = await GapAnswerModel.find({ isDeleted: false })

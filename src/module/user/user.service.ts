@@ -40,7 +40,7 @@ const createStudentsIntoDB = async (payload: IStudent) => {
     // if (sms?.response_code != 202	) {
     //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create student. Please try again")
     // }
-    
+
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
 
     // Step 4: Create user using data from createdStudent
@@ -54,7 +54,7 @@ const createStudentsIntoDB = async (payload: IStudent) => {
       email: createdStudent[0].email,
       isDeleted: createdStudent[0].isDeleted,
       deletedAt: createdStudent[0].deletedAt,
-      pin:plainPassword
+      pin: plainPassword,
     };
 
     const newUser = await UserModel.create([userData], { session });
@@ -113,7 +113,7 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
       email: createdAdmin[0]?.email,
       isDeleted: createdAdmin[0]?.isDeleted,
       deletedAt: createdAdmin[0]?.deletedAt,
-      pin:plainPassword
+      pin: plainPassword,
     };
 
     const newUser = await UserModel.create([userData], { session });
@@ -169,7 +169,7 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
       email: createdFaculty[0]?.email,
       isDeleted: createdFaculty[0]?.isDeleted,
       deletedAt: createdFaculty[0]?.deletedAt,
-      pin:plainPassword
+      pin: plainPassword,
     };
 
     const newUser = await UserModel.create([userData], { session });
@@ -190,7 +190,6 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
     throw new Error("Transaction failed: " + error);
   }
 };
-
 
 const changePassword = async (
   payload: IChangePasswordPayload,

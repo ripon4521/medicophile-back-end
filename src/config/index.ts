@@ -31,7 +31,7 @@ export default {
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
   superAdminPassword: process.env.SUPER_ADMIN_PASS,
-  accessSecret:process.env.JWT_SECRET,
-  refreshSecret:process.env.JWT_REFRESH_SECRET,
-  nodeEnv:process.env.NODE_ENV
+  accessSecret: process.env.JWT_SECRET,
+  refreshSecret: process.env.JWT_REFRESH_SECRET,
+  nodeEnv: process.env.NODE_ENV,
 };

@@ -6,7 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import { getDeviceInfo } from "../../middlewares/getDeviceInfo";
 import AppError from "../../helpers/AppError";
 import config from "../../config";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.register(req.body);
@@ -26,7 +26,7 @@ const login = catchAsync(async (req: Request, res: Response) => {
 
   // Set refresh token in HTTP-only cookie
   res.cookie("refreshToken", refreshToken, {
-    secure: config.nodeEnv === "development", 
+    secure: config.nodeEnv === "development",
     httpOnly: true, // JS access off
     sameSite: "strict",
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
@@ -44,7 +44,6 @@ const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
 const logout = catchAsync(async (req: Request, res: Response) => {
   const meta = getDeviceInfo(req);
   const payload = req.body;
@@ -61,11 +60,11 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
   let { phone } = req.body;
 
   // Handle if phone is nested (defensive coding)
-  if (typeof phone === 'object' && phone?.phone) {
+  if (typeof phone === "object" && phone?.phone) {
     phone = phone.phone;
   }
 
-  if (typeof phone !== 'string') {
+  if (typeof phone !== "string") {
     throw new AppError(StatusCodes.BAD_REQUEST, "Invalid phone number format.");
   }
 
@@ -104,7 +103,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
         _id: decoded._id,
       },
       config.accessSecret as string,
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     res.status(200).json({
@@ -115,16 +114,17 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid or expired refresh token.");
+    throw new AppError(
+      StatusCodes.UNAUTHORIZED,
+      "Invalid or expired refresh token.",
+    );
   }
 });
-
-
 
 export const AuthControllers = {
   register,
   login,
   logout,
   resetPassword,
-  refreshToken
+  refreshToken,
 };

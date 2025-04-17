@@ -18,7 +18,10 @@ const authUser = (...requiredRoles: TUserRole[]) => {
     try {
       const authHeader = req.headers.authorization;
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new AppError(StatusCodes.UNAUTHORIZED, "Authorization header missing or invalid.");
+        throw new AppError(
+          StatusCodes.UNAUTHORIZED,
+          "Authorization header missing or invalid.",
+        );
       }
 
       const accessToken = authHeader.split(" ")[1];
@@ -27,12 +30,15 @@ const authUser = (...requiredRoles: TUserRole[]) => {
       try {
         decoded = jwt.verify(accessToken, config.accessSecret as string);
       } catch (err) {
-        throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid or expired token.");
+        throw new AppError(
+          StatusCodes.UNAUTHORIZED,
+          "Invalid or expired token.",
+        );
       }
 
       const { role, phone } = decoded;
       const user = await UserModel.findOne({ phone });
-      
+
       if (!user) {
         throw new AppError(StatusCodes.FORBIDDEN, "User not found.");
       }
@@ -42,7 +48,10 @@ const authUser = (...requiredRoles: TUserRole[]) => {
       }
 
       if (requiredRoles.length && !requiredRoles.includes(role)) {
-        throw new AppError(StatusCodes.FORBIDDEN, "You are not authorized to access this resource.");
+        throw new AppError(
+          StatusCodes.FORBIDDEN,
+          "You are not authorized to access this resource.",
+        );
       }
 
       req.user = decoded; // Attach user info to req object
