@@ -19,6 +19,7 @@ const UserSchema = new Schema<IUser>(
     status: { type: String, enum: ["Active", "Blocked"] },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },
+    pin:{type:String}
   },
   {
     timestamps: {

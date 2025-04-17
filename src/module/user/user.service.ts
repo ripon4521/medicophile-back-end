@@ -40,6 +40,7 @@ const createStudentsIntoDB = async (payload: IStudent) => {
     // if (sms?.response_code != 202	) {
     //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create student. Please try again")
     // }
+    
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
 
     // Step 4: Create user using data from createdStudent
@@ -53,6 +54,7 @@ const createStudentsIntoDB = async (payload: IStudent) => {
       email: createdStudent[0].email,
       isDeleted: createdStudent[0].isDeleted,
       deletedAt: createdStudent[0].deletedAt,
+      pin:plainPassword
     };
 
     const newUser = await UserModel.create([userData], { session });
@@ -111,6 +113,7 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
       email: createdAdmin[0]?.email,
       isDeleted: createdAdmin[0]?.isDeleted,
       deletedAt: createdAdmin[0]?.deletedAt,
+      pin:plainPassword
     };
 
     const newUser = await UserModel.create([userData], { session });
@@ -166,6 +169,7 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
       email: createdFaculty[0]?.email,
       isDeleted: createdFaculty[0]?.isDeleted,
       deletedAt: createdFaculty[0]?.deletedAt,
+      pin:plainPassword
     };
 
     const newUser = await UserModel.create([userData], { session });
@@ -187,56 +191,6 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
   }
 };
 
-// const createFacultysIntoDB = async (payload: IFaculty) => {
-//   const session = await mongoose.startSession();
-//   session.startTransaction();
-
-//   try {
-
-//     const generatedPassword = generate6DigitPassword();
-
-//    const sms = await sendSMS(payload.phone, `Your Faculty Login Password is: ${generatedPassword}`);
-//     // if (sms?.response_code != 202	) {
-//     //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create teacher. Please try again")
-//     // }
-
-//     const hashedPassword = await bcrypt.hash(generatedPassword, 12);
-
-//     const createdFaculty = await FacultyUserModel.create([payload], { session });
-
-//     const userData: Partial<IUser> = {
-//       name: createdFaculty[0]?.name,
-//       status: createdFaculty[0]?.status,
-//       role: createdFaculty[0]?.role,
-//       profile_picture: createdFaculty[0]?.profile_picture,
-//       phone: createdFaculty[0]?.phone,
-//       email: createdFaculty[0]?.email,
-//       password: hashedPassword,
-//       isDeleted: createdFaculty[0]?.isDeleted,
-//       deletedAt: createdFaculty[0]?.deletedAt,
-//     };
-
-//     const createdUser = await UserModel.create([userData], { session });
-//     await adminModel.updateOne(
-//       { _id: createdFaculty[0]._id },
-//       { userId: createdUser[0]._id },
-//       { session }
-//     );
-
-//     await session.commitTransaction();
-//     session.endSession();
-
-//     return {
-//       faculty: createdFaculty[0],
-//       user: createdUser[0],
-//     };
-//   } catch (error) {
-//     console.error("Transaction Error:", error);
-//     await session.abortTransaction();
-//     session.endSession();
-//     throw new Error("Transaction failed: " + error);
-//   }
-// };
 
 const changePassword = async (
   payload: IChangePasswordPayload,
