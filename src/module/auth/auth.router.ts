@@ -13,7 +13,7 @@ authRouter.post(
 );
 
 authRouter.post(
-  "/reset-passord",
+  "/reset-password",
   validateRequest(AuthValidation.resetValidationSchema),
   AuthControllers.resetPassword,
 );

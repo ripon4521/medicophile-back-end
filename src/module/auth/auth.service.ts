@@ -158,7 +158,8 @@ const logout = async (
 };
 
 const resetPassword = async (phone: string): Promise<string> => {
-  const user = await UserModel.findOne({ phone });
+  const user = await UserModel.findOne({ phone: phone });
+ 
 
   if (!user) {
     throw new AppError(

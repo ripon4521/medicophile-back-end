@@ -4,6 +4,7 @@ import { AuthService } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
 import { getDeviceInfo } from "../../middlewares/getDeviceInfo";
+import AppError from "../../helpers/AppError";
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.register(req.body);
@@ -43,15 +44,29 @@ const logout = catchAsync(async (req: Request, res: Response) => {
 });
 
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
-  const payload = req.body;
-  const result = await AuthService.resetPassword(payload);
+  let { phone } = req.body;
+
+  // Handle if phone is nested (defensive coding)
+  if (typeof phone === 'object' && phone?.phone) {
+    phone = phone.phone;
+  }
+
+  if (typeof phone !== 'string') {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid phone number format.");
+  }
+
+  console.log("Received phone:", phone);
+
+  const result = await AuthService.resetPassword(phone);
+
   sendResponse(res, {
     statusCode: StatusCodes.ACCEPTED,
     status: true,
-    message: "Password Reset  Successful",
+    message: "Password Reset Successful",
     data: result,
   });
 });
+
 
 export const AuthControllers = {
   register,
