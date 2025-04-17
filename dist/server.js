@@ -19,7 +19,7 @@ const config_1 = __importDefault(require("./config"));
 const DB_1 = __importDefault(require("./DB"));
 const http_1 = __importDefault(require("http")); // HTTP module
 const socket_io_1 = require("socket.io"); // Import Socket.IO
-require("../src/module/notice/notice.cron");
+require("../dist/module/notice/notice.cron");
 let io;
 function server() {
     return __awaiter(this, void 0, void 0, function* () {
