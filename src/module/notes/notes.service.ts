@@ -10,30 +10,40 @@ const createNote = async (paload: INotes) => {
 
 const getAllNotes = async () => {
   const result = await NotesModel.find({ isDeleted: false })
-    .populate("createdBy")
-    .populate({
-      path: "courseId",
-      populate: { path: "category" },
-    })
-    .populate("moduleId");
+  .populate({
+    path:"createdBy",
+     select: "name role phone"
+  
+  })
+  .populate({
+    path: "courseId",
+    select:"cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
+    populate: { path: "category",select:"title cover_photo" },
+  })
+  .populate({
+    path:"moduleId",
+    select:"moduleTitle slug",
+  });
 
   return result;
 };
 
 const getSingleNotes = async (slug: string) => {
   const result = await NotesModel.findOne({ slug })
-    .populate("createdBy")
-    .populate({
-      path: "courseId",
-      populate: { path: "category" },
-    })
-    .populate("moduleId");
-  if (!result) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Failed to get Notes. Slug is not valid, reload or go back and try again",
-    );
-  }
+  .populate({
+    path:"createdBy",
+     select: "name role phone"
+  
+  })
+  .populate({
+    path: "courseId",
+    select:"cover_photo course_title description duration course_type category daySchedule expireTime price offerPrice status slug",
+    populate: { path: "category",select:"title cover_photo" },
+  })
+  .populate({
+    path:"moduleId",
+    select:"moduleTitle slug",
+  });
   return result;
 };
 

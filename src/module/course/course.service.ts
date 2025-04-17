@@ -11,9 +11,9 @@ import { addMonths, isAfter } from "date-fns";
 
 const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
  const id = payload.createdBy;
- const user = UserModel.findOne({_id:id});
- if (!user) {
-  throw new AppError(StatusCodes.BAD_REQUEST, "User not found. Please provide valid user id")
+ const user = await UserModel.findOne({_id:id});
+ if (!user || user?.role === "student") {
+  throw new AppError(StatusCodes.BAD_REQUEST, "User not found. Please provide valid user id. ony admin and teacher is valid")
  }
   const result = await courseModel.create(payload);
   return result;
@@ -33,9 +33,14 @@ const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
     .fields()
     .populate({
       path: "category",
-      populate: { path: "createdBy" },
+      select:"title cover_photo slug"
     })
-    .populate(["createdBy"]);
+    .populate([
+      {
+        path: "createdBy",
+        select: "name role phone", 
+      },
+    ]);
 
   const result = await courseQuery.exec();
   const currentDateBD = new Date(
@@ -61,7 +66,13 @@ const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
 
 
 const getCourseById = async (slug: string) => {
-  const result = await courseModel.findOne({ slug }).populate("category");
+  const result = await courseModel.findOne({ slug }).populate({
+     path: "category",
+      select:"title cover_photo slug"
+  }).populate({
+    path: "createdBy",
+    select: "name role phone",
+ });
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,

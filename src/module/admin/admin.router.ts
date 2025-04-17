@@ -5,11 +5,12 @@ import { adminController } from "./admin.controller";
 
 const adminRouter = Router();
 /*  auth(USER_ROLE.admin), */
-adminRouter.patch("/users/:userId/block", adminController.userBlockByAdmin);
-adminRouter.delete("/blogs/:id", adminController.deleteBlogByAdmin);
+// adminRouter.patch("/users/:userId/block", adminController.userBlockByAdmin);
+// adminRouter.delete("/blogs/:id", adminController.deleteBlogByAdmin);
 
 /* Overview section handel */
-adminRouter.get("/overview", adminController.deleteBlogByAdmin);
+
+// adminRouter.get("/overview", adminController.deleteBlogByAdmin);
 
 export default adminRouter;
 

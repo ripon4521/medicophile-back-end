@@ -31,9 +31,9 @@ const createStudentsIntoDB = async (payload: IStudent) => {
     const createdStudent = await studentModel.create([studentData], { session });
     const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
    const sms = await sendSMS(payload.phone, `Your login password is: ${plainPassword}`);
-    if (sms?.response_code != 202	) {
-      throw new AppError(StatusCodes.FORBIDDEN, "Failed to create student. Please try again")
-    }
+    // if (sms?.response_code != 202	) {
+    //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create student. Please try again")
+    // }
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
 
     // Step 4: Create user using data from createdStudent
@@ -88,9 +88,9 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
     // console.log(plainPassword)
   const sms =   await sendSMS(payload.phone, `Your login password is: ${plainPassword}`);
   // console.log(sms)
-  if (sms?.response_code != 202	) {
-    throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
-  }
+  // if (sms?.response_code != 202	) {
+  //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
+  // }
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
     // Step 2: Now create the user using createdAdmin data
     const userData: Partial<IUser> = {
@@ -125,63 +125,112 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
 };
 
 
-
-
-
-
 const createFacultysIntoDB = async (payload: IFaculty) => {
   const session = await mongoose.startSession();
   session.startTransaction();
-
   try {
- 
-    const generatedPassword = generate6DigitPassword();
+    // Step 1: Create admin first (without userId)
+    const faculty = { ...payload };
 
-  
-   const sms = await sendSMS(payload.phone, `Your Faculty Login Password is: ${generatedPassword}`);
-    if (sms?.response_code != 202	) {
-      throw new AppError(StatusCodes.FORBIDDEN, "Failed to create teacher. Please try again")
-    }
-  
-    const hashedPassword = await bcrypt.hash(generatedPassword, 12);
-
-
-    const createdFaculty = await FacultyUserModel.create([payload], { session });
-
-
+    const createdFaculty = await FacultyUserModel.create([faculty], { session });
+    const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
+    // console.log(plainPassword)
+  const sms =   await sendSMS(payload.phone, `Your login password is: ${plainPassword}`);
+  // console.log(sms)
+  // if (sms?.response_code != 202	) {
+  //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
+  // }
+    const hashedPassword = await bcrypt.hash(plainPassword, 12);
+    // Step 2: Now create the user using createdAdmin data
     const userData: Partial<IUser> = {
-      name: payload.name,
-      status: payload.status,
-      role: payload.role,
-      profile_picture: payload.profile_picture,
-      phone: payload.phone,
-      email: payload.email,
-      password: hashedPassword,
-      isDeleted: payload.isDeleted,
-      deletedAt: payload.deletedAt,
+      name: createdFaculty[0]?.name,
+      status: createdFaculty[0]?.status,
+      role: createdFaculty[0]?.role,
+      profile_picture: createdFaculty[0]?.profile_picture,
+      phone: createdFaculty[0]?.phone,
+      password:hashedPassword,
+      email: createdFaculty[0]?.email,
+      isDeleted: createdFaculty[0]?.isDeleted,
+      deletedAt: createdFaculty[0]?.deletedAt,
     };
 
-    const createdUser = await UserModel.create([userData], { session });
-    await adminModel.updateOne(
+    const newUser = await UserModel.create([userData], { session });
+
+    // Step 3: Update admin with the newly created userId
+    await FacultyUserModel.updateOne(
       { _id: createdFaculty[0]._id },
-      { userId: createdUser[0]._id },
+      { userId: newUser[0]._id },
       { session }
     );
 
     await session.commitTransaction();
     session.endSession();
-
-    return {
-      faculty: createdFaculty[0],
-      user: createdUser[0],
-    };
+    return { admin: createdFaculty[0], user: newUser[0] };
   } catch (error) {
-    console.error("Transaction Error:", error);
     await session.abortTransaction();
     session.endSession();
     throw new Error("Transaction failed: " + error);
   }
 };
+
+
+
+
+
+
+// const createFacultysIntoDB = async (payload: IFaculty) => {
+//   const session = await mongoose.startSession();
+//   session.startTransaction();
+
+//   try {
+ 
+//     const generatedPassword = generate6DigitPassword();
+
+  
+//    const sms = await sendSMS(payload.phone, `Your Faculty Login Password is: ${generatedPassword}`);
+//     // if (sms?.response_code != 202	) {
+//     //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create teacher. Please try again")
+//     // }
+  
+//     const hashedPassword = await bcrypt.hash(generatedPassword, 12);
+
+
+//     const createdFaculty = await FacultyUserModel.create([payload], { session });
+
+
+//     const userData: Partial<IUser> = {
+//       name: createdFaculty[0]?.name,
+//       status: createdFaculty[0]?.status,
+//       role: createdFaculty[0]?.role,
+//       profile_picture: createdFaculty[0]?.profile_picture,
+//       phone: createdFaculty[0]?.phone,
+//       email: createdFaculty[0]?.email,
+//       password: hashedPassword,
+//       isDeleted: createdFaculty[0]?.isDeleted,
+//       deletedAt: createdFaculty[0]?.deletedAt,
+//     };
+
+//     const createdUser = await UserModel.create([userData], { session });
+//     await adminModel.updateOne(
+//       { _id: createdFaculty[0]._id },
+//       { userId: createdUser[0]._id },
+//       { session }
+//     );
+
+//     await session.commitTransaction();
+//     session.endSession();
+
+//     return {
+//       faculty: createdFaculty[0],
+//       user: createdUser[0],
+//     };
+//   } catch (error) {
+//     console.error("Transaction Error:", error);
+//     await session.abortTransaction();
+//     session.endSession();
+//     throw new Error("Transaction failed: " + error);
+//   }
+// };
 
 
 

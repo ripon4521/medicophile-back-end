@@ -15,7 +15,7 @@ const createFacultyValidationSchema = z.object({
 
 const updateFacultyValidationSchema = z.object({
   body: z.object({
-    role: z.enum(["superAdmin", "admin", "teacher"]).optional(),
+    role: z.enum(["superAdmin", "admin", "teacher", "student"]).optional(),
     name: z.string().min(3, "Name must be at least 3 characters").optional(),
     phone: z
       .string()

@@ -6,10 +6,10 @@ const facultySchema = new Schema(
   {
     role: {
       type: String,
-      enum: ["superAdmin", "admin", "teacher"],
+      enum: ["superAdmin", "admin", "teacher", "student"],
       default:"teacher"
     },
-    userId: { type: Types.ObjectId, ref: "User", required: true },
+    userId: { type: Types.ObjectId, ref: "User"},
     name: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
     email: { type: String,  default:'' },

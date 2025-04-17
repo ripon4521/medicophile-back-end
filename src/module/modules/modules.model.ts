@@ -9,7 +9,7 @@ const ModuleSchema = new Schema<IModules>(
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     deletedAt: { type: Date },
-    isDeleted: { type: Boolean, required: false },
+    isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: {
