@@ -1,10 +1,12 @@
+
+
 import { z } from "zod";
 import { Types } from "mongoose";
 const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
   message: "Invalid ObjectId format",
 });
 
-const createFacultyValidationSchema = z.object({
+const createAdminValidationSchema = z.object({
   body: z.object({
     name: z.string().min(3, "Name must be at least 3 characters"),
     phone: z
@@ -13,9 +15,9 @@ const createFacultyValidationSchema = z.object({
   }),
 });
 
-const updateFacultyValidationSchema = z.object({
+const updateAdminValidationSchema = z.object({
   body: z.object({
-    role: z.enum(["superAdmin", "admin", "teacher"]).optional(),
+    role: z.enum(["superAdmin", "admin", "teacher" , "student"]).optional(),
     name: z.string().min(3, "Name must be at least 3 characters").optional(),
     phone: z
       .string()
@@ -31,7 +33,7 @@ const updateFacultyValidationSchema = z.object({
   }),
 });
 
-export const facultyValidation = {
-  createFacultyValidationSchema,
-  updateFacultyValidationSchema,
+export const adminValidation = {
+  createAdminValidationSchema,
+  updateAdminValidationSchema
 };

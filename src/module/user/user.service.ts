@@ -9,28 +9,56 @@ import AppError from "../../helpers/AppError";
 import { StatusCodes } from "http-status-codes";
 import { IStudent } from "../student/student.interface";
 import studentModel from "../student/student.model";
+import { IAdmin } from "../admin/admin.interface";
+import adminModel from "../admin/admin.model";
+import bcrypt from 'bcrypt';
+
+
+
 
 const createStudentsIntoDB = async (payload: IStudent) => {
-  const userData: Partial<IUser> = {};
-  userData.name = payload.name;
-  userData.status = payload.status;
-  userData.role = payload.role;
-  userData.profile_picture = payload.profile_picture;
-  userData.phone = payload.phone;
-  userData.password = payload.password;
-  userData.email = payload.email;
-  userData.isDeleted = payload.isDeleted;
-  userData.deletedAt = payload.deletedAt;
-
   const session = await mongoose.startSession();
   session.startTransaction();
+
   try {
+    // Step 1: Create student first (without userId)
+    const studentData = { ...payload };
+
+
+    const createdStudent = await studentModel.create([studentData], { session });
+    const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
+    const hashedPassword = await bcrypt.hash(plainPassword, 12);
+
+    // Step 4: Create user using data from createdStudent
+    const userData: Partial<IUser> = {
+      name: createdStudent[0].name,
+      status: createdStudent[0].status,
+      role: createdStudent[0].role,
+      profile_picture: createdStudent[0].profile_picture,
+      phone: createdStudent[0].phone,
+      password: hashedPassword,
+      email: createdStudent[0].email,
+      isDeleted: createdStudent[0].isDeleted,
+      deletedAt: createdStudent[0].deletedAt,
+    };
+
     const newUser = await UserModel.create([userData], { session });
-    payload.userId = newUser[0]._id;
-    const student = await studentModel.create([payload], { session });
+
+    // Step 5: Update student with userId
+    await studentModel.updateOne(
+      { _id: createdStudent[0]._id },
+      { userId: newUser[0]._id },
+      { session }
+    );
+
     await session.commitTransaction();
     session.endSession();
-    return { student: student[0] };
+
+    return {
+      student: createdStudent[0],
+      user: newUser[0],
+      password: plainPassword, // send this if needed (for SMS/email)
+    };
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
@@ -38,19 +66,52 @@ const createStudentsIntoDB = async (payload: IStudent) => {
   }
 };
 
-// const createAdminIntoDB = async (payload: ) => {
-//   const userData: Partial<IUser> = {};
-//   userData.name = payload.name;
-//   userData.status = payload.status;
-//   userData.role = 'admin';
-//   userData.address = payload.address;
-//   userData.contact = payload.contact;
-//   userData.password = payload.password
-//   userData.gmail = payload.gmail;
-//   const newUser = await UserModel.create(userData);
-//   return newUser;
 
-// };
+const createAdmiIntoDB = async (payload: IAdmin) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    // Step 1: Create admin first (without userId)
+    const adminData = { ...payload };
+
+    const createdAdmin = await adminModel.create([adminData], { session });
+
+    // Step 2: Now create the user using createdAdmin data
+    const userData: Partial<IUser> = {
+      name: createdAdmin[0]?.name,
+      status: createdAdmin[0]?.status,
+      role: createdAdmin[0]?.role,
+      profile_picture: createdAdmin[0]?.profile_picture,
+      phone: createdAdmin[0]?.phone,
+      password: createdAdmin[0]?.password,
+      email: createdAdmin[0]?.email,
+      isDeleted: createdAdmin[0]?.isDeleted,
+      deletedAt: createdAdmin[0]?.deletedAt,
+    };
+
+    const newUser = await UserModel.create([userData], { session });
+
+    // Step 3: Update admin with the newly created userId
+    await adminModel.updateOne(
+      { _id: createdAdmin[0]._id },
+      { userId: newUser[0]._id },
+      { session }
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+    return { admin: createdAdmin[0], user: newUser[0] };
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw new Error("Transaction failed: " + error);
+  }
+};
+
+
+
+
+
 
 const createFacultysIntoDB = async (payload: IFaculty) => {
   const userData: Partial<IUser> = {};
@@ -81,6 +142,16 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
   }
 };
 
+
+
+
+
+
+
+
+
+
+
 const getUSers = async () => {
   const users = await UserModel.find();
   return users;
@@ -110,4 +181,5 @@ export const userService = {
   getUSers,
   deleteUser,
   getPofile,
+  createAdmiIntoDB
 };

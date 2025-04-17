@@ -1,20 +1,21 @@
 import mongoose, { Schema, Types } from "mongoose";
 import bcrypt from "bcrypt";
 import config from "../../config";
+import { IAdmin } from "./admin.interface";
 
-const facultySchema = new Schema(
+const adminSchema = new Schema<IAdmin>(
   {
     role: {
       type: String,
-      enum: ["superAdmin", "admin", "teacher"],
-      default:"teacher"
+      enum: ["superAdmin", "admin", "teacher", "student"],
+     default:"admin"
     },
-    userId: { type: Types.ObjectId, ref: "User", required: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User"},
     name: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
-    email: { type: String,  default:'' },
-    password: { type: String , default:''},
-    profile_picture: { type: String,  default:'' },
+    email: { type: String,   default:''},
+    password: { type: String,  default:'' },
+    profile_picture: { type: String , default:''},
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
     deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
@@ -22,12 +23,12 @@ const facultySchema = new Schema(
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }, // ✅ BD Time (UTC+6)
+    },
   },
 );
 
 // ✅ Middleware: Delete হলে `deletedAt` BD Time অনুযায়ী সেট হবে
-facultySchema.pre("findOneAndUpdate", function (next) {
+adminSchema.pre("findOneAndUpdate", function (next) {
   const update = this.getUpdate() as Record<string, any>;
 
   if (update?.isDeleted === true) {
@@ -37,7 +38,7 @@ facultySchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-// facultySchema.pre("save", async function (next) {
+// adminSchema.pre("save", async function (next) {
 //   // eslint-disable-next-line @typescript-eslint/no-this-alias
 //   const user = this;
 //   user.password = await bcrypt.hash(
@@ -47,10 +48,10 @@ facultySchema.pre("findOneAndUpdate", function (next) {
 //   next();
 // });
 
-// facultySchema.post("save", async function (doc, next) {
+// adminSchema.post("save", async function (doc, next) {
 //   doc.password = "";
 //   next();
 // });
 
-const FacultyUserModel = mongoose.model("Faculty", facultySchema);
-export default FacultyUserModel;
+const adminModel = mongoose.model("Admin", adminSchema);
+export default adminModel;

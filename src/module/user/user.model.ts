@@ -6,7 +6,7 @@ import config from "../../config";
 const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
-    email: { type: String, unique: true },
+    email: { type: String,  },
     password: { type: String},
     // studentId:{ type: mongoose.Schema.ObjectId},
     // teacherId: {type:mongoose.Schema.ObjectId},
@@ -28,19 +28,19 @@ const UserSchema = new Schema<IUser>(
   },
 );
 
-UserSchema.pre("save", async function (next) {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this;
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_rounds),
-  );
-  next();
-});
+// UserSchema.pre("save", async function (next) {
+//   // eslint-disable-next-line @typescript-eslint/no-this-alias
+//   const user = this;
+//   user.password = await bcrypt.hash(
+//     user.password,
+//     Number(config.bcrypt_salt_rounds),
+//   );
+//   next();
+// });
 
-UserSchema.post("save", async function (doc, next) {
-  doc.password = "";
-  next();
-});
+// UserSchema.post("save", async function (doc, next) {
+//   doc.password = "";
+//   next();
+// });
 
 export const UserModel = model<IUser>("User", UserSchema);

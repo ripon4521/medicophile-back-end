@@ -13,6 +13,16 @@ const createStudeent = catchAsync(async (req, res) => {
   });
 });
 
+const createAdmin = catchAsync(async (req, res) => {
+  const payload = req.body;
+  const result = await userService.createAdmiIntoDB(payload);
+  sendResponse(res, {
+    statusCode: StatusCodes.CREATED,
+    message: "Admin created successfully",
+    data: result,
+  });
+});
+
 const createFaculty = catchAsync(async (req, res) => {
   const payload = req.body;
   const result = await userService.createFacultysIntoDB(payload);
@@ -69,6 +79,7 @@ const getProfile = catchAsync(async (req, res) => {
 export const userController = {
   createStudeent,
   createFaculty,
+  createAdmin,
   getAllUsers,
   deleteUsers,
   getProfile,

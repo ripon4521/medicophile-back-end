@@ -10,15 +10,15 @@ const stundetSchema = new Schema<IStudent>(
       enum: ["superAdmin", "admin", "teacher", "student"],
      default:"student"
     },
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
     name: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
-    email: { type: String,  unique: true },
-    password: { type: String,  },
-    gurdianName: { type: String },
-    gurdianPhone: { type: String },
-    profile_picture: { type: String },
-    address: { type: String},
+    email: { type: String, default:''},
+    password: { type: String, default:'' },
+    gurdianName: { type: String, default:'' },
+    gurdianPhone: { type: String , default: ''},
+    profile_picture: { type: String, default:'' },
+    address: { type: String, default:''},
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
     deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
@@ -41,20 +41,20 @@ stundetSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-stundetSchema.pre("save", async function (next) {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this;
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_rounds),
-  );
-  next();
-});
+// stundetSchema.pre("save", async function (next) {
+//   // eslint-disable-next-line @typescript-eslint/no-this-alias
+//   const user = this;
+//   user.password = await bcrypt.hash(
+//     user.password,
+//     Number(config.bcrypt_salt_rounds),
+//   );
+//   next();
+// });
 
-stundetSchema.post("save", async function (doc, next) {
-  doc.password = "";
-  next();
-});
+// stundetSchema.post("save", async function (doc, next) {
+//   doc.password = "";
+//   next();
+// });
 
 const studentModel = mongoose.model("Students", stundetSchema);
 export default studentModel;
