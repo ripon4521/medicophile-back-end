@@ -4,8 +4,13 @@ import { ITeams } from "./team.interface";
 import Team from "./team.model";
 import QueryBuilder from "../../builder/querybuilder";
 import { IBlog } from "../blog/blog.interface";
+import { UserModel } from "../user/user.model";
 
 const createTeam = async (payload: ITeams) => {
+  const user = await UserModel.findOne({_id:payload.createdBy});
+    if (!user) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "invalid user id. Please provide valid user id")
+    }
   const create = await Team.create(payload);
   if (!create) {
     throw new AppError(

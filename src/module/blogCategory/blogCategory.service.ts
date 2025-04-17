@@ -5,8 +5,13 @@ import AppError from "../../helpers/AppError";
 import { IBlogCategory } from "./blogCategory.interface";
 import BlogCategory from "./blogCategory.model";
 import QueryBuilder from "../../builder/querybuilder";
+import { UserModel } from "../user/user.model";
 
 const createBlogCategory = async (payload: IBlogCategory) => {
+  const user = await UserModel.findOne({_id:payload.createdBy});
+  if (!user) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid user id. Please provide valid user id")
+  }
   const result = await BlogCategory.create(payload);
   if (!result) {
     throw new AppError(
@@ -24,7 +29,10 @@ const getAllBlogCategory = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields()
-    .populate(["createdBy"]);
+    .populate([{
+      path:"createdBy",
+      select:"name role phone"
+    }]);
 
   const result = await courseQuery.exec();
   return result;
