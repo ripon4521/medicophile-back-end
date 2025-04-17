@@ -25,7 +25,10 @@ const noticeSchema = new Schema<INotice>({
   },
   expiresAt: {
     type: Date,
-    required: true,
+   
+  },
+  scheduleDate:{
+    type:Date
   },
   isExpire: {
     type: Boolean,

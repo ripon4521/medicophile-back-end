@@ -38,9 +38,7 @@ const createCourseSchema = z.object({
     status: z.enum(["active", "inactive"], {
       message: "Status must be either 'active' or 'inactive'.",
     }),
-    // course_tag: z
-    //   .array(z.string())
-    //   .nonempty({ message: "At least one course tag is required." }),
+
   }),
 });
 
@@ -75,7 +73,7 @@ const updateCourseSchema = z.object({
     category: ObjectIdSchema.optional(),
     createdBy: ObjectIdSchema.optional(),
     expireTime: z
-      .date({ message: "Expire time must be a valid date." })
+      .string({ message: "Expire time must be a valid date." })
       .optional(),
     daySchedule: z
       .array(z.string())

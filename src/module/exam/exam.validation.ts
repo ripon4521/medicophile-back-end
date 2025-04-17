@@ -20,11 +20,17 @@ const createExamSchema = z.object({
     cqMark: z.number().min(0, "CQ mark must be 0 or more").optional(),
     resultStatus: z.enum(["pending", "completed", "failed"], {
       required_error: "Result status is required",
-    }),
-    validTime: z.coerce.date({ errorMap: () => ({ message: "Valid time must be a valid date" }) }),
+    }).optional(),
+    validTime: z.coerce.date({ errorMap: () => ({ message: "Valid time must be a valid date" }) }).optional(),
     status: z.enum(["published", "drafted"], {
       required_error: "Status is required",
     }),
+     scheduleDate: z.preprocess((val) => {
+          if (typeof val === 'string' || val instanceof Date) {
+            return new Date(val);
+          }
+          return val;
+        }, z.date()).optional(),
   }),
 });
 
@@ -44,6 +50,12 @@ const updateExamSchema = z.object({
     resultStatus: z.enum(["pending", "completed", "failed"]).optional(),
     validTime: z.coerce.date({ errorMap: () => ({ message: "Valid time must be a valid date" }) }).optional(),
     status: z.enum(["published", "drafted"]).optional(),
+     scheduleDate: z.preprocess((val) => {
+          if (typeof val === 'string' || val instanceof Date) {
+            return new Date(val);
+          }
+          return val;
+        }, z.date()).optional(),
   }),
 });
 

@@ -7,12 +7,12 @@ Completed Module
 5. course - updated
 6. module 
 7. exam - updated
-8. notes
-9. lecture
+8. notes - updated
+9. lecture - updated
 10. module Details
-11. cq question
-12. cq attemps
-13. cq marking
+11. cq question - updated
+12. cq attemps - updated
+13. cq marking - updated
 14. pdf
 15. image
 16. docs
@@ -21,9 +21,9 @@ Completed Module
 19. gap attemp
 20. live class
 21. media
-22. notice
+22. notice -updated
 23. teams
-24. blog
+24. blog - updated
 25. blog category
 26. blog comment
 

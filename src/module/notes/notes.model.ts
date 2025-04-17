@@ -17,6 +17,7 @@ const NotesSchema = new Schema<INotes>(
       required: true,
       default: "Published",
     },
+    scheduleDate:{type:Date},
     deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
   },

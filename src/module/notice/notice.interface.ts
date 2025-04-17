@@ -7,6 +7,7 @@ export interface INotice {
     message:string;
     createdBy:Types.ObjectId;
     expiresAt:Date;
+    scheduleDate:Date;
     isExpire:boolean;
     isDeleted:boolean;
     deletedAt:Date;

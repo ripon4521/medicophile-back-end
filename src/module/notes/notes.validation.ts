@@ -8,12 +8,18 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 const createNotesSchema = z.object({
   body: z.object({
     title: z.string().min(1, "Title is required"),
-    description: z.string().min(1, "Description is required"),
+    description: z.string().min(1, "Description is required").optional(),
     createdBy: ObjectIdSchema,
     moduleId: ObjectIdSchema,
     courseId: ObjectIdSchema,
     noteFile: z.string().optional(),
     status: z.enum(["Published", "Drafted"]),
+    scheduleDate: z.preprocess((val) => {
+      if (typeof val === 'string' || val instanceof Date) {
+        return new Date(val);
+      }
+      return val;
+    }, z.date()).optional(),
   }),
 });
 
@@ -25,7 +31,13 @@ const updateNotesSchema = z.object({
     title: z.string().min(1, "Title is required").optional(),
     description: z.string().min(1, "Description is required").optional(),
     noteFile: z.string().optional(),
-    status: z.enum(["published", "drafted"]).optional(),
+    status: z.enum(["Published", "Drafted"]).optional(),
+     scheduleDate: z.preprocess((val) => {
+          if (typeof val === 'string' || val instanceof Date) {
+            return new Date(val);
+          }
+          return val;
+        }, z.date()).optional(),
   }),
 });
 

@@ -22,10 +22,11 @@ const ExamSchema = new Schema<IExam>(
     resultStatus: {
       type: String,
       enum: ["pending", "completed", "failed"],
-      required: true,
+      
     },
-    validTime: { type: Date, required: true },
+    validTime: { type: Date },
     status: { type: String, enum: ["published", "drafted"], required: true },
+    scheduleDate:{type:Date},
     deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
   },
