@@ -37,6 +37,7 @@ const blog_route_1 = __importDefault(require("../module/blog/blog.route"));
 const team_route_1 = __importDefault(require("../module/team/team.route"));
 const blogComment_route_1 = __importDefault(require("../module/blogComment/blogComment.route"));
 const coupon_route_1 = __importDefault(require("../module/coupon/coupon.route"));
+const purchaseToken_route_1 = __importDefault(require("../module/purchaseToken/purchaseToken.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -166,7 +167,10 @@ const moduleRoutes = [
     {
         path: "/coupon",
         route: coupon_route_1.default,
-    },
+    }, {
+        path: "/purchase-token",
+        route: purchaseToken_route_1.default
+    }
 ];
 moduleRoutes.forEach((route) => {
     router.use(route.path, route.route);

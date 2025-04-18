@@ -16,7 +16,7 @@ const PurchaseSchema = new mongoose_1.Schema({
     charge: { type: Number, required: true },
     totalAmount: { type: Number, required: true },
     discountReason: { type: String, required: true },
-    issuedBy: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "Admin" },
+    issuedBy: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "User" },
     isDeleted: { type: Boolean, required: true, default: false },
     deletedAt: { type: Date, default: null },
 }, {
