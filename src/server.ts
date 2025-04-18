@@ -22,8 +22,8 @@ async function server() {
       cors: {
         origin: [
           "http://localhost:5173",
-          "admin.iconadmissionaid.com",
-          "iconadmissionaid.com", // Removed trailing space
+          "https://admin.iconadmissionaid.com",
+          "https://iconadmissionaid.com", // Removed trailing space
         ],
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
       },
