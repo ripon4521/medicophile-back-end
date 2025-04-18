@@ -32,6 +32,7 @@ import blogRoute from "../module/blog/blog.route";
 import teamRoute from "../module/team/team.route";
 import blogCommentRouter from "../module/blogComment/blogComment.route";
 import couponRoute from "../module/coupon/coupon.route";
+import purchaseTokenRoute from "../module/purchaseToken/purchaseToken.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -164,7 +165,10 @@ const moduleRoutes = [
   {
     path: "/coupon",
     route: couponRoute,
-  },
+  },{
+    path:"/purchase-token",
+    route:purchaseTokenRoute
+  }
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);

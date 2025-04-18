@@ -16,7 +16,7 @@ const PurchaseSchema = new Schema<IPurchase>(
       charge: { type: Number, required: true },
       totalAmount: { type: Number, required: true },
       discountReason: { type: String, required: true },
-      issuedBy: { type: Schema.Types.ObjectId, required: true, ref: "Admin" },
+      issuedBy: { type: Schema.Types.ObjectId, required: true, ref: "User" },
       isDeleted: { type: Boolean, required: true, default: false },
       deletedAt: { type: Date, default: null },
     },
