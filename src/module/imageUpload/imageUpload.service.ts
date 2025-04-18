@@ -5,9 +5,12 @@ import { sendImageToCloudinary } from "../../utils/sendImageToCloudnery";
 export const uploadImageService = async (file: Express.Multer.File) => {
   const imagePath = path.join(file.destination, file.filename);
 
-  const result = await sendImageToCloudinary(file.filename, imagePath);
+  // ✅ Extension ছাড়া ফাইলনেম
+  const imageName = path.parse(file.filename).name;
 
-  // Optionally delete the local file after upload
+  const result = await sendImageToCloudinary(imageName, imagePath);
+
+  // ✅ লোকাল ফাইল ডিলিট
   fs.unlinkSync(imagePath);
 
   return result;

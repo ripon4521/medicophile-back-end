@@ -18,8 +18,10 @@ const path_1 = __importDefault(require("path"));
 const sendImageToCloudnery_1 = require("../../utils/sendImageToCloudnery");
 const uploadImageService = (file) => __awaiter(void 0, void 0, void 0, function* () {
     const imagePath = path_1.default.join(file.destination, file.filename);
-    const result = yield (0, sendImageToCloudnery_1.sendImageToCloudinary)(file.filename, imagePath);
-    // Optionally delete the local file after upload
+    // ✅ Extension ছাড়া ফাইলনেম
+    const imageName = path_1.default.parse(file.filename).name;
+    const result = yield (0, sendImageToCloudnery_1.sendImageToCloudinary)(imageName, imagePath);
+    // ✅ লোকাল ফাইল ডিলিট
     fs_1.default.unlinkSync(imagePath);
     return result;
 });

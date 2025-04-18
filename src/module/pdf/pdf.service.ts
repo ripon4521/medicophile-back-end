@@ -5,9 +5,12 @@ import { sendToCloudinary } from "../../utils/sendPdfToCloudnery";
 export const uploadPdfService = async (file: Express.Multer.File) => {
   const filePath = path.join(file.destination, file.filename);
 
-  const result = await sendToCloudinary(file.filename, filePath);
+  // ✅ Extension ছাড়া নাম
+  const pdfName = path.parse(file.filename).name;
 
-  // remove local file after upload
+  const result = await sendToCloudinary(pdfName, filePath);
+
+  // ✅ লোকাল ফাইল রিমুভ
   fs.unlinkSync(filePath);
 
   return result;

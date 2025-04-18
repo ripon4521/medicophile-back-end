@@ -18,8 +18,10 @@ const path_1 = __importDefault(require("path"));
 const sendPdfToCloudnery_1 = require("../../utils/sendPdfToCloudnery");
 const uploadPdfService = (file) => __awaiter(void 0, void 0, void 0, function* () {
     const filePath = path_1.default.join(file.destination, file.filename);
-    const result = yield (0, sendPdfToCloudnery_1.sendToCloudinary)(file.filename, filePath);
-    // remove local file after upload
+    // ✅ Extension ছাড়া নাম
+    const pdfName = path_1.default.parse(file.filename).name;
+    const result = yield (0, sendPdfToCloudnery_1.sendToCloudinary)(pdfName, filePath);
+    // ✅ লোকাল ফাইল রিমুভ
     fs_1.default.unlinkSync(filePath);
     return result;
 });
