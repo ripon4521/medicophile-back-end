@@ -15,11 +15,11 @@ const userCredentialsSchema = new Schema(
     },
     accessToken: {
       type: String,
-      required: true,
+   
     },
     refreshToken: {
       type: String,
-      required: true,
+      
     },
     ipAddress: {
       type: String,
