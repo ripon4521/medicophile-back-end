@@ -3,8 +3,18 @@ import AppError from "../../helpers/AppError";
 import { IBlogComment } from "./blogComment.interface";
 import BlogComment from "./blogComment.model";
 import QueryBuilder from "../../builder/querybuilder";
+import { UserModel } from "../user/user.model";
+import BlogModel from "../blog/blog.model";
 
 const createBlogComment = async (payload: IBlogComment) => {
+  const user = await UserModel.findOne({_id:payload.userId});
+  const blog = await BlogModel.findOne({_id:payload.blogId});
+  if (!user) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid user id")
+  }else if (!blog) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid blog id")
+  }
+
   const result = await BlogComment.create(payload);
   if (!result) {
     throw new AppError(
@@ -22,8 +32,15 @@ const getAllBlogComment = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields()
-    .populate(["userId"])
-    .populate(["blogId"]);
+    .populate([{
+      path:"userId",
+      select:"name role phone profile_picture"
+    }])
+    .populate([{
+      path:"blogId",
+      select:"title description categoryId tags",
+      populate:[ {path:"categoryId", select:"title"}]
+    }]);
 
   const result = await courseQuery.exec();
   return result;

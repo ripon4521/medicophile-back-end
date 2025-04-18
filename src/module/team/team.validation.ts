@@ -12,10 +12,6 @@ const createTeamSchema = z.object({
       .url("Invalid URL format for profile image")
       .optional(),
     createdBy: ObjectIdSchema,
-    status: z.enum(["Active", "Inactive", "Archived"], {
-      required_error: "Status is required",
-      invalid_type_error: "Status must be one of: active, inactive, archived",
-    }),
     members: z
       .array(ObjectIdSchema, {
         required_error: "Members list is required",

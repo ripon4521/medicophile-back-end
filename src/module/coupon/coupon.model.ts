@@ -19,7 +19,7 @@ const couponSchema = new Schema<ICoupon>(
     status: {
       type: String,
       enum: ["Active", "Expired"],
-      required: [true, "Status is required"],
+      default:"Active"
     },
     createdBy: {
       type: Schema.Types.ObjectId,

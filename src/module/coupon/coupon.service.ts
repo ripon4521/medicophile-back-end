@@ -3,8 +3,13 @@ import AppError from "../../helpers/AppError";
 import { ICoupon } from "./coupon.interface";
 import CouponModel from "./coupon.model";
 import QueryBuilder from "../../builder/querybuilder";
+import { UserModel } from "../user/user.model";
 
 const createCouponIntoDb = async (payload: ICoupon): Promise<ICoupon> => {
+  const user = await UserModel.findOne({_id:payload.createdBy});
+  if (!user || user.role === "student") {
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid user id. only admin or teacher created coupon")
+  }
   const result = await CouponModel.create(payload);
   if (!result) {
     throw new AppError(
@@ -22,13 +27,20 @@ const getAllCuponFromDb = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields()
-    .populate(["createdBy"]);
+    .populate([{
+      path:"createdBy",
+      select:"role name phone profile_picture"
+    }]);
 
   const result = await courseQuery.exec();
   return result;
 };
 
 const updateCouponInDb = async (_id: string, payload: Partial<ICoupon>) => {
+  const coupon = await CouponModel.findOne({_id: _id});
+  if (!coupon) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid coupon id.")
+  }
   const update = await CouponModel.findOneAndUpdate({ _id }, payload, {
     new: true,
     runValidators: true,
@@ -44,6 +56,10 @@ const updateCouponInDb = async (_id: string, payload: Partial<ICoupon>) => {
 };
 
 const deleteCouponFromDb = async (_id: string) => {
+  const coupon = await CouponModel.findOne({_id: _id});
+  if (!coupon) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid coupon id.")
+  }
   const result = await CouponModel.findOneAndUpdate(
     { _id },
     {

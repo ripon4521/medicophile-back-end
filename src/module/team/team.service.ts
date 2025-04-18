@@ -11,6 +11,12 @@ const createTeam = async (payload: ITeams) => {
     if (!user) {
       throw new AppError(StatusCodes.BAD_REQUEST, "invalid user id. Please provide valid user id")
     }
+
+    const member = await UserModel.findOne({_id:payload.members});
+    if (!member) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "invalid member id. Please provide valid member id")
+    }
+    
   const create = await Team.create(payload);
   if (!create) {
     throw new AppError(
