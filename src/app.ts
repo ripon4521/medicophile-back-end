@@ -15,8 +15,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "iconadmissionaid.com",
-      "admin.iconadmissionaid.com ",
+      "https://admin.iconadmissionaid.com",
+      "https://iconadmissionaid.com",
     ],
   }),
 );
