@@ -1,24 +1,44 @@
 import { model, Schema } from "mongoose";
 import { IPurchase } from "./purchase.interface";
+import { IPaymentInfo } from "../purchaseToken/purchaseToken.interface";
+const paymentInfoSchema = new Schema<IPaymentInfo>(
+  {
+    transactionId: { type: String, required: true },
+    method: {
+      type: String,
+      enum: ["Bkash", "Nagad", "Bank", "Cash"],
+      required: true,
+    },
+    accountNumber: { type: String, required:true },
+    paymentMedium: {
+      type: String,
+      enum: ["personal", "agent", "merchant"],
+    },
+    paymentDate: { type: Date }, 
+    proofUrl: { type: String },
+  },
+  { _id: false }
+);
 
 const PurchaseSchema = new Schema<IPurchase>(
     {
       studentId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-      status: { type: String, enum: ["Archive", "Course Out"], required: true },
+      courseId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
+      paymentInfo:{ type : paymentInfoSchema},
+      status: { type: String, enum: ["Archive", "Course Out", "Active"] },
       paymentStatus: {
         type: String,
-        enum: ["Paid", "Pending", "Partial", "Refunded"],
+        enum: ["Paid", "Pending", "Partial", "Refunded","Rejected"],
         required: true,
       },
-      purchaseToken: { type: String, required: true },
-      subtotal: { type: Number, required: true },
-      discount: { type: Number, required: true },
-      charge: { type: Number, required: true },
-      totalAmount: { type: Number, required: true },
-      discountReason: { type: String, required: true },
+      purchaseToken: { type: Schema.Types.ObjectId, required: true },
+      subtotal: { type: Number },
+      discount: { type: Number },
+      charge: { type: Number},
+      totalAmount: { type: Number },
       issuedBy: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-      isDeleted: { type: Boolean, required: true, default: false },
-      deletedAt: { type: Date, default: null },
+      isDeleted: { type: Boolean, default: false },
+      deletedAt: { type: Date },
     },
     {
         timestamps: {

@@ -13,7 +13,7 @@ export interface IPaymentInfo {
   export interface IPurchaseToken {
     studentId: Types.ObjectId;
     courseId: Types.ObjectId;
-    status: "Verified" | "Unverified" | "Rejected";
+    status: "Verified" | "Unverified" | "Rejected" | "Pending" | "Refunded" | "Partial" ;
     purchaseToken: string;
     coupon?:string;
     price:number;

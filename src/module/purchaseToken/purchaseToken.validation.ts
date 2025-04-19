@@ -13,7 +13,7 @@ export const paymentInfoSchema = z.object({
   method: z.enum(["Bkash", "Nagad", "Bank", "Cash"], {
     required_error: "Payment method is required",
   }),
-  accountNumber: z.string().optional(),
+  accountNumber: z.string({required_error:"account number is requried"}),
   paymentMedium: z.enum(["personal", "agent", "merchant"]).optional(),
   proofUrl: z.string().url("Invalid proof URL").optional(),
 });

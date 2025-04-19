@@ -33,6 +33,8 @@ import teamRoute from "../module/team/team.route";
 import blogCommentRouter from "../module/blogComment/blogComment.route";
 import couponRoute from "../module/coupon/coupon.route";
 import purchaseTokenRoute from "../module/purchaseToken/purchaseToken.route";
+import purchaseRoute from "../module/purchase/purchase.route";
+import paymentDetilsRoute from "../module/paymentDetails/paymentDetails.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -168,6 +170,12 @@ const moduleRoutes = [
   },{
     path:"/purchase-token",
     route:purchaseTokenRoute
+  },{
+    path:"/purchase",
+    route:purchaseRoute
+  },{
+    path:"/payment-details",
+    route:paymentDetilsRoute
   }
 ];
 moduleRoutes.forEach((route) => {

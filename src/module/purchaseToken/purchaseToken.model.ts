@@ -10,12 +10,12 @@ const paymentInfoSchema = new Schema<IPaymentInfo>(
       enum: ["Bkash", "Nagad", "Bank", "Cash"],
       required: true,
     },
-    accountNumber: { type: String },
+    accountNumber: { type: String, required:true },
     paymentMedium: {
       type: String,
       enum: ["personal", "agent", "merchant"],
     },
-    paymentDate: { type: Date }, // will be set in pre-save
+    paymentDate: { type: Date }, 
     proofUrl: { type: String },
   },
   { _id: false }
@@ -27,7 +27,7 @@ const purchaseTokenSchema = new Schema<IPurchaseToken>(
     courseId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
     status: {
       type: String,
-      enum: ["Verified", "Unverified", "Rejected"],
+      enum: ["Verified", "Unverified", "Rejected", "Pending", "Refunded", "Partial"],
       default: "Unverified",
     },
     purchaseToken: { type: String },

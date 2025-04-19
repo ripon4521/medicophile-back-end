@@ -1,15 +1,17 @@
 import { Types } from "mongoose";
+import { IPaymentInfo } from "../purchaseToken/purchaseToken.interface";
 
 export interface IPurchase {
         studentId:Types.ObjectId;
-        status: "Archive" | "Course Out";
-        paymentStatus:"Paid" | "Pending" | "Partial" | "Refunded";
-        purchaseToken:string;
+        courseId:Types.ObjectId;
+        paymentInfo:IPaymentInfo;
+        status: "Archive" | "Course Out" | "Active";
+        paymentStatus:"Paid" | "Pending" | "Partial" | "Refunded" | "Rejected";
+        purchaseToken:Types.ObjectId;
         subtotal:number;
         discount:number;
         charge:number;
         totalAmount:number;
-        discountReason:string;
         issuedBy:Types.ObjectId;
         isDeleted:boolean;
         deletedAt:Date;

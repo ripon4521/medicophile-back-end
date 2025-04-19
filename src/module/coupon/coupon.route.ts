@@ -6,7 +6,7 @@ import { couponController } from "./coupon.controller";
 const couponRoute = Router();
 couponRoute.post(
   "/create-coupon",
-  validateRequest(couponValidation.createCouponSchema),
+  validateRequest(couponValidation.createCouponSchema ),
   couponController.createCoupon,
 );
 couponRoute.get("/", couponController.getAllCoupon);
