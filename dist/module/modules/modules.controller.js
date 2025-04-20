@@ -17,6 +17,7 @@ const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const modules_service_1 = require("./modules.service");
+const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const createModule = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield modules_service_1.moduleService.createModule(req.body);
     (0, sendResponse_1.default)(res, {
@@ -53,6 +54,18 @@ const getSingleModule = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
         data: result,
     });
 }));
+const getSpecificModule = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    if (!id) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Please provide id");
+    }
+    const result = yield modules_service_1.moduleService.getSpecificModule(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Single Module get successfully",
+        data: result,
+    });
+}));
 const getAllModule = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = req.query;
     const result = yield modules_service_1.moduleService.getAllModule(query);
@@ -68,4 +81,5 @@ exports.modulesController = {
     deleteModule,
     getAllModule,
     getSingleModule,
+    getSpecificModule
 };

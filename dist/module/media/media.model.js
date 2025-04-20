@@ -8,6 +8,7 @@ const slugify_1 = __importDefault(require("slugify"));
 const mediaSchema = new mongoose_1.Schema({
     slug: {
         type: String,
+        unique: true
     },
     title: {
         type: String,
@@ -41,12 +42,12 @@ mediaSchema.pre("save", function (next) {
     }
     next();
 });
-mediaSchema.pre("findOneAndUpdate", function (next) {
-    const update = this.getUpdate();
-    if (update === null || update === void 0 ? void 0 : update.title) {
-        update.slug = (0, slugify_1.default)(update.title, { lower: true, strict: true });
-    }
-    next();
-});
+// mediaSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 const MediaModel = (0, mongoose_1.model)("Media", mediaSchema);
 exports.default = MediaModel;

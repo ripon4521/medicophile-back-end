@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { moduleService } from "./modules.service";
+import AppError from "../../helpers/AppError";
 
 const createModule = catchAsync(async (req, res) => {
   const result = await moduleService.createModule(req.body);
@@ -43,6 +44,23 @@ const getSingleModule = catchAsync(async (req, res) => {
   });
 });
 
+
+const getSpecificModule = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide id")
+  }
+  const result = await moduleService.getSpecificModule(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Single Module get successfully",
+    data: result,
+  });
+});
+
+
+
 const getAllModule = catchAsync(async (req, res) => {
   const query = req.query;
   const result = await moduleService.getAllModule(query);
@@ -59,4 +77,5 @@ export const modulesController = {
   deleteModule,
   getAllModule,
   getSingleModule,
+  getSpecificModule
 };

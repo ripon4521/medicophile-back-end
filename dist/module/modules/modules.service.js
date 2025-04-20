@@ -17,6 +17,7 @@ const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const modules_model_1 = __importDefault(require("./modules.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
+const course_model_1 = __importDefault(require("../course/course.model"));
 const createModule = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield modules_model_1.default.create(payload);
     if (!result) {
@@ -78,6 +79,24 @@ const getSingleModule = (slug) => __awaiter(void 0, void 0, void 0, function* ()
     }
     return result;
 });
+const getSpecificModule = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    // console.log(id)
+    const course = yield course_model_1.default.findOne({ _id: id });
+    // console.log(course)
+    if (!course) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid course id");
+    }
+    const result = yield modules_model_1.default.findOne({ courseId: id })
+        .populate("createdBy")
+        .populate({
+        path: "courseId",
+        populate: { path: "category" },
+    });
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to load data");
+    }
+    return result;
+});
 const updateModule = (slug, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const update = yield modules_model_1.default.findOneAndUpdate({ slug }, payload, {
         new: true,
@@ -104,4 +123,5 @@ exports.moduleService = {
     updateModule,
     getAllModule,
     getSingleModule,
+    getSpecificModule
 };

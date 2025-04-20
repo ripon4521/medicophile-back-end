@@ -12,7 +12,7 @@ exports.paymentInfoSchema = zod_1.z.object({
     method: zod_1.z.enum(["Bkash", "Nagad", "Bank", "Cash"], {
         required_error: "Payment method is required",
     }),
-    accountNumber: zod_1.z.string().optional(),
+    accountNumber: zod_1.z.string({ required_error: "account number is requried" }),
     paymentMedium: zod_1.z.enum(["personal", "agent", "merchant"]).optional(),
     proofUrl: zod_1.z.string().url("Invalid proof URL").optional(),
 });

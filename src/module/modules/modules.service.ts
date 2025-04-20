@@ -3,6 +3,7 @@ import AppError from "../../helpers/AppError";
 import { IModules } from "./modules.interface";
 import ModuleModel from "./modules.model";
 import QueryBuilder from "../../builder/querybuilder";
+import courseModel from "../course/course.model";
 
 const createModule = async (payload: IModules) => {
   const result = await ModuleModel.create(payload);
@@ -77,6 +78,29 @@ const getSingleModule = async (slug: string) => {
   return result;
 };
 
+const getSpecificModule = async(id:string) => {
+  // console.log(id)
+  const course = await courseModel.findOne({_id:id});
+  // console.log(course)
+  if (!course) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid course id");
+  }
+  const result = await ModuleModel.findOne({ courseId:id })
+  .populate("createdBy")
+  .populate({
+    path: "courseId",
+    populate: { path: "category" },
+  });
+ 
+if (!result) {
+  throw new AppError(StatusCodes.BAD_REQUEST, "Failed to load data");
+}
+return result;
+}
+
+
+
+
 const updateModule = async (slug: string, payload: Partial<IModules>) => {
   const update = await ModuleModel.findOneAndUpdate({ slug }, payload, {
     new: true,
@@ -115,4 +139,5 @@ export const moduleService = {
   updateModule,
   getAllModule,
   getSingleModule,
+  getSpecificModule
 };

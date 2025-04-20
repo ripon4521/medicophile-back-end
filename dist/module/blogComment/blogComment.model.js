@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const slugify_1 = __importDefault(require("slugify"));
 const blogCommentMongooseSchema = new mongoose_1.Schema({
-    slug: { type: String },
+    slug: { type: String, unique: true },
     userType: {
         type: String,
         required: true,
@@ -33,12 +33,12 @@ blogCommentMongooseSchema.pre("save", function (next) {
     }
     next();
 });
-blogCommentMongooseSchema.pre("findOneAndUpdate", function (next) {
-    const update = this.getUpdate();
-    if (update === null || update === void 0 ? void 0 : update.comment) {
-        update.slug = (0, slugify_1.default)(update.comment, { lower: true, strict: true });
-    }
-    next();
-});
+// blogCommentMongooseSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.comment) {
+//     update.slug = slugify(update.comment, { lower: true, strict: true });
+//   }
+//   next();
+// });
 const BlogComment = (0, mongoose_1.model)("BlogComment", blogCommentMongooseSchema);
 exports.default = BlogComment;

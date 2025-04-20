@@ -8,6 +8,7 @@ const slugify_1 = __importDefault(require("slugify"));
 const blogSchema = new mongoose_1.Schema({
     slug: {
         type: String,
+        unique: true
     },
     title: {
         type: String,
@@ -59,12 +60,12 @@ blogSchema.pre("save", function (next) {
     }
     next();
 });
-blogSchema.pre("findOneAndUpdate", function (next) {
-    const update = this.getUpdate();
-    if (update === null || update === void 0 ? void 0 : update.title) {
-        update.slug = (0, slugify_1.default)(update.title, { lower: true, strict: true });
-    }
-    next();
-});
+// blogSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 const BlogModel = (0, mongoose_1.model)("Blog", blogSchema);
 exports.default = BlogModel;

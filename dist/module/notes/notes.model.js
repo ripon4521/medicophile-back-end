@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));
 const NotesSchema = new mongoose_1.Schema({
-    slug: { type: String },
+    slug: { type: String, unique: true },
     title: { type: String, required: true },
     description: { type: String, required: true },
     createdBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
@@ -66,12 +66,12 @@ NotesSchema.pre("save", function (next) {
     }
     next();
 });
-NotesSchema.pre("findOneAndUpdate", function (next) {
-    const update = this.getUpdate();
-    if (update === null || update === void 0 ? void 0 : update.title) {
-        update.slug = (0, slugify_1.default)(update.title, { lower: true, strict: true });
-    }
-    next();
-});
+// NotesSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 const NotesModel = mongoose_1.default.model("Notes", NotesSchema);
 exports.default = NotesModel;

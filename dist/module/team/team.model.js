@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));
 const teamSchema = new mongoose_1.Schema({
-    slug: { type: String },
+    slug: { type: String, unique: true },
     name: { type: String, required: true },
     description: { type: String, default: "" },
     profileImg: { type: String, default: "" },
@@ -63,12 +63,12 @@ teamSchema.pre("save", function (next) {
     }
     next();
 });
-teamSchema.pre("findOneAndUpdate", function (next) {
-    const update = this.getUpdate();
-    if (update === null || update === void 0 ? void 0 : update.name) {
-        update.slug = (0, slugify_1.default)(update.name, { lower: true, strict: true });
-    }
-    next();
-});
+// teamSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.name) {
+//     update.slug = slugify(update.name, { lower: true, strict: true });
+//   }
+//   next();
+// });
 const Team = mongoose_1.default.model("Team", teamSchema);
 exports.default = Team;

@@ -11,6 +11,7 @@ const moduleRouter = (0, express_1.Router)();
 moduleRouter.post("/create-module", (0, validateRequest_1.default)(modules_validation_1.moduleValidation.createModuleSchema), modules_controller_1.modulesController.createModule);
 moduleRouter.patch("/:slug", (0, validateRequest_1.default)(modules_validation_1.moduleValidation.updateModuleSchema), modules_controller_1.modulesController.updateModule);
 moduleRouter.get("/", modules_controller_1.modulesController.getAllModule);
+moduleRouter.get("/:id", modules_controller_1.modulesController.getSpecificModule);
 moduleRouter.get("/:slug", modules_controller_1.modulesController.getSingleModule);
 moduleRouter.delete("/:slug", modules_controller_1.modulesController.deleteModule);
 exports.default = moduleRouter;

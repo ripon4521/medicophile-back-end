@@ -8,6 +8,7 @@ const slugify_1 = __importDefault(require("slugify"));
 const liveClassSchema = new mongoose_1.Schema({
     slug: {
         type: String,
+        unique: true
     },
     courseId: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -50,12 +51,12 @@ liveClassSchema.pre("save", function (next) {
     }
     next();
 });
-liveClassSchema.pre("findOneAndUpdate", function (next) {
-    const update = this.getUpdate();
-    if (update === null || update === void 0 ? void 0 : update.title) {
-        update.slug = (0, slugify_1.default)(update.title, { lower: true, strict: true });
-    }
-    next();
-});
+// liveClassSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 const LiveClassModel = (0, mongoose_1.model)("LiveClass", liveClassSchema);
 exports.default = LiveClassModel;

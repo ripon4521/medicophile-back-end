@@ -22,13 +22,13 @@ docsSchema.pre("save", function (next) {
     }
     next();
 });
-// ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-docsSchema.pre("findOneAndUpdate", function (next) {
-    const update = this.getUpdate();
-    if (update === null || update === void 0 ? void 0 : update.title) {
-        update.slug = (0, slugify_1.default)(update.title, { lower: true, strict: true });
-    }
-    next();
-});
+// // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
+// docsSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 const DocsModel = (0, mongoose_1.model)("Docs", docsSchema);
 exports.default = DocsModel;

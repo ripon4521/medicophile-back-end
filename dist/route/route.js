@@ -38,6 +38,10 @@ const team_route_1 = __importDefault(require("../module/team/team.route"));
 const blogComment_route_1 = __importDefault(require("../module/blogComment/blogComment.route"));
 const coupon_route_1 = __importDefault(require("../module/coupon/coupon.route"));
 const purchaseToken_route_1 = __importDefault(require("../module/purchaseToken/purchaseToken.route"));
+const purchase_route_1 = __importDefault(require("../module/purchase/purchase.route"));
+const paymentDetails_route_1 = __importDefault(require("../module/paymentDetails/paymentDetails.route"));
+const mcq_route_1 = __importDefault(require("../module/mcq/mcq.route"));
+const mcqAttemp_route_1 = __importDefault(require("../module/mcqAttemp/mcqAttemp.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -170,6 +174,18 @@ const moduleRoutes = [
     }, {
         path: "/purchase-token",
         route: purchaseToken_route_1.default
+    }, {
+        path: "/purchase",
+        route: purchase_route_1.default
+    }, {
+        path: "/payment-details",
+        route: paymentDetails_route_1.default
+    }, {
+        path: "/mcq",
+        route: mcq_route_1.default
+    }, {
+        path: "/mcq-attemp",
+        route: mcqAttemp_route_1.default
     }
 ];
 moduleRoutes.forEach((route) => {

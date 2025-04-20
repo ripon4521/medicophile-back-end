@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));
 const ExamSchema = new mongoose_1.Schema({
-    slug: { type: String },
+    slug: { type: String, unique: true },
     examTitle: { type: String, required: true },
     createdBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
     courseId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "Course" },
@@ -74,12 +74,12 @@ ExamSchema.pre("save", function (next) {
     }
     next();
 });
-ExamSchema.pre("findOneAndUpdate", function (next) {
-    const update = this.getUpdate();
-    if (update === null || update === void 0 ? void 0 : update.examTitle) {
-        update.slug = (0, slugify_1.default)(update.examTitle, { lower: true, strict: true });
-    }
-    next();
-});
+// ExamSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.examTitle) {
+//     update.slug = slugify(update.examTitle, { lower: true, strict: true });
+//   }
+//   next();
+// });
 const ExamModel = mongoose_1.default.model("Exam", ExamSchema);
 exports.default = ExamModel;

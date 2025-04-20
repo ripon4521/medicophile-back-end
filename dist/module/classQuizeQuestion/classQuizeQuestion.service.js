@@ -25,7 +25,7 @@ const createCqQuestion = (payload) => __awaiter(void 0, void 0, void 0, function
     if (!user || user.role === "student") {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid user id , only admin and teacher create cq question");
     }
-    if (!exam) {
+    if (!exam || exam.examType !== "CQ") {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid exam id");
     }
     const result = yield classQuizeQuestion_model_1.default.create(payload);

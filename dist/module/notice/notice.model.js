@@ -42,6 +42,7 @@ const slugify_1 = __importDefault(require("slugify"));
 const noticeSchema = new mongoose_1.Schema({
     slug: {
         type: String,
+        unique: true
     },
     title: {
         type: String,
@@ -84,12 +85,12 @@ noticeSchema.pre("save", function (next) {
     }
     next();
 });
-noticeSchema.pre("findOneAndUpdate", function (next) {
-    const update = this.getUpdate();
-    if (update === null || update === void 0 ? void 0 : update.title) {
-        update.slug = (0, slugify_1.default)(update.title, { lower: true, strict: true });
-    }
-    next();
-});
+// noticeSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 const NoticeModel = mongoose_1.default.model("Notice", noticeSchema);
 exports.default = NoticeModel;

@@ -14,7 +14,9 @@ moduleRouter.patch(
   validateRequest(moduleValidation.updateModuleSchema),
   modulesController.updateModule,
 );
+
 moduleRouter.get("/", modulesController.getAllModule);
+moduleRouter.get("/:id", modulesController.getSpecificModule);
 moduleRouter.get("/:slug", modulesController.getSingleModule);
 moduleRouter.delete("/:slug", modulesController.deleteModule);
 

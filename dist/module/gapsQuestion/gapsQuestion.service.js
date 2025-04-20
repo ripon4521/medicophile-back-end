@@ -22,7 +22,7 @@ const exam_model_1 = __importDefault(require("../exam/exam.model"));
 const cretaeGapsQuestion = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.UserModel.findOne({ _id: payload.createdBy });
     const exam = yield exam_model_1.default.findOne({ _id: payload.examId });
-    if (!exam) {
+    if (!exam || exam.examType !== "Fill in the gaps") {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid exam id.Please provide a valid exam id");
     }
     else if (!user || user.role === "student") {
