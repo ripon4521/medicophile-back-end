@@ -16,7 +16,22 @@ exports.noteService = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const notes_model_1 = __importDefault(require("./notes.model"));
+const user_model_1 = require("../user/user.model");
+const course_model_1 = __importDefault(require("../course/course.model"));
+const lecture_model_1 = __importDefault(require("../lecture/lecture.model"));
 const createNote = (paload) => __awaiter(void 0, void 0, void 0, function* () {
+    const course = yield course_model_1.default.findOne({ _id: paload.courseId, isDeleted: false });
+    const useer = yield user_model_1.UserModel.findOne({ _id: paload.createdBy, isDeleted: false });
+    const modul = yield lecture_model_1.default.findOne({ _id: paload.moduleId });
+    if (!course) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid course id");
+    }
+    else if (!useer || useer.role === "student") {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid user id");
+    }
+    else if (!modul) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid module id");
+    }
     const result = yield notes_model_1.default.create(paload);
     return result;
 });
@@ -74,10 +89,24 @@ const deleteNote = (slug) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
+const getSpcificNotes = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield lecture_model_1.default.findOne({ courseId: id })
+        .populate("createdBy")
+        .populate({
+        path: "courseId",
+        populate: { path: "category" },
+    })
+        .populate("moduleId");
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "course id is not valid or not found in database");
+    }
+    return result;
+});
 exports.noteService = {
     createNote,
     updateNote,
     getAllNotes,
     getSingleNotes,
     deleteNote,
+    getSpcificNotes
 };

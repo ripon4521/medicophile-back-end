@@ -2,8 +2,28 @@ import { StatusCodes } from "http-status-codes";
 import AppError from "../../helpers/AppError";
 import { INotes } from "./notes.interface";
 import NotesModel from "./notes.model";
+import { UserModel } from "../user/user.model";
+import courseModel from "../course/course.model";
+import LectureModel from "../lecture/lecture.model";
 
 const createNote = async (paload: INotes) => {
+  const course = await courseModel.findOne({_id:paload.courseId, isDeleted:false});
+  const useer = await UserModel.findOne({_id:paload.createdBy, isDeleted:false});
+  const modul = await LectureModel.findOne({_id:paload.moduleId});
+  if (!course) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Inavlid course id",
+    );
+  }else if (!useer || useer.role === "student") {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Inavlid user id")
+  }else if (!modul) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Inavlid module id")
+  }
   const result = await NotesModel.create(paload);
   return result;
 };
@@ -77,10 +97,32 @@ const deleteNote = async (slug: string) => {
   return result;
 };
 
+
+const getSpcificNotes = async (id: string) => {
+  const result = await LectureModel.findOne({courseId:id })
+    .populate("createdBy")
+    .populate({
+      path: "courseId",
+      populate: { path: "category" },
+    })
+    .populate("moduleId");
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "course id is not valid or not found in database",
+    );
+  }
+  return result;
+};
+
+
+
+
 export const noteService = {
   createNote,
   updateNote,
   getAllNotes,
   getSingleNotes,
   deleteNote,
+  getSpcificNotes
 };

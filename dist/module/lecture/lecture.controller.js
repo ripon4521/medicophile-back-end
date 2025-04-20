@@ -42,6 +42,15 @@ const getSingleLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         data: result,
     });
 }));
+const getSpeecificLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield lecture_service_1.lectureServices.getSpcificLecture(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Referanc Lecture  fatched successfully",
+        data: result,
+    });
+}));
 const updateLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { slug } = req.params;
     const payload = req.body;
@@ -67,4 +76,5 @@ exports.lectureController = {
     getSingleLecture,
     deleteLecture,
     updateLecture,
+    getSpeecificLecture
 };

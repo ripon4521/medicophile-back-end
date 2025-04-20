@@ -15,7 +15,9 @@ lectureRouter.patch(
   lectureController.updateLecture,
 );
 lectureRouter.get("/", lectureController.getLecture);
+lectureRouter.get("/:id", lectureController.getSpeecificLecture);
 lectureRouter.get("/:slug", lectureController.getSingleLecture);
+
 lectureRouter.delete("/:slug", lectureController.deleteLecture);
 
 export default lectureRouter;

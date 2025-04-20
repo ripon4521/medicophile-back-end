@@ -16,7 +16,21 @@ exports.lectureServices = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const lecture_model_1 = __importDefault(require("./lecture.model"));
+const course_model_1 = __importDefault(require("../course/course.model"));
+const user_model_1 = require("../user/user.model");
 const createLecture = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const course = yield course_model_1.default.findOne({ _id: payload.courseId, isDeleted: false });
+    const useer = yield user_model_1.UserModel.findOne({ _id: payload.createdBy, isDeleted: false });
+    const modul = yield lecture_model_1.default.findOne({ _id: payload.moduleId });
+    if (!course) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid course id");
+    }
+    else if (!useer || useer.role === "student") {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid user id");
+    }
+    else if (!modul) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid module id");
+    }
     const create = yield lecture_model_1.default.create(payload);
     if (!create) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Faled to create, PLease try again");
@@ -79,10 +93,24 @@ const getSingleLecture = (slug) => __awaiter(void 0, void 0, void 0, function* (
     }
     return result;
 });
+const getSpcificLecture = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield lecture_model_1.default.find({ moduleId: id })
+        .populate("createdBy")
+        .populate({
+        path: "courseId",
+        populate: { path: "category" },
+    })
+        .populate("moduleId");
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "course id is not valid or not found in database");
+    }
+    return result;
+});
 exports.lectureServices = {
     createLecture,
     updateLecture,
     deleteLecture,
     getAllLecture,
     getSingleLecture,
+    getSpcificLecture
 };

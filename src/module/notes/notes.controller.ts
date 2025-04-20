@@ -51,11 +51,20 @@ const getAllNotes = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
+const getSpeecificNotes = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await noteService.getSpcificNotes(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Referanc Notes  fatched successfully",
+    data: result,
+  });
+});
 export const notesController = {
   createNote,
   updateNote,
   deleteNote,
   getAllNotes,
   getSingleNote,
+  getSpeecificNotes
 };

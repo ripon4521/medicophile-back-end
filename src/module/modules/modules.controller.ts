@@ -54,7 +54,7 @@ const getSpecificModule = catchAsync(async (req, res) => {
   const result = await moduleService.getSpecificModule(id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: "Single Module get successfully",
+    message: "Refrence Module get successfully",
     data: result,
   });
 });

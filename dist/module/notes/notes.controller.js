@@ -61,10 +61,20 @@ const getAllNotes = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+const getSpeecificNotes = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield notes_service_1.noteService.getSpcificNotes(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Referanc Notes  fatched successfully",
+        data: result,
+    });
+}));
 exports.notesController = {
     createNote,
     updateNote,
     deleteNote,
     getAllNotes,
     getSingleNote,
+    getSpeecificNotes
 };

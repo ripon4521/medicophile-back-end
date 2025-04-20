@@ -28,6 +28,15 @@ const getSingleLecture = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getSpeecificLecture = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await lectureServices.getSpcificLecture(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Referanc Lecture  fatched successfully",
+    data: result,
+  });
+});
 const updateLecture = catchAsync(async (req, res) => {
   const { slug } = req.params;
   const payload = req.body;
@@ -54,4 +63,5 @@ export const lectureController = {
   getSingleLecture,
   deleteLecture,
   updateLecture,
+  getSpeecificLecture
 };

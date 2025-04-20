@@ -62,7 +62,7 @@ const getSpecificModule = (0, catchAsync_1.default)((req, res) => __awaiter(void
     const result = yield modules_service_1.moduleService.getSpecificModule(id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
-        message: "Single Module get successfully",
+        message: "Refrence Module get successfully",
         data: result,
     });
 }));

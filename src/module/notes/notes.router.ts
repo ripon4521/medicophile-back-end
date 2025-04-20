@@ -10,6 +10,7 @@ noteRouter.post(
   notesController.createNote,
 );
 noteRouter.get("/", notesController.getAllNotes);
+noteRouter.get("/:id", notesController.getSpeecificNotes);
 noteRouter.get("/:slug", notesController.getSingleNote);
 noteRouter.patch(
   "/:slug",
