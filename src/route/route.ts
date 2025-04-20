@@ -35,6 +35,8 @@ import couponRoute from "../module/coupon/coupon.route";
 import purchaseTokenRoute from "../module/purchaseToken/purchaseToken.route";
 import purchaseRoute from "../module/purchase/purchase.route";
 import paymentDetilsRoute from "../module/paymentDetails/paymentDetails.route";
+import mcqRoute from "../module/mcq/mcq.route";
+import mcqAttempRouter from "../module/mcqAttemp/mcqAttemp.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -176,6 +178,12 @@ const moduleRoutes = [
   },{
     path:"/payment-details",
     route:paymentDetilsRoute
+  },{
+    path:"/mcq",
+    route:mcqRoute
+  },{
+    path:"/mcq-attemp",
+    route:mcqAttempRouter
   }
 ];
 moduleRoutes.forEach((route) => {

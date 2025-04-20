@@ -1,6 +1,6 @@
 import { Schema, model, Types } from "mongoose";
 
-const mcqQuestionSchema = new Schema(
+const mcqQuestionSchema = new Schema (
   {
     examId: {
       type: Schema.Types.ObjectId,
@@ -45,15 +45,24 @@ const mcqQuestionSchema = new Schema(
       type: String,
       required: false,
     },
-    questionCategory: {
-      type: String,
-      required: false,
-    },
+    
     insertBy: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User", 
     },
+    positiveMark:{
+      type:Number
+    },negetiveMark:{
+      type:Number
+    },
+    isDeleted:{
+      type:Boolean,
+      default:false
+    },
+    deletedAt:{
+      type:Date
+    }
   },
   {
     timestamps: {

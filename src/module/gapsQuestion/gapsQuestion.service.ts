@@ -9,7 +9,7 @@ import ExamModel from "../exam/exam.model";
 const cretaeGapsQuestion = async (payload: IGapsQuestion) => {
   const user = await UserModel.findOne({ _id: payload.createdBy });
   const exam = await ExamModel.findOne({ _id: payload.examId });
-  if (!exam) {
+  if (!exam || exam.examType !== "Fill in the gaps") {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
       "invalid exam id.Please provide a valid exam id",

@@ -11,10 +11,10 @@ export interface IMcqQuestion {
     tags:[string],
     subject:string;
     questionType:string;
-    questionCategory:string;
-    questionCount:number;
     insertBy:Types.ObjectId;
     insertDate:Date;
+    positiveMark:number;
+    negetiveMark:number;
     isDeleted:boolean;
     deletedAt:Date;
 }

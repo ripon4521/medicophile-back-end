@@ -15,7 +15,7 @@ const createCqQuestion = async (payload: ICqQuestion) => {
       "invalid user id , only admin and teacher create cq question",
     );
   }
-  if (!exam) {
+  if (!exam || exam.examType !== "CQ") {
     throw new AppError(StatusCodes.BAD_REQUEST, "invalid exam id");
   }
 
