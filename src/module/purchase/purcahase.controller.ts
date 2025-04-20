@@ -27,23 +27,43 @@ const createPurchase = catchAsync(async (req, res) => {
   });
 
   const deletePurchase = catchAsync(async (req, res) => {
-    const {_id} = req.body;
-    const purchas = await PurchaseModel.findOne({_id:_id})
+    const {id}= req.params;
+    const purchas = await PurchaseModel.findOne({_id:id})
     if (!purchas) {
         throw new AppError(StatusCodes.BAD_REQUEST, "invalid id. Please provide a valid id")
     }
-    const result = await purchaseService.deletePurchase(_id);
+    const result = await purchaseService.deletePurchase(id);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       message: "Purchase deleted successfully",
       data: result,
     });
   });
+
+
+  const updatePurchase = catchAsync(async (req, res) => {
+    const {id}= req.params;
+    const payload = req.body;
+    const purchas = await PurchaseModel.findOne({_id:id})
+    if (!purchas) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "invalid id. Please provide a valid id")
+    }
+    const result = await purchaseService.updatePurchase(id, payload);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      message: "Purchase updated successfully",
+      data: result,
+    });
+  });
+
+
+
   
   
 
   export  const purchaseController = {
     createPurchase,
     getAllPurchase,
-    deletePurchase
+    deletePurchase,
+    updatePurchase
   }

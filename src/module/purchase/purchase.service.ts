@@ -122,8 +122,31 @@ const deletePurchase = async (_id:string) => {
     return result;
 }
 
+ const updatePurchase = async (_id: string, payload: Partial<Pick<IPurchase, "status" | "paymentStatus">>) => {
+  const existingPurchase = await PurchaseModel.findById(_id);
+
+  if (!existingPurchase || existingPurchase.isDeleted) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Purchase not found");
+  }
+
+  // Update only the allowed fields
+  if (payload.status) {
+    existingPurchase.status = payload.status;
+  }
+
+  if (payload.paymentStatus) {
+    existingPurchase.paymentStatus = payload.paymentStatus;
+  }
+
+  await existingPurchase.save();
+
+  return existingPurchase;
+};
+
+
 export const purchaseService = {
     createPurchase,
     getAllPurchase,
-    deletePurchase
+    deletePurchase,
+    updatePurchase
 }
