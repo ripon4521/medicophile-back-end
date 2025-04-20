@@ -61,10 +61,20 @@ const updateExam = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: result,
     });
 }));
+const getSpeecificExam = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield exam_service_1.examServices.getSpcificExam(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Referanc Exam  fatched successfully",
+        data: result,
+    });
+}));
 exports.examController = {
     createExam,
     getExam,
     getSingleExam,
     updateExam,
     deleteExam,
+    getSpeecificExam
 };

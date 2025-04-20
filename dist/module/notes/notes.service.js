@@ -90,7 +90,7 @@ const deleteNote = (slug) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getSpcificNotes = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield lecture_model_1.default.findOne({ courseId: id })
+    const result = yield lecture_model_1.default.find({ moduleId: id, isDeleted: false })
         .populate("createdBy")
         .populate({
         path: "courseId",
@@ -98,7 +98,7 @@ const getSpcificNotes = (id) => __awaiter(void 0, void 0, void 0, function* () {
     })
         .populate("moduleId");
     if (!result) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "course id is not valid or not found in database");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "module id is not valid or not found in database");
     }
     return result;
 });

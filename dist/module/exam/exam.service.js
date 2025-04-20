@@ -97,10 +97,24 @@ const deleteExam = (slug) => __awaiter(void 0, void 0, void 0, function* () {
     }, { new: true });
     return result;
 });
+const getSpcificExam = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield exam_model_1.default.find({ moduleId: id, isDeleted: false })
+        .populate("createdBy")
+        .populate({
+        path: "courseId",
+        populate: { path: "category" },
+    })
+        .populate("moduleId");
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "module id is not valid or not found in database");
+    }
+    return result;
+});
 exports.examServices = {
     createExam,
     updateExam,
     deleteExam,
     getAllExam,
     getSingleExam,
+    getSpcificExam
 };

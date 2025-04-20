@@ -117,10 +117,28 @@ const deleteExam = async (slug: string) => {
   return result;
 };
 
+const getSpcificExam = async (id: string) => {
+  const result = await ExamModel.find({moduleId:id, isDeleted:false})
+    .populate("createdBy")
+    .populate({
+      path: "courseId",
+      populate: { path: "category" },
+    })
+    .populate("moduleId");
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "module id is not valid or not found in database",
+    );
+  }
+  return result;
+};
+
 export const examServices = {
   createExam,
   updateExam,
   deleteExam,
   getAllExam,
   getSingleExam,
+  getSpcificExam
 };

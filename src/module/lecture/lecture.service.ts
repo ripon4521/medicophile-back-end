@@ -111,7 +111,7 @@ const getSingleLecture = async (slug: string) => {
 
 
 const getSpcificLecture = async (id: string) => {
-  const result = await LectureModel.find({moduleId:id })
+  const result = await LectureModel.find({moduleId:id, isDeleted:false })
     .populate("createdBy")
     .populate({
       path: "courseId",
@@ -121,7 +121,7 @@ const getSpcificLecture = async (id: string) => {
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "course id is not valid or not found in database",
+      "module id is not valid or not found in database",
     );
   }
   return result;

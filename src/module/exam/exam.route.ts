@@ -10,6 +10,7 @@ examRouter.post(
   examController.createExam,
 );
 examRouter.get("/", examController.getExam);
+examRouter.get("/:id", examController.getSpeecificExam);
 examRouter.get("/:slug", examController.getSingleExam);
 examRouter.delete("/:slug", examController.deleteExam);
 examRouter.patch(
