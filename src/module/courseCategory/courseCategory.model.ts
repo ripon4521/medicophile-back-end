@@ -25,14 +25,14 @@ courseCategorySchema.pre("save", function (next) {
   next();
 });
 
-// ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-courseCategorySchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.title) {
-    update.slug = slugify(update.title, { lower: true, strict: true });
-  }
-  next();
-});
+// // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
+// courseCategorySchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const CourseCategory = mongoose.model("CourseCategory", courseCategorySchema);
 export default CourseCategory;

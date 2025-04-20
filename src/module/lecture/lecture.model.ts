@@ -4,7 +4,9 @@ import slugify from "slugify";
 
 const LectureSchema = new Schema<ILeecture>(
   {
-    slug: { type: String },
+    slug: { type: String , unique:true
+
+    },
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     moduleId: { type: Schema.Types.ObjectId, ref: "Module", required: true },
@@ -42,13 +44,13 @@ LectureSchema.pre("save", function (next) {
 });
 
 // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-LectureSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.title) {
-    update.slug = slugify(update.title, { lower: true, strict: true });
-  }
-  next();
-});
+// LectureSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const LectureModel = mongoose.model<ILeecture>("Lecture", LectureSchema);
 

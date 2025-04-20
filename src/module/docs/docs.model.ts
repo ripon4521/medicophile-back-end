@@ -24,14 +24,14 @@ docsSchema.pre("save", function (next) {
   next();
 });
 
-// ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-docsSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.title) {
-    update.slug = slugify(update.title, { lower: true, strict: true });
-  }
-  next();
-});
+// // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
+// docsSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const DocsModel = model<IDocs>("Docs", docsSchema);
 

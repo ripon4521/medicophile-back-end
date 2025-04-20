@@ -8,6 +8,7 @@ const noticeSchema = new Schema<INotice>(
   {
     slug: {
       type: String,
+      unique:true
     },
     title: {
       type: String,
@@ -54,13 +55,13 @@ noticeSchema.pre("save", function (next) {
   next();
 });
 
-noticeSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.title) {
-    update.slug = slugify(update.title, { lower: true, strict: true });
-  }
-  next();
-});
+// noticeSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const NoticeModel = mongoose.model<INotice>("Notice", noticeSchema);
 

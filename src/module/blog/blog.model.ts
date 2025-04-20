@@ -6,6 +6,7 @@ const blogSchema = new Schema<IBlog>(
   {
     slug: {
       type: String,
+      unique:true
     },
     title: {
       type: String,
@@ -61,13 +62,13 @@ blogSchema.pre("save", function (next) {
   next();
 });
 
-blogSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.title) {
-    update.slug = slugify(update.title, { lower: true, strict: true });
-  }
-  next();
-});
+// blogSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const BlogModel = model<IBlog>("Blog", blogSchema);
 export default BlogModel;

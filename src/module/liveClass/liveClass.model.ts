@@ -6,6 +6,7 @@ const liveClassSchema = new Schema<ILiveClass>(
   {
     slug: {
       type: String,
+      unique:true
     },
     courseId: {
       type: Schema.Types.ObjectId,
@@ -52,13 +53,13 @@ liveClassSchema.pre("save", function (next) {
   next();
 });
 
-liveClassSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.title) {
-    update.slug = slugify(update.title, { lower: true, strict: true });
-  }
-  next();
-});
+// liveClassSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const LiveClassModel = model<ILiveClass>("LiveClass", liveClassSchema);
 export default LiveClassModel;

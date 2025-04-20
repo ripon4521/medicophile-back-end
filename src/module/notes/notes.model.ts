@@ -4,7 +4,7 @@ import slugify from "slugify";
 
 const NotesSchema = new Schema<INotes>(
   {
-    slug: { type: String },
+    slug: { type: String, unique:true },
     title: { type: String, required: true },
     description: { type: String, required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -35,13 +35,13 @@ NotesSchema.pre("save", function (next) {
   next();
 });
 
-NotesSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.title) {
-    update.slug = slugify(update.title, { lower: true, strict: true });
-  }
-  next();
-});
+// NotesSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const NotesModel = mongoose.model<INotes>("Notes", NotesSchema);
 

@@ -4,7 +4,7 @@ import slugify from "slugify";
 const blogCategorySchema = new Schema(
   {
     title: { type: String, required: true },
-    slug: { type: String },
+    slug: { type: String, unique:true },
     createdBy: { type: Types.ObjectId, ref: "User", required: true },
     deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
@@ -23,13 +23,13 @@ blogCategorySchema.pre("save", function (next) {
   next();
 });
 
-blogCategorySchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.title) {
-    update.slug = slugify(update.title, { lower: true, strict: true });
-  }
-  next();
-});
+// blogCategorySchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const BlogCategory = mongoose.model("BlogCategory", blogCategorySchema);
 export default BlogCategory;

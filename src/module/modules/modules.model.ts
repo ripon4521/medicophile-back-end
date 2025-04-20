@@ -4,7 +4,7 @@ import slugify from "slugify";
 
 const ModuleSchema = new Schema<IModules>(
   {
-    slug: { type: String },
+    slug: { type: String , unique:true},
     moduleTitle: { type: String, required: true, trim: true },
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -25,13 +25,13 @@ ModuleSchema.pre("save", function (next) {
   next();
 });
 
-ModuleSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.moduleTitle) {
-    update.slug = slugify(update.moduleTitle, { lower: true, strict: true });
-  }
-  next();
-});
+// ModuleSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.moduleTitle) {
+//     update.slug = slugify(update.moduleTitle, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const ModuleModel = mongoose.model<IModules>("Module", ModuleSchema);
 

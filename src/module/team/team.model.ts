@@ -4,7 +4,7 @@ import slugify from "slugify";
 
 const teamSchema = new Schema<ITeams>(
   {
-    slug: { type: String },
+    slug: { type: String, unique:true },
     name: { type: String, required: true },
     description: { type: String, default: "" },
     profileImg: { type: String, default: "" },
@@ -32,13 +32,13 @@ teamSchema.pre("save", function (next) {
   next();
 });
 
-teamSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.name) {
-    update.slug = slugify(update.name, { lower: true, strict: true });
-  }
-  next();
-});
+// teamSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.name) {
+//     update.slug = slugify(update.name, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const Team = mongoose.model<ITeams>("Team", teamSchema);
 

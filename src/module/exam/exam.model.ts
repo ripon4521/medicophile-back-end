@@ -4,7 +4,7 @@ import slugify from "slugify";
 
 const ExamSchema = new Schema<IExam>(
   {
-    slug: { type: String },
+    slug: { type: String, unique:true },
     examTitle: { type: String, required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     courseId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
@@ -43,13 +43,13 @@ ExamSchema.pre("save", function (next) {
   next();
 });
 
-ExamSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.examTitle) {
-    update.slug = slugify(update.examTitle, { lower: true, strict: true });
-  }
-  next();
-});
+// ExamSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.examTitle) {
+//     update.slug = slugify(update.examTitle, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const ExamModel = mongoose.model<IExam>("Exam", ExamSchema);
 

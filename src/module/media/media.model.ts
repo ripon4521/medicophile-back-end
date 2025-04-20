@@ -6,6 +6,7 @@ const mediaSchema = new Schema<IMedia>(
   {
     slug: {
       type: String,
+      unique:true
     },
     title: {
       type: String,
@@ -43,13 +44,13 @@ mediaSchema.pre("save", function (next) {
   next();
 });
 
-mediaSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.title) {
-    update.slug = slugify(update.title, { lower: true, strict: true });
-  }
-  next();
-});
+// mediaSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.title) {
+//     update.slug = slugify(update.title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const MediaModel = model<IMedia>("Media", mediaSchema);
 export default MediaModel;

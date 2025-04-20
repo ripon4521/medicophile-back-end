@@ -5,7 +5,7 @@ import slugify from "slugify";
 
 const blogCommentMongooseSchema = new Schema<IBlogComment>(
   {
-    slug: { type: String },
+    slug: { type: String, unique:true },
     userType: {
       type: String,
       required: true,
@@ -36,13 +36,13 @@ blogCommentMongooseSchema.pre("save", function (next) {
   next();
 });
 
-blogCommentMongooseSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.comment) {
-    update.slug = slugify(update.comment, { lower: true, strict: true });
-  }
-  next();
-});
+// blogCommentMongooseSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.comment) {
+//     update.slug = slugify(update.comment, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 const BlogComment = model<IBlogComment>(
   "BlogComment",

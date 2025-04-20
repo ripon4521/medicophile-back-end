@@ -42,14 +42,14 @@ courseSchema.pre("save", function (next) {
   next();
 });
 
-// ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-courseSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as Record<string, any>;
-  if (update?.course_title) {
-    update.slug = slugify(update.course_title, { lower: true, strict: true });
-  }
-  next();
-});
+// // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
+// courseSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate() as Record<string, any>;
+//   if (update?.course_title) {
+//     update.slug = slugify(update.course_title, { lower: true, strict: true });
+//   }
+//   next();
+// });
 
 // Create Mongoose model
 const courseModel = mongoose.model<ICourse>("Course", courseSchema);
