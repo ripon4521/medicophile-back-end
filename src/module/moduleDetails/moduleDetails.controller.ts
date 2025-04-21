@@ -61,10 +61,21 @@ const getAllModuleDetails = catchAsync(async (req, res) => {
   });
 });
 
+const getSpeecificModuleDtails = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await moduleDetailsService.getSpcificModuDtails(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Referanc Moduule Dtails  fatched successfully",
+    data: result,
+  });
+});
+
 export const moduleDetailsController = {
   createModuleDetails,
   deleteModuleDetails,
   updateModuleDetails,
   getAllModuleDetails,
   getSingleModuleDetails,
+  getSpeecificModuleDtails
 };

@@ -100,6 +100,28 @@ const getSingleModuleDetails = async (_id: string) => {
   return result;
 };
 
+const getSpcificModuDtails = async (id: string) => {
+  const result = await ModuleDetails.find({moduleId:id, isDeleted:false})
+    .populate("contentId")
+    .populate({
+      path: "courseId",
+      populate: { path: "category" },
+    })
+    .populate("moduleId");
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "module id is not valid or not found in database",
+    );
+  }
+  return result;
+};
+
+
+
+
+
+
 const deleteModuleDetails = async (_id: string) => {
   if (!_id) {
     throw new AppError(StatusCodes.BAD_REQUEST, "id not found ");
@@ -147,4 +169,5 @@ export const moduleDetailsService = {
   getSingleModuleDetails,
   updateModuleDetails,
   deleteModuleDetails,
+  getSpcificModuDtails
 };

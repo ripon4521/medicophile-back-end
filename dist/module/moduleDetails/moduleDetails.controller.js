@@ -67,10 +67,20 @@ const getAllModuleDetails = (0, catchAsync_1.default)((req, res) => __awaiter(vo
         data: result,
     });
 }));
+const getSpeecificModuleDtails = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield moduleDetails_service_1.moduleDetailsService.getSpcificModuDtails(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Referanc Moduule Dtails  fatched successfully",
+        data: result,
+    });
+}));
 exports.moduleDetailsController = {
     createModuleDetails,
     deleteModuleDetails,
     updateModuleDetails,
     getAllModuleDetails,
     getSingleModuleDetails,
+    getSpeecificModuleDtails
 };

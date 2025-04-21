@@ -10,6 +10,7 @@ moduleDetailsRouter.post(
   moduleDetailsController.createModuleDetails,
 );
 moduleDetailsRouter.get("/", moduleDetailsController.getAllModuleDetails);
+moduleDetailsRouter.get("/:id", moduleDetailsController.getSpeecificModuleDtails);
 moduleDetailsRouter.get("/:id", moduleDetailsController.getSingleModuleDetails);
 moduleDetailsRouter.patch(
   "/update-moduleDetails",

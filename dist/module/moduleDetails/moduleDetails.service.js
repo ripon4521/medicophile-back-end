@@ -90,6 +90,19 @@ const getSingleModuleDetails = (_id) => __awaiter(void 0, void 0, void 0, functi
     }
     return result;
 });
+const getSpcificModuDtails = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield moduleDetails_model_1.default.find({ moduleId: id, isDeleted: false })
+        .populate("contentId")
+        .populate({
+        path: "courseId",
+        populate: { path: "category" },
+    })
+        .populate("moduleId");
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "module id is not valid or not found in database");
+    }
+    return result;
+});
 const deleteModuleDetails = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     if (!_id) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "id not found ");
@@ -124,4 +137,5 @@ exports.moduleDetailsService = {
     getSingleModuleDetails,
     updateModuleDetails,
     deleteModuleDetails,
+    getSpcificModuDtails
 };
