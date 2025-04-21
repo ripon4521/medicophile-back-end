@@ -16,7 +16,14 @@ exports.mcqAttempService = void 0;
 const mongoose_1 = require("mongoose");
 const mcq_model_1 = __importDefault(require("../mcq/mcq.model"));
 const mcqAttemp_model_1 = __importDefault(require("./mcqAttemp.model"));
+const AppError_1 = __importDefault(require("../../helpers/AppError"));
+const http_status_codes_1 = require("http-status-codes");
+const user_model_1 = require("../user/user.model");
 const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* ({ studentId, answer }) {
+    const user = yield user_model_1.UserModel.findOne({ _id: studentId });
+    if (!user || user.role !== "student") {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid student id. Please provide a valid student is");
+    }
     const questionIds = answer.map(a => new mongoose_1.Types.ObjectId(a.questionId));
     // Fetch all answered questions and populate examId
     const questions = yield mcq_model_1.default.find({
@@ -61,6 +68,20 @@ const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* (
         attempt: result
     };
 });
+const getAllMcq = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield mcqAttemp_model_1.default.find();
+    return result;
+});
+const getSpcificMcqAttemp = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield mcqAttemp_model_1.default.find({ studentId: id })
+        .populate("studentId");
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "studnt id is not valid or not found in database");
+    }
+    return result;
+});
 exports.mcqAttempService = {
-    submitAttemptService
+    submitAttemptService,
+    getSpcificMcqAttemp,
+    getAllMcq
 };

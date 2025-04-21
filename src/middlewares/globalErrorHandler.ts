@@ -11,70 +11,90 @@ import { CustomError } from "../helpers/handleCustomError";
 import AppError from "../helpers/AppError";
 import { StatusCodes } from "http-status-codes";
 import { TErrorMessages } from "./error.interface";
-// import { handlerZodError } from "../helpers/handleZodError";
-
-type TErrorResponse = {
-  success: boolean;
-  message: string;
-  error: any;
-};
-
-let statusCode = StatusCodes.INTERNAL_SERVER_ERROR as number;
-let message = "Something went wrong";
-
-let errorMessages: TErrorMessages = [
-  {
-    path: "",
-    message: "Something went wrong",
-  },
-];
 
 export const globalErrorHandler = (
   err: any,
   req: Request,
   res: Response,
-  _next: NextFunction,
+  _next: NextFunction
 ) => {
-  let response: {
-    success: boolean;
-    message: string;
-    statusCode: number;
-    error: any;
-    stack?: string;
-  } = {
-    success: false,
-    message: "An unexpected error occurred",
-    statusCode: 500,
-    error: null,
-  };
+  let statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+  let message = "Something went wrong";
+  let errorMessages: TErrorMessages = [
+    {
+      path: "",
+      message: "Something went wrong",
+    },
+  ];
 
+  // CustomError (like Zod structured errors)
   if (err instanceof CustomError) {
-    response = {
+    statusCode = err.statusCode;
+    message = err.message;
+    errorMessages = err.details || errorMessages;
+
+    res.status(statusCode).json({
       success: false,
-      message: err.message,
-      statusCode: err.statusCode,
-      error: err.details || null,
-      stack: err.stack,
-    };
-    res.status(err.statusCode).json(response);
-  } else if (err.name && err.name === "ZodError") {
-    handlerZodError(err, res);
-  } else if (err instanceof mongoose.Error.CastError) {
-    handleCastError(err, res);
-  } else if (err instanceof mongoose.Error.ValidationError) {
-    handleValidationError(err, res);
-  } else if (err.code && err.code === 11000) {
-    handlerDuplicateError(err, res);
-  } else if (err instanceof Error) {
-    handleGenericError(err, res);
-  } else if (err instanceof AppError) {
-    statusCode = err?.statusCode;
-    message = err?.message;
+      message,
+      statusCode,
+      error: errorMessages,
+      stack: process.env.NODE_ENV !== "production" ? err.stack : undefined,
+    });
+    return;
+  }
+
+  // Zod validation error
+  if (err.name === "ZodError") {
+    return handlerZodError(err, res);
+  }
+
+  // Mongoose Cast Error
+  if (err instanceof mongoose.Error.CastError) {
+    return handleCastError(err, res);
+  }
+
+  // Mongoose Validation Error
+  if (err instanceof mongoose.Error.ValidationError) {
+    return handleValidationError(err, res);
+  }
+
+  // Duplicate key error (MongoDB error code: 11000)
+  if (err.code && err.code === 11000) {
+    return handlerDuplicateError(err, res);
+  }
+
+  // Our custom AppError
+  if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    message = err.message;
     errorMessages = [
       {
         path: "",
-        message: err?.message,
+        message: err.message,
       },
     ];
+
+    res.status(statusCode).json({
+      success: false,
+      message,
+      statusCode,
+      error: errorMessages,
+      stack: process.env.NODE_ENV !== "production" ? err.stack : undefined,
+    });
+    return;
   }
+
+  // Generic error (unexpected)
+  if (err instanceof Error) {
+    return handleGenericError(err, res);
+  }
+
+  // Final fallback (just in case)
+  res.status(statusCode).json({
+    success: false,
+    message,
+    statusCode,
+    error: errorMessages,
+    stack: process.env.NODE_ENV !== "production" ? err.stack : undefined,
+  });
 };

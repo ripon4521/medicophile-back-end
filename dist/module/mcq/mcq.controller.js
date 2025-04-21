@@ -60,9 +60,19 @@ const deleteMCQ = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         data: result,
     });
 }));
+const getSpeecificMccq = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield mcq_service_1.mcqQuestionService.getSpcificMcq(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Referanc MCQ  fatched successfully",
+        data: result,
+    });
+}));
 exports.mcqQuestiionController = {
     createMcq,
     getAllMCQ,
     updateMCQ,
-    deleteMCQ
+    deleteMCQ,
+    getSpeecificMccq
 };

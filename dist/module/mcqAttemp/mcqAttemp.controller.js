@@ -26,10 +26,29 @@ const submitMcqAttemptController = (0, catchAsync_1.default)((req, res) => __awa
     const result = yield mcqAttemp_service_1.mcqAttempService.submitAttemptService({ studentId, answer });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
-        message: "MCQ deleted successfully",
+        message: "MCQ Atttmp created successfully",
+        data: result,
+    });
+}));
+const getSpeecificMccq = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield mcqAttemp_service_1.mcqAttempService.getSpcificMcqAttemp(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Referanc MCQ Attmp  fatched successfully",
+        data: result,
+    });
+}));
+const getAllMcq = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield mcqAttemp_service_1.mcqAttempService.getAllMcq();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: " MCQ Attmp  fatched successfully",
         data: result,
     });
 }));
 exports.mcqAttempController = {
-    submitMcqAttemptController
+    submitMcqAttemptController,
+    getSpeecificMccq,
+    getAllMcq
 };

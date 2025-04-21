@@ -9,4 +9,6 @@ const validateRequest_1 = __importDefault(require("../../middlewares/validateReq
 const mcqAttemp_validation_1 = require("./mcqAttemp.validation");
 const mcqAttempRouter = (0, express_1.Router)();
 mcqAttempRouter.post('/submit', (0, validateRequest_1.default)(mcqAttemp_validation_1.mcqAttemptSchema), mcqAttemp_controller_1.mcqAttempController.submitMcqAttemptController);
+mcqAttempRouter.get('/:id', mcqAttemp_controller_1.mcqAttempController.getSpeecificMccq);
+mcqAttempRouter.get('/', mcqAttemp_controller_1.mcqAttempController.getAllMcq);
 exports.default = mcqAttempRouter;

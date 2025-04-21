@@ -13,55 +13,75 @@ const handleZodError_1 = require("../helpers/handleZodError");
 const handleCustomError_1 = require("../helpers/handleCustomError");
 const AppError_1 = __importDefault(require("../helpers/AppError"));
 const http_status_codes_1 = require("http-status-codes");
-let statusCode = http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR;
-let message = "Something went wrong";
-let errorMessages = [
-    {
-        path: "",
-        message: "Something went wrong",
-    },
-];
 const globalErrorHandler = (err, req, res, _next) => {
-    let response = {
-        success: false,
-        message: "An unexpected error occurred",
-        statusCode: 500,
-        error: null,
-    };
+    let statusCode = http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR;
+    let message = "Something went wrong";
+    let errorMessages = [
+        {
+            path: "",
+            message: "Something went wrong",
+        },
+    ];
+    // CustomError (like Zod structured errors)
     if (err instanceof handleCustomError_1.CustomError) {
-        response = {
+        statusCode = err.statusCode;
+        message = err.message;
+        errorMessages = err.details || errorMessages;
+        res.status(statusCode).json({
             success: false,
-            message: err.message,
-            statusCode: err.statusCode,
-            error: err.details || null,
-            stack: err.stack,
-        };
-        res.status(err.statusCode).json(response);
+            message,
+            statusCode,
+            error: errorMessages,
+            stack: process.env.NODE_ENV !== "production" ? err.stack : undefined,
+        });
+        return;
     }
-    else if (err.name && err.name === "ZodError") {
-        (0, handleZodError_1.handlerZodError)(err, res);
+    // Zod validation error
+    if (err.name === "ZodError") {
+        return (0, handleZodError_1.handlerZodError)(err, res);
     }
-    else if (err instanceof mongoose_1.default.Error.CastError) {
-        (0, handleCastError_1.handleCastError)(err, res);
+    // Mongoose Cast Error
+    if (err instanceof mongoose_1.default.Error.CastError) {
+        return (0, handleCastError_1.handleCastError)(err, res);
     }
-    else if (err instanceof mongoose_1.default.Error.ValidationError) {
-        (0, handlerValidationError_1.handleValidationError)(err, res);
+    // Mongoose Validation Error
+    if (err instanceof mongoose_1.default.Error.ValidationError) {
+        return (0, handlerValidationError_1.handleValidationError)(err, res);
     }
-    else if (err.code && err.code === 11000) {
-        (0, handleDuplicateError_1.handlerDuplicateError)(err, res);
+    // Duplicate key error (MongoDB error code: 11000)
+    if (err.code && err.code === 11000) {
+        return (0, handleDuplicateError_1.handlerDuplicateError)(err, res);
     }
-    else if (err instanceof Error) {
-        (0, handleGenericError_1.handleGenericError)(err, res);
-    }
-    else if (err instanceof AppError_1.default) {
-        statusCode = err === null || err === void 0 ? void 0 : err.statusCode;
-        message = err === null || err === void 0 ? void 0 : err.message;
+    // Our custom AppError
+    if (err instanceof AppError_1.default) {
+        statusCode = err.statusCode;
+        message = err.message;
         errorMessages = [
             {
                 path: "",
-                message: err === null || err === void 0 ? void 0 : err.message,
+                message: err.message,
             },
         ];
+        res.status(statusCode).json({
+            success: false,
+            message,
+            statusCode,
+            error: errorMessages,
+            stack: process.env.NODE_ENV !== "production" ? err.stack : undefined,
+        });
+        return;
     }
+    // Generic error (unexpected)
+    if (err instanceof Error) {
+        return (0, handleGenericError_1.handleGenericError)(err, res);
+    }
+    // Final fallback (just in case)
+    res.status(statusCode).json({
+        success: false,
+        message,
+        statusCode,
+        error: errorMessages,
+        stack: process.env.NODE_ENV !== "production" ? err.stack : undefined,
+    });
 };
 exports.globalErrorHandler = globalErrorHandler;

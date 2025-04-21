@@ -88,9 +88,19 @@ const deleteMcq = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
+const getSpcificMcq = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield mcq_model_1.default.find({ examId: id, isDeleted: false })
+        .populate("insertBy")
+        .populate("examId");
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "exam id is not valid or not found in database");
+    }
+    return result;
+});
 exports.mcqQuestionService = {
     createMcq,
     getAllMcq,
     updateMcq,
-    deleteMcq
+    deleteMcq,
+    getSpcificMcq
 };
