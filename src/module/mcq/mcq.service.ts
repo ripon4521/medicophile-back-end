@@ -92,6 +92,19 @@ const deleteMcq = async(_id:string) => {
 }
 
 
+const getSpcificMcq = async (id: string) => {
+    const result = await McqQuestion.find({examId:id, isDeleted:false})
+      .populate("insertBy")
+      .populate("examId");
+    if (!result) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        "exam id is not valid or not found in database",
+      );
+    }
+    return result;
+  };
+
 
 
 
@@ -99,5 +112,6 @@ export const mcqQuestionService = {
     createMcq,
     getAllMcq,
     updateMcq,
-    deleteMcq
+    deleteMcq,
+    getSpcificMcq
 }

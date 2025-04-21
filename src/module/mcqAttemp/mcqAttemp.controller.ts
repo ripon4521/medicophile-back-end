@@ -18,13 +18,40 @@ import AppError from "../../helpers/AppError";
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
-        message: "MCQ deleted successfully",
+        message: "MCQ Atttmp created successfully",
         data: result,
       });
   }
 );
 
 
+const getSpeecificMccq = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await mcqAttempService.getSpcificMcqAttemp(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Referanc MCQ Attmp  fatched successfully",
+    data: result,
+  });
+});
+
+
+const getAllMcq = catchAsync(async (req, res) => {
+  const result = await mcqAttempService.getAllMcq();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: " MCQ Attmp  fatched successfully",
+    data: result,
+  });
+});
+
+
+
+
+
+
 export const mcqAttempController ={
-    submitMcqAttemptController
+    submitMcqAttemptController,
+    getSpeecificMccq,
+    getAllMcq
 }
