@@ -4,11 +4,12 @@ import { ILeecture } from "./lecture.interface";
 import LectureModel from "./lecture.model";
 import courseModel from "../course/course.model";
 import { UserModel } from "../user/user.model";
+import ModuleModel from "../modules/modules.model";
 
 const createLecture = async (payload: ILeecture) => {
   const course = await courseModel.findOne({_id:payload.courseId, isDeleted:false});
   const useer = await UserModel.findOne({_id:payload.createdBy, isDeleted:false});
-  const modul = await LectureModel.findOne({_id:payload.moduleId});
+  const modul = await ModuleModel.findOne({_id:payload.moduleId});
   if (!course) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,

@@ -18,10 +18,11 @@ const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const lecture_model_1 = __importDefault(require("./lecture.model"));
 const course_model_1 = __importDefault(require("../course/course.model"));
 const user_model_1 = require("../user/user.model");
+const modules_model_1 = __importDefault(require("../modules/modules.model"));
 const createLecture = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const course = yield course_model_1.default.findOne({ _id: payload.courseId, isDeleted: false });
     const useer = yield user_model_1.UserModel.findOne({ _id: payload.createdBy, isDeleted: false });
-    const modul = yield lecture_model_1.default.findOne({ _id: payload.moduleId });
+    const modul = yield modules_model_1.default.findOne({ _id: payload.moduleId });
     if (!course) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid course id");
     }
