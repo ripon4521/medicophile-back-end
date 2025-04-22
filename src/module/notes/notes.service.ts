@@ -5,11 +5,12 @@ import NotesModel from "./notes.model";
 import { UserModel } from "../user/user.model";
 import courseModel from "../course/course.model";
 import LectureModel from "../lecture/lecture.model";
+import ModuleModel from "../modules/modules.model";
 
 const createNote = async (paload: INotes) => {
   const course = await courseModel.findOne({_id:paload.courseId, isDeleted:false});
   const useer = await UserModel.findOne({_id:paload.createdBy, isDeleted:false});
-  const modul = await LectureModel.findOne({_id:paload.moduleId});
+  const modul = await ModuleModel.findOne({_id:paload.moduleId});
   if (!course) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
