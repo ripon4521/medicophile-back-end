@@ -1,8 +1,12 @@
+import { Types } from "mongoose";
 import { z } from "zod";
-
+const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
+  message: "Invalid ObjectId format",
+});
  const createBookCategoryValidationSchema = z.object({
   name: z.string().min(1, "Category name is required"),
   description: z.string().optional(), 
+  createdBy:ObjectIdSchema,
 });
 
 
