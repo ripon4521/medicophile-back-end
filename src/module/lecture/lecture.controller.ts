@@ -21,6 +21,7 @@ const getLecture = catchAsync(async (req, res) => {
 });
 const getSingleLecture = catchAsync(async (req, res) => {
   const { slug } = req.params;
+  console.log(slug)
   const result = await lectureServices.getSingleLecture(slug);
   sendResponse(res, {
     statusCode: StatusCodes.OK,

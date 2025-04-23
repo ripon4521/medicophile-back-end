@@ -42,6 +42,7 @@ const purchase_route_1 = __importDefault(require("../module/purchase/purchase.ro
 const paymentDetails_route_1 = __importDefault(require("../module/paymentDetails/paymentDetails.route"));
 const mcq_route_1 = __importDefault(require("../module/mcq/mcq.route"));
 const mcqAttemp_route_1 = __importDefault(require("../module/mcqAttemp/mcqAttemp.route"));
+const bookCategory_route_1 = __importDefault(require("../module/bookCategory/bookCategory.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -186,6 +187,9 @@ const moduleRoutes = [
     }, {
         path: "/mcq-attemp",
         route: mcqAttemp_route_1.default
+    }, {
+        path: "/book-category",
+        route: bookCategory_route_1.default
     }
 ];
 moduleRoutes.forEach((route) => {

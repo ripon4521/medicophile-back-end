@@ -14,9 +14,10 @@ lectureRouter.patch(
   validateRequest(lectureValidation.updateLectureSchema),
   lectureController.updateLecture,
 );
+lectureRouter.get("/single-lecture/:slug", lectureController.getSingleLecture);
 lectureRouter.get("/", lectureController.getLecture);
 lectureRouter.get("/:id", lectureController.getSpeecificLecture);
-lectureRouter.get("/:slug", lectureController.getSingleLecture);
+
 
 lectureRouter.delete("/:slug", lectureController.deleteLecture);
 

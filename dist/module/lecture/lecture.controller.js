@@ -35,6 +35,10 @@ const getLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 }));
 const getSingleLecture = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { slug } = req.params;
+<<<<<<< HEAD
+=======
+    console.log(slug);
+>>>>>>> cc45def (inital commit)
     const result = yield lecture_service_1.lectureServices.getSingleLecture(slug);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,

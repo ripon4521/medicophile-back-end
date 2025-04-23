@@ -15,6 +15,10 @@ const BookCategorySchema = new Schema<IBookCategory>(
         required: true,
         trim: true,
       },
+      createdBy:{
+        type:Schema.Types.ObjectId,
+        required:true
+      },
       description: {
         type: String,
         default: "",
@@ -25,7 +29,6 @@ const BookCategorySchema = new Schema<IBookCategory>(
       },
       deletedAt: {
         type: Date,
-        default: null,
       },
     },
     {

@@ -37,6 +37,7 @@ import purchaseRoute from "../module/purchase/purchase.route";
 import paymentDetilsRoute from "../module/paymentDetails/paymentDetails.route";
 import mcqRoute from "../module/mcq/mcq.route";
 import mcqAttempRouter from "../module/mcqAttemp/mcqAttemp.route";
+import bookCategoryRoute from "../module/bookCategory/bookCategory.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -184,6 +185,9 @@ const moduleRoutes = [
   },{
     path:"/mcq-attemp",
     route:mcqAttempRouter
+  },{
+    path:"/book-category",
+    route:bookCategoryRoute
   }
 ];
 moduleRoutes.forEach((route) => {

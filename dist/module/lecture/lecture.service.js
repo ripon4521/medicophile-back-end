@@ -82,6 +82,10 @@ const getAllLecture = () => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getSingleLecture = (slug) => __awaiter(void 0, void 0, void 0, function* () {
+<<<<<<< HEAD
+=======
+    console.log(slug);
+>>>>>>> cc45def (inital commit)
     const result = yield lecture_model_1.default.findOne({ slug })
         .populate("createdBy")
         .populate({
