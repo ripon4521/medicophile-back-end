@@ -11,7 +11,7 @@ noteRouter.post(
 );
 noteRouter.get("/", notesController.getAllNotes);
 noteRouter.get("/:id", notesController.getSpeecificNotes);
-noteRouter.get("/:slug", notesController.getSingleNote);
+noteRouter.get("/single-note/:slug", notesController.getSingleNote);
 noteRouter.patch(
   "/:slug",
   validateRequest(noteValidation.updateNotesSchema),

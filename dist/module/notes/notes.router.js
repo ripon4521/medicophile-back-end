@@ -11,7 +11,7 @@ const noteRouter = (0, express_1.Router)();
 noteRouter.post("/create-note", (0, validateRequest_1.default)(notes_validation_1.noteValidation.createNotesSchema), notes_controller_1.notesController.createNote);
 noteRouter.get("/", notes_controller_1.notesController.getAllNotes);
 noteRouter.get("/:id", notes_controller_1.notesController.getSpeecificNotes);
-noteRouter.get("/:slug", notes_controller_1.notesController.getSingleNote);
+noteRouter.get("/single-note/:slug", notes_controller_1.notesController.getSingleNote);
 noteRouter.patch("/:slug", (0, validateRequest_1.default)(notes_validation_1.noteValidation.updateNotesSchema), notes_controller_1.notesController.updateNote);
 noteRouter.delete("/:slug", notes_controller_1.notesController.deleteNote);
 exports.default = noteRouter;

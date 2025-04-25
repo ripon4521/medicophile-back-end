@@ -94,6 +94,7 @@ const getAllLecture = async () => {
 };
 
 const getSingleLecture = async (slug: string) => {
+  console.log(slug)
   const result = await LectureModel.findOne({ slug })
     .populate("createdBy")
     .populate({
