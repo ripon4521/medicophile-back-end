@@ -46,9 +46,23 @@ const deleteCqQuestion = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+
+const getSpeecificCaq = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await cqQuestionService.getSpcificCq(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Referanc Cq  fatched successfully",
+    data: result,
+  });
+});
+
+
 export const cqQuestionController = {
   createCqQuestion,
   updateCqQuestion,
   deleteCqQuestion,
   getAllCqQuestion,
+  getSpeecificCaq
 };

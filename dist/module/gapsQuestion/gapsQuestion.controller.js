@@ -61,9 +61,19 @@ const getAllGapQuestions = (0, catchAsync_1.default)((req, res) => __awaiter(voi
         data: result,
     });
 }));
+const getSpeecificGaps = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield gapsQuestion_service_1.gapsQuestionService.getSpcificGaps(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Referanc Gaps  fatched successfully",
+        data: result,
+    });
+}));
 exports.gapsQuestionController = {
     createGapQuestion,
     updateGapQuestion,
     deleteGapQuestion,
     getAllGapQuestions,
+    getSpeecificGaps
 };

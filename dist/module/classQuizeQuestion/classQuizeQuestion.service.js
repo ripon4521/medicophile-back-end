@@ -26,7 +26,7 @@ const createCqQuestion = (payload) => __awaiter(void 0, void 0, void 0, function
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid user id , only admin and teacher create cq question");
     }
     if (!exam || exam.examType !== "CQ") {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid exam id");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid exam id. Only cq type exam needed");
     }
     const result = yield classQuizeQuestion_model_1.default.create(payload);
     if (!result) {
@@ -82,9 +82,19 @@ const deleteCqQuestion = (_id) => __awaiter(void 0, void 0, void 0, function* ()
     }
     return result;
 });
+const getSpcificCq = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield classQuizeQuestion_model_1.default.find({ examId: id, isDeleted: false })
+        .populate("createdBy")
+        .populate("examId");
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "exam id is not valid or not found in database");
+    }
+    return result;
+});
 exports.cqQuestionService = {
     createCqQuestion,
     updateCqQuestion,
     deleteCqQuestion,
     getALlCqQuestion,
+    getSpcificCq
 };

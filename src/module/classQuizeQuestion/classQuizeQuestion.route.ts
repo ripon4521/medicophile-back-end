@@ -10,6 +10,7 @@ cqQuestionRouter.post(
   cqQuestionController.createCqQuestion,
 );
 cqQuestionRouter.get("/", cqQuestionController.getAllCqQuestion);
+cqQuestionRouter.get("/:id", cqQuestionController.getSpeecificCaq);
 cqQuestionRouter.patch(
   "/update-cqquestion",
   validateRequest(classQuizeQuestionValidation.updateCqQuestionSchema),

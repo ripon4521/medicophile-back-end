@@ -10,6 +10,7 @@ gapsQuestionRouter.post(
   gapsQuestionController.createGapQuestion,
 );
 gapsQuestionRouter.get("/", gapsQuestionController.getAllGapQuestions);
+gapsQuestionRouter.get("/:id",gapsQuestionController.getSpeecificGaps)
 gapsQuestionRouter.delete(
   "/delete-gapquestion",
   gapsQuestionController.deleteGapQuestion,

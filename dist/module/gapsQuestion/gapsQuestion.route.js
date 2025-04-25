@@ -10,6 +10,7 @@ const gapsQuestion_controller_1 = require("./gapsQuestion.controller");
 const gapsQuestionRouter = (0, express_1.Router)();
 gapsQuestionRouter.post("/create-gapquestion", (0, validateRequest_1.default)(gapsQuestion_validation_1.gapsQuestionValidation.createGapsQuestionSchema), gapsQuestion_controller_1.gapsQuestionController.createGapQuestion);
 gapsQuestionRouter.get("/", gapsQuestion_controller_1.gapsQuestionController.getAllGapQuestions);
+gapsQuestionRouter.get("/:id", gapsQuestion_controller_1.gapsQuestionController.getSpeecificGaps);
 gapsQuestionRouter.delete("/delete-gapquestion", gapsQuestion_controller_1.gapsQuestionController.deleteGapQuestion);
 gapsQuestionRouter.patch("/update-question", (0, validateRequest_1.default)(gapsQuestion_validation_1.gapsQuestionValidation.updateGapsQuestionSchema), gapsQuestion_controller_1.gapsQuestionController.updateGapQuestion);
 exports.default = gapsQuestionRouter;

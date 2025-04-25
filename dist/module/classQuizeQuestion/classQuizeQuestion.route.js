@@ -10,6 +10,7 @@ const validateRequest_1 = __importDefault(require("../../middlewares/validateReq
 const cqQuestionRouter = (0, express_1.Router)();
 cqQuestionRouter.post("/create-cqquestion", (0, validateRequest_1.default)(classQuizeQuestion_validation_1.classQuizeQuestionValidation.createCqQuestionSchema), classQuizeQuestion_controller_1.cqQuestionController.createCqQuestion);
 cqQuestionRouter.get("/", classQuizeQuestion_controller_1.cqQuestionController.getAllCqQuestion);
+cqQuestionRouter.get("/:id", classQuizeQuestion_controller_1.cqQuestionController.getSpeecificCaq);
 cqQuestionRouter.patch("/update-cqquestion", (0, validateRequest_1.default)(classQuizeQuestion_validation_1.classQuizeQuestionValidation.updateCqQuestionSchema), classQuizeQuestion_controller_1.cqQuestionController.updateCqQuestion);
 cqQuestionRouter.delete("/delete-cqquestion", classQuizeQuestion_controller_1.cqQuestionController.deleteCqQuestion);
 exports.default = cqQuestionRouter;

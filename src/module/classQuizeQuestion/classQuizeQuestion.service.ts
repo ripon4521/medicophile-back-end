@@ -16,7 +16,7 @@ const createCqQuestion = async (payload: ICqQuestion) => {
     );
   }
   if (!exam || exam.examType !== "CQ") {
-    throw new AppError(StatusCodes.BAD_REQUEST, "invalid exam id");
+    throw new AppError(StatusCodes.BAD_REQUEST, "invalid exam id. Only cq type exam needed");
   }
 
   const result = await CqQuestionModel.create(payload);
@@ -96,9 +96,24 @@ const deleteCqQuestion = async (_id: string) => {
   return result;
 };
 
+
+const getSpcificCq = async (id: string) => {
+    const result = await CqQuestionModel.find({examId:id, isDeleted:false})
+      .populate("createdBy")
+      .populate("examId");
+    if (!result) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        "exam id is not valid or not found in database",
+      );
+    }
+    return result;
+  };
+
 export const cqQuestionService = {
   createCqQuestion,
   updateCqQuestion,
   deleteCqQuestion,
   getALlCqQuestion,
+  getSpcificCq
 };
