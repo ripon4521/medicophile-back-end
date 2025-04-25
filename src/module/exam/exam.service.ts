@@ -5,6 +5,7 @@ import ExamModel from "./exam.model";
 import ModuleModel from "../modules/modules.model";
 import { UserModel } from "../user/user.model";
 import courseModel from "../course/course.model";
+import QueryBuilder from "../../builder/querybuilder";
 
 const createExam = async (payload: IExam) => {
   const moduleId = payload.moduleId;
@@ -39,8 +40,13 @@ const createExam = async (payload: IExam) => {
   return result;
 };
 
-const getAllExam = async () => {
-  const result = await ExamModel.find({ isDeleted: false })
+const getAllExam = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(ExamModel, query)
+  .search(["examType"])
+  .filter()
+  .sort()
+  .paginate()
+  .fields()
     .populate({
       path: "createdBy",
       select: "name role phone",
@@ -55,6 +61,8 @@ const getAllExam = async () => {
       path: "moduleId",
       select: "moduleTitle slug",
     });
+
+    const result = await courseQuery.exec();
 
   if (!result) {
     throw new AppError(

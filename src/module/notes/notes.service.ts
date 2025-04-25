@@ -100,7 +100,7 @@ const deleteNote = async (slug: string) => {
 
 
 const getSpcificNotes = async (id: string) => {
-  const result = await LectureModel.find({moduleId:id, isDeleted:false})
+  const result = await NotesModel.find({moduleId:id, isDeleted:false})
     .populate("createdBy")
     .populate({
       path: "courseId",

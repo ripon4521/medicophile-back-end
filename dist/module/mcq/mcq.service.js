@@ -20,13 +20,13 @@ const user_model_1 = require("../user/user.model");
 const mcq_model_1 = __importDefault(require("./mcq.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createMcq = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const exam = yield exam_model_1.default.findOne({ _id: payload.examId, isDeleted: false });
+    const exam = yield exam_model_1.default.findOne({ _id: payload.examId });
     const user = yield user_model_1.UserModel.findOne({ _id: payload.insertBy, isDeleted: false });
     if (!exam || exam.examType !== "MCQ") {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid exam id.");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid exam id or please check exam type. Only MCQ type exam needed");
     }
     else if (!user || user.role === "student") {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid admin or teacher id.");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid admin or teacher id.Only teacher and admin can cretae exam");
     }
     payload.questionType = exam.examType;
     payload.positiveMark = exam.positiveMark;

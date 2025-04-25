@@ -13,7 +13,8 @@ const createExam = catchAsync(async (req, res) => {
 });
 
 const getExam = catchAsync(async (req, res) => {
-  const result = await examServices.getAllExam();
+  const query = req.query;
+  const result = await examServices.getAllExam(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Exam fatched successfully",

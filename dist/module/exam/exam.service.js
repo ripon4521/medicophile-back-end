@@ -19,6 +19,7 @@ const exam_model_1 = __importDefault(require("./exam.model"));
 const modules_model_1 = __importDefault(require("../modules/modules.model"));
 const user_model_1 = require("../user/user.model");
 const course_model_1 = __importDefault(require("../course/course.model"));
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createExam = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const moduleId = payload.moduleId;
     const createdBy = payload.createdBy;
@@ -41,8 +42,13 @@ const createExam = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
-const getAllExam = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield exam_model_1.default.find({ isDeleted: false })
+const getAllExam = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(exam_model_1.default, query)
+        .search(["examType"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
         .populate({
         path: "createdBy",
         select: "name role phone",
@@ -56,6 +62,7 @@ const getAllExam = () => __awaiter(void 0, void 0, void 0, function* () {
         path: "moduleId",
         select: "moduleTitle slug",
     });
+    const result = yield courseQuery.exec();
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to load data, please try again");
     }

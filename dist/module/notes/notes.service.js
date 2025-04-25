@@ -18,7 +18,6 @@ const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const notes_model_1 = __importDefault(require("./notes.model"));
 const user_model_1 = require("../user/user.model");
 const course_model_1 = __importDefault(require("../course/course.model"));
-const lecture_model_1 = __importDefault(require("../lecture/lecture.model"));
 const modules_model_1 = __importDefault(require("../modules/modules.model"));
 const createNote = (paload) => __awaiter(void 0, void 0, void 0, function* () {
     const course = yield course_model_1.default.findOne({ _id: paload.courseId, isDeleted: false });
@@ -91,7 +90,7 @@ const deleteNote = (slug) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getSpcificNotes = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield lecture_model_1.default.find({ moduleId: id, isDeleted: false })
+    const result = yield notes_model_1.default.find({ moduleId: id, isDeleted: false })
         .populate("createdBy")
         .populate({
         path: "courseId",

@@ -8,12 +8,13 @@ import QueryBuilder from "../../builder/querybuilder";
 
 
 const createMcq = async(payload:IMcqQuestion) => {
-    const exam = await ExamModel.findOne({_id:payload.examId, isDeleted:false});
+    const exam = await ExamModel.findOne({_id:payload.examId});
+
     const user = await UserModel.findOne({_id:payload.insertBy, isDeleted:false});
     if (!exam || exam.examType !== "MCQ") {
-        throw new AppError(StatusCodes.BAD_REQUEST, "Invalid exam id.")
+        throw new AppError(StatusCodes.BAD_REQUEST, "Invalid exam id or please check exam type. Only MCQ type exam needed")
     }else if (!user || user.role === "student") {
-        throw new AppError(StatusCodes.BAD_REQUEST, "Invalid admin or teacher id.")
+        throw new AppError(StatusCodes.BAD_REQUEST, "Invalid admin or teacher id.Only teacher and admin can cretae exam")
     }
 
     payload.questionType = exam.examType;
