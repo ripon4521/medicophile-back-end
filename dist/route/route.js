@@ -189,7 +189,7 @@ const moduleRoutes = [
         path: "/mcq-attemp",
         route: mcqAttemp_route_1.default
     }, {
-        path: "/book-category",
+        path: "/product-category",
         route: bookCategory_route_1.default
     }, {
         path: "/notice",

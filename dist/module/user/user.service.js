@@ -24,21 +24,21 @@ const admin_model_1 = __importDefault(require("../admin/admin.model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const sendSms_1 = require("../../utils/sendSms");
 const http_status_1 = __importDefault(require("http-status"));
-const generate6DigitPassword = () => Math.floor(100000 + Math.random() * 900000).toString();
 const createStudentsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield mongoose_1.default.startSession();
     session.startTransaction();
     try {
         // Step 1: Create student first (without userId)
         const studentData = Object.assign({}, payload);
+        const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
+        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Your login password is: ${plainPassword}`);
+        if (!sms) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Student Create Failed.");
+        }
+        // console.log(sms)
         const createdStudent = yield student_model_1.default.create([studentData], {
             session,
         });
-        const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
-        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Your login password is: ${plainPassword}`);
-        // if (sms?.response_code != 202	) {
-        //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create student. Please try again")
-        // }
         const hashedPassword = yield bcrypt_1.default.hash(plainPassword, 12);
         // Step 4: Create user using data from createdStudent
         const userData = {
@@ -51,7 +51,6 @@ const createStudentsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
             email: createdStudent[0].email,
             isDeleted: createdStudent[0].isDeleted,
             deletedAt: createdStudent[0].deletedAt,
-            pin: plainPassword,
         };
         const newUser = yield user_model_1.UserModel.create([userData], { session });
         // Step 5: Update student with userId
@@ -76,15 +75,13 @@ const createAdmiIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
     session.startTransaction();
     try {
         // Step 1: Create admin first (without userId)
-        const adminData = Object.assign({}, payload);
-        const createdAdmin = yield admin_model_1.default.create([adminData], { session });
         const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
-        // console.log(plainPassword)
+        const adminData = Object.assign({}, payload);
         const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Your login password is: ${plainPassword}`);
-        // console.log(sms)
-        // if (sms?.response_code != 202	) {
-        //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
-        // }
+        if (!sms) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Student Create Failed.");
+        }
+        const createdAdmin = yield admin_model_1.default.create([adminData], { session });
         const hashedPassword = yield bcrypt_1.default.hash(plainPassword, 12);
         // Step 2: Now create the user using createdAdmin data
         const userData = {
@@ -97,7 +94,6 @@ const createAdmiIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
             email: (_f = createdAdmin[0]) === null || _f === void 0 ? void 0 : _f.email,
             isDeleted: (_g = createdAdmin[0]) === null || _g === void 0 ? void 0 : _g.isDeleted,
             deletedAt: (_h = createdAdmin[0]) === null || _h === void 0 ? void 0 : _h.deletedAt,
-            pin: plainPassword,
         };
         const newUser = yield user_model_1.UserModel.create([userData], { session });
         // Step 3: Update admin with the newly created userId
@@ -119,16 +115,14 @@ const createFacultysIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
     try {
         // Step 1: Create admin first (without userId)
         const faculty = Object.assign({}, payload);
+        const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
+        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Your login password is: ${plainPassword}`);
+        if (!sms) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Student Create Failed.");
+        }
         const createdFaculty = yield faculty_model_1.default.create([faculty], {
             session,
         });
-        const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
-        // console.log(plainPassword)
-        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Your login password is: ${plainPassword}`);
-        // console.log(sms)
-        // if (sms?.response_code != 202	) {
-        //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
-        // }
         const hashedPassword = yield bcrypt_1.default.hash(plainPassword, 12);
         // Step 2: Now create the user using createdAdmin data
         const userData = {
@@ -141,7 +135,6 @@ const createFacultysIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
             email: (_f = createdFaculty[0]) === null || _f === void 0 ? void 0 : _f.email,
             isDeleted: (_g = createdFaculty[0]) === null || _g === void 0 ? void 0 : _g.isDeleted,
             deletedAt: (_h = createdFaculty[0]) === null || _h === void 0 ? void 0 : _h.deletedAt,
-            pin: plainPassword,
         };
         const newUser = yield user_model_1.UserModel.create([userData], { session });
         // Step 3: Update admin with the newly created userId

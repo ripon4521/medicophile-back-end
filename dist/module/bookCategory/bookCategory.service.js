@@ -17,7 +17,12 @@ const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const bookCategory_model_1 = __importDefault(require("./bookCategory.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
+const user_model_1 = require("../user/user.model");
 const createBookCategory = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.UserModel.findOne({ _id: payload.createdBy, isDeleted: false });
+    if (!user || user.role === "student") {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid user id. Only admin or teacher can create product category .Please  try again");
+    }
     const result = yield bookCategory_model_1.default.create(payload);
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to Create Book Category.Please  try again");

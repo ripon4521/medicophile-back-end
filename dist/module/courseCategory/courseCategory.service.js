@@ -43,7 +43,7 @@ const getAllCourseCategory = (query) => __awaiter(void 0, void 0, void 0, functi
     return result;
 });
 const getSingleCourseCatgeory = (slug) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield courseCategory_model_1.default.findOne({ slug }).populate({
+    const result = yield courseCategory_model_1.default.findOne({ slug, isDeleted: false }).populate({
         path: "createdBy",
         select: "name role phone",
     });
