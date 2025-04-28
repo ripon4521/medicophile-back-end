@@ -5,11 +5,11 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 });
  const createBookCategoryValidationSchema = z.object({
   body:z.object({
-  
+
   name: z.string().min(1, "Category name is required"),
   description: z.string().optional(), 
   createdBy:ObjectIdSchema,
-    
+  
 })
 });
 
