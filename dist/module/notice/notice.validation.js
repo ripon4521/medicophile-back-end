@@ -12,8 +12,15 @@ const createNoticeSchema = zod_1.z.object({
         message: zod_1.z.string().min(1, "Message is required"),
         createdBy: ObjectIdSchema,
         expiresAt: zod_1.z
-            .date()
-            .refine((date) => date > new Date(), "Expiry date must be in the future"),
+            .preprocess((val) => {
+            if (typeof val === "string" || val instanceof Date) {
+                return new Date(val);
+            }
+            return val;
+        }, zod_1.z.date())
+            .refine((date) => date > new Date(), {
+            message: "Expiry date must be in the future",
+        }).optional(),
         scheduleDate: zod_1.z
             .preprocess((val) => {
             if (typeof val === "string" || val instanceof Date) {
@@ -21,7 +28,9 @@ const createNoticeSchema = zod_1.z.object({
             }
             return val;
         }, zod_1.z.date())
-            .optional(),
+            .refine((date) => date > new Date(), {
+            message: "Expiry date must be in the future",
+        }).optional()
     }),
 });
 const updateNoticeSchema = zod_1.z.object({
@@ -30,9 +39,15 @@ const updateNoticeSchema = zod_1.z.object({
         message: zod_1.z.string().min(1, "Message is required").optional(),
         createdBy: ObjectIdSchema.optional(),
         expiresAt: zod_1.z
-            .date()
-            .refine((date) => date > new Date(), "Expiry date must be in the future")
-            .optional(),
+            .preprocess((val) => {
+            if (typeof val === "string" || val instanceof Date) {
+                return new Date(val);
+            }
+            return val;
+        }, zod_1.z.date())
+            .refine((date) => date > new Date(), {
+            message: "Expiry date must be in the future",
+        }).optional(),
         scheduleDate: zod_1.z
             .preprocess((val) => {
             if (typeof val === "string" || val instanceof Date) {
@@ -40,7 +55,9 @@ const updateNoticeSchema = zod_1.z.object({
             }
             return val;
         }, zod_1.z.date())
-            .optional(),
+            .refine((date) => date > new Date(), {
+            message: "Schedule date must be in the future",
+        }).optional()
     }),
 });
 exports.noticeValidation = {

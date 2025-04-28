@@ -1,27 +1,46 @@
-import axios from "axios";
-import dotenv from "dotenv";
+import http from 'http';
+import querystring from 'querystring';
 
-dotenv.config();
+export const sendSMS = (to: string, message: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const postData = querystring.stringify({
+      token: '12191181439174541047949ff22c131db41feda8f24e4a5dcca10', 
+      to: to,
+      message: message,
+    });
 
-export const sendSMS = async (phone: string, message: string) => {
-  const token = process.env.GREENWEB_API_TOKEN;
+    const options = {
+      hostname: 'api.bdbulksms.net',
+      path: '/api.php',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(postData),
+      },
+    };
 
-  const url = `http://api.greenweb.com.bd/api.php`;
-  const payload = {
-    token: token,
-    to: phone,
-    message: message,
-  };
+    const req = http.request(options, (res) => {
+      res.setEncoding('utf8');
+      let body = '';
 
-  try {
-    const response = await axios.get(url, { params: payload });
-    // console.log("SMS sent response:", response.data);
-    return response.data;
-  } catch (error: any) {
-    console.error(
-      "SMS sending failed:",
-      error?.response?.data || error.message,
-    );
-    throw new Error("SMS sending failed");
-  }
+      res.on('data', (chunk) => {
+        body += chunk;
+      });
+
+      res.on('end', () => {
+        try {
+          resolve(body);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+
+    req.on('error', (e) => {
+      reject(e);
+    });
+
+    req.write(postData);
+    req.end();
+  });
 };

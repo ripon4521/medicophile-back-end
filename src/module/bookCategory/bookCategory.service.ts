@@ -3,9 +3,17 @@ import AppError from "../../helpers/AppError";
 import { IBookCategory } from "./bookCategory.interface";
 import BookCategoryModel from "./bookCategory.model";
 import QueryBuilder from "../../builder/querybuilder";
+import { UserModel } from "../user/user.model";
 
 
 const createBookCategory = async (payload: IBookCategory) => {
+  const user = await UserModel.findOne({_id:payload.createdBy, isDeleted:false});
+  if (!user || user.role === "student") {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Invalid user id. Only admin or teacher can create product category .Please  try again",
+    );
+  }
     const result = await BookCategoryModel.create(payload);
     if (!result) {
       throw new AppError(

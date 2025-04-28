@@ -42,10 +42,6 @@ const getAllNoticeFromDb = async (query: Record<string, unknown>) => {
 const getSingleNotice = async (slug: string) => {
   const result = await NoticeModel.findOne({ slug })
     .populate({
-      path: "members",
-      select: "name email phone profile_picture role",
-    })
-    .populate({
       path: "createdBy",
       select: "name email phone profile_picture role",
     });
@@ -100,7 +96,7 @@ const updateNotice = async (slug: string, payload: INotice) => {
   return result;
 };
 
-export const noticeValidation = {
+export const noticeServices = {
   createNotice,
   updateNotice,
   deleteNotice,

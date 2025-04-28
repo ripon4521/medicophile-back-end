@@ -38,7 +38,7 @@ const getAllCourseCategory = async (query: Record<string, unknown>) => {
 };
 
 const getSingleCourseCatgeory = async (slug: string) => {
-  const result = await CourseCategory.findOne({ slug }).populate({
+  const result = await CourseCategory.findOne({ slug, isDeleted:false }).populate({
     path: "createdBy",
     select: "name role phone",
   });

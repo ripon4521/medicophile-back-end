@@ -9,17 +9,26 @@ const createNoticeSchema = z.object({
     title: z.string().min(1, "Title is required"),
     message: z.string().min(1, "Message is required"),
     createdBy: ObjectIdSchema,
-    expiresAt: z
-      .date()
-      .refine((date) => date > new Date(), "Expiry date must be in the future"),
-    scheduleDate: z
-      .preprocess((val) => {
-        if (typeof val === "string" || val instanceof Date) {
-          return new Date(val);
-        }
-        return val;
-      }, z.date())
-      .optional(),
+    expiresAt:  z
+    .preprocess((val) => {
+      if (typeof val === "string" || val instanceof Date) {
+        return new Date(val);
+      }
+      return val;
+    }, z.date())
+    .refine((date) => date > new Date(), {
+      message: "Expiry date must be in the future",
+    }).optional(),
+    scheduleDate:  z
+    .preprocess((val) => {
+      if (typeof val === "string" || val instanceof Date) {
+        return new Date(val);
+      }
+      return val;
+    }, z.date())
+    .refine((date) => date > new Date(), {
+      message: "Expiry date must be in the future",
+    }).optional()
   }),
 });
 
@@ -29,17 +38,26 @@ const updateNoticeSchema = z.object({
     message: z.string().min(1, "Message is required").optional(),
     createdBy: ObjectIdSchema.optional(),
     expiresAt: z
-      .date()
-      .refine((date) => date > new Date(), "Expiry date must be in the future")
-      .optional(),
-    scheduleDate: z
-      .preprocess((val) => {
-        if (typeof val === "string" || val instanceof Date) {
-          return new Date(val);
-        }
-        return val;
-      }, z.date())
-      .optional(),
+    .preprocess((val) => {
+      if (typeof val === "string" || val instanceof Date) {
+        return new Date(val);
+      }
+      return val;
+    }, z.date())
+    .refine((date) => date > new Date(), {
+      message: "Expiry date must be in the future",
+    }).optional(),
+  
+    scheduleDate:  z
+    .preprocess((val) => {
+      if (typeof val === "string" || val instanceof Date) {
+        return new Date(val);
+      }
+      return val;
+    }, z.date())
+    .refine((date) => date > new Date(), {
+      message: "Schedule date must be in the future",
+    }).optional()
   }),
 });
 

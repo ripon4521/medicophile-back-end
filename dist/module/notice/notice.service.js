@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.noticeValidation = void 0;
+exports.noticeServices = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const notice_model_1 = __importDefault(require("./notice.model"));
@@ -45,10 +45,6 @@ const getAllNoticeFromDb = (query) => __awaiter(void 0, void 0, void 0, function
 });
 const getSingleNotice = (slug) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield notice_model_1.default.findOne({ slug })
-        .populate({
-        path: "members",
-        select: "name email phone profile_picture role",
-    })
         .populate({
         path: "createdBy",
         select: "name email phone profile_picture role",
@@ -85,7 +81,7 @@ const updateNotice = (slug, payload) => __awaiter(void 0, void 0, void 0, functi
     });
     return result;
 });
-exports.noticeValidation = {
+exports.noticeServices = {
     createNotice,
     updateNotice,
     deleteNotice,

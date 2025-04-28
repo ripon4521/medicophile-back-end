@@ -16,8 +16,7 @@ import { sendSMS } from "../../utils/sendSms";
 import { IChangePasswordPayload } from "./changepassord.interface";
 import httpStatus from "http-status";
 
-const generate6DigitPassword = () =>
-  Math.floor(100000 + Math.random() * 900000).toString();
+
 
 const createStudentsIntoDB = async (payload: IStudent) => {
   const session = await mongoose.startSession();
@@ -26,20 +25,26 @@ const createStudentsIntoDB = async (payload: IStudent) => {
   try {
     // Step 1: Create student first (without userId)
     const studentData = { ...payload };
+    const plainPassword = Math.floor(
+      100000 + Math.random() * 900000,
+    ).toString();
+
+const sms = await sendSMS(
+      payload.phone,
+      `Your login password is: ${plainPassword}`,
+    );
+if (!sms) {
+  throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.")
+}
+
+    // console.log(sms)
 
     const createdStudent = await studentModel.create([studentData], {
       session,
     });
-    const plainPassword = Math.floor(
-      100000 + Math.random() * 900000,
-    ).toString();
-    const sms = await sendSMS(
-      payload.phone,
-      `Your login password is: ${plainPassword}`,
-    );
-    // if (sms?.response_code != 202	) {
-    //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create student. Please try again")
-    // }
+    
+     
+  
 
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
 
@@ -54,7 +59,7 @@ const createStudentsIntoDB = async (payload: IStudent) => {
       email: createdStudent[0].email,
       isDeleted: createdStudent[0].isDeleted,
       deletedAt: createdStudent[0].deletedAt,
-      pin: plainPassword,
+   
     };
 
     const newUser = await UserModel.create([userData], { session });
@@ -86,21 +91,23 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
   session.startTransaction();
   try {
     // Step 1: Create admin first (without userId)
-    const adminData = { ...payload };
-
-    const createdAdmin = await adminModel.create([adminData], { session });
     const plainPassword = Math.floor(
       100000 + Math.random() * 900000,
     ).toString();
-    // console.log(plainPassword)
+
+    const adminData = { ...payload };
+
     const sms = await sendSMS(
       payload.phone,
       `Your login password is: ${plainPassword}`,
     );
-    // console.log(sms)
-    // if (sms?.response_code != 202	) {
-    //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
-    // }
+if (!sms) {
+  throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.")
+}
+
+    const createdAdmin = await adminModel.create([adminData], { session });
+  
+    
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
     // Step 2: Now create the user using createdAdmin data
     const userData: Partial<IUser> = {
@@ -113,7 +120,6 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
       email: createdAdmin[0]?.email,
       isDeleted: createdAdmin[0]?.isDeleted,
       deletedAt: createdAdmin[0]?.deletedAt,
-      pin: plainPassword,
     };
 
     const newUser = await UserModel.create([userData], { session });
@@ -141,22 +147,22 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
   try {
     // Step 1: Create admin first (without userId)
     const faculty = { ...payload };
-
-    const createdFaculty = await FacultyUserModel.create([faculty], {
-      session,
-    });
     const plainPassword = Math.floor(
       100000 + Math.random() * 900000,
     ).toString();
-    // console.log(plainPassword)
     const sms = await sendSMS(
       payload.phone,
       `Your login password is: ${plainPassword}`,
     );
-    // console.log(sms)
-    // if (sms?.response_code != 202	) {
-    //   throw new AppError(StatusCodes.FORBIDDEN, "Failed to create Admin. Please try again")
-    // }
+if (!sms) {
+  throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.")
+}
+
+    const createdFaculty = await FacultyUserModel.create([faculty], {
+      session,
+    });
+    
+   
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
     // Step 2: Now create the user using createdAdmin data
     const userData: Partial<IUser> = {
@@ -169,7 +175,7 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
       email: createdFaculty[0]?.email,
       isDeleted: createdFaculty[0]?.isDeleted,
       deletedAt: createdFaculty[0]?.deletedAt,
-      pin: plainPassword,
+     
     };
 
     const newUser = await UserModel.create([userData], { session });

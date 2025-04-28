@@ -5,7 +5,7 @@ import { bookCategoryontroller } from "./bookCategory.controller";
 
 
 const bookCategoryRoute = Router();
-bookCategoryRoute.post('/cretae-book-category', validateRequest(bookCategoryValidation.createBookCategoryValidationSchema), bookCategoryontroller.createBookCategory);
+bookCategoryRoute.post('/cretae-product-category', validateRequest(bookCategoryValidation.createBookCategoryValidationSchema), bookCategoryontroller.createBookCategory);
 bookCategoryRoute.get('/', bookCategoryontroller.getAllBookCategory);
 bookCategoryRoute.get('/:slug', bookCategoryontroller.getSingleBookCategory);
 bookCategoryRoute.patch('/:slug', validateRequest(bookCategoryValidation.updateBookCategoryValidationSchema), bookCategoryontroller.updateBookCategory);

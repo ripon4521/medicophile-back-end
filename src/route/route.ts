@@ -38,6 +38,7 @@ import paymentDetilsRoute from "../module/paymentDetails/paymentDetails.route";
 import mcqRoute from "../module/mcq/mcq.route";
 import mcqAttempRouter from "../module/mcqAttemp/mcqAttemp.route";
 import bookCategoryRoute from "../module/bookCategory/bookCategory.route";
+import noticeRoute from "../module/notice/notice.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -186,8 +187,11 @@ const moduleRoutes = [
     path:"/mcq-attemp",
     route:mcqAttempRouter
   },{
-    path:"/book-category",
+    path:"/product-category",
     route:bookCategoryRoute
+  },{
+    path:"/notice",
+    route:noticeRoute
   }
 ];
 moduleRoutes.forEach((route) => {
