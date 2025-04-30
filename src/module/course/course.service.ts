@@ -8,6 +8,7 @@ import AppError from "../../helpers/AppError";
 import { StatusCodes } from "http-status-codes";
 import { UserModel } from "../user/user.model";
 import { addMonths, isAfter } from "date-fns";
+import { PurchaseModel } from "../purchase/purchase.model";
 
 const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
   const id = payload.createdBy;
@@ -117,10 +118,22 @@ const deleteCourseFromDb = async (slug: string) => {
   return result;
 };
 
+
+const getUserPurchasedCourses = async (userId:string) => {
+  const purchases = await PurchaseModel.find({
+    userId,
+    paymentStatus: 'Paid',
+    status: 'Active'
+  }).populate('courseId'); 
+
+  // শুধু কোর্স ডেটা রিটার্ন করবো
+  return purchases.map(purchase => purchase.courseId);
+};
 export const courseService = {
   createCourseIntoDb,
   getAllCoursesFromDb,
   getCourseById,
   updateCourseInDb,
   deleteCourseFromDb,
+  getUserPurchasedCourses
 };

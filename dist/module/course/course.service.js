@@ -20,6 +20,7 @@ const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const http_status_codes_1 = require("http-status-codes");
 const user_model_1 = require("../user/user.model");
 const date_fns_1 = require("date-fns");
+const purchase_model_1 = require("../purchase/purchase.model");
 const createCourseIntoDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const id = payload.createdBy;
     const user = yield user_model_1.UserModel.findOne({ _id: id });
@@ -98,10 +99,20 @@ const deleteCourseFromDb = (slug) => __awaiter(void 0, void 0, void 0, function*
     }
     return result;
 });
+const getUserPurchasedCourses = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const purchases = yield purchase_model_1.PurchaseModel.find({
+        userId,
+        paymentStatus: 'Paid',
+        status: 'Active'
+    }).populate('courseId');
+    // শুধু কোর্স ডেটা রিটার্ন করবো
+    return purchases.map(purchase => purchase.courseId);
+});
 exports.courseService = {
     createCourseIntoDb,
     getAllCoursesFromDb,
     getCourseById,
     updateCourseInDb,
     deleteCourseFromDb,
+    getUserPurchasedCourses
 };

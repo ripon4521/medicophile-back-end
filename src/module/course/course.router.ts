@@ -10,6 +10,7 @@ courseRouter.post(
   courseController.createCourse,
 );
 courseRouter.get("/", courseController.getAllCourses);
+courseRouter.get('/my-course', courseController.getMyCourse)
 courseRouter.get("/:slug", courseController.getSingleCourse);
 courseRouter.patch(
   "/:slug",
@@ -17,4 +18,5 @@ courseRouter.patch(
   courseController.updateCourse,
 );
 courseRouter.delete("/:slug", courseController.deleteCourse);
+
 export default courseRouter;

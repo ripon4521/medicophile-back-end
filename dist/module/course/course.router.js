@@ -10,6 +10,7 @@ const course_controller_1 = require("./course.controller");
 const courseRouter = express_1.default.Router();
 courseRouter.post("/create-course", (0, validateRequest_1.default)(course_validation_1.courseValidation.createCourseSchema), course_controller_1.courseController.createCourse);
 courseRouter.get("/", course_controller_1.courseController.getAllCourses);
+courseRouter.get('/my-course', course_controller_1.courseController.getMyCourse);
 courseRouter.get("/:slug", course_controller_1.courseController.getSingleCourse);
 courseRouter.patch("/:slug", (0, validateRequest_1.default)(course_validation_1.courseValidation.updateCourseSchema), course_controller_1.courseController.updateCourse);
 courseRouter.delete("/:slug", course_controller_1.courseController.deleteCourse);

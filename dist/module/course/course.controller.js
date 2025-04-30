@@ -68,10 +68,21 @@ const deleteCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         data: result,
     });
 }));
+const getMyCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+    const result = yield course_service_1.courseService.getUserPurchasedCourses(userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Accessed Course fatched  successfully",
+        data: result,
+    });
+}));
 exports.courseController = {
     createCourse,
     getAllCourses,
     getSingleCourse,
     updateCourse,
     deleteCourse,
+    getMyCourse
 };

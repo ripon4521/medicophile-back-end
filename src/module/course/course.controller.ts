@@ -66,10 +66,25 @@ const deleteCourse = catchAsync(async (req, res) => {
   });
 });
 
+const getMyCourse = catchAsync(async (req, res) => {
+  const userId = req.user?.id;
+
+  const result = await courseService.getUserPurchasedCourses(userId);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Accessed Course fatched  successfully",
+    data: result,
+  });
+});
+
+
+
+
 export const courseController = {
   createCourse,
   getAllCourses,
   getSingleCourse,
   updateCourse,
   deleteCourse,
+  getMyCourse
 };
