@@ -1,11 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 import { ILeecture } from "./lecture.interface";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const LectureSchema = new Schema<ILeecture>(
   {
     slug: { type: String , unique:true
-
+      
     },
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -35,22 +36,13 @@ const LectureSchema = new Schema<ILeecture>(
     },
   },
 );
-
 LectureSchema.pre("save", function (next) {
   if (this.isModified("title")) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.title);
+    this.slug = uniqueSlug; 
   }
   next();
 });
-
-// ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-// LectureSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
 
 const LectureModel = mongoose.model<ILeecture>("Lecture", LectureSchema);
 

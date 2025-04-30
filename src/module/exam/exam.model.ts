@@ -1,6 +1,7 @@
 import mongoose, { Schema, Types } from "mongoose";
 import { IExam } from "./exam.interface";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const ExamSchema = new Schema<IExam>(
   {
@@ -38,18 +39,12 @@ const ExamSchema = new Schema<IExam>(
 
 ExamSchema.pre("save", function (next) {
   if (this.isModified("examTitle")) {
-    this.slug = slugify(this.examTitle, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.examTitle);
+    this.slug = uniqueSlug; 
   }
   next();
 });
 
-// ExamSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.examTitle) {
-//     update.slug = slugify(update.examTitle, { lower: true, strict: true });
-//   }
-//   next();
-// });
 
 const ExamModel = mongoose.model<IExam>("Exam", ExamSchema);
 

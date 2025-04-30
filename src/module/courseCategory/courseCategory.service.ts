@@ -14,6 +14,13 @@ const createCourseCategory = async (payload: ICourseCategory) => {
       "Invalid user id, only admin and teacher id is valid",
     );
   }
+  const isExist = await CourseCategory.findOne({title:payload.title});
+  if (isExist ) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Course Category Already Exist in Database",
+    );
+  }
 
   const result = await CourseCategory.create(payload);
   return result;

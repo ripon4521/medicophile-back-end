@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 import { IBlogComment } from "./blogComment.interface";
 import { string } from "zod";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const blogCommentMongooseSchema = new Schema<IBlogComment>(
   {
@@ -28,21 +29,15 @@ const blogCommentMongooseSchema = new Schema<IBlogComment>(
     },
   },
 );
-
 blogCommentMongooseSchema.pre("save", function (next) {
   if (this.isModified("comment")) {
-    this.slug = slugify(this.comment, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.comment);
+    this.slug = uniqueSlug; 
   }
   next();
 });
 
-// blogCommentMongooseSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.comment) {
-//     update.slug = slugify(update.comment, { lower: true, strict: true });
-//   }
-//   next();
-// });
+
 
 const BlogComment = model<IBlogComment>(
   "BlogComment",

@@ -1,6 +1,6 @@
 import mongoose, { Model, Schema } from "mongoose";
 import { ICourse } from "./course.interface";
-import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const courseSchema = new Schema<ICourse>(
   {
@@ -34,22 +34,13 @@ const courseSchema = new Schema<ICourse>(
     }, // UTC+6 (Bangladesh Time)
   },
 );
-
 courseSchema.pre("save", function (next) {
   if (this.isModified("course_title")) {
-    this.slug = slugify(this.course_title, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.course_title);
+    this.slug = uniqueSlug; 
   }
   next();
 });
-
-// // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-// courseSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.course_title) {
-//     update.slug = slugify(update.course_title, { lower: true, strict: true });
-//   }
-//   next();
-// });
 
 // Create Mongoose model
 const courseModel = mongoose.model<ICourse>("Course", courseSchema);

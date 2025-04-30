@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 import { IBookCategory } from "./bookCategory.interface";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 
 
@@ -41,7 +42,8 @@ const BookCategorySchema = new Schema<IBookCategory>(
 
   BookCategorySchema.pre("save", function (next) {
     if (this.isModified("name")) {
-      this.slug = slugify(this.name, { lower: true, strict: true });
+      const uniqueSlug = generateUniqueSlug(this.name);
+      this.slug = uniqueSlug; 
     }
     next();
   });

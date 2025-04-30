@@ -1,10 +1,11 @@
 import mongoose, { Schema, Types } from "mongoose";
-import slugify from "slugify";
+import limax from 'limax';
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const courseCategorySchema = new Schema(
   {
     title: { type: String, required: true },
-    slug: { type: String, unique: true },
+    slug: { type: String },
     cover_photo: { type: String, required: true },
     createdBy: { type: Types.ObjectId, ref: "User", required: true },
     deletedAt: { type: Date },
@@ -13,26 +14,23 @@ const courseCategorySchema = new Schema(
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }, // UTC+6 (Bangladesh Time)
-  },
+    },
+  }
 );
 
-// ✅ Middleware: Save করার সময় Slug অটো জেনারেট হবে
+// ✅ Slug generate with fallback for Bangla
 courseCategorySchema.pre("save", function (next) {
   if (this.isModified("title")) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
+    // Use the utility function to generate slug
+    const uniqueSlug = generateUniqueSlug(this.title);
+
+    this.slug = uniqueSlug; // Set the slug field with generated slug
+    console.log("✅ Generated Slug:", this.slug);
   }
+
   next();
 });
 
-// // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-// courseCategorySchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
 
 const CourseCategory = mongoose.model("CourseCategory", courseCategorySchema);
 export default CourseCategory;

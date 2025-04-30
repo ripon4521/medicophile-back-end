@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { IDocs } from "./docs.interface";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const docsSchema = new Schema<IDocs>(
   {
@@ -19,19 +20,11 @@ const docsSchema = new Schema<IDocs>(
 
 docsSchema.pre("save", function (next) {
   if (this.isModified("title")) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.title);
+    this.slug = uniqueSlug; 
   }
   next();
 });
-
-// // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-// docsSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
 
 const DocsModel = model<IDocs>("Docs", docsSchema);
 

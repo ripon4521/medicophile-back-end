@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IModules } from "./modules.interface";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const ModuleSchema = new Schema<IModules>(
   {
@@ -17,21 +18,16 @@ const ModuleSchema = new Schema<IModules>(
     }, // UTC+6 (Bangladesh Time)
   },
 );
-
 ModuleSchema.pre("save", function (next) {
   if (this.isModified("moduleTitle")) {
-    this.slug = slugify(this.moduleTitle, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.moduleTitle);
+    this.slug = uniqueSlug; 
   }
   next();
 });
 
-// ModuleSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.moduleTitle) {
-//     update.slug = slugify(update.moduleTitle, { lower: true, strict: true });
-//   }
-//   next();
-// });
+
+
 
 const ModuleModel = mongoose.model<IModules>("Module", ModuleSchema);
 

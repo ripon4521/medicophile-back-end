@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { INotes } from "./notes.interface";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const NotesSchema = new Schema<INotes>(
   {
@@ -30,18 +31,13 @@ const NotesSchema = new Schema<INotes>(
 
 NotesSchema.pre("save", function (next) {
   if (this.isModified("title")) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.title);
+    this.slug = uniqueSlug; 
   }
   next();
 });
 
-// NotesSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
+
 
 const NotesModel = mongoose.model<INotes>("Notes", NotesSchema);
 

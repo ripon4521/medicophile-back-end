@@ -1,6 +1,7 @@
 import { Schema, model, Types } from "mongoose";
 import { IMedia } from "./media.interface";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const mediaSchema = new Schema<IMedia>(
   {
@@ -39,18 +40,14 @@ const mediaSchema = new Schema<IMedia>(
 
 mediaSchema.pre("save", function (next) {
   if (this.isModified("title")) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.title);
+    this.slug = uniqueSlug; 
   }
   next();
 });
 
-// mediaSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
+
+
 
 const MediaModel = model<IMedia>("Media", mediaSchema);
 export default MediaModel;

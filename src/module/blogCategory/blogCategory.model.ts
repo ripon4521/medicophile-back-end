@@ -1,5 +1,6 @@
 import mongoose, { Schema, Types } from "mongoose";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const blogCategorySchema = new Schema(
   {
@@ -18,18 +19,11 @@ const blogCategorySchema = new Schema(
 
 blogCategorySchema.pre("save", function (next) {
   if (this.isModified("title")) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.title);
+    this.slug = uniqueSlug; 
   }
   next();
 });
-
-// blogCategorySchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
 
 const BlogCategory = mongoose.model("BlogCategory", blogCategorySchema);
 export default BlogCategory;

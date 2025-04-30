@@ -1,6 +1,7 @@
 import { Schema, model, Types } from "mongoose";
 import { IBlog } from "./blog.interface";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const blogSchema = new Schema<IBlog>(
   {
@@ -57,18 +58,12 @@ const blogSchema = new Schema<IBlog>(
 
 blogSchema.pre("save", function (next) {
   if (this.isModified("title")) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.title);
+    this.slug = uniqueSlug; 
   }
   next();
 });
 
-// blogSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
 
 const BlogModel = model<IBlog>("Blog", blogSchema);
 export default BlogModel;

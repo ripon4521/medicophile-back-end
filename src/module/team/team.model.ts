@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { ITeams } from "./team.interface";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const teamSchema = new Schema<ITeams>(
   {
@@ -27,18 +28,12 @@ const teamSchema = new Schema<ITeams>(
 
 teamSchema.pre("save", function (next) {
   if (this.isModified("name")) {
-    this.slug = slugify(this.name, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.name);
+    this.slug = uniqueSlug; 
   }
   next();
 });
 
-// teamSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.name) {
-//     update.slug = slugify(update.name, { lower: true, strict: true });
-//   }
-//   next();
-// });
 
 const Team = mongoose.model<ITeams>("Team", teamSchema);
 

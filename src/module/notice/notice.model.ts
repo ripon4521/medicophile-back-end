@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 import { Types } from "mongoose";
 import { INotice } from "./notice.interface";
 import slugify from "slugify";
+import { generateUniqueSlug } from "../../utils/generateSlug";
 
 // Define the Notice schema
 const noticeSchema = new Schema<INotice>(
@@ -50,18 +51,13 @@ const noticeSchema = new Schema<INotice>(
 
 noticeSchema.pre("save", function (next) {
   if (this.isModified("title")) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
+    const uniqueSlug = generateUniqueSlug(this.title);
+    this.slug = uniqueSlug; 
   }
   next();
 });
 
-// noticeSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
+
 
 const NoticeModel = mongoose.model<INotice>("Notice", noticeSchema);
 
