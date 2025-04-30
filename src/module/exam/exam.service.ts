@@ -151,7 +151,6 @@ const getStudentsByExamService = async (examId: string) => {
   // Fetch attempts from all models and populate studentId
   const cqAttempts = await CqAttempModel.find({ examId }).populate("studentId");
   const gapAttempts = await GapAttempModel.find({ examId }).populate("studentId");
-
   const mcqAttempts = await McqAttemptModel.find({ examId }).populate("studentId");
   const allStudents = [
     ...cqAttempts.map(attempt => attempt.studentId),  

@@ -6,6 +6,8 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 
 
  const createProductSchema = z.object({
+    body:z.object({
+  
     title: z.string().min(1, "Title is required"),
     description: z.string().optional(),
     trailer: z.string().url("Invalid URL").optional(),
@@ -16,10 +18,15 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
     stock: z.enum(["In Stock", "Out Off Stock"]),
     coverPhoto: z.string().url("Invalid cover photo URL"),
     createdBy: ObjectIdSchema,
-    tags: z.array(z.string()),
+    tags: z.array(z.string())
+          
+})
   });
 
   const updateProductSchema = z.object({
+    body:z.object({
+
+   
     title: z.string().min(1, "Title is required").optional(),
     description: z.string().optional(),
     trailer: z.string().url("Invalid URL").optional(),
@@ -30,7 +37,8 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
     stock: z.enum(["In Stock", "Out Off Stock"]).optional(),
     coverPhoto: z.string().url("Invalid cover photo URL").optional(),
     createdBy: ObjectIdSchema.optional(),
-    tags: z.array(z.string()).optional(),
+    tags: z.array(z.string()).optional()
+})
   });
 
   export const productValidation = {

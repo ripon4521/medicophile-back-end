@@ -4,7 +4,7 @@ exports.ProductModel = void 0;
 const mongoose_1 = require("mongoose");
 const generateSlug_1 = require("../../utils/generateSlug");
 const productSchema = new mongoose_1.Schema({
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String, unique: true },
     title: { type: String, required: true },
     description: { type: String },
     trailer: { type: String },

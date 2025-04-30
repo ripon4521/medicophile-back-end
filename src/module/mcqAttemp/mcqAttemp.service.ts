@@ -5,6 +5,7 @@ import McqAttemptModel from "./mcqAttemp.model";
 import AppError from "../../helpers/AppError";
 import { StatusCodes } from "http-status-codes";
 import { UserModel } from "../user/user.model";
+import QueryBuilder from "../../builder/querybuilder";
 
 const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
   const user = await UserModel.findOne({ _id: studentId });
@@ -77,8 +78,23 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
   };
 };
 
-const getAllMcq = async () => {
-  const result = await McqAttemptModel.find();
+const getAllMcq = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(McqAttemptModel, query)
+    .search(["totalScore"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .populate({
+      path: "studentId",
+      select: "name role phone",
+    })
+    .populate({
+      path: "examId",
+    })
+  
+
+  const result = await courseQuery.exec(); 
   return result;
 };
 

@@ -4,7 +4,7 @@ import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const productSchema = new Schema<IProduct>(
     {
-      slug: { type: String, required: true, unique: true },
+      slug: { type: String, unique: true },
       title: { type: String, required: true },
       description: { type: String },
       trailer: { type: String },
