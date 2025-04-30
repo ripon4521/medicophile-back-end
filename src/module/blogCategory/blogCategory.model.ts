@@ -5,7 +5,7 @@ import { generateUniqueSlug } from "../../utils/generateSlug";
 const blogCategorySchema = new Schema(
   {
     title: { type: String, required: true },
-    slug: { type: String, unique:true },
+    slug: { type: String, unique: true },
     createdBy: { type: Types.ObjectId, ref: "User", required: true },
     deletedAt: { type: Date },
     isDeleted: { type: Boolean, default: false },
@@ -20,7 +20,7 @@ const blogCategorySchema = new Schema(
 blogCategorySchema.pre("save", function (next) {
   if (this.isModified("title")) {
     const uniqueSlug = generateUniqueSlug(this.title);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });

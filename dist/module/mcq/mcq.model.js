@@ -51,21 +51,22 @@ const mcqQuestionSchema = new mongoose_1.Schema({
         ref: "User",
     },
     positiveMark: {
-        type: Number
-    }, negetiveMark: {
-        type: Number
+        type: Number,
+    },
+    negetiveMark: {
+        type: Number,
     },
     isDeleted: {
         type: Boolean,
-        default: false
+        default: false,
     },
     deletedAt: {
-        type: Date
-    }
+        type: Date,
+    },
 }, {
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }
+    },
 });
 // Create the Mongoose model
 const McqQuestion = (0, mongoose_1.model)("McqQuestion", mcqQuestionSchema);

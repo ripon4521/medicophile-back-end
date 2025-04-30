@@ -31,26 +31,27 @@ const createCqMarking = async (payload: ICqMarking) => {
 
 const getAllCqMarking = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(CqMarkingModel, query)
-  .search(["score"])
-  .filter()
-  .sort()
-  .paginate()
-  .fields()
-  .populate({
-    path: "studentId",
-    select: "name role phone",
-  })
-  .populate([
-    {
-      path: "examId",
-      select: "examTitle rolexamTypee examType",
-    },
-  ]).populate([
-    {
-      path: "questionId",
-      select: "question",
-    },
-  ])
+    .search(["score"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .populate({
+      path: "studentId",
+      select: "name role phone",
+    })
+    .populate([
+      {
+        path: "examId",
+        select: "examTitle rolexamTypee examType",
+      },
+    ])
+    .populate([
+      {
+        path: "questionId",
+        select: "question",
+      },
+    ]);
   const result = await courseQuery.exec();
   return result;
 };

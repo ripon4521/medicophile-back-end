@@ -45,11 +45,11 @@ const createExam = async (payload: IExam) => {
 
 const getAllExam = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(ExamModel, query)
-  .search(["examType"])
-  .filter()
-  .sort()
-  .paginate()
-  .fields()
+    .search(["examType"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
     .populate({
       path: "createdBy",
       select: "name role phone",
@@ -65,7 +65,7 @@ const getAllExam = async (query: Record<string, unknown>) => {
       select: "moduleTitle slug",
     });
 
-    const result = await courseQuery.exec();
+  const result = await courseQuery.exec();
 
   if (!result) {
     throw new AppError(
@@ -129,7 +129,7 @@ const deleteExam = async (slug: string) => {
 };
 
 const getSpcificExam = async (id: string) => {
-  const result = await ExamModel.find({moduleId:id, isDeleted:false})
+  const result = await ExamModel.find({ moduleId: id, isDeleted: false })
     .populate("createdBy")
     .populate({
       path: "courseId",
@@ -145,17 +145,13 @@ const getSpcificExam = async (id: string) => {
   return result;
 };
 
-
 const getStudentsByExamService = async (examId: string) => {
-  const students = await CqAttempModel.find({ examId })
-  const student = await GapAttempModel.find({ examId })
+  const students = await CqAttempModel.find({ examId });
+  const student = await GapAttempModel.find({ examId });
   const stude = await McqAttemptModel.find({ examId });
-  const totalStudentList =stude.length + students.length + student.length;
+  const totalStudentList = stude.length + students.length + student.length;
   return totalStudentList;
-
- 
 };
-
 
 export const examServices = {
   createExam,
@@ -164,5 +160,5 @@ export const examServices = {
   getAllExam,
   getSingleExam,
   getSpcificExam,
-  getStudentsByExamService
+  getStudentsByExamService,
 };

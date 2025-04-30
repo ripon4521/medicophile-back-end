@@ -21,7 +21,7 @@ const docsSchema = new Schema<IDocs>(
 docsSchema.pre("save", function (next) {
   if (this.isModified("title")) {
     const uniqueSlug = generateUniqueSlug(this.title);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });

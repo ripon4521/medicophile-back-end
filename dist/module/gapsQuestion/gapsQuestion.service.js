@@ -103,5 +103,5 @@ exports.gapsQuestionService = {
     getAllGapsQuestion,
     updateGapsQuestion,
     deleteGapsQuestion,
-    getSpcificGaps
+    getSpcificGaps,
 };

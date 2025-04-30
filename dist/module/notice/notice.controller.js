@@ -67,5 +67,5 @@ exports.noticeController = {
     updateNotice,
     deleteNotice,
     getAllNotice,
-    getSingleNotice
+    getSingleNotice,
 };

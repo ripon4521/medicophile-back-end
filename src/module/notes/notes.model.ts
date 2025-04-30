@@ -5,7 +5,7 @@ import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const NotesSchema = new Schema<INotes>(
   {
-    slug: { type: String, unique:true },
+    slug: { type: String, unique: true },
     title: { type: String, required: true },
     description: { type: String, required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -32,12 +32,10 @@ const NotesSchema = new Schema<INotes>(
 NotesSchema.pre("save", function (next) {
   if (this.isModified("title")) {
     const uniqueSlug = generateUniqueSlug(this.title);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });
-
-
 
 const NotesModel = mongoose.model<INotes>("Notes", NotesSchema);
 

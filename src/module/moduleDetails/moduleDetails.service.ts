@@ -101,7 +101,7 @@ const getSingleModuleDetails = async (_id: string) => {
 };
 
 const getSpcificModuDtails = async (id: string) => {
-  const result = await ModuleDetails.find({moduleId:id, isDeleted:false})
+  const result = await ModuleDetails.find({ moduleId: id, isDeleted: false })
     .populate("contentId")
     .populate({
       path: "courseId",
@@ -116,11 +116,6 @@ const getSpcificModuDtails = async (id: string) => {
   }
   return result;
 };
-
-
-
-
-
 
 const deleteModuleDetails = async (_id: string) => {
   if (!_id) {
@@ -169,5 +164,5 @@ export const moduleDetailsService = {
   getSingleModuleDetails,
   updateModuleDetails,
   deleteModuleDetails,
-  getSpcificModuDtails
+  getSpcificModuDtails,
 };

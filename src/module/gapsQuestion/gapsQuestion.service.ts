@@ -102,24 +102,23 @@ const deleteGapsQuestion = async (_id: string) => {
   return result;
 };
 
-
 const getSpcificGaps = async (id: string) => {
-    const result = await GapsQuestionModel.find({examId:id, isDeleted:false})
-      .populate("createdBy")
-      .populate("examId");
-    if (!result) {
-      throw new AppError(
-        StatusCodes.BAD_REQUEST,
-        "exam id is not valid or not found in database",
-      );
-    }
-    return result;
-  };
+  const result = await GapsQuestionModel.find({ examId: id, isDeleted: false })
+    .populate("createdBy")
+    .populate("examId");
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "exam id is not valid or not found in database",
+    );
+  }
+  return result;
+};
 
 export const gapsQuestionService = {
   cretaeGapsQuestion,
   getAllGapsQuestion,
   updateGapsQuestion,
   deleteGapsQuestion,
-  getSpcificGaps
+  getSpcificGaps,
 };

@@ -1,5 +1,3 @@
-
-
 import mongoose, { Schema, model } from "mongoose";
 import { IAttemp, IMcqAttemp } from "./mcqAttemp.interface";
 
@@ -15,10 +13,10 @@ const answerItemSchema = new Schema<IAttemp>(
       required: true,
     },
   },
-  { _id: false } 
+  { _id: false },
 );
 
-const mcqAttemptSchema = new Schema <IMcqAttemp>(
+const mcqAttemptSchema = new Schema<IMcqAttemp>(
   {
     answer: {
       type: [answerItemSchema],
@@ -27,21 +25,21 @@ const mcqAttemptSchema = new Schema <IMcqAttemp>(
     studentId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "User", 
+      ref: "User",
     },
-    totalScore:{
-        type:Number
-    }, totalAttemp:{
-        type:Number
+    totalScore: {
+      type: Number,
     },
-    correctCount: { type: Number }
-
+    totalAttemp: {
+      type: Number,
+    },
+    correctCount: { type: Number },
   },
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }
-  }
+    },
+  },
 );
 
 const McqAttemptModel = model("McqAttempt", mcqAttemptSchema);

@@ -23,7 +23,10 @@ const submitMcqAttemptController = (0, catchAsync_1.default)((req, res) => __awa
     if (!studentId) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid student id");
     }
-    const result = yield mcqAttemp_service_1.mcqAttempService.submitAttemptService({ studentId, answer });
+    const result = yield mcqAttemp_service_1.mcqAttempService.submitAttemptService({
+        studentId,
+        answer,
+    });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "MCQ Atttmp created successfully",
@@ -50,5 +53,5 @@ const getAllMcq = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
 exports.mcqAttempController = {
     submitMcqAttemptController,
     getSpeecificMccq,
-    getAllMcq
+    getAllMcq,
 };

@@ -173,28 +173,35 @@ const moduleRoutes = [
     {
         path: "/coupon",
         route: coupon_route_1.default,
-    }, {
+    },
+    {
         path: "/purchase-token",
-        route: purchaseToken_route_1.default
-    }, {
+        route: purchaseToken_route_1.default,
+    },
+    {
         path: "/purchase",
-        route: purchase_route_1.default
-    }, {
+        route: purchase_route_1.default,
+    },
+    {
         path: "/payment-details",
-        route: paymentDetails_route_1.default
-    }, {
+        route: paymentDetails_route_1.default,
+    },
+    {
         path: "/mcq",
-        route: mcq_route_1.default
-    }, {
+        route: mcq_route_1.default,
+    },
+    {
         path: "/mcq-attemp",
-        route: mcqAttemp_route_1.default
-    }, {
+        route: mcqAttemp_route_1.default,
+    },
+    {
         path: "/product-category",
-        route: bookCategory_route_1.default
-    }, {
+        route: bookCategory_route_1.default,
+    },
+    {
         path: "/notice",
-        route: notice_route_1.default
-    }
+        route: notice_route_1.default,
+    },
 ];
 moduleRoutes.forEach((route) => {
     router.use(route.path, route.route);

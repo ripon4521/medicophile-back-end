@@ -74,5 +74,5 @@ exports.mcqQuestiionController = {
     getAllMCQ,
     updateMCQ,
     deleteMCQ,
-    getSpeecificMccq
+    getSpeecificMccq,
 };

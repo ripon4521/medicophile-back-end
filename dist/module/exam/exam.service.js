@@ -134,5 +134,5 @@ exports.examServices = {
     getAllExam,
     getSingleExam,
     getSpcificExam,
-    getStudentsByExamService
+    getStudentsByExamService,
 };

@@ -53,7 +53,6 @@ const updateExam = catchAsync(async (req, res) => {
   });
 });
 
-
 const getSpeecificExam = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await examServices.getSpcificExam(id);
@@ -63,7 +62,6 @@ const getSpeecificExam = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
 
 const getStudentsByExamService = catchAsync(async (req, res) => {
   const { examId } = req.params;
@@ -75,8 +73,6 @@ const getStudentsByExamService = catchAsync(async (req, res) => {
   });
 });
 
-
-
 export const examController = {
   createExam,
   getExam,
@@ -84,5 +80,5 @@ export const examController = {
   updateExam,
   deleteExam,
   getSpeecificExam,
-  getStudentsByExamService
+  getStudentsByExamService,
 };

@@ -81,5 +81,5 @@ exports.modulesController = {
     deleteModule,
     getAllModule,
     getSingleModule,
-    getSpecificModule
+    getSpecificModule,
 };

@@ -22,8 +22,14 @@ const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const course_model_1 = __importDefault(require("../course/course.model"));
 const createPurchaseToken = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const student = yield user_model_1.UserModel.findOne({ _id: payload.studentId });
-    const course = yield course_model_1.default.findOne({ _id: payload.courseId, isDeleted: false });
-    const coupon = yield coupon_model_1.default.findOne({ coupon: payload.coupon, isDeleted: false });
+    const course = yield course_model_1.default.findOne({
+        _id: payload.courseId,
+        isDeleted: false,
+    });
+    const coupon = yield coupon_model_1.default.findOne({
+        coupon: payload.coupon,
+        isDeleted: false,
+    });
     if (!coupon || coupon.coupon !== payload.coupon) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid coupon");
     }
@@ -46,16 +52,18 @@ const getAllPurchasseToken = (query) => __awaiter(void 0, void 0, void 0, functi
         .sort()
         .paginate()
         .fields()
-        .populate([{
+        .populate([
+        {
             path: "courseId",
             select: "cover_photo course_title description duration price offerPrice",
-            populate: { path: "category", select: "title cover_photo" }
-        }])
+            populate: { path: "category", select: "title cover_photo" },
+        },
+    ])
         .populate([
         {
             path: "studentId",
             select: "name role phone",
-        }
+        },
     ]);
     const result = yield courseQuery.exec();
     if (!result) {
@@ -69,7 +77,7 @@ const updatePurchaseToken = (_id, payload) => __awaiter(void 0, void 0, void 0, 
     }
     const result = yield purchaseToken_model_1.default.findOneAndUpdate({ _id }, payload, {
         runValidators: true,
-        new: true
+        new: true,
     });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to update purchase token");
@@ -82,9 +90,9 @@ const deletePurchaseToken = (_id) => __awaiter(void 0, void 0, void 0, function*
     }
     const result = yield purchaseToken_model_1.default.findOneAndUpdate({ _id }, {
         isDeleted: true,
-        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
+        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     }, {
-        new: true
+        new: true,
     });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to delete purchase token");
@@ -95,5 +103,5 @@ exports.purchaseTokenService = {
     createPurchaseToken,
     getAllPurchasseToken,
     updatePurchaseToken,
-    deletePurchaseToken
+    deletePurchaseToken,
 };

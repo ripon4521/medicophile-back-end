@@ -21,8 +21,8 @@ const courseSchema = new Schema<ICourse>(
     daySchedule: { type: [String] },
     timeShedule: { type: [String] },
     price: { type: Number, required: true, min: 0 },
-    offerPrice: { type: Number, default:0 },
-    takeReview: { type: String, enum: ["on", "off"], default:"on" },
+    offerPrice: { type: Number, default: 0 },
+    takeReview: { type: String, enum: ["on", "off"], default: "on" },
     status: { type: String, enum: ["active", "inactive"], required: true },
     course_tag: { type: [String], default: [] },
     isDeleted: { type: Boolean, default: false },
@@ -37,7 +37,7 @@ const courseSchema = new Schema<ICourse>(
 courseSchema.pre("save", function (next) {
   if (this.isModified("course_title")) {
     const uniqueSlug = generateUniqueSlug(this.course_title);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });

@@ -19,5 +19,5 @@ const getAllPaymentDetails = () => __awaiter(void 0, void 0, void 0, function* (
     return result;
 });
 exports.pamentDetailsService = {
-    getAllPaymentDetails
+    getAllPaymentDetails,
 };

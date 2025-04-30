@@ -44,8 +44,7 @@ const getAllNoticeFromDb = (query) => __awaiter(void 0, void 0, void 0, function
     return result;
 });
 const getSingleNotice = (slug) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield notice_model_1.default.findOne({ slug })
-        .populate({
+    const result = yield notice_model_1.default.findOne({ slug }).populate({
         path: "createdBy",
         select: "name email phone profile_picture role",
     });

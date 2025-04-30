@@ -15,11 +15,9 @@ const userCredentialsSchema = new Schema(
     },
     accessToken: {
       type: String,
-   
     },
     refreshToken: {
       type: String,
-      
     },
     ipAddress: {
       type: String,

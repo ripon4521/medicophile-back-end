@@ -40,11 +40,10 @@ const getAllNoticeFromDb = async (query: Record<string, unknown>) => {
 };
 
 const getSingleNotice = async (slug: string) => {
-  const result = await NoticeModel.findOne({ slug })
-    .populate({
-      path: "createdBy",
-      select: "name email phone profile_picture role",
-    });
+  const result = await NoticeModel.findOne({ slug }).populate({
+    path: "createdBy",
+    select: "name email phone profile_picture role",
+  });
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,

@@ -21,7 +21,10 @@ const mcq_model_1 = __importDefault(require("./mcq.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createMcq = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const exam = yield exam_model_1.default.findOne({ _id: payload.examId });
-    const user = yield user_model_1.UserModel.findOne({ _id: payload.insertBy, isDeleted: false });
+    const user = yield user_model_1.UserModel.findOne({
+        _id: payload.insertBy,
+        isDeleted: false,
+    });
     if (!exam || exam.examType !== "MCQ") {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid exam id or please check exam type. Only MCQ type exam needed");
     }
@@ -65,7 +68,7 @@ const updateMcq = (_id, payload) => __awaiter(void 0, void 0, void 0, function* 
     }
     const result = yield mcq_model_1.default.findOneAndUpdate({ _id }, payload, {
         runValidators: true,
-        new: true
+        new: true,
     });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to update mcq  question");
@@ -79,9 +82,9 @@ const deleteMcq = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     }
     const result = yield mcq_model_1.default.findOneAndUpdate({ _id }, {
         isDeleted: true,
-        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
+        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     }, {
-        new: true
+        new: true,
     });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to delete mcq  question");
@@ -102,5 +105,5 @@ exports.mcqQuestionService = {
     getAllMcq,
     updateMcq,
     deleteMcq,
-    getSpcificMcq
+    getSpcificMcq,
 };

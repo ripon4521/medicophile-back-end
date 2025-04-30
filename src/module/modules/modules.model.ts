@@ -5,7 +5,7 @@ import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const ModuleSchema = new Schema<IModules>(
   {
-    slug: { type: String , unique:true},
+    slug: { type: String, unique: true },
     moduleTitle: { type: String, required: true, trim: true },
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -21,13 +21,10 @@ const ModuleSchema = new Schema<IModules>(
 ModuleSchema.pre("save", function (next) {
   if (this.isModified("moduleTitle")) {
     const uniqueSlug = generateUniqueSlug(this.moduleTitle);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });
-
-
-
 
 const ModuleModel = mongoose.model<IModules>("Module", ModuleSchema);
 

@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types } from "mongoose";
-import limax from 'limax';
+import limax from "limax";
 import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const courseCategorySchema = new Schema(
@@ -15,7 +15,7 @@ const courseCategorySchema = new Schema(
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
-  }
+  },
 );
 
 // ✅ Slug generate with fallback for Bangla
@@ -30,7 +30,6 @@ courseCategorySchema.pre("save", function (next) {
 
   next();
 });
-
 
 const CourseCategory = mongoose.model("CourseCategory", courseCategorySchema);
 export default CourseCategory;

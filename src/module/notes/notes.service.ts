@@ -8,22 +8,21 @@ import LectureModel from "../lecture/lecture.model";
 import ModuleModel from "../modules/modules.model";
 
 const createNote = async (paload: INotes) => {
-  const course = await courseModel.findOne({_id:paload.courseId, isDeleted:false});
-  const useer = await UserModel.findOne({_id:paload.createdBy, isDeleted:false});
-  const modul = await ModuleModel.findOne({_id:paload.moduleId});
+  const course = await courseModel.findOne({
+    _id: paload.courseId,
+    isDeleted: false,
+  });
+  const useer = await UserModel.findOne({
+    _id: paload.createdBy,
+    isDeleted: false,
+  });
+  const modul = await ModuleModel.findOne({ _id: paload.moduleId });
   if (!course) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Inavlid course id",
-    );
-  }else if (!useer || useer.role === "student") {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Inavlid user id")
-  }else if (!modul) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Inavlid module id")
+    throw new AppError(StatusCodes.BAD_REQUEST, "Inavlid course id");
+  } else if (!useer || useer.role === "student") {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Inavlid user id");
+  } else if (!modul) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Inavlid module id");
   }
   const result = await NotesModel.create(paload);
   return result;
@@ -98,9 +97,8 @@ const deleteNote = async (slug: string) => {
   return result;
 };
 
-
 const getSpcificNotes = async (id: string) => {
-  const result = await NotesModel.find({moduleId:id, isDeleted:false})
+  const result = await NotesModel.find({ moduleId: id, isDeleted: false })
     .populate("createdBy")
     .populate({
       path: "courseId",
@@ -116,14 +114,11 @@ const getSpcificNotes = async (id: string) => {
   return result;
 };
 
-
-
-
 export const noteService = {
   createNote,
   updateNote,
   getAllNotes,
   getSingleNotes,
   deleteNote,
-  getSpcificNotes
+  getSpcificNotes,
 };

@@ -67,5 +67,5 @@ exports.purchaseController = {
     createPurchase,
     getAllPurchase,
     deletePurchase,
-    updatePurchase
+    updatePurchase,
 };

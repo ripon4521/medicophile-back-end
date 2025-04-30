@@ -5,9 +5,7 @@ import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const LectureSchema = new Schema<ILeecture>(
   {
-    slug: { type: String , unique:true
-      
-    },
+    slug: { type: String, unique: true },
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     moduleId: { type: Schema.Types.ObjectId, ref: "Module", required: true },
@@ -39,7 +37,7 @@ const LectureSchema = new Schema<ILeecture>(
 LectureSchema.pre("save", function (next) {
   if (this.isModified("title")) {
     const uniqueSlug = generateUniqueSlug(this.title);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });

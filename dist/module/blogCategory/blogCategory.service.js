@@ -36,10 +36,12 @@ const getAllBlogCategory = (query) => __awaiter(void 0, void 0, void 0, function
         .sort()
         .paginate()
         .fields()
-        .populate([{
+        .populate([
+        {
             path: "createdBy",
-            select: "name role phone"
-        }]);
+            select: "name role phone",
+        },
+    ]);
     const result = yield courseQuery.exec();
     return result;
 });

@@ -77,5 +77,5 @@ exports.lectureController = {
     getSingleLecture,
     deleteLecture,
     updateLecture,
-    getSpeecificLecture
+    getSpeecificLecture,
 };

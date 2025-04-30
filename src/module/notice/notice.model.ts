@@ -9,7 +9,7 @@ const noticeSchema = new Schema<INotice>(
   {
     slug: {
       type: String,
-      unique:true
+      unique: true,
     },
     title: {
       type: String,
@@ -52,12 +52,10 @@ const noticeSchema = new Schema<INotice>(
 noticeSchema.pre("save", function (next) {
   if (this.isModified("title")) {
     const uniqueSlug = generateUniqueSlug(this.title);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });
-
-
 
 const NoticeModel = mongoose.model<INotice>("Notice", noticeSchema);
 

@@ -10,15 +10,15 @@ const paymentInfoSchema = new Schema<IPaymentInfo>(
       enum: ["Bkash", "Nagad", "Bank", "Cash"],
       required: true,
     },
-    accountNumber: { type: String, required:true },
+    accountNumber: { type: String, required: true },
     paymentMedium: {
       type: String,
       enum: ["personal", "agent", "merchant"],
     },
-    paymentDate: { type: Date }, 
+    paymentDate: { type: Date },
     proofUrl: { type: String },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const purchaseTokenSchema = new Schema<IPurchaseToken>(
@@ -27,7 +27,14 @@ const purchaseTokenSchema = new Schema<IPurchaseToken>(
     courseId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
     status: {
       type: String,
-      enum: ["Verified", "Unverified", "Rejected", "Pending", "Refunded", "Partial"],
+      enum: [
+        "Verified",
+        "Unverified",
+        "Rejected",
+        "Pending",
+        "Refunded",
+        "Partial",
+      ],
       default: "Unverified",
     },
     purchaseToken: { type: String },
@@ -45,26 +52,25 @@ const purchaseTokenSchema = new Schema<IPurchaseToken>(
   },
   {
     timestamps: {
-      currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000), 
+      currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
-  }
+  },
 );
-
 
 // purchaseTokenSchema.pre("save", async function (next) {
 //     const doc = this as any;
-  
+
 //     // Generate purchase token if not set
 //     if (!doc.purchaseToken) {
 //       const unique = crypto.randomBytes(8).toString("hex").toUpperCase();
 //       doc.purchaseToken = `PT-${unique}`;
 //     }
-  
+
 //     // Set today's payment date if not already set
 //     if (!doc.paymentInfo.paymentDate) {
 //       doc.paymentInfo.paymentDate = new Date();
 //     }
-  
+
 //     // Coupon logic
 //     if (doc.coupon) {
 //       const couponData = await CouponModel.findOne({
@@ -72,17 +78,17 @@ const purchaseTokenSchema = new Schema<IPurchaseToken>(
 //         status: "Active",
 //         isDeleted: false,
 //       });
-  
+
 //       if (couponData) {
 //         const price = doc.price || 0;
 //         let discountAmount = 0;
-  
+
 //         if (couponData.discountType === "Percentage") {
 //           discountAmount = (price * couponData.discountAmount) / 100;
 //         } else if (couponData.discountType === "Fixed") {
 //           discountAmount = couponData.discountAmount;
 //         }
-  
+
 //         doc.discount = Math.min(discountAmount, price); // prevent negative subtotal
 //       } else {
 //         doc.discount = 0; // invalid coupon
@@ -90,19 +96,16 @@ const purchaseTokenSchema = new Schema<IPurchaseToken>(
 //     } else {
 //       doc.discount = 0;
 //     }
-  
+
 //     doc.subtotal = doc.price;
 //     doc.totalAmount = doc.subtotal - doc.discount + doc.charge;
 
-    
 //     if (!doc.paymentInfo.paymentDate) {
 //         doc.paymentInfo.paymentDate = new Date();
 //       }
-  
+
 //     next();
 //   });
-
-
 
 // ✅ Pre-save hook to generate token & set payment date
 purchaseTokenSchema.pre("save", function (next) {
@@ -122,6 +125,9 @@ purchaseTokenSchema.pre("save", function (next) {
   next();
 });
 
-const PurchaseTokenModel = model<IPurchaseToken>("PurchaseToken", purchaseTokenSchema);
+const PurchaseTokenModel = model<IPurchaseToken>(
+  "PurchaseToken",
+  purchaseTokenSchema,
+);
 
 export default PurchaseTokenModel;

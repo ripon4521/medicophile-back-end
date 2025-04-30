@@ -171,28 +171,35 @@ const moduleRoutes = [
   {
     path: "/coupon",
     route: couponRoute,
-  },{
-    path:"/purchase-token",
-    route:purchaseTokenRoute
-  },{
-    path:"/purchase",
-    route:purchaseRoute
-  },{
-    path:"/payment-details",
-    route:paymentDetilsRoute
-  },{
-    path:"/mcq",
-    route:mcqRoute
-  },{
-    path:"/mcq-attemp",
-    route:mcqAttempRouter
-  },{
-    path:"/product-category",
-    route:bookCategoryRoute
-  },{
-    path:"/notice",
-    route:noticeRoute
-  }
+  },
+  {
+    path: "/purchase-token",
+    route: purchaseTokenRoute,
+  },
+  {
+    path: "/purchase",
+    route: purchaseRoute,
+  },
+  {
+    path: "/payment-details",
+    route: paymentDetilsRoute,
+  },
+  {
+    path: "/mcq",
+    route: mcqRoute,
+  },
+  {
+    path: "/mcq-attemp",
+    route: mcqAttempRouter,
+  },
+  {
+    path: "/product-category",
+    route: bookCategoryRoute,
+  },
+  {
+    path: "/notice",
+    route: noticeRoute,
+  },
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);

@@ -14,8 +14,8 @@ const createCourseCategory = async (payload: ICourseCategory) => {
       "Invalid user id, only admin and teacher id is valid",
     );
   }
-  const isExist = await CourseCategory.findOne({title:payload.title});
-  if (isExist ) {
+  const isExist = await CourseCategory.findOne({ title: payload.title });
+  if (isExist) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
       "Course Category Already Exist in Database",
@@ -45,7 +45,10 @@ const getAllCourseCategory = async (query: Record<string, unknown>) => {
 };
 
 const getSingleCourseCatgeory = async (slug: string) => {
-  const result = await CourseCategory.findOne({ slug, isDeleted:false }).populate({
+  const result = await CourseCategory.findOne({
+    slug,
+    isDeleted: false,
+  }).populate({
     path: "createdBy",
     select: "name role phone",
   });

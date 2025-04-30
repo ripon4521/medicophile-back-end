@@ -61,11 +61,10 @@ const getSpeecificGaps = catchAsync(async (req, res) => {
   });
 });
 
-
 export const gapsQuestionController = {
   createGapQuestion,
   updateGapQuestion,
   deleteGapQuestion,
   getAllGapQuestions,
-  getSpeecificGaps
+  getSpeecificGaps,
 };

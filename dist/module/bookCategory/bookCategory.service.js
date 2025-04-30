@@ -19,7 +19,10 @@ const bookCategory_model_1 = __importDefault(require("./bookCategory.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const user_model_1 = require("../user/user.model");
 const createBookCategory = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.UserModel.findOne({ _id: payload.createdBy, isDeleted: false });
+    const user = yield user_model_1.UserModel.findOne({
+        _id: payload.createdBy,
+        isDeleted: false,
+    });
     if (!user || user.role === "student") {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid user id. Only admin or teacher can create product category .Please  try again");
     }
@@ -30,13 +33,16 @@ const createBookCategory = (payload) => __awaiter(void 0, void 0, void 0, functi
     return result;
 });
 const updateBookCategory = (slug, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const isexist = yield bookCategory_model_1.default.findOne({ slug: slug, isDeleted: false });
+    const isexist = yield bookCategory_model_1.default.findOne({
+        slug: slug,
+        isDeleted: false,
+    });
     if (!isexist) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Slug is not valid.Please  try again");
     }
     const result = yield bookCategory_model_1.default.findOneAndUpdate({ slug }, payload, {
         runValidators: true,
-        new: true
+        new: true,
     });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to Update Book Category.Please  try again");
@@ -44,15 +50,18 @@ const updateBookCategory = (slug, payload) => __awaiter(void 0, void 0, void 0, 
     return result;
 });
 const deleteBookCategory = (slug) => __awaiter(void 0, void 0, void 0, function* () {
-    const isexist = yield bookCategory_model_1.default.findOne({ slug: slug, isDeleted: false });
+    const isexist = yield bookCategory_model_1.default.findOne({
+        slug: slug,
+        isDeleted: false,
+    });
     if (!isexist) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Slug is not valid.Please  try again");
     }
     const result = yield bookCategory_model_1.default.findOneAndUpdate({ slug }, {
         isDeleted: true,
-        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
+        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     }, {
-        new: true
+        new: true,
     });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to Delete Book Category.Please  try again");
@@ -66,10 +75,12 @@ const getAllBookCategory = (query) => __awaiter(void 0, void 0, void 0, function
         .sort()
         .paginate()
         .fields()
-        .populate([{
+        .populate([
+        {
             path: "createdBy",
-            select: "name role phone"
-        }]);
+            select: "name role phone",
+        },
+    ]);
     const result = yield courseQuery.exec();
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Book Category. please try again");
@@ -88,5 +99,5 @@ exports.bookCategoryService = {
     updateBookCategory,
     deleteBookCategory,
     getAllBookCategory,
-    getSingleBookCategory
+    getSingleBookCategory,
 };

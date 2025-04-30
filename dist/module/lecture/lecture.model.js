@@ -36,8 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const generateSlug_1 = require("../../utils/generateSlug");
 const LectureSchema = new mongoose_1.Schema({
-    slug: { type: String, unique: true
-    },
+    slug: { type: String, unique: true },
     courseId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Course", required: true },
     createdBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
     moduleId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Module", required: true },

@@ -14,5 +14,5 @@ exports.mcqAttemptSchema = zod_1.z.object({
     body: zod_1.z.object({
         answer: zod_1.z.array(answerItemSchema).min(1, "At least one answer is required"),
         studentId: ObjectIdSchema,
-    })
+    }),
 });

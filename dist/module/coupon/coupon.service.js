@@ -36,10 +36,12 @@ const getAllCuponFromDb = (query) => __awaiter(void 0, void 0, void 0, function*
         .sort()
         .paginate()
         .fields()
-        .populate([{
+        .populate([
+        {
             path: "createdBy",
-            select: "role name phone profile_picture"
-        }]);
+            select: "role name phone profile_picture",
+        },
+    ]);
     const result = yield courseQuery.exec();
     return result;
 });

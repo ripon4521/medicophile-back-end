@@ -66,5 +66,5 @@ export const notesController = {
   deleteNote,
   getAllNotes,
   getSingleNote,
-  getSpeecificNotes
+  getSpeecificNotes,
 };

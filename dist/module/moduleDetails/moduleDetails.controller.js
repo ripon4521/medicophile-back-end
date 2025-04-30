@@ -82,5 +82,5 @@ exports.moduleDetailsController = {
     updateModuleDetails,
     getAllModuleDetails,
     getSingleModuleDetails,
-    getSpeecificModuleDtails
+    getSpeecificModuleDtails,
 };

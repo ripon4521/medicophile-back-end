@@ -5,7 +5,7 @@ import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const teamSchema = new Schema<ITeams>(
   {
-    slug: { type: String, unique:true },
+    slug: { type: String, unique: true },
     name: { type: String, required: true },
     description: { type: String, default: "" },
     profileImg: { type: String, default: "" },
@@ -29,11 +29,10 @@ const teamSchema = new Schema<ITeams>(
 teamSchema.pre("save", function (next) {
   if (this.isModified("name")) {
     const uniqueSlug = generateUniqueSlug(this.name);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });
-
 
 const Team = mongoose.model<ITeams>("Team", teamSchema);
 

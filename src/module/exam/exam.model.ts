@@ -5,7 +5,7 @@ import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const ExamSchema = new Schema<IExam>(
   {
-    slug: { type: String, unique:true },
+    slug: { type: String, unique: true },
     examTitle: { type: String, required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     courseId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
@@ -40,11 +40,10 @@ const ExamSchema = new Schema<IExam>(
 ExamSchema.pre("save", function (next) {
   if (this.isModified("examTitle")) {
     const uniqueSlug = generateUniqueSlug(this.examTitle);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });
-
 
 const ExamModel = mongoose.model<IExam>("Exam", ExamSchema);
 

@@ -87,5 +87,5 @@ exports.examController = {
     updateExam,
     deleteExam,
     getSpeecificExam,
-    getStudentsByExamService
+    getStudentsByExamService,
 };

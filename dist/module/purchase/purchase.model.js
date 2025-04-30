@@ -38,6 +38,6 @@ const PurchaseSchema = new mongoose_1.Schema({
 }, {
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }
+    },
 });
 exports.PurchaseModel = (0, mongoose_1.model)("Purchase", PurchaseSchema);

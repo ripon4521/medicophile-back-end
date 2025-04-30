@@ -75,5 +75,5 @@ exports.gapsQuestionController = {
     updateGapQuestion,
     deleteGapQuestion,
     getAllGapQuestions,
-    getSpeecificGaps
+    getSpeecificGaps,
 };

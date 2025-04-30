@@ -1,11 +1,11 @@
 import { Schema, model, Types } from "mongoose";
 
-const mcqQuestionSchema = new Schema (
+const mcqQuestionSchema = new Schema(
   {
     examId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Exam", 
+      ref: "Exam",
     },
     question: {
       type: String,
@@ -45,29 +45,30 @@ const mcqQuestionSchema = new Schema (
       type: String,
       required: false,
     },
-    
+
     insertBy: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "User", 
+      ref: "User",
     },
-    positiveMark:{
-      type:Number
-    },negetiveMark:{
-      type:Number
+    positiveMark: {
+      type: Number,
     },
-    isDeleted:{
-      type:Boolean,
-      default:false
+    negetiveMark: {
+      type: Number,
     },
-    deletedAt:{
-      type:Date
-    }
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    deletedAt: {
+      type: Date,
+    },
   },
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }
+    },
   },
 );
 

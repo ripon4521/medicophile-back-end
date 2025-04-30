@@ -18,7 +18,7 @@ const couponSchema = new mongoose_1.Schema({
     status: {
         type: String,
         enum: ["Active", "Expired"],
-        default: "Active"
+        default: "Active",
     },
     createdBy: {
         type: mongoose_1.Schema.Types.ObjectId,

@@ -20,8 +20,14 @@ const user_model_1 = require("../user/user.model");
 const course_model_1 = __importDefault(require("../course/course.model"));
 const modules_model_1 = __importDefault(require("../modules/modules.model"));
 const createNote = (paload) => __awaiter(void 0, void 0, void 0, function* () {
-    const course = yield course_model_1.default.findOne({ _id: paload.courseId, isDeleted: false });
-    const useer = yield user_model_1.UserModel.findOne({ _id: paload.createdBy, isDeleted: false });
+    const course = yield course_model_1.default.findOne({
+        _id: paload.courseId,
+        isDeleted: false,
+    });
+    const useer = yield user_model_1.UserModel.findOne({
+        _id: paload.createdBy,
+        isDeleted: false,
+    });
     const modul = yield modules_model_1.default.findOne({ _id: paload.moduleId });
     if (!course) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid course id");
@@ -108,5 +114,5 @@ exports.noteService = {
     getAllNotes,
     getSingleNotes,
     deleteNote,
-    getSpcificNotes
+    getSpcificNotes,
 };

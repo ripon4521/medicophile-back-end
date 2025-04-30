@@ -7,14 +7,19 @@ import BlogCategory from "../blogCategory/blogCategory.model";
 import { UserModel } from "../user/user.model";
 
 const createBlog = async (payload: IBlog) => {
- const category = await BlogCategory.findOne({_id:payload.categoryId})
- const user = await UserModel.findOne({_id:payload.createdBy})
- if (!user || user.role === "student") {
-    throw new AppError(StatusCodes.BAD_REQUEST, "invalid user id. blog only created by admin or teacher" )
- }else if (!category) {
-  throw new AppError(StatusCodes.BAD_REQUEST, "invalid blog category id. please provide valid id " )
- }
-
+  const category = await BlogCategory.findOne({ _id: payload.categoryId });
+  const user = await UserModel.findOne({ _id: payload.createdBy });
+  if (!user || user.role === "student") {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "invalid user id. blog only created by admin or teacher",
+    );
+  } else if (!category) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "invalid blog category id. please provide valid id ",
+    );
+  }
 
   const result = await BlogModel.create(payload);
   if (!result) {
@@ -33,14 +38,18 @@ const getAllBlog = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields()
-    .populate([{
-      path:"categoryId",
-      select:"title"
-    }])
-    .populate([{
-      path:"createdBy",
-      select:"name role phone"
-    }]);
+    .populate([
+      {
+        path: "categoryId",
+        select: "title",
+      },
+    ])
+    .populate([
+      {
+        path: "createdBy",
+        select: "name role phone",
+      },
+    ]);
 
   const result = await courseQuery.exec();
   if (!result) {
@@ -64,7 +73,6 @@ const getSingleBlog = async (slug: string) => {
 };
 
 const updateBlog = async (slug: string, payload: IBlog) => {
-  
   const result = await BlogModel.findOneAndUpdate({ slug }, payload, {
     runValidators: true,
     new: true,

@@ -19,11 +19,11 @@ const paymentInfoSchema = new mongoose_1.Schema({
 const PaymentDetailsSchema = new mongoose_1.Schema({
     purchaseId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Purchase"
+        ref: "Purchase",
     },
     studentId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
     },
     paidAmount: {
         type: Number,
@@ -31,15 +31,15 @@ const PaymentDetailsSchema = new mongoose_1.Schema({
     paymentInfo: { type: paymentInfoSchema },
     isDeleted: {
         type: Boolean,
-        default: false
+        default: false,
     },
     deletedAt: {
-        type: Date
-    }
+        type: Date,
+    },
 }, {
     timestamps: {
-        currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
-    }
+        currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+    },
 });
 const PaymentDetailsModel = (0, mongoose_1.model)("PaymentDetails", PaymentDetailsSchema);
 exports.default = PaymentDetailsModel;

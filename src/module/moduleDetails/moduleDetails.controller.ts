@@ -77,5 +77,5 @@ export const moduleDetailsController = {
   updateModuleDetails,
   getAllModuleDetails,
   getSingleModuleDetails,
-  getSpeecificModuleDtails
+  getSpeecificModuleDtails,
 };

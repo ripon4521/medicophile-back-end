@@ -137,5 +137,5 @@ exports.moduleDetailsService = {
     getSingleModuleDetails,
     updateModuleDetails,
     deleteModuleDetails,
-    getSpcificModuDtails
+    getSpcificModuDtails,
 };

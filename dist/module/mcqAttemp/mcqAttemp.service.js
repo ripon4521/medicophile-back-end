@@ -24,17 +24,17 @@ const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* (
     if (!user || user.role !== "student") {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid student id. Please provide a valid student is");
     }
-    const questionIds = answer.map(a => new mongoose_1.Types.ObjectId(a.questionId));
+    const questionIds = answer.map((a) => new mongoose_1.Types.ObjectId(a.questionId));
     // Fetch all answered questions and populate examId
     const questions = yield mcq_model_1.default.find({
-        _id: { $in: questionIds }
+        _id: { $in: questionIds },
     }).populate("examId"); // To access positiveMark and negativeMark
     let score = 0;
     let correctCount = 0;
     let wrongCount = 0;
     // Process each answer
     for (const userAnswer of answer) {
-        const matchedQuestion = questions.find(q => q._id.toString() === userAnswer.questionId.toString());
+        const matchedQuestion = questions.find((q) => q._id.toString() === userAnswer.questionId.toString());
         if (!matchedQuestion || !matchedQuestion.examId)
             continue;
         const positiveMark = matchedQuestion.positiveMark || 1;
@@ -57,7 +57,7 @@ const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* (
         score,
         total,
         correctCount,
-        wrongCount
+        wrongCount,
     });
     return {
         message: "Exam submitted successfully!",
@@ -65,7 +65,7 @@ const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* (
         correctCount,
         wrongCount,
         total,
-        attempt: result
+        attempt: result,
     };
 });
 const getAllMcq = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -73,8 +73,7 @@ const getAllMcq = () => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getSpcificMcqAttemp = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield mcqAttemp_model_1.default.find({ studentId: id })
-        .populate("studentId");
+    const result = yield mcqAttemp_model_1.default.find({ studentId: id }).populate("studentId");
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "studnt id is not valid or not found in database");
     }
@@ -83,5 +82,5 @@ const getSpcificMcqAttemp = (id) => __awaiter(void 0, void 0, void 0, function* 
 exports.mcqAttempService = {
     submitAttemptService,
     getSpcificMcqAttemp,
-    getAllMcq
+    getAllMcq,
 };

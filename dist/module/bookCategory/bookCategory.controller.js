@@ -67,5 +67,5 @@ exports.bookCategoryontroller = {
     updateBookCategory,
     deleteBookCategory,
     getAllBookCategory,
-    getSingleBookCategory
+    getSingleBookCategory,
 };

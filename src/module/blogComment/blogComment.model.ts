@@ -6,7 +6,7 @@ import { generateUniqueSlug } from "../../utils/generateSlug";
 
 const blogCommentMongooseSchema = new Schema<IBlogComment>(
   {
-    slug: { type: String, unique:true },
+    slug: { type: String, unique: true },
     userType: {
       type: String,
       required: true,
@@ -32,12 +32,10 @@ const blogCommentMongooseSchema = new Schema<IBlogComment>(
 blogCommentMongooseSchema.pre("save", function (next) {
   if (this.isModified("comment")) {
     const uniqueSlug = generateUniqueSlug(this.comment);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });
-
-
 
 const BlogComment = model<IBlogComment>(
   "BlogComment",

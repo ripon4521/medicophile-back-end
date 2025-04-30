@@ -18,7 +18,6 @@ lectureRouter.get("/single-lecture/:slug", lectureController.getSingleLecture);
 lectureRouter.get("/", lectureController.getLecture);
 lectureRouter.get("/:id", lectureController.getSpeecificLecture);
 
-
 lectureRouter.delete("/:slug", lectureController.deleteLecture);
 
 export default lectureRouter;

@@ -41,15 +41,19 @@ const getAllBlogComment = (query) => __awaiter(void 0, void 0, void 0, function*
         .sort()
         .paginate()
         .fields()
-        .populate([{
+        .populate([
+        {
             path: "userId",
-            select: "name role phone profile_picture"
-        }])
-        .populate([{
+            select: "name role phone profile_picture",
+        },
+    ])
+        .populate([
+        {
             path: "blogId",
             select: "title description categoryId tags",
-            populate: [{ path: "categoryId", select: "title" }]
-        }]);
+            populate: [{ path: "categoryId", select: "title" }],
+        },
+    ]);
     const result = yield courseQuery.exec();
     return result;
 });

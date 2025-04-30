@@ -20,7 +20,8 @@ const createNoticeSchema = zod_1.z.object({
         }, zod_1.z.date())
             .refine((date) => date > new Date(), {
             message: "Expiry date must be in the future",
-        }).optional(),
+        })
+            .optional(),
         scheduleDate: zod_1.z
             .preprocess((val) => {
             if (typeof val === "string" || val instanceof Date) {
@@ -30,7 +31,8 @@ const createNoticeSchema = zod_1.z.object({
         }, zod_1.z.date())
             .refine((date) => date > new Date(), {
             message: "Expiry date must be in the future",
-        }).optional()
+        })
+            .optional(),
     }),
 });
 const updateNoticeSchema = zod_1.z.object({
@@ -47,7 +49,8 @@ const updateNoticeSchema = zod_1.z.object({
         }, zod_1.z.date())
             .refine((date) => date > new Date(), {
             message: "Expiry date must be in the future",
-        }).optional(),
+        })
+            .optional(),
         scheduleDate: zod_1.z
             .preprocess((val) => {
             if (typeof val === "string" || val instanceof Date) {
@@ -57,7 +60,8 @@ const updateNoticeSchema = zod_1.z.object({
         }, zod_1.z.date())
             .refine((date) => date > new Date(), {
             message: "Schedule date must be in the future",
-        }).optional()
+        })
+            .optional(),
     }),
 });
 exports.noticeValidation = {

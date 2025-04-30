@@ -3,9 +3,12 @@ import { mcqAttempController } from "./mcqAttemp.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import { mcqAttemptSchema } from "./mcqAttemp.validation";
 
-
 const mcqAttempRouter = Router();
-mcqAttempRouter.post('/submit', validateRequest(mcqAttemptSchema), mcqAttempController.submitMcqAttemptController);
-mcqAttempRouter.get('/:id', mcqAttempController.getSpeecificMccq)
-mcqAttempRouter.get('/', mcqAttempController.getAllMcq)
+mcqAttempRouter.post(
+  "/submit",
+  validateRequest(mcqAttemptSchema),
+  mcqAttempController.submitMcqAttemptController,
+);
+mcqAttempRouter.get("/:id", mcqAttempController.getSpeecificMccq);
+mcqAttempRouter.get("/", mcqAttempController.getAllMcq);
 export default mcqAttempRouter;

@@ -42,13 +42,14 @@ const getAllCqAttemps = async (query: Record<string, unknown>) => {
         path: "examId",
         select: "examTitle rolexamTypee examType",
       },
-    ]).populate([
+    ])
+    .populate([
       {
         path: "questionId",
         select: "question",
       },
-    ])
-    const result = await courseQuery.exec();
+    ]);
+  const result = await courseQuery.exec();
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,

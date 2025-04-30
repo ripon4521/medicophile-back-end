@@ -69,5 +69,5 @@ exports.cqQuestionController = {
     updateCqQuestion,
     deleteCqQuestion,
     getAllCqQuestion,
-    getSpeecificCaq
+    getSpeecificCaq,
 };

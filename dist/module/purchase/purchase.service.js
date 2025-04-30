@@ -26,7 +26,9 @@ const createPurchase = (payload) => __awaiter(void 0, void 0, void 0, function* 
     session.startTransaction();
     try {
         const student = yield user_model_1.UserModel.findOne({ _id: payload.studentId }).session(session);
-        const purchaseToken = yield purchaseToken_model_1.default.findOne({ _id: payload.purchaseToken }).session(session);
+        const purchaseToken = yield purchaseToken_model_1.default.findOne({
+            _id: payload.purchaseToken,
+        }).session(session);
         const issuedBy = yield user_model_1.UserModel.findOne({ _id: payload.issuedBy }).session(session);
         if (!student || student.role === "admin" || student.role === "teacher") {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid student id. Only student can buy course");
@@ -114,9 +116,9 @@ const getAllPurchase = (query) => __awaiter(void 0, void 0, void 0, function* ()
 const deletePurchase = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield purchase_model_1.PurchaseModel.findOneAndUpdate({ _id }, {
         isDeleted: false,
-        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
+        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     }, {
-        new: true
+        new: true,
     });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to delete purchase");
@@ -126,7 +128,7 @@ const deletePurchase = (_id) => __awaiter(void 0, void 0, void 0, function* () {
 const updatePurchase = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield purchase_model_1.PurchaseModel.findOneAndUpdate({ _id }, payload, {
         runValidators: true,
-        new: true
+        new: true,
     });
     return result;
 });
@@ -134,5 +136,5 @@ exports.purchaseService = {
     createPurchase,
     getAllPurchase,
     deletePurchase,
-    updatePurchase
+    updatePurchase,
 };

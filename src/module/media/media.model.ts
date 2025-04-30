@@ -7,7 +7,7 @@ const mediaSchema = new Schema<IMedia>(
   {
     slug: {
       type: String,
-      unique:true
+      unique: true,
     },
     title: {
       type: String,
@@ -41,13 +41,10 @@ const mediaSchema = new Schema<IMedia>(
 mediaSchema.pre("save", function (next) {
   if (this.isModified("title")) {
     const uniqueSlug = generateUniqueSlug(this.title);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });
-
-
-
 
 const MediaModel = model<IMedia>("Media", mediaSchema);
 export default MediaModel;

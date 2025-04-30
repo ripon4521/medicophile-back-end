@@ -1,5 +1,5 @@
-import { z, AnyZodObject } from 'zod';
-import mongoose from 'mongoose';
+import { z, AnyZodObject } from "zod";
+import mongoose from "mongoose";
 
 const baseSchema = z.object({
   coupon: z.string({ required_error: "Coupon is required" }),
@@ -23,7 +23,7 @@ const createCouponSchema = z.object({
     {
       message: "Percentage discount must be between 1 and 100",
       path: ["discountAmount"],
-    }
+    },
   ),
 });
 
@@ -43,7 +43,7 @@ const updateCouponSchema = z.object({
       {
         message: "Percentage discount must be between 1 and 100",
         path: ["discountAmount"],
-      }
+      },
     ),
 });
 

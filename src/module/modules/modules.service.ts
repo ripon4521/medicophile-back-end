@@ -78,28 +78,25 @@ const getSingleModule = async (slug: string) => {
   return result;
 };
 
-const getSpecificModule = async(id:string) => {
+const getSpecificModule = async (id: string) => {
   // console.log(id)
-  const course = await courseModel.findOne({_id:id});
+  const course = await courseModel.findOne({ _id: id });
   // console.log(course)
   if (!course) {
     throw new AppError(StatusCodes.BAD_REQUEST, "invalid course id");
   }
-  const result = await ModuleModel.find({ courseId:id })
-  .populate("createdBy")
-  .populate({
-    path: "courseId",
-    populate: { path: "category" },
-  });
- 
-if (!result) {
-  throw new AppError(StatusCodes.BAD_REQUEST, "Failed to load data");
-}
-return result;
-}
+  const result = await ModuleModel.find({ courseId: id })
+    .populate("createdBy")
+    .populate({
+      path: "courseId",
+      populate: { path: "category" },
+    });
 
-
-
+  if (!result) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Failed to load data");
+  }
+  return result;
+};
 
 const updateModule = async (slug: string, payload: Partial<IModules>) => {
   const update = await ModuleModel.findOneAndUpdate({ slug }, payload, {
@@ -139,5 +136,5 @@ export const moduleService = {
   updateModule,
   getAllModule,
   getSingleModule,
-  getSpecificModule
+  getSpecificModule,
 };

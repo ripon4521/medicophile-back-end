@@ -5,7 +5,7 @@ const generateSlug_1 = require("../../utils/generateSlug");
 const BookCategorySchema = new mongoose_1.Schema({
     slug: {
         type: String,
-        unique: true
+        unique: true,
     },
     name: {
         type: String,
@@ -14,7 +14,7 @@ const BookCategorySchema = new mongoose_1.Schema({
     },
     createdBy: {
         type: mongoose_1.Schema.Types.ObjectId,
-        required: true
+        required: true,
     },
     description: {
         type: String,
@@ -29,7 +29,7 @@ const BookCategorySchema = new mongoose_1.Schema({
     },
 }, {
     timestamps: {
-        currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
+        currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
 });
 BookCategorySchema.pre("save", function (next) {

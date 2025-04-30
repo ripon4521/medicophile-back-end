@@ -5,7 +5,7 @@ const generateSlug_1 = require("../../utils/generateSlug");
 const liveClassSchema = new mongoose_1.Schema({
     slug: {
         type: String,
-        unique: true
+        unique: true,
     },
     courseId: {
         type: mongoose_1.Schema.Types.ObjectId,

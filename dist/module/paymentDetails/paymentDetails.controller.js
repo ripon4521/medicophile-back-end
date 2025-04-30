@@ -26,5 +26,5 @@ const getAllPamentyDetails = (0, catchAsync_1.default)((req, res) => __awaiter(v
     });
 }));
 exports.paymentDetailsController = {
-    getAllPamentyDetails
+    getAllPamentyDetails,
 };

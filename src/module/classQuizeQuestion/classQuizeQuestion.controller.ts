@@ -46,8 +46,6 @@ const deleteCqQuestion = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
-
 const getSpeecificCaq = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await cqQuestionService.getSpcificCq(id);
@@ -58,11 +56,10 @@ const getSpeecificCaq = catchAsync(async (req, res) => {
   });
 });
 
-
 export const cqQuestionController = {
   createCqQuestion,
   updateCqQuestion,
   deleteCqQuestion,
   getAllCqQuestion,
-  getSpeecificCaq
+  getSpeecificCaq,
 };

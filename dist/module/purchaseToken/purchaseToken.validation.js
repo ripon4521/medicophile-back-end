@@ -29,29 +29,35 @@ const createPurchaseTokenSchema = zod_1.z.object({
         paymentInfo: exports.paymentInfoSchema,
         name: zod_1.z.string({ required_error: "Name is required" }),
         phone: zod_1.z.string({ required_error: "Phone is required" }),
-    })
+    }),
 });
 const updatePurchaseTokenSchema = zod_1.z.object({
     body: zod_1.z.object({
         studentId: ObjectIdSchema.optional(),
         courseId: ObjectIdSchema.optional(),
-        status: zod_1.z.enum(["Verified", "Unverified", "Rejected"], {
+        status: zod_1.z
+            .enum(["Verified", "Unverified", "Rejected"], {
             required_error: "Status is required",
-        }).optional(),
-        purchaseToken: zod_1.z.string({ required_error: "Purchase token is required" }).optional(),
+        })
+            .optional(),
+        purchaseToken: zod_1.z
+            .string({ required_error: "Purchase token is required" })
+            .optional(),
         coupon: zod_1.z.string().optional(),
         price: zod_1.z.number({ required_error: "Price is required" }).optional(),
         subtotal: zod_1.z.number({ required_error: "Subtotal is required" }).optional(),
         discount: zod_1.z.number({ required_error: "Discount is required" }).optional(),
         charge: zod_1.z.number({ required_error: "Charge is required" }).optional(),
-        totalAmount: zod_1.z.number({ required_error: "Total amount is required" }).optional(),
+        totalAmount: zod_1.z
+            .number({ required_error: "Total amount is required" })
+            .optional(),
         issuedBy: ObjectIdSchema.optional(),
         paymentInfo: exports.paymentInfoSchema.optional(),
         name: zod_1.z.string({ required_error: "Name is required" }).optional(),
         phone: zod_1.z.string({ required_error: "Phone is required" }).optional(),
-    })
+    }),
 });
 exports.purchaseTokenValidation = {
     createPurchaseTokenSchema,
-    updatePurchaseTokenSchema
+    updatePurchaseTokenSchema,
 };

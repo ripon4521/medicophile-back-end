@@ -3,5 +3,5 @@ export const searchableFields = [
   "course_type",
   "category",
   "course_tag",
-  "slug"
+  "slug",
 ];

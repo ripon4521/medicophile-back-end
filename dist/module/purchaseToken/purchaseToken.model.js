@@ -25,7 +25,14 @@ const purchaseTokenSchema = new mongoose_1.Schema({
     courseId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "Course" },
     status: {
         type: String,
-        enum: ["Verified", "Unverified", "Rejected", "Pending", "Refunded", "Partial"],
+        enum: [
+            "Verified",
+            "Unverified",
+            "Rejected",
+            "Pending",
+            "Refunded",
+            "Partial",
+        ],
         default: "Unverified",
     },
     purchaseToken: { type: String },

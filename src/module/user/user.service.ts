@@ -16,8 +16,6 @@ import { sendSMS } from "../../utils/sendSms";
 import { IChangePasswordPayload } from "./changepassord.interface";
 import httpStatus from "http-status";
 
-
-
 const createStudentsIntoDB = async (payload: IStudent) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -29,22 +27,19 @@ const createStudentsIntoDB = async (payload: IStudent) => {
       100000 + Math.random() * 900000,
     ).toString();
 
-const sms = await sendSMS(
+    const sms = await sendSMS(
       payload.phone,
       `Your login password is: ${plainPassword}`,
     );
-if (!sms) {
-  throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.")
-}
+    if (!sms) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.");
+    }
 
     // console.log(sms)
 
     const createdStudent = await studentModel.create([studentData], {
       session,
     });
-    
-     
-  
 
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
 
@@ -59,7 +54,6 @@ if (!sms) {
       email: createdStudent[0].email,
       isDeleted: createdStudent[0].isDeleted,
       deletedAt: createdStudent[0].deletedAt,
-   
     };
 
     const newUser = await UserModel.create([userData], { session });
@@ -101,13 +95,12 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
       payload.phone,
       `Your login password is: ${plainPassword}`,
     );
-if (!sms) {
-  throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.")
-}
+    if (!sms) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.");
+    }
 
     const createdAdmin = await adminModel.create([adminData], { session });
-  
-    
+
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
     // Step 2: Now create the user using createdAdmin data
     const userData: Partial<IUser> = {
@@ -154,15 +147,14 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
       payload.phone,
       `Your login password is: ${plainPassword}`,
     );
-if (!sms) {
-  throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.")
-}
+    if (!sms) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.");
+    }
 
     const createdFaculty = await FacultyUserModel.create([faculty], {
       session,
     });
-    
-   
+
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
     // Step 2: Now create the user using createdAdmin data
     const userData: Partial<IUser> = {
@@ -175,7 +167,6 @@ if (!sms) {
       email: createdFaculty[0]?.email,
       isDeleted: createdFaculty[0]?.isDeleted,
       deletedAt: createdFaculty[0]?.deletedAt,
-     
     };
 
     const newUser = await UserModel.create([userData], { session });

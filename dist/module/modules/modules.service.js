@@ -123,5 +123,5 @@ exports.moduleService = {
     updateModule,
     getAllModule,
     getSingleModule,
-    getSpecificModule
+    getSpecificModule,
 };

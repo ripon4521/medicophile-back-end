@@ -44,12 +44,11 @@ const getSingleModule = catchAsync(async (req, res) => {
   });
 });
 
-
 const getSpecificModule = catchAsync(async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide id")
+    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide id");
   }
   const result = await moduleService.getSpecificModule(id);
   sendResponse(res, {
@@ -58,8 +57,6 @@ const getSpecificModule = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
-
 
 const getAllModule = catchAsync(async (req, res) => {
   const query = req.query;
@@ -77,5 +74,5 @@ export const modulesController = {
   deleteModule,
   getAllModule,
   getSingleModule,
-  getSpecificModule
+  getSpecificModule,
 };

@@ -7,7 +7,7 @@ const liveClassSchema = new Schema<ILiveClass>(
   {
     slug: {
       type: String,
-      unique:true
+      unique: true,
     },
     courseId: {
       type: Schema.Types.ObjectId,
@@ -49,12 +49,10 @@ const liveClassSchema = new Schema<ILiveClass>(
 liveClassSchema.pre("save", function (next) {
   if (this.isModified("title")) {
     const uniqueSlug = generateUniqueSlug(this.title);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });
-
-
 
 const LiveClassModel = model<ILiveClass>("LiveClass", liveClassSchema);
 export default LiveClassModel;

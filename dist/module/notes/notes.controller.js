@@ -76,5 +76,5 @@ exports.notesController = {
     deleteNote,
     getAllNotes,
     getSingleNote,
-    getSpeecificNotes
+    getSpeecificNotes,
 };

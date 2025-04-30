@@ -101,5 +101,5 @@ exports.cqQuestionService = {
     updateCqQuestion,
     deleteCqQuestion,
     getALlCqQuestion,
-    getSpcificCq
+    getSpcificCq,
 };

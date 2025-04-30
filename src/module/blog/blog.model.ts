@@ -7,7 +7,7 @@ const blogSchema = new Schema<IBlog>(
   {
     slug: {
       type: String,
-      unique:true
+      unique: true,
     },
     title: {
       type: String,
@@ -59,11 +59,10 @@ const blogSchema = new Schema<IBlog>(
 blogSchema.pre("save", function (next) {
   if (this.isModified("title")) {
     const uniqueSlug = generateUniqueSlug(this.title);
-    this.slug = uniqueSlug; 
+    this.slug = uniqueSlug;
   }
   next();
 });
-
 
 const BlogModel = model<IBlog>("Blog", blogSchema);
 export default BlogModel;

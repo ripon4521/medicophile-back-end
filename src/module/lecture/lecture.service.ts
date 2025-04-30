@@ -7,22 +7,21 @@ import { UserModel } from "../user/user.model";
 import ModuleModel from "../modules/modules.model";
 
 const createLecture = async (payload: ILeecture) => {
-  const course = await courseModel.findOne({_id:payload.courseId, isDeleted:false});
-  const useer = await UserModel.findOne({_id:payload.createdBy, isDeleted:false});
-  const modul = await ModuleModel.findOne({_id:payload.moduleId});
+  const course = await courseModel.findOne({
+    _id: payload.courseId,
+    isDeleted: false,
+  });
+  const useer = await UserModel.findOne({
+    _id: payload.createdBy,
+    isDeleted: false,
+  });
+  const modul = await ModuleModel.findOne({ _id: payload.moduleId });
   if (!course) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Inavlid course id",
-    );
-  }else if (!useer || useer.role === "student") {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Inavlid user id")
-  }else if (!modul) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Inavlid module id")
+    throw new AppError(StatusCodes.BAD_REQUEST, "Inavlid course id");
+  } else if (!useer || useer.role === "student") {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Inavlid user id");
+  } else if (!modul) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Inavlid module id");
   }
   const create = await LectureModel.create(payload);
   if (!create) {
@@ -94,7 +93,7 @@ const getAllLecture = async () => {
 };
 
 const getSingleLecture = async (slug: string) => {
-  console.log(slug)
+  console.log(slug);
   const result = await LectureModel.findOne({ slug })
     .populate("createdBy")
     .populate({
@@ -111,9 +110,8 @@ const getSingleLecture = async (slug: string) => {
   return result;
 };
 
-
 const getSpcificLecture = async (id: string) => {
-  const result = await LectureModel.find({moduleId:id, isDeleted:false })
+  const result = await LectureModel.find({ moduleId: id, isDeleted: false })
     .populate("createdBy")
     .populate({
       path: "courseId",
@@ -129,13 +127,11 @@ const getSpcificLecture = async (id: string) => {
   return result;
 };
 
-
-
 export const lectureServices = {
   createLecture,
   updateLecture,
   deleteLecture,
   getAllLecture,
   getSingleLecture,
-  getSpcificLecture
+  getSpcificLecture,
 };

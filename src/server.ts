@@ -9,8 +9,6 @@ import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 
 let io: Server;
 
-
-
 async function server() {
   try {
     // Connect to MongoDB

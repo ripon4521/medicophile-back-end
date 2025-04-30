@@ -35,7 +35,8 @@ const getAllGapAttemp = (query) => __awaiter(void 0, void 0, void 0, function* (
             path: "examId",
             select: "examTitle rolexamTypee examType",
         },
-    ]).populate([
+    ])
+        .populate([
         {
             path: "questionId",
             select: "question",

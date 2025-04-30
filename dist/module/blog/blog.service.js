@@ -41,14 +41,18 @@ const getAllBlog = (query) => __awaiter(void 0, void 0, void 0, function* () {
         .sort()
         .paginate()
         .fields()
-        .populate([{
+        .populate([
+        {
             path: "categoryId",
-            select: "title"
-        }])
-        .populate([{
+            select: "title",
+        },
+    ])
+        .populate([
+        {
             path: "createdBy",
-            select: "name role phone"
-        }]);
+            select: "name role phone",
+        },
+    ]);
     const result = yield courseQuery.exec();
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Blog . please try again");

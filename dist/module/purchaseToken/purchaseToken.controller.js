@@ -66,5 +66,5 @@ exports.purchaseTokenCOntroller = {
     createPurchaseToken,
     updatePurchaseToken,
     deletePurchaseToken,
-    getAllPurchaseToken
+    getAllPurchaseToken,
 };

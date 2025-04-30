@@ -11,15 +11,15 @@ const createBookCategoryValidationSchema = zod_1.z.object({
         name: zod_1.z.string().min(1, "Category name is required"),
         description: zod_1.z.string().optional(),
         createdBy: ObjectIdSchema,
-    })
+    }),
 });
 const updateBookCategoryValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         name: zod_1.z.string().min(1, "Category name is required").optional(),
         description: zod_1.z.string().optional(),
-    })
+    }),
 });
 exports.bookCategoryValidation = {
     createBookCategoryValidationSchema,
-    updateBookCategoryValidationSchema
+    updateBookCategoryValidationSchema,
 };
