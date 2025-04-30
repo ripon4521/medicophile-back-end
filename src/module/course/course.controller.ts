@@ -26,8 +26,6 @@ const getAllCourses = catchAsync(async (req, res) => {
 
 const getSingleCourse = catchAsync(async (req, res) => {
   const userId = req.user?._id;
- 
-  
   const result = await courseService.getCourseById(req.params.slug, userId);
 
   if (!result) {

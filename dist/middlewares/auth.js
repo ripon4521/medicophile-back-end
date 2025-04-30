@@ -24,8 +24,10 @@ const authUser = (...requiredRoles) => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const authHeader = req.headers.authorization;
+            // If there's no authorization header, proceed with no user (user is not logged in)
             if (!authHeader || !authHeader.startsWith("Bearer ")) {
-                throw new AppError_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "Authorization header missing or invalid.");
+                req.user = null; // Set user to null if there's no token
+                return next();
             }
             const accessToken = authHeader.split(" ")[1];
             let decoded;

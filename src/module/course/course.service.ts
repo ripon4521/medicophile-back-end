@@ -67,8 +67,7 @@ const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
   return ongoingCourses;
 };
 
-const getCourseById = async (slug: string, userId: string) => {
-  console.log(userId)
+const getCourseById = async (slug: string, userId?: string) => {
   const result = await courseModel
     .findOne({ slug })
     .populate({
@@ -92,7 +91,6 @@ const getCourseById = async (slug: string, userId: string) => {
     studentId: userId,
     courseId: result._id,
   });
-console.log(hasPurchased)
   const courseObject = result.toObject();
   courseObject.access = hasPurchased ? true : false;
 

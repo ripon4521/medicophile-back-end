@@ -64,7 +64,6 @@ const getAllCoursesFromDb = (query) => __awaiter(void 0, void 0, void 0, functio
     return ongoingCourses;
 });
 const getCourseById = (slug, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(userId);
     const result = yield course_model_1.default
         .findOne({ slug })
         .populate({
@@ -83,7 +82,6 @@ const getCourseById = (slug, userId) => __awaiter(void 0, void 0, void 0, functi
         studentId: userId,
         courseId: result._id,
     });
-    console.log(hasPurchased);
     const courseObject = result.toObject();
     courseObject.access = hasPurchased ? true : false;
     return courseObject;

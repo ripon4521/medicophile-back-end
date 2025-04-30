@@ -17,11 +17,11 @@ const authUser = (...requiredRoles: TUserRole[]) => {
   return async (req: any, res: Response, next: NextFunction) => {
     try {
       const authHeader = req.headers.authorization;
+
+      // If there's no authorization header, proceed with no user (user is not logged in)
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new AppError(
-          StatusCodes.UNAUTHORIZED,
-          "Authorization header missing or invalid.",
-        );
+        req.user = null;  // Set user to null if there's no token
+        return next();
       }
 
       const accessToken = authHeader.split(" ")[1];
@@ -61,6 +61,7 @@ const authUser = (...requiredRoles: TUserRole[]) => {
     }
   };
 };
+
 
 const onlyAdmin = (...requiredRoles: TUserRole[]) => {
   return catchAsync(
