@@ -11,7 +11,7 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
   if (!user || user.role !== "student") {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "invalid student id. Please provide a valid student is",
+      "invalid student id. Please provide a valid student id",
     );
   }
 
@@ -20,11 +20,12 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
   // Fetch all answered questions and populate examId
   const questions = await McqQuestion.find({
     _id: { $in: questionIds },
-  }).populate("examId"); // To access positiveMark and negativeMark
+  }).populate("examId"); // To access positiveMark, negativeMark, and examId
 
   let score = 0;
   let correctCount = 0;
   let wrongCount = 0;
+  let examId: Types.ObjectId | null = null;
 
   // Process each answer
   for (const userAnswer of answer) {
@@ -34,10 +35,15 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
 
     if (!matchedQuestion || !matchedQuestion.examId) continue;
 
+    // Set the examId from the first matched question
+    if (!examId) {
+      examId = matchedQuestion.examId;
+    }
+
     const positiveMark = matchedQuestion.positiveMark || 1;
     const negativeMark = matchedQuestion.negetiveMark || 0;
 
-    // Check if answer is correct
+    // Check if the answer is correct
     if (matchedQuestion.correctAnswer === userAnswer.selectedAnswer) {
       score += positiveMark;
       correctCount++;
@@ -49,9 +55,10 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
 
   const total = answer.length;
 
-  // Save result
+  // Save result with examId
   const result = await McqAttemptModel.create({
     studentId: new Types.ObjectId(studentId),
+    examId, 
     answer,
     score,
     total,
@@ -65,6 +72,7 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
     correctCount,
     wrongCount,
     total,
+    examId,
     attempt: result,
   };
 };

@@ -146,13 +146,27 @@ const getSpcificExam = async (id: string) => {
   return result;
 };
 
+
 const getStudentsByExamService = async (examId: string) => {
-  const students = await CqAttempModel.find({ examId });
-  const student = await GapAttempModel.find({ examId });
-  const stude = await McqQuestion.find({ examId });
-  const totalStudentList = stude.length + students.length + student.length;
-  return totalStudentList;
+  // Fetch attempts from all models and populate studentId
+  const cqAttempts = await CqAttempModel.find({ examId }).populate("studentId");
+  const gapAttempts = await GapAttempModel.find({ examId }).populate("studentId");
+
+  const mcqAttempts = await McqAttemptModel.find({ examId }).populate("studentId");
+  const allStudents = [
+    ...cqAttempts.map(attempt => attempt.studentId),  
+    ...gapAttempts.map(attempt => attempt.studentId), 
+    ...mcqAttempts.map(attempt => attempt.studentId), 
+  ];
+
+
+
+  return allStudents;
 };
+
+
+
+
 
 export const examServices = {
   createExam,

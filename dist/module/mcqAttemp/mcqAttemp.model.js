@@ -23,16 +23,20 @@ const mcqAttemptSchema = new mongoose_1.Schema({
         ref: "User",
     },
     totalScore: {
-        type: Number,
+        type: Number
+    }, totalAttemp: {
+        type: Number
     },
-    totalAttemp: {
-        type: Number,
+    examId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "Exam"
     },
     correctCount: { type: Number },
+    wrongCount: { type: Number },
 }, {
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    },
+    }
 });
 const McqAttemptModel = (0, mongoose_1.model)("McqAttempt", mcqAttemptSchema);
 exports.default = McqAttemptModel;

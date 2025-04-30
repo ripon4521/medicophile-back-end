@@ -22,24 +22,29 @@ const user_model_1 = require("../user/user.model");
 const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* ({ studentId, answer }) {
     const user = yield user_model_1.UserModel.findOne({ _id: studentId });
     if (!user || user.role !== "student") {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid student id. Please provide a valid student is");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid student id. Please provide a valid student id");
     }
     const questionIds = answer.map((a) => new mongoose_1.Types.ObjectId(a.questionId));
     // Fetch all answered questions and populate examId
     const questions = yield mcq_model_1.default.find({
         _id: { $in: questionIds },
-    }).populate("examId"); // To access positiveMark and negativeMark
+    }).populate("examId"); // To access positiveMark, negativeMark, and examId
     let score = 0;
     let correctCount = 0;
     let wrongCount = 0;
+    let examId = null;
     // Process each answer
     for (const userAnswer of answer) {
         const matchedQuestion = questions.find((q) => q._id.toString() === userAnswer.questionId.toString());
         if (!matchedQuestion || !matchedQuestion.examId)
             continue;
+        // Set the examId from the first matched question
+        if (!examId) {
+            examId = matchedQuestion.examId;
+        }
         const positiveMark = matchedQuestion.positiveMark || 1;
         const negativeMark = matchedQuestion.negetiveMark || 0;
-        // Check if answer is correct
+        // Check if the answer is correct
         if (matchedQuestion.correctAnswer === userAnswer.selectedAnswer) {
             score += positiveMark;
             correctCount++;
@@ -50,9 +55,10 @@ const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* (
         }
     }
     const total = answer.length;
-    // Save result
+    // Save result with examId
     const result = yield mcqAttemp_model_1.default.create({
         studentId: new mongoose_1.Types.ObjectId(studentId),
+        examId,
         answer,
         score,
         total,
@@ -65,6 +71,7 @@ const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* (
         correctCount,
         wrongCount,
         total,
+        examId,
         attempt: result,
     };
 });

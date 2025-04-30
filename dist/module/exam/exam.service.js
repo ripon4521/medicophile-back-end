@@ -22,7 +22,7 @@ const course_model_1 = __importDefault(require("../course/course.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const cqAttemp_model_1 = __importDefault(require("../cqAttemp/cqAttemp.model"));
 const gapAttemp_model_1 = __importDefault(require("../gapsAttemp/gapAttemp.model"));
-const mcq_model_1 = __importDefault(require("../mcq/mcq.model"));
+const mcqAttemp_model_1 = __importDefault(require("../mcqAttemp/mcqAttemp.model"));
 const createExam = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const moduleId = payload.moduleId;
     const createdBy = payload.createdBy;
@@ -121,11 +121,16 @@ const getSpcificExam = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getStudentsByExamService = (examId) => __awaiter(void 0, void 0, void 0, function* () {
-    const students = yield cqAttemp_model_1.default.find({ examId });
-    const student = yield gapAttemp_model_1.default.find({ examId });
-    const stude = yield mcq_model_1.default.find({ examId });
-    const totalStudentList = stude.length + students.length + student.length;
-    return totalStudentList;
+    // Fetch attempts from all models and populate studentId
+    const cqAttempts = yield cqAttemp_model_1.default.find({ examId }).populate("studentId");
+    const gapAttempts = yield gapAttemp_model_1.default.find({ examId }).populate("studentId");
+    const mcqAttempts = yield mcqAttemp_model_1.default.find({ examId }).populate("studentId");
+    const allStudents = [
+        ...cqAttempts.map(attempt => attempt.studentId),
+        ...gapAttempts.map(attempt => attempt.studentId),
+        ...mcqAttempts.map(attempt => attempt.studentId),
+    ];
+    return allStudents;
 });
 exports.examServices = {
     createExam,
