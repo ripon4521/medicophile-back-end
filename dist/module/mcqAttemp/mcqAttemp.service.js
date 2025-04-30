@@ -91,10 +91,11 @@ const getAllMcq = (query) => __awaiter(void 0, void 0, void 0, function* () {
         path: "examId",
     });
     const result = yield courseQuery.exec();
+    console.log(result);
     return result;
 });
 const getSpcificMcqAttemp = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield mcqAttemp_model_1.default.find({ studentId: id }).populate("studentId");
+    const result = yield mcqAttemp_model_1.default.find({ studentId: id }).populate({ path: "studentId", select: "name role phone" }).populate("answer.questionId");
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "studnt id is not valid or not found in database");
     }

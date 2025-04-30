@@ -95,13 +95,14 @@ const getAllMcq = async (query: Record<string, unknown>) => {
   
 
   const result = await courseQuery.exec(); 
+  console.log(result)
   return result;
 };
 
 const getSpcificMcqAttemp = async (id: string) => {
-  const result = await McqAttemptModel.find({ studentId: id }).populate(
-    "studentId",
-  );
+  const result = await McqAttemptModel.find({ studentId: id }).populate({path:"studentId", select:"name role phone"}
+    ,
+  ).populate("answer.questionId");
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
