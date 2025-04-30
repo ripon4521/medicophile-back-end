@@ -92,7 +92,7 @@ const updateCourseInDb = (slug, payload) => __awaiter(void 0, void 0, void 0, fu
 const deleteCourseFromDb = (slug) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield course_model_1.default.findOneAndUpdate({ slug }, {
         isDeleted: true,
-        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
+        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     }, { new: true });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "PLease Try Again ");
