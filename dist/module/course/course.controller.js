@@ -36,7 +36,9 @@ const getAllCourses = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 const getSingleCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield course_service_1.courseService.getCourseById(req.params.slug);
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
+    const result = yield course_service_1.courseService.getCourseById(req.params.slug, userId);
     if (!result) {
         throw new Error("Course not found");
     }

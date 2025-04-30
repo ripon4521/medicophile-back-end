@@ -63,7 +63,8 @@ const getAllCoursesFromDb = (query) => __awaiter(void 0, void 0, void 0, functio
     });
     return ongoingCourses;
 });
-const getCourseById = (slug) => __awaiter(void 0, void 0, void 0, function* () {
+const getCourseById = (slug, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(userId);
     const result = yield course_model_1.default
         .findOne({ slug })
         .populate({
@@ -75,9 +76,17 @@ const getCourseById = (slug) => __awaiter(void 0, void 0, void 0, function* () {
         select: "name role phone",
     });
     if (!result) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Course Ctaegory. Slug is not valid, reload or go back and try again");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Course Category. Slug is not valid, reload or go back and try again");
     }
-    return result;
+    // Check purchase
+    const hasPurchased = yield purchase_model_1.PurchaseModel.exists({
+        studentId: userId,
+        courseId: result._id,
+    });
+    console.log(hasPurchased);
+    const courseObject = result.toObject();
+    courseObject.access = hasPurchased ? true : false;
+    return courseObject;
 });
 const updateCourseInDb = (slug, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const update = yield course_model_1.default.findOneAndUpdate({ slug }, payload, {

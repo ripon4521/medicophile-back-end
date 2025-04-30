@@ -18,6 +18,7 @@ export interface ICourse {
   takeReview: "on" | "off";
   status: "active" | "inactive";
   course_tag: string[];
+  access?:boolean;
   isDeleted: boolean;
   deletedAt: Date;
   createdAt: Date;

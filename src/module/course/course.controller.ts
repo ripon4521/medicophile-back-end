@@ -25,16 +25,22 @@ const getAllCourses = catchAsync(async (req, res) => {
 });
 
 const getSingleCourse = catchAsync(async (req, res) => {
-  const result = await courseService.getCourseById(req.params.slug);
+  const userId = req.user?._id;
+ 
+  
+  const result = await courseService.getCourseById(req.params.slug, userId);
+
   if (!result) {
     throw new Error("Course not found");
   }
+
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Course fetched successfully",
     data: result,
   });
 });
+
 
 const updateCourse = catchAsync(async (req, res) => {
   const result = await courseService.updateCourseInDb(

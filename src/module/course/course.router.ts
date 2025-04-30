@@ -2,6 +2,7 @@ import express from "express";
 import validateRequest from "../../middlewares/validateRequest";
 import { courseValidation } from "./course.validation";
 import { courseController } from "./course.controller";
+import { auth } from "../../middlewares/auth";
 
 const courseRouter = express.Router();
 courseRouter.post(
@@ -11,7 +12,7 @@ courseRouter.post(
 );
 courseRouter.get("/", courseController.getAllCourses);
 courseRouter.get('/my-course', courseController.getMyCourse)
-courseRouter.get("/:slug", courseController.getSingleCourse);
+courseRouter.get("/:slug", auth.authUser(), courseController.getSingleCourse);
 courseRouter.patch(
   "/:slug",
   validateRequest(courseValidation.updateCourseSchema),

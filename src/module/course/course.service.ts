@@ -67,7 +67,8 @@ const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
   return ongoingCourses;
 };
 
-const getCourseById = async (slug: string) => {
+const getCourseById = async (slug: string, userId: string) => {
+  console.log(userId)
   const result = await courseModel
     .findOne({ slug })
     .populate({
@@ -78,14 +79,26 @@ const getCourseById = async (slug: string) => {
       path: "createdBy",
       select: "name role phone",
     });
+
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to get Course Ctaegory. Slug is not valid, reload or go back and try again",
+      "Failed to get Course Category. Slug is not valid, reload or go back and try again",
     );
   }
-  return result;
+
+  // Check purchase
+  const hasPurchased = await PurchaseModel.exists({
+    studentId: userId,
+    courseId: result._id,
+  });
+console.log(hasPurchased)
+  const courseObject = result.toObject();
+  courseObject.access = hasPurchased ? true : false;
+
+  return courseObject;
 };
+
 
 const updateCourseInDb = async (slug: string, payload: Partial<ICourse>) => {
   const update = await courseModel.findOneAndUpdate({ slug }, payload, {
