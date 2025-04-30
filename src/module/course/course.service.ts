@@ -107,7 +107,7 @@ const deleteCourseFromDb = async (slug: string) => {
     { slug },
     {
       isDeleted: true,
-      deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // ✅ BD Time (UTC+6)
+      deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), 
     },
     { new: true },
   );

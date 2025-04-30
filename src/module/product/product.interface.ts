@@ -1,0 +1,19 @@
+import { Types } from "mongoose";
+
+export interface IProduct {
+    slug:string;
+    title:string;
+    description?:string;
+    trailer?:string;
+    categoryId:Types.ObjectId;
+    status:"Active " | "Drafted";
+    price:number;
+    offerPrice:number;
+    stock:"In Stock" | "Out Off Stock";
+    coverPhoto:string;
+    createdBy:Types.ObjectId;
+    deletedAt:Date;
+    isDeleted:boolean;
+    tags:string[];
+
+}

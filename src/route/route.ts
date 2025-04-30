@@ -39,6 +39,7 @@ import mcqRoute from "../module/mcq/mcq.route";
 import mcqAttempRouter from "../module/mcqAttemp/mcqAttemp.route";
 import bookCategoryRoute from "../module/bookCategory/bookCategory.route";
 import noticeRoute from "../module/notice/notice.route";
+import productRouter from "../module/product/product.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -199,7 +200,10 @@ const moduleRoutes = [
   {
     path: "/notice",
     route: noticeRoute,
-  },
+  },{
+    path:"/product",
+    route:productRouter
+  }
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);
