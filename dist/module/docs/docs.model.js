@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-const slugify_1 = __importDefault(require("slugify"));
+const generateSlug_1 = require("../../utils/generateSlug");
 const docsSchema = new mongoose_1.Schema({
     slug: { type: String, unique: true, trim: true },
     title: { type: String, required: true, trim: true },
@@ -18,17 +15,10 @@ const docsSchema = new mongoose_1.Schema({
 });
 docsSchema.pre("save", function (next) {
     if (this.isModified("title")) {
-        this.slug = (0, slugify_1.default)(this.title, { lower: true, strict: true });
+        const uniqueSlug = (0, generateSlug_1.generateUniqueSlug)(this.title);
+        this.slug = uniqueSlug;
     }
     next();
 });
-// // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-// docsSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
 const DocsModel = (0, mongoose_1.model)("Docs", docsSchema);
 exports.default = DocsModel;

@@ -18,8 +18,30 @@ const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const exam_model_1 = __importDefault(require("../exam/exam.model"));
 const user_model_1 = require("../user/user.model");
 const gapAttemp_model_1 = __importDefault(require("./gapAttemp.model"));
-const getAllGapAttemp = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield gapAttemp_model_1.default.find({ isDeleted: false });
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
+const getAllGapAttemp = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(gapAttemp_model_1.default, query)
+        .search(["score"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .populate({
+        path: "studentId",
+        select: "name role phone",
+    })
+        .populate([
+        {
+            path: "examId",
+            select: "examTitle rolexamTypee examType",
+        },
+    ]).populate([
+        {
+            path: "questionId",
+            select: "question",
+        },
+    ]);
+    const result = yield courseQuery.exec();
     return result;
 });
 const getSpecificUserGapsAttempMark = (studentId, examId) => __awaiter(void 0, void 0, void 0, function* () {

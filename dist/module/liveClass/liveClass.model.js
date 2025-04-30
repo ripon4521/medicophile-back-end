@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-const slugify_1 = __importDefault(require("slugify"));
+const generateSlug_1 = require("../../utils/generateSlug");
 const liveClassSchema = new mongoose_1.Schema({
     slug: {
         type: String,
@@ -47,16 +44,10 @@ const liveClassSchema = new mongoose_1.Schema({
 });
 liveClassSchema.pre("save", function (next) {
     if (this.isModified("title")) {
-        this.slug = (0, slugify_1.default)(this.title, { lower: true, strict: true });
+        const uniqueSlug = (0, generateSlug_1.generateUniqueSlug)(this.title);
+        this.slug = uniqueSlug;
     }
     next();
 });
-// liveClassSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
 const LiveClassModel = (0, mongoose_1.model)("LiveClass", liveClassSchema);
 exports.default = LiveClassModel;

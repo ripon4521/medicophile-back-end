@@ -37,6 +37,9 @@ const cretaeGapsQuestion = (payload) => __awaiter(void 0, void 0, void 0, functi
 const getAllGapsQuestion = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const courseQuery = new querybuilder_1.default(gapsQuestion_model_1.default, query)
         .search(["question", "answer"])
+        .fields()
+        .filter()
+        .sort()
         .paginate()
         .populate([
         {

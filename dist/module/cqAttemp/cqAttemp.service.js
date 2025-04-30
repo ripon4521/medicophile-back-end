@@ -19,6 +19,7 @@ const cqAttemp_model_1 = __importDefault(require("./cqAttemp.model"));
 const classQuizeQuestion_model_1 = __importDefault(require("../classQuizeQuestion/classQuizeQuestion.model"));
 const user_model_1 = require("../user/user.model");
 const exam_model_1 = __importDefault(require("../exam/exam.model"));
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createCqAttemps = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const student = yield user_model_1.UserModel.findOne({ _id: payload.studentId });
     const exam = yield exam_model_1.default.findOne({ _id: payload.examId });
@@ -37,20 +38,29 @@ const createCqAttemps = (payload) => __awaiter(void 0, void 0, void 0, function*
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to cerate cq attemp");
     }
 });
-const getAllCqAttemps = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield cqAttemp_model_1.default.find({ isDeleted: false })
+const getAllCqAttemps = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(cqAttemp_model_1.default, query)
+        .search(["score"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
         .populate({
         path: "studentId",
         select: "name role phone",
     })
-        .populate({
-        path: "examId",
-        select: "examTitle examType cqMark",
-    })
-        .populate({
-        path: "questionId",
-        select: "question",
-    });
+        .populate([
+        {
+            path: "examId",
+            select: "examTitle rolexamTypee examType",
+        },
+    ]).populate([
+        {
+            path: "questionId",
+            select: "question",
+        },
+    ]);
+    const result = yield courseQuery.exec();
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Cq Attemps . Please try again");
     }

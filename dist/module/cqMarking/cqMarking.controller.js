@@ -28,7 +28,8 @@ const createCqMarking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
     });
 }));
 const getAllCqMarking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield cqMarking_service_1.cqMarkingService.getAllCqMarking();
+    const query = req.query;
+    const result = yield cqMarking_service_1.cqMarkingService.getAllCqMarking(query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "CQ Marking fatched successfully",

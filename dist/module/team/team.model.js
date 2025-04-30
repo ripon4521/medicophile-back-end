@@ -32,12 +32,9 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const slugify_1 = __importDefault(require("slugify"));
+const generateSlug_1 = require("../../utils/generateSlug");
 const teamSchema = new mongoose_1.Schema({
     slug: { type: String, unique: true },
     name: { type: String, required: true },
@@ -59,16 +56,10 @@ const teamSchema = new mongoose_1.Schema({
 });
 teamSchema.pre("save", function (next) {
     if (this.isModified("name")) {
-        this.slug = (0, slugify_1.default)(this.name, { lower: true, strict: true });
+        const uniqueSlug = (0, generateSlug_1.generateUniqueSlug)(this.name);
+        this.slug = uniqueSlug;
     }
     next();
 });
-// teamSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.name) {
-//     update.slug = slugify(update.name, { lower: true, strict: true });
-//   }
-//   next();
-// });
 const Team = mongoose_1.default.model("Team", teamSchema);
 exports.default = Team;

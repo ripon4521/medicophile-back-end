@@ -23,6 +23,10 @@ const createCourseCategory = (payload) => __awaiter(void 0, void 0, void 0, func
     if (!user || user.role === "student") {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid user id, only admin and teacher id is valid");
     }
+    const isExist = yield courseCategory_model_1.default.findOne({ title: payload.title });
+    if (isExist) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Course Category Already Exist in Database");
+    }
     const result = yield courseCategory_model_1.default.create(payload);
     return result;
 });

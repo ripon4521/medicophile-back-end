@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-const slugify_1 = __importDefault(require("slugify"));
+const generateSlug_1 = require("../../utils/generateSlug");
 const blogCommentMongooseSchema = new mongoose_1.Schema({
     slug: { type: String, unique: true },
     userType: {
@@ -29,16 +26,10 @@ const blogCommentMongooseSchema = new mongoose_1.Schema({
 });
 blogCommentMongooseSchema.pre("save", function (next) {
     if (this.isModified("comment")) {
-        this.slug = (0, slugify_1.default)(this.comment, { lower: true, strict: true });
+        const uniqueSlug = (0, generateSlug_1.generateUniqueSlug)(this.comment);
+        this.slug = uniqueSlug;
     }
     next();
 });
-// blogCommentMongooseSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.comment) {
-//     update.slug = slugify(update.comment, { lower: true, strict: true });
-//   }
-//   next();
-// });
 const BlogComment = (0, mongoose_1.model)("BlogComment", blogCommentMongooseSchema);
 exports.default = BlogComment;

@@ -32,12 +32,9 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const slugify_1 = __importDefault(require("slugify"));
+const generateSlug_1 = require("../../utils/generateSlug");
 const ModuleSchema = new mongoose_1.Schema({
     slug: { type: String, unique: true },
     moduleTitle: { type: String, required: true, trim: true },
@@ -52,16 +49,10 @@ const ModuleSchema = new mongoose_1.Schema({
 });
 ModuleSchema.pre("save", function (next) {
     if (this.isModified("moduleTitle")) {
-        this.slug = (0, slugify_1.default)(this.moduleTitle, { lower: true, strict: true });
+        const uniqueSlug = (0, generateSlug_1.generateUniqueSlug)(this.moduleTitle);
+        this.slug = uniqueSlug;
     }
     next();
 });
-// ModuleSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.moduleTitle) {
-//     update.slug = slugify(update.moduleTitle, { lower: true, strict: true });
-//   }
-//   next();
-// });
 const ModuleModel = mongoose_1.default.model("Module", ModuleSchema);
 exports.default = ModuleModel;

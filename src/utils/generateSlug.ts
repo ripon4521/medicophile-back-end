@@ -10,7 +10,7 @@ function isBangla(title: string): boolean {
       .replace(/\s+/g, '-') // Replace spaces with hyphens
       .replace(/[^a-zA-Z0-9-\u0980-\u09FF]/g, '') // Remove non-Bangla characters
       .toLowerCase() // Convert to lowercase
-      .trim('-'); // Remove trailing hyphen if any
+      .trim();
   
     return baseSlug;
   }
@@ -28,7 +28,7 @@ function isBangla(title: string): boolean {
         .replace(/\s+/g, '-') // Replace spaces with hyphens
         .replace(/[^a-z0-9\-]/g, '') // Remove non-alphanumeric characters
         .replace(/-+/g, '-') // Replace multiple hyphens with a single hyphen
-        .trim('-'); // Trim leading and trailing hyphens
+        .trim();
     }
   
     const randomSuffix = Math.floor(1000 + Math.random() * 9000); // Random number for uniqueness

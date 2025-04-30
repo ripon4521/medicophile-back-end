@@ -32,15 +32,12 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const slugify_1 = __importDefault(require("slugify"));
+const generateSlug_1 = require("../../utils/generateSlug");
 const courseCategorySchema = new mongoose_1.Schema({
     title: { type: String, required: true },
-    slug: { type: String, unique: true },
+    slug: { type: String },
     cover_photo: { type: String, required: true },
     createdBy: { type: mongoose_1.Types.ObjectId, ref: "User", required: true },
     deletedAt: { type: Date },
@@ -48,22 +45,17 @@ const courseCategorySchema = new mongoose_1.Schema({
 }, {
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }, // UTC+6 (Bangladesh Time)
+    },
 });
-// ✅ Middleware: Save করার সময় Slug অটো জেনারেট হবে
+// ✅ Slug generate with fallback for Bangla
 courseCategorySchema.pre("save", function (next) {
     if (this.isModified("title")) {
-        this.slug = (0, slugify_1.default)(this.title, { lower: true, strict: true });
+        // Use the utility function to generate slug
+        const uniqueSlug = (0, generateSlug_1.generateUniqueSlug)(this.title);
+        this.slug = uniqueSlug; // Set the slug field with generated slug
+        console.log("✅ Generated Slug:", this.slug);
     }
     next();
 });
-// // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-// courseCategorySchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.title) {
-//     update.slug = slugify(update.title, { lower: true, strict: true });
-//   }
-//   next();
-// });
 const CourseCategory = mongoose_1.default.model("CourseCategory", courseCategorySchema);
 exports.default = CourseCategory;

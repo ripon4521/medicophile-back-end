@@ -20,6 +20,7 @@ const user_model_1 = require("../user/user.model");
 const purchase_model_1 = require("./purchase.model");
 const mongoose_1 = __importDefault(require("mongoose"));
 const paymentDetails_model_1 = __importDefault(require("../paymentDetails/paymentDetails.model"));
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createPurchase = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield mongoose_1.default.startSession();
     session.startTransaction();
@@ -91,11 +92,23 @@ const createPurchase = (payload) => __awaiter(void 0, void 0, void 0, function* 
         throw error;
     }
 });
-const getAllPurchase = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield purchase_model_1.PurchaseModel.find({ isDeleted: false, status: "Active", paymentStatus: "Paid" });
-    if (!result) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get result");
-    }
+const getAllPurchase = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(purchase_model_1.PurchaseModel, query)
+        .search(["status"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .populate({
+        path: "studentId",
+        select: "name role phone",
+    })
+        .populate([
+        {
+            path: "courseId",
+        },
+    ]);
+    const result = yield courseQuery.exec();
     return result;
 });
 const deletePurchase = (_id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -111,19 +124,11 @@ const deletePurchase = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const updatePurchase = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const existingPurchase = yield purchase_model_1.PurchaseModel.findById(_id);
-    if (!existingPurchase || existingPurchase.isDeleted) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Purchase not found");
-    }
-    // Update only the allowed fields
-    if (payload.status) {
-        existingPurchase.status = payload.status;
-    }
-    if (payload.paymentStatus) {
-        existingPurchase.paymentStatus = payload.paymentStatus;
-    }
-    yield existingPurchase.save();
-    return existingPurchase;
+    const result = yield purchase_model_1.PurchaseModel.findOneAndUpdate({ _id }, payload, {
+        runValidators: true,
+        new: true
+    });
+    return result;
 });
 exports.purchaseService = {
     createPurchase,

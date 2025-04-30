@@ -14,4 +14,5 @@ examRouter.get("/:id", exam_controller_1.examController.getSpeecificExam);
 examRouter.get("/single-exam/:slug", exam_controller_1.examController.getSingleExam);
 examRouter.delete("/:slug", exam_controller_1.examController.deleteExam);
 examRouter.patch("/:slug", (0, validateRequest_1.default)(exam_validation_1.examValidation.updateExamSchema), exam_controller_1.examController.updateExam);
+examRouter.get("/:examId/students", exam_controller_1.examController.getStudentsByExamService);
 exports.default = examRouter;

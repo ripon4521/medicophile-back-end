@@ -32,16 +32,13 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const slugify_1 = __importDefault(require("slugify"));
+const generateSlug_1 = require("../../utils/generateSlug");
 const courseSchema = new mongoose_1.Schema({
     slug: { type: String, unique: true },
     cover_photo: { type: String, default: "" },
-    course_title: { type: String, required: true, unique: true },
+    course_title: { type: String, required: true },
     description: { type: String, required: true },
     duration: { type: String, required: true },
     preOrder: { type: String, enum: ["on", "off"], required: true },
@@ -56,8 +53,8 @@ const courseSchema = new mongoose_1.Schema({
     daySchedule: { type: [String] },
     timeShedule: { type: [String] },
     price: { type: Number, required: true, min: 0 },
-    offerPrice: { type: Number, min: 0 },
-    takeReview: { type: String, enum: ["on", "off"], required: true },
+    offerPrice: { type: Number, default: 0 },
+    takeReview: { type: String, enum: ["on", "off"], default: "on" },
     status: { type: String, enum: ["active", "inactive"], required: true },
     course_tag: { type: [String], default: [] },
     isDeleted: { type: Boolean, default: false },
@@ -69,18 +66,11 @@ const courseSchema = new mongoose_1.Schema({
 });
 courseSchema.pre("save", function (next) {
     if (this.isModified("course_title")) {
-        this.slug = (0, slugify_1.default)(this.course_title, { lower: true, strict: true });
+        const uniqueSlug = (0, generateSlug_1.generateUniqueSlug)(this.course_title);
+        this.slug = uniqueSlug;
     }
     next();
 });
-// // ✅ Middleware: findOneAndUpdate এর সময় Slug আপডেট হবে
-// courseSchema.pre("findOneAndUpdate", function (next) {
-//   const update = this.getUpdate() as Record<string, any>;
-//   if (update?.course_title) {
-//     update.slug = slugify(update.course_title, { lower: true, strict: true });
-//   }
-//   next();
-// });
 // Create Mongoose model
 const courseModel = mongoose_1.default.model("Course", courseSchema);
 exports.default = courseModel;

@@ -37,6 +37,11 @@ const createCqQuestion = (payload) => __awaiter(void 0, void 0, void 0, function
 const getALlCqQuestion = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const courseQuery = new querybuilder_1.default(classQuizeQuestion_model_1.default, query)
         .search(["question"])
+        .filter()
+        .fields()
+        .sort()
+        .fields()
+        .paginate()
         .populate({
         path: "examId",
         select: "examTitle examType totalQuestion positiveMark negativeMark mcqDuration cqMark slug status",

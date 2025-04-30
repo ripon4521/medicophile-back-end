@@ -19,6 +19,7 @@ const cqMarking_model_1 = __importDefault(require("./cqMarking.model"));
 const user_model_1 = require("../user/user.model");
 const exam_model_1 = __importDefault(require("../exam/exam.model"));
 const classQuizeQuestion_model_1 = __importDefault(require("../classQuizeQuestion/classQuizeQuestion.model"));
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createCqMarking = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const student = yield user_model_1.UserModel.findOne({ _id: payload.studentId });
     const exam = yield exam_model_1.default.findOne({ _id: payload.examId });
@@ -38,23 +39,29 @@ const createCqMarking = (payload) => __awaiter(void 0, void 0, void 0, function*
     }
     return result;
 });
-const getAllCqMarking = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield cqMarking_model_1.default.find({ isDeleted: false })
+const getAllCqMarking = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(cqMarking_model_1.default, query)
+        .search(["score"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
         .populate({
         path: "studentId",
         select: "name role phone",
     })
-        .populate({
-        path: "examId",
-        select: "examTitle examType cqMark",
-    })
-        .populate({
-        path: "questionId",
-        select: "question",
-    });
-    if (!result) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get Cq Marking. Please cheack and try again");
-    }
+        .populate([
+        {
+            path: "examId",
+            select: "examTitle rolexamTypee examType",
+        },
+    ]).populate([
+        {
+            path: "questionId",
+            select: "question",
+        },
+    ]);
+    const result = yield courseQuery.exec();
     return result;
 });
 const getSpecifUserCqMarking = (studentId, examId, questionId) => __awaiter(void 0, void 0, void 0, function* () {
