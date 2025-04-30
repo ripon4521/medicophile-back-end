@@ -32,6 +32,11 @@ const createCqQuestion = async (payload: ICqQuestion) => {
 const getALlCqQuestion = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(CqQuestionModel, query)
     .search(["question"])
+    .filter()
+    .fields()
+    .sort()
+    .fields()
+    .paginate()
     .populate({
       path: "examId",
       select:

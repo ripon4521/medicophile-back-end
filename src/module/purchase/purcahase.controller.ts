@@ -18,7 +18,8 @@ const createPurchase = catchAsync(async (req, res) => {
 
 
   const getAllPurchase = catchAsync(async (req, res) => {
-    const result = await purchaseService.getAllPurchase();
+    const query = req.query;
+    const result = await purchaseService.getAllPurchase(query);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       message: "Purchase get successfully",

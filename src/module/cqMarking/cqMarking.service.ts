@@ -5,6 +5,7 @@ import CqMarkingModel from "./cqMarking.model";
 import { UserModel } from "../user/user.model";
 import ExamModel from "../exam/exam.model";
 import CqQuestionModel from "../classQuizeQuestion/classQuizeQuestion.model";
+import QueryBuilder from "../../builder/querybuilder";
 
 const createCqMarking = async (payload: ICqMarking) => {
   const student = await UserModel.findOne({ _id: payload.studentId });
@@ -28,26 +29,29 @@ const createCqMarking = async (payload: ICqMarking) => {
   return result;
 };
 
-const getAllCqMarking = async () => {
-  const result = await CqMarkingModel.find({ isDeleted: false })
-    .populate({
-      path: "studentId",
-      select: "name role phone",
-    })
-    .populate({
+const getAllCqMarking = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(CqMarkingModel, query)
+  .search(["score"])
+  .filter()
+  .sort()
+  .paginate()
+  .fields()
+  .populate({
+    path: "studentId",
+    select: "name role phone",
+  })
+  .populate([
+    {
       path: "examId",
-      select: "examTitle examType cqMark",
-    })
-    .populate({
+      select: "examTitle rolexamTypee examType",
+    },
+  ]).populate([
+    {
       path: "questionId",
       select: "question",
-    });
-  if (!result) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Failed to get Cq Marking. Please cheack and try again",
-    );
-  }
+    },
+  ])
+  const result = await courseQuery.exec();
   return result;
 };
 

@@ -33,6 +33,9 @@ const cretaeGapsQuestion = async (payload: IGapsQuestion) => {
 const getAllGapsQuestion = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(GapsQuestionModel, query)
     .search(["question", "answer"])
+    .fields()
+    .filter()
+    .sort()
     .paginate()
     .populate([
       {

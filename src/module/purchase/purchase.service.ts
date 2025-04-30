@@ -7,6 +7,7 @@ import { PurchaseModel } from "./purchase.model";
 import mongoose from "mongoose";
 import PaymentDetailsModel from "../paymentDetails/paymentDetails.model";
 import { IPaymentDetails } from "../paymentDetails/paymentDetails.interface";
+import QueryBuilder from "../../builder/querybuilder";
 
 
 const createPurchase = async (payload: IPurchase) => {
@@ -100,11 +101,25 @@ if (!result) {
 
 
 
-const getAllPurchase = async () => {
-    const result = await PurchaseModel.find({isDeleted:false, status:"Active", paymentStatus:"Paid"});
-    if (!result) {
-        throw new AppError(StatusCodes.BAD_REQUEST , "Failed to get result")
-    }
+const getAllPurchase = async (query: Record<string, unknown>) => {
+
+  const courseQuery = new QueryBuilder(PurchaseModel, query)
+    .search(["status"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .populate({
+      path: "studentId",
+      select: "name role phone",
+    })
+    .populate([
+      {
+        path: "courseId",
+      
+      },
+    ])
+    const result = await courseQuery.exec();
     return result
 }
 
@@ -122,26 +137,13 @@ const deletePurchase = async (_id:string) => {
     return result;
 }
 
- const updatePurchase = async (_id: string, payload: Partial<Pick<IPurchase, "status" | "paymentStatus">>) => {
-  const existingPurchase = await PurchaseModel.findById(_id);
-
-  if (!existingPurchase || existingPurchase.isDeleted) {
-    throw new AppError(StatusCodes.NOT_FOUND, "Purchase not found");
-  }
-
-  // Update only the allowed fields
-  if (payload.status) {
-    existingPurchase.status = payload.status;
-  }
-
-  if (payload.paymentStatus) {
-    existingPurchase.paymentStatus = payload.paymentStatus;
-  }
-
-  await existingPurchase.save();
-
-  return existingPurchase;
-};
+const updatePurchase = async(_id:string, payload:IPurchase) => {
+  const result = await PurchaseModel.findOneAndUpdate({_id}, payload, {
+    runValidators:true,
+    new:true
+  })
+  return result;
+}
 
 
 export const purchaseService = {

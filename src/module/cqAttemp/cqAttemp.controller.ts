@@ -17,7 +17,8 @@ const createCqAttemp = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllCqAttemp = catchAsync(async (req: Request, res: Response) => {
-  const result = await cqAttemService.getAllCqAttemps();
+  const query = req.query;
+  const result = await cqAttemService.getAllCqAttemps(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "CQ Attemp fatched successfully",

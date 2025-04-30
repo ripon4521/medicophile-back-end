@@ -18,5 +18,6 @@ examRouter.patch(
   validateRequest(examValidation.updateExamSchema),
   examController.updateExam,
 );
+examRouter.get("/:examId/students", examController.getStudentsByExamService);
 
 export default examRouter;

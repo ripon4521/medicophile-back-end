@@ -65,6 +65,17 @@ const getSpeecificExam = catchAsync(async (req, res) => {
 });
 
 
+const getStudentsByExamService = catchAsync(async (req, res) => {
+  const { examId } = req.params;
+  const result = await examServices.getStudentsByExamService(examId);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Referanc Exam  fatched successfully",
+    data: result,
+  });
+});
+
+
 
 export const examController = {
   createExam,
@@ -72,5 +83,6 @@ export const examController = {
   getSingleExam,
   updateExam,
   deleteExam,
-  getSpeecificExam
+  getSpeecificExam,
+  getStudentsByExamService
 };

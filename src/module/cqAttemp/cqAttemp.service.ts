@@ -6,6 +6,7 @@ import CqQuestionModel from "../classQuizeQuestion/classQuizeQuestion.model";
 import mongoose from "mongoose";
 import { UserModel } from "../user/user.model";
 import ExamModel from "../exam/exam.model";
+import QueryBuilder from "../../builder/querybuilder";
 
 const createCqAttemps = async (payload: ICqAttemps) => {
   const student = await UserModel.findOne({ _id: payload.studentId });
@@ -25,20 +26,29 @@ const createCqAttemps = async (payload: ICqAttemps) => {
   }
 };
 
-const getAllCqAttemps = async () => {
-  const result = await CqAttempModel.find({ isDeleted: false })
+const getAllCqAttemps = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(CqAttempModel, query)
+    .search(["score"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
     .populate({
       path: "studentId",
       select: "name role phone",
     })
-    .populate({
-      path: "examId",
-      select: "examTitle examType cqMark",
-    })
-    .populate({
-      path: "questionId",
-      select: "question",
-    });
+    .populate([
+      {
+        path: "examId",
+        select: "examTitle rolexamTypee examType",
+      },
+    ]).populate([
+      {
+        path: "questionId",
+        select: "question",
+      },
+    ])
+    const result = await courseQuery.exec();
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,

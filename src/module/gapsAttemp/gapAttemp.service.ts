@@ -3,9 +3,32 @@ import AppError from "../../helpers/AppError";
 import ExamModel from "../exam/exam.model";
 import { UserModel } from "../user/user.model";
 import GapAttempModel from "./gapAttemp.model";
+import QueryBuilder from "../../builder/querybuilder";
 
-const getAllGapAttemp = async () => {
-  const result = await GapAttempModel.find({ isDeleted: false });
+const getAllGapAttemp = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(GapAttempModel, query)
+    .search(["score"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .populate({
+      path: "studentId",
+      select: "name role phone",
+    })
+    .populate([
+      {
+        path: "examId",
+        select: "examTitle rolexamTypee examType",
+      },
+    ]).populate([
+      {
+        path: "questionId",
+        select: "question",
+      },
+    ])
+    const result = await courseQuery.exec();
+
   return result;
 };
 

@@ -6,6 +6,9 @@ import ModuleModel from "../modules/modules.model";
 import { UserModel } from "../user/user.model";
 import courseModel from "../course/course.model";
 import QueryBuilder from "../../builder/querybuilder";
+import CqAttempModel from "../cqAttemp/cqAttemp.model";
+import GapAttempModel from "../gapsAttemp/gapAttemp.model";
+import McqAttemptModel from "../mcqAttemp/mcqAttemp.model";
 
 const createExam = async (payload: IExam) => {
   const moduleId = payload.moduleId;
@@ -142,11 +145,24 @@ const getSpcificExam = async (id: string) => {
   return result;
 };
 
+
+const getStudentsByExamService = async (examId: string) => {
+  const students = await CqAttempModel.find({ examId })
+  const student = await GapAttempModel.find({ examId })
+  const stude = await McqAttemptModel.find({ examId });
+  const totalStudentList =stude.length + students.length + student.length;
+  return totalStudentList;
+
+ 
+};
+
+
 export const examServices = {
   createExam,
   updateExam,
   deleteExam,
   getAllExam,
   getSingleExam,
-  getSpcificExam
+  getSpcificExam,
+  getStudentsByExamService
 };

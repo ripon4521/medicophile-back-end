@@ -34,10 +34,10 @@ const createCourseSchema = z.object({
       .min(0, { message: "Price must be a non-negative number." }),
     offerPrice: z
       .number()
-      .min(0, { message: "Offer price must be a non-negative number." }),
+      .min(0, { message: "Offer price must be a non-negative number." }).optional(),
     takeReview: z.enum(["on", "off"], {
       message: "Take review must be either 'on' or 'off'.",
-    }),
+    }).optional(),
     status: z.enum(["active", "inactive"], {
       message: "Status must be either 'active' or 'inactive'.",
     }),

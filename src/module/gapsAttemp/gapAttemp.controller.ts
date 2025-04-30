@@ -5,7 +5,8 @@ import { gapAttempService } from "./gapAttemp.service";
 import AppError from "../../helpers/AppError";
 
 const getAllGapAttemp = catchAsync(async (req, res) => {
-  const result = await gapAttempService.getAllGapAttemp();
+  const query = req.query;
+  const result = await gapAttempService.getAllGapAttemp(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Gap Attemp fatched successfully",

@@ -16,7 +16,8 @@ const createCqMarking = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllCqMarking = catchAsync(async (req: Request, res: Response) => {
-  const result = await cqMarkingService.getAllCqMarking();
+  const query =  req.query;
+  const result = await cqMarkingService.getAllCqMarking(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "CQ Marking fatched successfully",
