@@ -27,7 +27,7 @@ const updateProductSchema = zod_1.z.object({
         description: zod_1.z.string().optional(),
         trailer: zod_1.z.string().url("Invalid URL").optional(),
         categoryId: ObjectIdSchema.optional(),
-        status: zod_1.z.enum(["Active ", "Drafted"]).optional(),
+        status: zod_1.z.enum(["Active", "Drafted"]).optional(),
         price: zod_1.z.number().min(0, "Price must be a positive number").optional(),
         offerPrice: zod_1.z.number().min(0, "Offer price must be a positive number").optional(),
         stock: zod_1.z.enum(["In Stock", "Out Off Stock"]).optional(),
