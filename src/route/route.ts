@@ -41,6 +41,7 @@ import bookCategoryRoute from "../module/bookCategory/bookCategory.route";
 import noticeRoute from "../module/notice/notice.route";
 import productRouter from "../module/product/product.route";
 import courseDetailsRouter from "../module/courseDetails/courseDetails.route";
+import courseReveiewRouter from "../module/courseReview/courseReview.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -207,6 +208,10 @@ const moduleRoutes = [
   },{
     path:'/course-details',
     route:courseDetailsRouter
+  },
+  {
+    path:'/course-reveiw',
+    route:courseReveiewRouter
   }
 ];
 moduleRoutes.forEach((route) => {

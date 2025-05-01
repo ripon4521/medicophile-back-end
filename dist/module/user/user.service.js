@@ -24,6 +24,7 @@ const admin_model_1 = __importDefault(require("../admin/admin.model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const sendSms_1 = require("../../utils/sendSms");
 const http_status_1 = __importDefault(require("http-status"));
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createStudentsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield mongoose_1.default.startSession();
     session.startTransaction();
@@ -170,9 +171,15 @@ const changePassword = (payload) => __awaiter(void 0, void 0, void 0, function* 
     yield user.save();
     return "Password changed successfully";
 });
-const getUSers = () => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield user_model_1.UserModel.find();
-    return users;
+const getUSers = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(user_model_1.UserModel, query)
+        .search(["name", "role"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+    const result = yield courseQuery.exec();
+    return result;
 });
 const deleteUser = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.deleteMany();

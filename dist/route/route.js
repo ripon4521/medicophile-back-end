@@ -45,6 +45,8 @@ const mcqAttemp_route_1 = __importDefault(require("../module/mcqAttemp/mcqAttemp
 const bookCategory_route_1 = __importDefault(require("../module/bookCategory/bookCategory.route"));
 const notice_route_1 = __importDefault(require("../module/notice/notice.route"));
 const product_route_1 = __importDefault(require("../module/product/product.route"));
+const courseDetails_route_1 = __importDefault(require("../module/courseDetails/courseDetails.route"));
+const courseReview_route_1 = __importDefault(require("../module/courseReview/courseReview.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -205,6 +207,13 @@ const moduleRoutes = [
     }, {
         path: "/product",
         route: product_route_1.default
+    }, {
+        path: '/course-details',
+        route: courseDetails_route_1.default
+    },
+    {
+        path: '/course-reveiw',
+        route: courseReview_route_1.default
     }
 ];
 moduleRoutes.forEach((route) => {

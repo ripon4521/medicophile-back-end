@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 export interface ICourseReview {
     studentId:Types.ObjectId;
-    productId:Types.ObjectId;
+    courseId:Types.ObjectId;
     rating:number;
     review:string;
     isDeleted:boolean;
