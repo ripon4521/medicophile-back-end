@@ -6,6 +6,7 @@ const generateSlug_1 = require("../../utils/generateSlug");
 const productSchema = new mongoose_1.Schema({
     slug: { type: String, unique: true },
     title: { type: String, required: true },
+    pdf: { type: String, default: '' },
     description: { type: String },
     trailer: { type: String },
     categoryId: { type: mongoose_1.Schema.Types.ObjectId, ref: "BookCategory", required: true },

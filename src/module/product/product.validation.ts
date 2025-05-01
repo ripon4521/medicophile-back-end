@@ -10,6 +10,7 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
   
     title: z.string().min(1, "Title is required"),
     description: z.string().optional(),
+    pdf:z.string().optional(),
     trailer: z.string().url("Invalid URL").optional(),
     categoryId: ObjectIdSchema,
     status: z.enum(["Active", "Drafted"]),

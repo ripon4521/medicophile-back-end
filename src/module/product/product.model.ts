@@ -6,6 +6,7 @@ const productSchema = new Schema<IProduct>(
     {
       slug: { type: String, unique: true },
       title: { type: String, required: true },
+      pdf:{type:String, default:''},
       description: { type: String },
       trailer: { type: String },
       categoryId: { type: Schema.Types.ObjectId, ref: "BookCategory", required: true },
