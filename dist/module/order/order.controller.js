@@ -34,7 +34,28 @@ const getAllOrders = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         data: result,
     });
 }));
+const updateOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const payload = req.body;
+    const result = yield order_service_1.orderService.updateOrderAndOrderDetailsCommonFields(id, payload);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: " Order updated successfully",
+        data: result,
+    });
+}));
+const deleteOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield order_service_1.orderService.deleteOrderWithOrderDetails(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: " Order deleted successfully",
+        data: result,
+    });
+}));
 exports.orderController = {
     createOrder,
-    getAllOrders
+    getAllOrders,
+    updateOrder,
+    deleteOrder
 };

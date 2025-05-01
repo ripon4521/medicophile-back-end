@@ -23,9 +23,37 @@ const createOrder = catchAsync(async (req, res) => {
       data: result,
     });
   });
+
+
+  const updateOrder = catchAsync(async (req, res) => {
+    const {id} = req.params;
+    const payload = req.body;
+    const result = await orderService.updateOrderAndOrderDetailsCommonFields(id,payload);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      message: " Order updated successfully",
+      data: result,
+    });
+  });
+
+
+  const deleteOrder = catchAsync(async (req, res) => {
+    const {id} = req.params;
+    const result = await orderService.deleteOrderWithOrderDetails(id);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      message: " Order deleted successfully",
+      data: result,
+    });
+  });
+
+
+
   
 
   export const orderController = {
     createOrder,
-    getAllOrders
+    getAllOrders,
+    updateOrder,
+    deleteOrder
   }
