@@ -78,24 +78,9 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
   };
 };
 
-const getAllMcq = async (query: Record<string, unknown>) => {
-  const courseQuery = new QueryBuilder(McqAttemptModel, query)
-    .search(["totalScore"])
-    .filter()
-    .sort()
-    .paginate()
-    .fields()
-    .populate({
-      path: "studentId",
-      select: "name role phone",
-    })
-    .populate({
-      path: "examId",
-    })
-  
+const getAllMcq = async () => {
+  const result = await McqAttemptModel.find().populate("answer.questionId").populate({path:"studentId", select:"name role phone"});
 
-  const result = await courseQuery.exec(); 
-  console.log(result)
   return result;
 };
 

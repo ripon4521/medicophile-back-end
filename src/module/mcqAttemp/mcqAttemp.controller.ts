@@ -37,8 +37,8 @@ const getSpeecificMccq = catchAsync(async (req, res) => {
 });
 
 const getAllMcq = catchAsync(async (req, res) => {
-  const query = req.query;
-  const result = await mcqAttempService.getAllMcq(query);
+  // const query = req.query;
+  const result = await mcqAttempService.getAllMcq();
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: " MCQ Attmp  fatched successfully",

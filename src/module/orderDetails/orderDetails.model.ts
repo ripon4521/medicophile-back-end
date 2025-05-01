@@ -1,5 +1,7 @@
 import { Schema, model, Types } from "mongoose";
-import { IOrderDetails } from "./OrderDetails.interface";
+import { IOrderDetails } from "./orderDetails.interface";
+
+
 
 
 const orderDetailsSchema = new Schema<IOrderDetails>(
