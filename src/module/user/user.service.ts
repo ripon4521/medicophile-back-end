@@ -15,6 +15,7 @@ import bcrypt from "bcrypt";
 import { sendSMS } from "../../utils/sendSms";
 import { IChangePasswordPayload } from "./changepassord.interface";
 import httpStatus from "http-status";
+import QueryBuilder from "../../builder/querybuilder";
 
 const createStudentsIntoDB = async (payload: IStudent) => {
   const session = await mongoose.startSession();
@@ -224,9 +225,16 @@ const changePassword = async (
   return "Password changed successfully";
 };
 
-const getUSers = async () => {
-  const users = await UserModel.find();
-  return users;
+const getUSers = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(UserModel, query)
+        .search(["name", "role"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+    
+      const result = await courseQuery.exec(); 
+      return result;
 };
 
 const deleteUser = async () => {

@@ -1,13 +1,12 @@
-import { Types } from "mongoose";
+import { Router } from "express";
+import validateRequest from "../../middlewares/validateRequest";
+import { courseDetailsValidation } from "./courseDetails.validation";
+import { courseDetailsController } from "./courseDetails.controller";
 
-export interface IFAQ {
-  question: string;
-  answer: string[];
-}
-
-export interface ICourseDetails {
-  isCourseExist: string[];
-  syllabus: IFAQ[];
-  courseDetails: IFAQ[];
-  instructors: Types.ObjectId[]; 
-}
+const courseDetailsRouter = Router();
+courseDetailsRouter.post('/create-course-details', validateRequest(courseDetailsValidation.createCourseDetailsZodSchema), courseDetailsController.createCourseDetails);
+courseDetailsRouter.patch('/:id', validateRequest(courseDetailsValidation.updateCourseDetailsZodSchema), courseDetailsController.updateCourseDetails);
+courseDetailsRouter.delete('/:id', courseDetailsController.deleteCourseDetails);
+courseDetailsRouter.get('/', courseDetailsController.getAllCourseDetails);
+courseDetailsRouter.get('/:courseId', courseDetailsController.getSingleCourseDetails);
+export default courseDetailsRouter;

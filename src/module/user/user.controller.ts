@@ -47,7 +47,8 @@ const createFaculty = catchAsync(async (req, res) => {
 //   });
 
 const getAllUsers = catchAsync(async (req, res) => {
-  const result = await userService.getUSers();
+  const query = req.query;
+  const result = await userService.getUSers(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Users getting successfully",

@@ -13,6 +13,7 @@ const faqSchema = new Schema<IFAQ>(
   
   const courseDetailsSchema = new Schema<ICourseDetails>(
     {
+        courseId:{type:Schema.Types.ObjectId, required:true, ref:"Course"},
       isCourseExist: [{ type: String, required: true }],
       syllabus: [faqSchema],
       courseDetails: [faqSchema],
