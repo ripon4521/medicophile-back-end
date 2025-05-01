@@ -9,7 +9,7 @@ export interface IOrderDetails {
     address:string;
     quantity:number;
     price:number;
-    status:"Refunded" | "Delivered" | "Courier";
+    status:"Refunded" | "Delivered" | "Courier" | "Pending";
     paymentStatus:"Paid"|"Pending" | "Refunded";
     paymentInfo:IPaymentInfo;
     isDeleted:boolean;

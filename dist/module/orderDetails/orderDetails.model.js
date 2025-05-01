@@ -23,7 +23,7 @@ const orderDetailsSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: ["Refunded", "Delivered", "Courier"],
+        enum: ["Refunded", "Delivered", "Courier", "Pending"],
     },
     paymentStatus: {
         type: String,

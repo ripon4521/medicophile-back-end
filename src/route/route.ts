@@ -42,6 +42,8 @@ import noticeRoute from "../module/notice/notice.route";
 import productRouter from "../module/product/product.route";
 import courseDetailsRouter from "../module/courseDetails/courseDetails.route";
 import courseReveiewRouter from "../module/courseReview/courseReview.route";
+import orderRouter from "../module/order/order.route";
+import orderDetailsRouter from "../module/orderDetails/orderDetails.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -212,6 +214,12 @@ const moduleRoutes = [
   {
     path:'/course-reveiw',
     route:courseReveiewRouter
+  },{
+    path:"/order",
+    route:orderRouter
+  },{
+    path:"/order-details",
+    route:orderDetailsRouter
   }
 ];
 moduleRoutes.forEach((route) => {

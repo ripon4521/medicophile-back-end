@@ -27,7 +27,7 @@ const orderDetailsSchema = new Schema<IOrderDetails>(
       },
     status: {
       type: String,
-      enum: ["Refunded", "Delivered", "Courier"],
+      enum: ["Refunded", "Delivered", "Courier", "Pending"],
     
     },
     paymentStatus: {

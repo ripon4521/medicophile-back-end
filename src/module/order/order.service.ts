@@ -6,9 +6,22 @@ import OrderModel from "./order.model";
 import AppError from "../../helpers/AppError";
 import OrderDetailsModel from "../orderDetails/orderDetails.model";
 import QueryBuilder from "../../builder/querybuilder";
+import { ProductModel } from "../product/product.model";
+import CouponModel from "../coupon/coupon.model";
 
 
  const createOrderWithDetails = async (payload: IOrder) => {
+    const product = await ProductModel.findOne({_id:payload.productId, isDeleted:false});
+    if (payload.coupoun) {
+        const coupon = await CouponModel.findOne({_id:payload.coupoun, isDeleted:false});
+        if (!coupon) {
+            throw new AppError(StatusCodes.BAD_REQUEST, "coupon not found")
+        }
+    }
+   
+    if (!product) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "Product Not Found")
+    }
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -58,7 +71,7 @@ const getAllOrderFromDb = async (query: Record<string, unknown>) => {
       })
       .populate([
         {
-          path: "coupon",
+          path: "coupoun",
         },
       ]);
   
@@ -66,7 +79,95 @@ const getAllOrderFromDb = async (query: Record<string, unknown>) => {
     return result;
   };
 
+  const deleteOrderWithOrderDetails = async (_id: string) => {
+    const session = await mongoose.startSession();
+  
+    try {
+      session.startTransaction();
+  
+      // Order খুঁজে বের করা
+      const order = await OrderModel.findOne({ _id, isDeleted: false }).session(session);
+  
+      if (!order) {
+        throw new AppError(StatusCodes.NOT_FOUND, "Order not found.");
+      }
+  
+      // Order ডিলিট (logical delete)
+      await OrderModel.updateOne(
+        { _id: order._id },
+        { isDeleted: true, deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000)},
+        { session }
+      );
+  
+      // OrderDetails ডিলিট (logical delete)
+      await OrderDetailsModel.findByIdAndUpdate(
+        { orderId: order._id },
+        { isDeleted: true, deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000) },
+        { session }
+      );
+  
+      await session.commitTransaction();
+      session.endSession();
+  
+      return {
+        success: true,
+        message: "Order এবং OrderDetails সফলভাবে ডিলিট হয়েছে।",
+      };
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
+    }
+  };
+
+
+  const updateOrderAndOrderDetailsCommonFields = async (
+    orderId: string,
+    data: {
+      name?: string;
+      phone?: string;
+      address?: string;
+    }
+  ) => {
+    const session = await mongoose.startSession();
+  
+    try {
+      session.startTransaction();
+  
+      const order = await OrderModel.findOne({ _id: orderId, isDeleted: false }).session(session);
+  
+      if (!order) {
+        throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
+      }
+  
+      // Step 1: Update Order
+      await OrderModel.updateOne({ _id: orderId }, data, { session });
+  
+      // Step 2: Update All Related OrderDetails
+      await OrderDetailsModel.updateOne({ orderId: orderId }, data, { session });
+  
+      await session.commitTransaction();
+      session.endSession();
+  
+      return {
+        success: true,
+        message: "Order ও OrderDetails একসাথে আপডেট হয়েছে",
+      };
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
+    }
+  };
+
+
+
+
+
+
 export const orderService = {
     createOrderWithDetails,
-    getAllOrderFromDb
+    getAllOrderFromDb,
+    deleteOrderWithOrderDetails,
+    updateOrderAndOrderDetailsCommonFields
 }

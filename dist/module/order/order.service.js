@@ -19,7 +19,19 @@ const order_model_1 = __importDefault(require("./order.model"));
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const orderDetails_model_1 = __importDefault(require("../orderDetails/orderDetails.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
+const product_model_1 = require("../product/product.model");
+const coupon_model_1 = __importDefault(require("../coupon/coupon.model"));
 const createOrderWithDetails = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const product = yield product_model_1.ProductModel.findOne({ _id: payload.productId, isDeleted: false });
+    if (payload.coupoun) {
+        const coupon = yield coupon_model_1.default.findOne({ _id: payload.coupoun, isDeleted: false });
+        if (!coupon) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "coupon not found");
+        }
+    }
+    if (!product) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Product Not Found");
+    }
     const session = yield mongoose_1.default.startSession();
     session.startTransaction();
     try {
@@ -62,13 +74,66 @@ const getAllOrderFromDb = (query) => __awaiter(void 0, void 0, void 0, function*
     })
         .populate([
         {
-            path: "coupon",
+            path: "coupoun",
         },
     ]);
     const result = yield courseQuery.exec();
     return result;
 });
+const deleteOrderWithOrderDetails = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const session = yield mongoose_1.default.startSession();
+    try {
+        session.startTransaction();
+        // Order খুঁজে বের করা
+        const order = yield order_model_1.default.findOne({ _id, isDeleted: false }).session(session);
+        if (!order) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Order not found.");
+        }
+        // Order ডিলিট (logical delete)
+        yield order_model_1.default.updateOne({ _id: order._id }, { isDeleted: true, deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000) }, { session });
+        // OrderDetails ডিলিট (logical delete)
+        yield orderDetails_model_1.default.findByIdAndUpdate({ orderId: order._id }, { isDeleted: true, deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000) }, { session });
+        yield session.commitTransaction();
+        session.endSession();
+        return {
+            success: true,
+            message: "Order এবং OrderDetails সফলভাবে ডিলিট হয়েছে।",
+        };
+    }
+    catch (error) {
+        yield session.abortTransaction();
+        session.endSession();
+        throw error;
+    }
+});
+const updateOrderAndOrderDetailsCommonFields = (orderId, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const session = yield mongoose_1.default.startSession();
+    try {
+        session.startTransaction();
+        const order = yield order_model_1.default.findOne({ _id: orderId, isDeleted: false }).session(session);
+        if (!order) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Order not found");
+        }
+        // Step 1: Update Order
+        yield order_model_1.default.updateOne({ _id: orderId }, data, { session });
+        // Step 2: Update All Related OrderDetails
+        yield orderDetails_model_1.default.updateOne({ orderId: orderId }, data, { session });
+        yield session.commitTransaction();
+        session.endSession();
+        return {
+            success: true,
+            message: "Order ও OrderDetails একসাথে আপডেট হয়েছে",
+        };
+    }
+    catch (error) {
+        yield session.abortTransaction();
+        session.endSession();
+        throw error;
+    }
+});
 exports.orderService = {
     createOrderWithDetails,
-    getAllOrderFromDb
+    getAllOrderFromDb,
+    deleteOrderWithOrderDetails,
+    updateOrderAndOrderDetailsCommonFields
 };

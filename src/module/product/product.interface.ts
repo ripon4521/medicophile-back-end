@@ -6,7 +6,7 @@ export interface IProduct {
     description?:string;
     trailer?:string;
     categoryId:Types.ObjectId;
-    status:"Active " | "Drafted";
+    status:"Active" | "Drafted";
     price:number;
     offerPrice:number;
     stock:"In Stock" | "Out Off Stock";

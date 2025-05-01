@@ -9,7 +9,7 @@ const productSchema = new Schema<IProduct>(
       description: { type: String },
       trailer: { type: String },
       categoryId: { type: Schema.Types.ObjectId, ref: "BookCategory", required: true },
-      status: { type: String, enum: ["Active ", "Drafted"], required: true },
+      status: { type: String, enum: ["Active", "Drafted"], required: true },
       price: { type: Number, required: true },
       offerPrice: { type: Number, default:0 },
       stock: { type: String, enum: ["In Stock", "Out Off Stock"], required: true },

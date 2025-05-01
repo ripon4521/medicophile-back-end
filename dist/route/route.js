@@ -47,6 +47,8 @@ const notice_route_1 = __importDefault(require("../module/notice/notice.route"))
 const product_route_1 = __importDefault(require("../module/product/product.route"));
 const courseDetails_route_1 = __importDefault(require("../module/courseDetails/courseDetails.route"));
 const courseReview_route_1 = __importDefault(require("../module/courseReview/courseReview.route"));
+const order_route_1 = __importDefault(require("../module/order/order.route"));
+const orderDetails_route_1 = __importDefault(require("../module/orderDetails/orderDetails.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -214,6 +216,12 @@ const moduleRoutes = [
     {
         path: '/course-reveiw',
         route: courseReview_route_1.default
+    }, {
+        path: "/order",
+        route: order_route_1.default
+    }, {
+        path: "/order-details",
+        route: orderDetails_route_1.default
     }
 ];
 moduleRoutes.forEach((route) => {

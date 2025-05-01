@@ -39,14 +39,6 @@ const updateOrderZodSchema = zod_1.z.object({
         name: zod_1.z.string().min(1, "Name is required").optional(),
         phone: zod_1.z.number().min(1000000000, "Invalid phone number").optional(),
         address: zod_1.z.string().min(1, "Address is required").optional(),
-        paymentInfo: exports.paymentInfoSchema.optional(),
-        subTotal: zod_1.z.number().min(0).optional(),
-        discount: zod_1.z.number().min(0).optional(),
-        coupoun: ObjectIdSchema.optional(),
-        charge: zod_1.z.number().min(0).optional(),
-        shiping: zod_1.z.number().min(0).optional(),
-        totalAmount: zod_1.z.number().min(0).optional(),
-        paidAmount: zod_1.z.number().min(0).optional(),
     }),
 });
 exports.orderValidation = {

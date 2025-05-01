@@ -12,7 +12,7 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
     description: z.string().optional(),
     trailer: z.string().url("Invalid URL").optional(),
     categoryId: ObjectIdSchema,
-    status: z.enum(["Active ", "Drafted"]),
+    status: z.enum(["Active", "Drafted"]),
     price: z.number().min(0, "Price must be a positive number"),
     offerPrice: z.number().min(0, "Offer price must be a positive number").optional(),
     stock: z.enum(["In Stock", "Out Off Stock"]),

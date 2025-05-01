@@ -42,14 +42,6 @@ const updateOrderZodSchema = z.object({
       name: z.string().min(1, "Name is required").optional(),
       phone: z.number().min(1000000000, "Invalid phone number").optional(),
       address: z.string().min(1, "Address is required").optional(),
-      paymentInfo: paymentInfoSchema.optional(),
-      subTotal: z.number().min(0).optional(),
-      discount: z.number().min(0).optional(),
-      coupoun: ObjectIdSchema.optional(),
-      charge: z.number().min(0).optional(),
-      shiping: z.number().min(0).optional(),
-      totalAmount: z.number().min(0).optional(),
-      paidAmount: z.number().min(0).optional(),
     }),
   });
 
