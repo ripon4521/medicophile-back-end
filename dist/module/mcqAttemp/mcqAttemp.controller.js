@@ -43,8 +43,8 @@ const getSpeecificMccq = (0, catchAsync_1.default)((req, res) => __awaiter(void 
     });
 }));
 const getAllMcq = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const query = req.query;
-    const result = yield mcqAttemp_service_1.mcqAttempService.getAllMcq();
+    const query = req.query;
+    const result = yield mcqAttemp_service_1.mcqAttempService.getAllMcq(query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: " MCQ Attmp  fatched successfully",

@@ -19,6 +19,7 @@ const mcqAttemp_model_1 = __importDefault(require("./mcqAttemp.model"));
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const http_status_codes_1 = require("http-status-codes");
 const user_model_1 = require("../user/user.model");
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* ({ studentId, answer }) {
     const user = yield user_model_1.UserModel.findOne({ _id: studentId });
     if (!user || user.role !== "student") {
@@ -75,8 +76,23 @@ const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* (
         attempt: result,
     };
 });
-const getAllMcq = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield mcqAttemp_model_1.default.find().populate("answer.questionId").populate({ path: "studentId", select: "name role phone" });
+const getAllMcq = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(mcqAttemp_model_1.default, query)
+        .search(["totalScore"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .populate({
+        path: "studentId",
+        select: "name role phone",
+    })
+        .populate({
+        path: "examId",
+        select: "examTitle examType totalQuestion positiveMark negativeMark mcqDuration  status"
+    })
+        .populate({ path: "answer.questionId", select: "question options correctAnswer subject questionType positiveMark negetiveMark" });
+    const result = yield courseQuery.exec();
     return result;
 });
 const getSpcificMcqAttemp = (id) => __awaiter(void 0, void 0, void 0, function* () {

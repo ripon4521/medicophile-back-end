@@ -40,6 +40,8 @@ const mcqAttemptSchema = new Schema <IMcqAttemp>(
     },
     correctCount: { type: Number },
     wrongCount: { type: Number },
+    isDeleted:{type:Boolean, default:false},
+    deletedAt:{type:Date}
 
   },
   {

@@ -13,5 +13,8 @@ export interface IMcqAttemp {
   totalAttemp?: number;
   correctCount?: number;
   wrongCount?: number;
+  isDeleted?:boolean;
+  deletedAt?:Date
+
 
 }

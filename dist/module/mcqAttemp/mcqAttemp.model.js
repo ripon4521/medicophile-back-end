@@ -33,6 +33,8 @@ const mcqAttemptSchema = new mongoose_1.Schema({
     },
     correctCount: { type: Number },
     wrongCount: { type: Number },
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date }
 }, {
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),

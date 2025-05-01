@@ -78,9 +78,25 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
   };
 };
 
-const getAllMcq = async () => {
-  const result = await McqAttemptModel.find().populate("answer.questionId").populate({path:"studentId", select:"name role phone"});
+const getAllMcq = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(McqAttemptModel, query)
+    .search(["totalScore"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .populate({
+      path: "studentId",
+      select: "name role phone",
+    })
+    .populate({
+      path: "examId",
+      select:"examTitle examType totalQuestion positiveMark negativeMark mcqDuration  status"
+    })
+    .populate({path:"answer.questionId", select:"question options correctAnswer subject questionType positiveMark negetiveMark"})
+  
 
+  const result = await courseQuery.exec(); 
   return result;
 };
 
