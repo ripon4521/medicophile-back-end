@@ -33,6 +33,8 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
       "Failed to create purchase token",
     );
   }
+
+
   return result;
 };
 
