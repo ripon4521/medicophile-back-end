@@ -64,10 +64,20 @@ const getSpeecificCaq = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
         data: result,
     });
 }));
+const getSingleQuestion = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield classQuizeQuestion_service_1.cqQuestionService.getSingleQuestion(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "single Cq  fatched successfully",
+        data: result,
+    });
+}));
 exports.cqQuestionController = {
     createCqQuestion,
     updateCqQuestion,
     deleteCqQuestion,
     getAllCqQuestion,
     getSpeecificCaq,
+    getSingleQuestion
 };

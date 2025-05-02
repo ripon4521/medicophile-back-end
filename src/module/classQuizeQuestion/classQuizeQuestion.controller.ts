@@ -56,10 +56,23 @@ const getSpeecificCaq = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleQuestion = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await cqQuestionService.getSingleQuestion(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "single Cq  fatched successfully",
+    data: result,
+  });
+});
+
+
+
 export const cqQuestionController = {
   createCqQuestion,
   updateCqQuestion,
   deleteCqQuestion,
   getAllCqQuestion,
   getSpeecificCaq,
+  getSingleQuestion
 };

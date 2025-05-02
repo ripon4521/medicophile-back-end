@@ -49,6 +49,7 @@ const courseDetails_route_1 = __importDefault(require("../module/courseDetails/c
 const courseReview_route_1 = __importDefault(require("../module/courseReview/courseReview.route"));
 const order_route_1 = __importDefault(require("../module/order/order.route"));
 const orderDetails_route_1 = __importDefault(require("../module/orderDetails/orderDetails.route"));
+const whatsapp_route_1 = __importDefault(require("../module/whatsapp/whatsapp.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -222,6 +223,9 @@ const moduleRoutes = [
     }, {
         path: "/order-details",
         route: orderDetails_route_1.default
+    }, {
+        path: "/whatsapp",
+        route: whatsapp_route_1.default
     }
 ];
 moduleRoutes.forEach((route) => {

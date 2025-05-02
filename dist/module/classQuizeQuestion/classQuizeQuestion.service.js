@@ -96,10 +96,15 @@ const getSpcificCq = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
+const getSingleQuestion = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield classQuizeQuestion_model_1.default.findOne({ _id }).populate("examId").populate("createdBy");
+    return result;
+});
 exports.cqQuestionService = {
     createCqQuestion,
     updateCqQuestion,
     deleteCqQuestion,
     getALlCqQuestion,
     getSpcificCq,
+    getSingleQuestion
 };

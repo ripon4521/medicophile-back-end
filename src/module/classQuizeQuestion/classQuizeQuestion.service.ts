@@ -117,10 +117,17 @@ const getSpcificCq = async (id: string) => {
   return result;
 };
 
+
+const getSingleQuestion = async (_id: string) => {
+  const result = await CqQuestionModel.findOne({_id }).populate("examId").populate("createdBy")
+  return result;
+};
+
 export const cqQuestionService = {
   createCqQuestion,
   updateCqQuestion,
   deleteCqQuestion,
   getALlCqQuestion,
   getSpcificCq,
+  getSingleQuestion
 };
