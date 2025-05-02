@@ -11,13 +11,13 @@ const createBlog = async (payload: IBlog) => {
   const user = await UserModel.findOne({ _id: payload.createdBy });
   if (!user || user.role === "student") {
     throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "invalid user id. blog only created by admin or teacher",
+      StatusCodes.NOT_FOUND,
+      "invalid user id. ",
     );
   } else if (!category) {
     throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "invalid blog category id. please provide valid id ",
+      StatusCodes.NOT_FOUND,
+      "invalid  category id. please provide valid id ",
     );
   }
 

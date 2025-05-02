@@ -46,6 +46,7 @@ import orderRouter from "../module/order/order.route";
 import orderDetailsRouter from "../module/orderDetails/orderDetails.route";
 import whatsAppRouter from "../module/whatsapp/whatsapp.route";
 import offlineBatchRouter from "../module/offlineBatch/offlineBatch.route";
+import batchStudentRoute from "../module/batchStudent/batchStudent.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -228,6 +229,9 @@ const moduleRoutes = [
   },{
     path:"/offline-batch",
     route:offlineBatchRouter
+  },{
+    path:'/batch-student',
+    route:batchStudentRoute
   }
 ];
 moduleRoutes.forEach((route) => {
