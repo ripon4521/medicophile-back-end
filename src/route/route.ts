@@ -45,6 +45,7 @@ import courseReveiewRouter from "../module/courseReview/courseReview.route";
 import orderRouter from "../module/order/order.route";
 import orderDetailsRouter from "../module/orderDetails/orderDetails.route";
 import whatsAppRouter from "../module/whatsapp/whatsapp.route";
+import offlineBatchRouter from "../module/offlineBatch/offlineBatch.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -224,6 +225,9 @@ const moduleRoutes = [
   },{
     path:"/whatsapp",
     route:whatsAppRouter
+  },{
+    path:"/offline-batch",
+    route:offlineBatchRouter
   }
 ];
 moduleRoutes.forEach((route) => {
