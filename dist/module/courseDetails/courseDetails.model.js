@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const faqSchema = new mongoose_1.Schema({
-    question: { type: String, required: true },
-    answer: [{ type: String, required: true }],
+    question: { type: String },
+    answer: [{ type: String }],
 }, { _id: false });
 const courseDetailsSchema = new mongoose_1.Schema({
     courseId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "Course" },

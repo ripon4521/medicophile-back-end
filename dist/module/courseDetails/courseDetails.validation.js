@@ -7,8 +7,8 @@ const ObjectIdSchema = zod_1.z.string().refine((val) => mongoose_1.Types.ObjectI
     message: "Invalid ObjectId format",
 });
 exports.faqSchema = zod_1.z.object({
-    question: zod_1.z.string().min(1, "Question is required"),
-    answer: zod_1.z.array(zod_1.z.string().min(1, "Answer can't be empty")).nonempty(),
+    question: zod_1.z.string().min(1, "Question is required").optional(),
+    answer: zod_1.z.array(zod_1.z.string().min(1, "Answer can't be empty")).optional(),
 });
 const createCourseDetailsZodSchema = zod_1.z.object({
     body: zod_1.z.object({

@@ -70,6 +70,7 @@ const getSpecificUserGapsAttempMark = (studentId, examId) => __awaiter(void 0, v
     console.log("Total Score:", totalScore);
     return {
         totalScore,
+        result
     };
 });
 exports.gapAttempService = {

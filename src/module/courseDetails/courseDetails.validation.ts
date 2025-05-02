@@ -4,8 +4,8 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
     message: "Invalid ObjectId format",
   });
 export const faqSchema = z.object({
-  question: z.string().min(1, "Question is required"),
-  answer: z.array(z.string().min(1, "Answer can't be empty")).nonempty(),
+  question: z.string().min(1, "Question is required").optional(),
+  answer: z.array(z.string().min(1, "Answer can't be empty")).optional(),
 });
 
  const createCourseDetailsZodSchema = z.object({

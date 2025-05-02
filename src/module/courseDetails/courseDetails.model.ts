@@ -5,8 +5,8 @@ import { ICourseDetails, IFAQ } from "./courseDetails.interface";
 
 const faqSchema = new Schema<IFAQ>(
     {
-      question: { type: String, required: true },
-      answer: [{ type: String, required: true }],
+      question: { type: String  },
+      answer: [{ type: String  }],
     },
     { _id: false }
   );
