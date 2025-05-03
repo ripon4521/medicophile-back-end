@@ -44,7 +44,7 @@ const getAllLiveClass = (query) => __awaiter(void 0, void 0, void 0, function* (
         .paginate()
         .fields()
         .populate({
-        path: " courseId",
+        path: "courseId",
     })
         .populate([
         {

@@ -35,9 +35,7 @@ const getAllLiveClass = async (query: Record<string, unknown>) => {
     .paginate()
     .fields()
     .populate({
-      path: " courseId",
-   
-     
+      path: "courseId",
     })
     .populate([
       {
