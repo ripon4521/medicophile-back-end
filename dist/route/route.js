@@ -50,6 +50,9 @@ const courseReview_route_1 = __importDefault(require("../module/courseReview/cou
 const order_route_1 = __importDefault(require("../module/order/order.route"));
 const orderDetails_route_1 = __importDefault(require("../module/orderDetails/orderDetails.route"));
 const whatsapp_route_1 = __importDefault(require("../module/whatsapp/whatsapp.route"));
+const offlineBatch_route_1 = __importDefault(require("../module/offlineBatch/offlineBatch.route"));
+const batchStudent_route_1 = __importDefault(require("../module/batchStudent/batchStudent.route"));
+const qrCodeGenerate_route_1 = __importDefault(require("../module/qecodeGenerate/qrCodeGenerate.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -226,6 +229,15 @@ const moduleRoutes = [
     }, {
         path: "/whatsapp",
         route: whatsapp_route_1.default
+    }, {
+        path: "/offline-batch",
+        route: offlineBatch_route_1.default
+    }, {
+        path: '/batch-student',
+        route: batchStudent_route_1.default
+    }, {
+        path: "/qr-code",
+        route: qrCodeGenerate_route_1.default
     }
 ];
 moduleRoutes.forEach((route) => {

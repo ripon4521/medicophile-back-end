@@ -27,7 +27,8 @@ const createLiveClass = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
     });
 }));
 const getAllLiveClass = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield liveClass_service_1.liveClassService.getAllLiveClass();
+    const query = req.query;
+    const result = yield liveClass_service_1.liveClassService.getAllLiveClass(query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Live Class fatched successfully",

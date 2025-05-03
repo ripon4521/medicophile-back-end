@@ -34,8 +34,8 @@ const getAllBatchStudents = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields()
-    .populate([ { path: "courseId", },])
-    .populate([{path:"batchId"}])
+    .populate([ { path: "courseId", select:"cover_photo course_title duration course_type "},])
+    .populate([{path:"batchId", select:"name"}])
     .populate([{ path: "studentId", select: "name role phone profile_picture" } ]);
 
   const result = await courseQuery.exec();

@@ -14,7 +14,8 @@ const createLiveClass = catchAsync(async (req, res) => {
 });
 
 const getAllLiveClass = catchAsync(async (req, res) => {
-  const result = await liveClassService.getAllLiveClass();
+  const query = req.query;
+  const result = await liveClassService.getAllLiveClass(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Live Class fatched successfully",

@@ -16,6 +16,7 @@ exports.liveClassService = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const liveClass_model_1 = __importDefault(require("./liveClass.model"));
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const createLiveClass = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const create = yield liveClass_model_1.default.create(payload);
     if (!create) {
@@ -23,14 +24,39 @@ const createLiveClass = (payload) => __awaiter(void 0, void 0, void 0, function*
     }
     return create;
 });
-const getAllLiveClass = () => __awaiter(void 0, void 0, void 0, function* () {
-    const get = yield liveClass_model_1.default.find({ isDeleted: false })
-        .populate("courseId")
-        .populate("createdBy");
-    if (!get) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Faled to get Live Class, PLease try again");
+// const getAllLiveClass = async () => {
+//   const get = await LiveClassModel.find({ isDeleted: false })
+//     .populate("courseId")
+//     .populate("createdBy");
+//   if (!get) {
+//     throw new AppError(
+//       StatusCodes.BAD_REQUEST,
+//       "Faled to get Live Class, PLease try again",
+//     );
+//   }
+//   return get;
+// };
+const getAllLiveClass = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(liveClass_model_1.default, query)
+        .search(["title"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .populate({
+        path: " courseId",
+    })
+        .populate([
+        {
+            path: "createdBy",
+            select: "name role phone",
+        },
+    ]);
+    const result = yield courseQuery.exec();
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed  to get Live Class");
     }
-    return get;
+    return result;
 });
 const updateLiveClass = (slug, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const get = yield liveClass_model_1.default.findOneAndUpdate({ slug }, payload, {

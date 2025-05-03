@@ -8,6 +8,7 @@ const batchStudentSchema = new Schema<IBatchStudent>(
     batchId: { type: Schema.Types.ObjectId, ref: "OfflineBatch", required: true },
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     studentId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    isDeleted:{type:Boolean, default:false}
   },
   {
     timestamps: {

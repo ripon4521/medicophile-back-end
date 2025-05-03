@@ -23,10 +23,10 @@ const createBlog = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const category = yield blogCategory_model_1.default.findOne({ _id: payload.categoryId });
     const user = yield user_model_1.UserModel.findOne({ _id: payload.createdBy });
     if (!user || user.role === "student") {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid user id. blog only created by admin or teacher");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "invalid user id. ");
     }
     else if (!category) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid blog category id. please provide valid id ");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "invalid  category id. please provide valid id ");
     }
     const result = yield blog_model_1.default.create(payload);
     if (!result) {
