@@ -50,8 +50,14 @@ const deleteQrCode = async(_id:string) => {
     return result;
 }
 
+const getSingleQrCode = async(_id:string) => {
+    const result = await qrCodeModel.findOne({_id});
+    return result;
+}
+
 export const qrCodeService = {
     generateQrCodeForStudent,
     getQrCode,
-    deleteQrCode
+    deleteQrCode,
+    getSingleQrCode
 }

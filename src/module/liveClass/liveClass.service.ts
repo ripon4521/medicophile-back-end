@@ -15,18 +15,6 @@ const createLiveClass = async (payload: ILiveClass) => {
   return create;
 };
 
-// const getAllLiveClass = async () => {
-//   const get = await LiveClassModel.find({ isDeleted: false })
-//     .populate("courseId")
-//     .populate("createdBy");
-//   if (!get) {
-//     throw new AppError(
-//       StatusCodes.BAD_REQUEST,
-//       "Faled to get Live Class, PLease try again",
-//     );
-//   }
-//   return get;
-// };
 const getAllLiveClass = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(LiveClassModel, query)
     .search(["title"])

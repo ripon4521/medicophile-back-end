@@ -48,6 +48,7 @@ import whatsAppRouter from "../module/whatsapp/whatsapp.route";
 import offlineBatchRouter from "../module/offlineBatch/offlineBatch.route";
 import batchStudentRoute from "../module/batchStudent/batchStudent.route";
 import qrCodeGenerateRoute from "../module/qecodeGenerate/qrCodeGenerate.route";
+import attendanceRoute from "../module/qrcodeAttendeene/attendence.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -236,6 +237,9 @@ const moduleRoutes = [
   },{
     path:"/qr-code",
     route:qrCodeGenerateRoute
+  },{
+    path:"/attendance",
+    route:attendanceRoute
   }
 ];
 moduleRoutes.forEach((route) => {

@@ -44,6 +44,18 @@ import AppError from "../../helpers/AppError";
     });
   });
 
+  
+  const getSingleQrcode = catchAsync(async (req: Request, res: Response) => {
+    const {id} = req.params;
+    const result = await qrCodeService.getSingleQrCode(id);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      message: "Qr Code get successfully",
+      data: result,
+    });
+  });
+
+
 
 
 
@@ -51,5 +63,6 @@ import AppError from "../../helpers/AppError";
 export const qrCodeController = {
     generateQrCode,
     getAllQrcode,
-    deleteQrcode
+    deleteQrcode,
+    getSingleQrcode
 }
