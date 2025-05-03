@@ -13,6 +13,7 @@ import httpStatus from "http-status";
 import axios from "axios";
 import config from "../../config";
 import adminModel from "../admin/admin.model";
+import { sendSMS } from "../../utils/sendSms";
 
 const register = async (payload: IUser) => {
   const result = await UserModel.create(payload);
@@ -178,39 +179,13 @@ const resetPassword = async (phone: string): Promise<string> => {
   // Generate random 6-digit password
   const newPassword = Math.floor(100000 + Math.random() * 900000).toString();
 
-  // Prepare SMS payload for GreenWeb
-  const smsPayload = {
-    token: process.env.GREENWEB_API_TOKEN,
-    to: phone,
-    message: `Your new password is: ${newPassword}`,
-  };
-
-  try {
-    const response = await axios.post(
-      "http://api.greenweb.com.bd/api.php",
-      null,
-      {
-        params: smsPayload,
-      },
-    );
-
-    // Check GreenWeb's response content
-    const responseData = response.data.toString().trim().toLowerCase();
-
-    if (!responseData.includes("success")) {
-      throw new Error(`GreenWeb response: ${responseData}`);
-    }
-  } catch (error: any) {
-    console.error(
-      "SMS sending failed:",
-      error?.response?.data || error.message,
-    );
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      "SMS sending failed: " + error.message,
-    );
+  const sms = await sendSMS(
+    phone,
+    `Your login password is: ${newPassword}`,
+  );
+  if (!sms) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Password Reset Failed.");
   }
-
   // Hash and update the new password
   const hashedPassword = await bcrypt.hash(newPassword, 12);
   user.password = hashedPassword;
