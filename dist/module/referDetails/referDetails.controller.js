@@ -54,5 +54,9 @@ const getSingleReferDetails = (0, catchAsync_1.default)((req, res) => __awaiter(
 exports.referDetailsController = {
     getAllReferDetails,
     deleteReferDetails,
+<<<<<<< HEAD
     getSingleReferDetails,
+=======
+    getSingleReferDetails
+>>>>>>> 893945e (Resolved merge conflicts)
 };

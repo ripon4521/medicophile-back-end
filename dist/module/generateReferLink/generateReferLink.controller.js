@@ -36,5 +36,9 @@ const getAllRferLink = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 }));
 exports.referallinkController = {
     createReferalLink,
+<<<<<<< HEAD
     getAllRferLink,
+=======
+    getAllRferLink
+>>>>>>> 893945e (Resolved merge conflicts)
 };

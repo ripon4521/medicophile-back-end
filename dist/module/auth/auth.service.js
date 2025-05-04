@@ -23,8 +23,18 @@ const user_model_1 = require("../user/user.model");
 const userCredentials_model_1 = require("../userCredentials/userCredentials.model");
 const http_status_1 = __importDefault(require("http-status"));
 const config_1 = __importDefault(require("../../config"));
+<<<<<<< HEAD
 const sendSms_1 = require("../../utils/sendSms");
 const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+=======
+<<<<<<< Updated upstream
+const register = (payload) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+=======
+const sendSms_1 = require("../../utils/sendSms");
+const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
     const result = yield user_model_1.UserModel.create(payload);
     if (!result) {
         throw new handleCustomError_1.CustomError("Failed to create user", 500);
@@ -121,17 +131,69 @@ const logout = (payload, meta) => __awaiter(void 0, void 0, void 0, function* ()
     // Save the updated credential status
     yield existingCredential.save();
     return { message: "Logged out successfully" };
+<<<<<<< HEAD
 });
 const resetPassword = (phone) => __awaiter(void 0, void 0, void 0, function* () {
+=======
+<<<<<<< Updated upstream
+  });
+const resetPassword = (phone) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+=======
+});
+const resetPassword = (phone) => __awaiter(void 0, void 0, void 0, function* () {
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
     const user = yield user_model_1.UserModel.findOne({ phone: phone });
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User not found with this phone number");
     }
     // Generate random 6-digit password
     const newPassword = Math.floor(100000 + Math.random() * 900000).toString();
+<<<<<<< HEAD
     const sms = yield (0, sendSms_1.sendSMS)(phone, `Your login password is: ${newPassword}`);
     if (!sms) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Password Reset Failed.");
+=======
+<<<<<<< Updated upstream
+    // Prepare SMS payload for GreenWeb
+    const smsPayload = {
+      token: process.env.GREENWEB_API_TOKEN,
+      to: phone,
+      message: `Your new password is: ${newPassword}`,
+    };
+    try {
+      const response = yield axios_1.default.post(
+        "http://api.greenweb.com.bd/api.php",
+        null,
+        {
+          params: smsPayload,
+        },
+      );
+      // Check GreenWeb's response content
+      const responseData = response.data.toString().trim().toLowerCase();
+      if (!responseData.includes("success")) {
+        throw new Error(`GreenWeb response: ${responseData}`);
+      }
+    } catch (error) {
+      console.error(
+        "SMS sending failed:",
+        ((_a = error === null || error === void 0 ? void 0 : error.response) ===
+          null || _a === void 0
+          ? void 0
+          : _a.data) || error.message,
+      );
+      throw new AppError_1.default(
+        http_status_1.default.BAD_REQUEST,
+        "SMS sending failed: " + error.message,
+      );
+=======
+    const sms = yield (0, sendSms_1.sendSMS)(phone, `Your login password is: ${newPassword}`);
+    if (!sms) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Password Reset Failed.");
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
     }
     // Hash and update the new password
     const hashedPassword = yield bcrypt_1.default.hash(newPassword, 12);

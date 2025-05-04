@@ -22,13 +22,21 @@ const generateReferralLink = (userId, courseSlug, courseId) => __awaiter(void 0,
             // Referral doesn't exist, create a new one
             referral = new generateReferLink_model_1.default({
                 userId,
+<<<<<<< HEAD
                 courseId,
+=======
+                courseId
+>>>>>>> 893945e (Resolved merge conflicts)
             });
             // Save new referral
             yield referral.save();
         }
         // Return referral link
+<<<<<<< HEAD
         return `https://iconadmissionaid.com/course-details/${courseSlug}?courseId=${courseId}?ref=${referral.userId}`;
+=======
+        return `https://iconadmissionaid.com/course-details/${courseSlug}?ref=${referral.userId}`;
+>>>>>>> 893945e (Resolved merge conflicts)
     }
     catch (error) {
         throw new Error(`Error generating referral link: ${error}`);
@@ -40,5 +48,9 @@ const getReferLink = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.referalLinkService = {
     generateReferralLink,
+<<<<<<< HEAD
     getReferLink,
+=======
+    getReferLink
+>>>>>>> 893945e (Resolved merge conflicts)
 };

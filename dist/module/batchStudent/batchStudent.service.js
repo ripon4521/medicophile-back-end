@@ -51,6 +51,7 @@ const getAllBatchStudents = (query) => __awaiter(void 0, void 0, void 0, functio
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get  . please try again");
     }
     return result;
+<<<<<<< HEAD
 });
 const getSingleBatchStudent = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield batchStudent_model_1.BatchStudentModel.findOne({ _id })
@@ -64,6 +65,21 @@ const getSingleBatchStudent = (_id) => __awaiter(void 0, void 0, void 0, functio
         .populate([
         { path: "studentId", select: "name role phone profile_picture" },
     ]);
+=======
+<<<<<<< Updated upstream
+  });
+const getSingleBatchStudent = (_id) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield batchStudent_model_1.BatchStudentModel.findOne({
+      _id,
+=======
+});
+const getSingleBatchStudent = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield batchStudent_model_1.BatchStudentModel.findOne({ _id }).populate([{ path: "courseId", select: "cover_photo course_title duration course_type " },])
+        .populate([{ path: "batchId", select: "name" }])
+        .populate([{ path: "studentId", select: "name role phone profile_picture" }]);
+    ;
+>>>>>>> 893945e (Resolved merge conflicts)
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to Create  . please try again");
     }
@@ -73,6 +89,10 @@ const updateBatchStudent = (_id, payload) => __awaiter(void 0, void 0, void 0, f
     const result = yield batchStudent_model_1.BatchStudentModel.findOneAndUpdate({ _id }, payload, {
         runValidators: true,
         new: true,
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
     });
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to update  . please try again");

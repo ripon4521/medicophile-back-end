@@ -68,8 +68,12 @@ const getAllAttendance = (query) => __awaiter(void 0, void 0, void 0, function* 
             select: "batchId courseId studentId",
         },
     ])
+<<<<<<< HEAD
         .populate([
         { path: "studentId", select: "name role phone profile_picture" },
+=======
+        .populate([{ path: "studentId", select: "name role phone profile_picture" },
+>>>>>>> 893945e (Resolved merge conflicts)
     ]);
     const result = yield courseQuery.exec();
     return result;
@@ -79,8 +83,12 @@ const deleteAttendance = (_id) => __awaiter(void 0, void 0, void 0, function* ()
     return result;
 });
 const singleAttendance = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+<<<<<<< HEAD
     const result = yield attendence_model_1.default.findOne({ _id })
         .populate([
+=======
+    const result = yield attendence_model_1.default.findOne({ _id }).populate([
+>>>>>>> 893945e (Resolved merge conflicts)
         {
             path: "batchStudent",
             populate: [
@@ -96,8 +104,12 @@ const singleAttendance = (_id) => __awaiter(void 0, void 0, void 0, function* ()
             select: "batchId courseId studentId",
         },
     ])
+<<<<<<< HEAD
         .populate([
         { path: "studentId", select: "name role phone profile_picture" },
+=======
+        .populate([{ path: "studentId", select: "name role phone profile_picture" },
+>>>>>>> 893945e (Resolved merge conflicts)
     ]);
     return result;
 });
@@ -105,5 +117,9 @@ exports.attendeceService = {
     createAttendence,
     getAllAttendance,
     deleteAttendance,
+<<<<<<< HEAD
     singleAttendance,
+=======
+    singleAttendance
+>>>>>>> 893945e (Resolved merge conflicts)
 };

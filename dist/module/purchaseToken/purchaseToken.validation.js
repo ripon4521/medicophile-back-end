@@ -17,6 +17,24 @@ exports.paymentInfoSchema = zod_1.z.object({
     proofUrl: zod_1.z.string().url("Invalid proof URL").optional(),
 });
 const createPurchaseTokenSchema = zod_1.z.object({
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+  body: zod_1.z.object({
+    studentId: ObjectIdSchema,
+    courseId: ObjectIdSchema,
+    coupon: zod_1.z.string().optional(),
+    price: zod_1.z.number({ required_error: "Price is required" }),
+    subtotal: zod_1.z.number({ required_error: "Subtotal is required" }),
+    discount: zod_1.z.number({ required_error: "Discount is required" }),
+    charge: zod_1.z.number({ required_error: "Charge is required" }),
+    totalAmount: zod_1.z.number({ required_error: "Total amount is required" }),
+    paymentInfo: exports.paymentInfoSchema,
+    name: zod_1.z.string({ required_error: "Name is required" }),
+    phone: zod_1.z.string({ required_error: "Phone is required" }),
+  }),
+=======
+>>>>>>> 893945e (Resolved merge conflicts)
     body: zod_1.z.object({
         studentId: ObjectIdSchema,
         courseId: ObjectIdSchema,
@@ -31,6 +49,10 @@ const createPurchaseTokenSchema = zod_1.z.object({
         name: zod_1.z.string({ required_error: "Name is required" }),
         phone: zod_1.z.string({ required_error: "Phone is required" }),
     }),
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
 });
 const updatePurchaseTokenSchema = zod_1.z.object({
     body: zod_1.z.object({

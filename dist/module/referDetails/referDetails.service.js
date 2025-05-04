@@ -46,7 +46,11 @@ const getAllReferDetails = (query) => __awaiter(void 0, void 0, void 0, function
         .populate([
         {
             path: "purchaseTokenId",
+<<<<<<< HEAD
             select: "status paymentInfo name phone",
+=======
+            select: "status paymentInfo name phone"
+>>>>>>> 893945e (Resolved merge conflicts)
         },
     ]);
     const result = yield courseQuery.exec();
@@ -56,8 +60,12 @@ const getAllReferDetails = (query) => __awaiter(void 0, void 0, void 0, function
     return result;
 });
 const singleReferDetails = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+<<<<<<< HEAD
     const result = yield referDetails_model_1.default.findOne({ _id })
         .populate([
+=======
+    const result = yield referDetails_model_1.default.findOne({ _id }).populate([
+>>>>>>> 893945e (Resolved merge conflicts)
         {
             path: "courseId",
             select: "cover_photo course_title description duration price offerPrice",
@@ -79,7 +87,11 @@ const singleReferDetails = (_id) => __awaiter(void 0, void 0, void 0, function* 
         .populate([
         {
             path: "purchaseTokenId",
+<<<<<<< HEAD
             select: "status paymentInfo name phone",
+=======
+            select: "status paymentInfo name phone"
+>>>>>>> 893945e (Resolved merge conflicts)
         },
     ]);
     return result;

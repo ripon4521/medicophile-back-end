@@ -8,6 +8,11 @@ const validateRequest_1 = __importDefault(require("../../middlewares/validateReq
 const generateReferLink_validation_1 = require("./generateReferLink.validation");
 const generateReferLink_controller_1 = require("./generateReferLink.controller");
 const referalLinkRouter = express_1.default.Router();
+<<<<<<< HEAD
 referalLinkRouter.post("/generate-refer-link", (0, validateRequest_1.default)(generateReferLink_validation_1.IReferralSchema), generateReferLink_controller_1.referallinkController.createReferalLink);
 referalLinkRouter.get("/", generateReferLink_controller_1.referallinkController.getAllRferLink);
+=======
+referalLinkRouter.post('/generate-refer-link', (0, validateRequest_1.default)(generateReferLink_validation_1.IReferralSchema), generateReferLink_controller_1.referallinkController.createReferalLink);
+referalLinkRouter.get('/', generateReferLink_controller_1.referallinkController.getAllRferLink);
+>>>>>>> 893945e (Resolved merge conflicts)
 exports.default = referalLinkRouter;

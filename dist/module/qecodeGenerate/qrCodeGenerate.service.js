@@ -53,6 +53,7 @@ const getQrCode = (query) => __awaiter(void 0, void 0, void 0, function* () {
 const deleteQrCode = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield qrCodeGenerate_model_1.default.findOneAndDelete({ _id });
     return result;
+<<<<<<< HEAD
 });
 const getSingleQrCode = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield qrCodeGenerate_model_1.default.findOne({ _id });
@@ -63,4 +64,24 @@ exports.qrCodeService = {
     getQrCode,
     deleteQrCode,
     getSingleQrCode,
+=======
+<<<<<<< Updated upstream
+  });
+exports.qrCodeService = {
+  generateQrCodeForStudent,
+  getQrCode,
+  deleteQrCode,
+=======
+});
+const getSingleQrCode = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield qrCodeGenerate_model_1.default.findOne({ _id });
+    return result;
+});
+exports.qrCodeService = {
+    generateQrCodeForStudent,
+    getQrCode,
+    deleteQrCode,
+    getSingleQrCode
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
 };

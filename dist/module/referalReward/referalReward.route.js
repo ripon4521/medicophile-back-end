@@ -8,9 +8,17 @@ const validateRequest_1 = __importDefault(require("../../middlewares/validateReq
 const referalReward_validation_1 = require("./referalReward.validation");
 const referalReward_controller_1 = require("./referalReward.controller");
 const referRewardRouter = (0, express_1.Router)();
+<<<<<<< HEAD
 referRewardRouter.post("/create-refer-reward", (0, validateRequest_1.default)(referalReward_validation_1.referalRewardValidation.createReferralRewardZodSchema), referalReward_controller_1.referRewardController.createReferReward);
 referRewardRouter.get("/", referalReward_controller_1.referRewardController.getAllReferDetails);
 referRewardRouter.get("/:id", referalReward_controller_1.referRewardController.getSingleReferReward);
 referRewardRouter.patch("/:id", (0, validateRequest_1.default)(referalReward_validation_1.referalRewardValidation.updateReferralRewardZodSchema), referalReward_controller_1.referRewardController.updateReferReward);
 referRewardRouter.delete("/:id", referalReward_controller_1.referRewardController.deleteReferReward);
+=======
+referRewardRouter.post('/create-refer-reward', (0, validateRequest_1.default)(referalReward_validation_1.referalRewardValidation.createReferralRewardZodSchema), referalReward_controller_1.referRewardController.createReferReward);
+referRewardRouter.get('/', referalReward_controller_1.referRewardController.getAllReferDetails);
+referRewardRouter.get('/:id', referalReward_controller_1.referRewardController.getSingleReferReward);
+referRewardRouter.patch('/:id', (0, validateRequest_1.default)(referalReward_validation_1.referalRewardValidation.updateReferralRewardZodSchema), referalReward_controller_1.referRewardController.updateReferReward);
+referRewardRouter.delete('/:id', referalReward_controller_1.referRewardController.deleteReferReward);
+>>>>>>> 893945e (Resolved merge conflicts)
 exports.default = referRewardRouter;

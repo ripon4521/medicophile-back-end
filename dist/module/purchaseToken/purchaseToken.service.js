@@ -20,13 +20,41 @@ const purchaseToken_model_1 = __importDefault(require("./purchaseToken.model"));
 const coupon_model_1 = __importDefault(require("../coupon/coupon.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const course_model_1 = __importDefault(require("../course/course.model"));
+<<<<<<< HEAD
 const referDetails_model_1 = __importDefault(require("../referDetails/referDetails.model"));
 const createPurchaseToken = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const student = yield user_model_1.UserModel.findOne({ _id: payload.studentId });
+=======
+<<<<<<< Updated upstream
+const createPurchaseToken = (payload) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const student = yield user_model_1.UserModel.findOne({
+      _id: payload.studentId,
+    });
+=======
+const referDetails_model_1 = __importDefault(require("../referDetails/referDetails.model"));
+const createPurchaseToken = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const student = yield user_model_1.UserModel.findOne({ _id: payload.studentId });
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
     const course = yield course_model_1.default.findOne({
         _id: payload.courseId,
         isDeleted: false,
     });
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+    const coupon = yield coupon_model_1.default.findOne({
+      coupon: payload.coupon,
+      isDeleted: false,
+    });
+    if (!coupon || coupon.coupon !== payload.coupon) {
+      throw new AppError_1.default(
+        http_status_codes_1.StatusCodes.BAD_REQUEST,
+        "invalid coupon",
+      );
+=======
+>>>>>>> 893945e (Resolved merge conflicts)
     if (payload.coupon) {
         const coupon = yield coupon_model_1.default.findOne({
             coupon: payload.coupon,
@@ -35,6 +63,10 @@ const createPurchaseToken = (payload) => __awaiter(void 0, void 0, void 0, funct
         if (!coupon || coupon.coupon !== payload.coupon) {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid coupon");
         }
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
     }
     if (!student) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid student id");
@@ -45,6 +77,14 @@ const createPurchaseToken = (payload) => __awaiter(void 0, void 0, void 0, funct
     const result = yield purchaseToken_model_1.default.create(payload);
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to create purchase token");
+    }
+    if (payload.ref) {
+        yield referDetails_model_1.default.create({
+            referrerId: payload.ref,
+            referredUserId: payload.studentId,
+            courseId: payload.courseId,
+            purchaseTokenId: result._id,
+        });
     }
     if (payload.ref) {
         yield referDetails_model_1.default.create({

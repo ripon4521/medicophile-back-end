@@ -40,9 +40,13 @@ const createReferralReward = (payload) => __awaiter(void 0, void 0, void 0, func
         return existingReward;
     }
     // No existing reward, create new
+<<<<<<< HEAD
     const newRewardData = Object.assign(Object.assign({}, payload), { paidAt: payload.isPaid
             ? new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
             : undefined });
+=======
+    const newRewardData = Object.assign(Object.assign({}, payload), { paidAt: payload.isPaid ? new Date(new Date().getTime() + 6 * 60 * 60 * 1000) : undefined });
+>>>>>>> 893945e (Resolved merge conflicts)
     const newReward = yield referalReward_model_1.default.create(newRewardData);
     return newReward;
 });
@@ -56,6 +60,7 @@ const getAllReferReward = (query) => __awaiter(void 0, void 0, void 0, function*
         .populate([
         {
             path: "referDetailsId",
+<<<<<<< HEAD
             populate: [
                 { path: "referrerId", select: "name role phone profile_picture" },
                 { path: "courseId", select: "course_title duration price" },
@@ -64,6 +69,10 @@ const getAllReferReward = (query) => __awaiter(void 0, void 0, void 0, function*
                     select: "studentId status ref price totalAmount paymentInfo name phone",
                 },
             ],
+=======
+            populate: [{ path: "referrerId", select: "name role phone profile_picture" }, { path: "courseId", select: "course_title duration price" },
+                { path: "purchaseTokenId", select: "studentId status ref price totalAmount paymentInfo name phone" }],
+>>>>>>> 893945e (Resolved merge conflicts)
         },
     ]);
     const result = yield courseQuery.exec();
@@ -76,6 +85,7 @@ const singleReferReward = (_id) => __awaiter(void 0, void 0, void 0, function* (
     const result = yield referalReward_model_1.default.findOne({ _id }).populate([
         {
             path: "referDetailsId",
+<<<<<<< HEAD
             populate: [
                 { path: "referrerId", select: "name role phone profile_picture" },
                 { path: "courseId", select: "course_title duration price" },
@@ -84,6 +94,10 @@ const singleReferReward = (_id) => __awaiter(void 0, void 0, void 0, function* (
                     select: "studentId status ref price totalAmount paymentInfo name phone",
                 },
             ],
+=======
+            populate: [{ path: "referrerId", select: "name role phone profile_picture" }, { path: "courseId", select: "course_title duration price" },
+                { path: "purchaseTokenId", select: "studentId status ref price totalAmount paymentInfo name phone" }],
+>>>>>>> 893945e (Resolved merge conflicts)
         },
     ]);
     return result;
@@ -121,5 +135,9 @@ exports.referRewardService = {
     createReferralReward,
     getAllReferReward,
     deleteReferReward,
+<<<<<<< HEAD
     updateReferReward,
+=======
+    updateReferReward
+>>>>>>> 893945e (Resolved merge conflicts)
 };

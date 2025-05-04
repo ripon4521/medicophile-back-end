@@ -12,8 +12,18 @@ const mcqQuestionSchema = new mongoose_1.Schema({
         required: true,
     },
     questionImg: {
+<<<<<<< HEAD
         type: String,
         default: "",
+=======
+<<<<<<< Updated upstream
+      type: String,
+      required: false,
+=======
+        type: String,
+        default: ''
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
     },
     options: {
         type: [String],

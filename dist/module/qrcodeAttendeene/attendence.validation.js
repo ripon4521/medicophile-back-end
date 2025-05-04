@@ -8,6 +8,11 @@ const ObjectIdSchema = zod_1.z.string().refine((val) => mongoose_1.Types.ObjectI
 });
 exports.AttendenceSchema = zod_1.z.object({
     body: zod_1.z.object({
+<<<<<<< HEAD
         studentId: ObjectIdSchema,
     }),
+=======
+        studentId: ObjectIdSchema
+    })
+>>>>>>> 893945e (Resolved merge conflicts)
 });

@@ -55,7 +55,11 @@ const referralSchema = new mongoose_1.Schema({
 }, {
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+<<<<<<< HEAD
     },
+=======
+    }
+>>>>>>> 893945e (Resolved merge conflicts)
 });
 const ReferralLinkModel = mongoose_1.default.model("ReferralLink", referralSchema);
 exports.default = ReferralLinkModel;

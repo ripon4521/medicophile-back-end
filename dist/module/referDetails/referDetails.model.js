@@ -56,6 +56,7 @@ const referDetailsSchema = new mongoose_1.Schema({
     },
     referredAt: {
         type: Date,
+<<<<<<< HEAD
         default: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
     isDeleted: {
@@ -69,6 +70,21 @@ const referDetailsSchema = new mongoose_1.Schema({
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
+=======
+        default: new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    deletedAt: {
+        type: Date
+    }
+}, {
+    timestamps: {
+        currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+    }
+>>>>>>> 893945e (Resolved merge conflicts)
 });
 const ReferDetails = mongoose_1.default.model("ReferDetails", referDetailsSchema);
 exports.default = ReferDetails;

@@ -75,5 +75,9 @@ exports.referRewardController = {
     getAllReferDetails,
     getSingleReferReward,
     deleteReferReward,
+<<<<<<< HEAD
     updateReferReward,
+=======
+    updateReferReward
+>>>>>>> 893945e (Resolved merge conflicts)
 };

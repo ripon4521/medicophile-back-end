@@ -56,6 +56,7 @@ const referralRewardSchema = new mongoose_1.Schema({
     },
     isDeleted: {
         type: Boolean,
+<<<<<<< HEAD
         default: false,
     },
     deletedAt: {
@@ -65,6 +66,17 @@ const referralRewardSchema = new mongoose_1.Schema({
     timestamps: {
         currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
+=======
+        default: false
+    },
+    deletedAt: {
+        type: Date
+    }
+}, {
+    timestamps: {
+        currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+    }
+>>>>>>> 893945e (Resolved merge conflicts)
 });
 const ReferralReward = mongoose_1.default.model("ReferralReward", referralRewardSchema);
 exports.default = ReferralReward;

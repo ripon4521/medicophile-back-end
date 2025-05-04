@@ -16,6 +16,10 @@ const liveClassSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    link: {
+        type: String,
+        required: true
+    },
     createdBy: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: [true, "CreatedBy is required"],

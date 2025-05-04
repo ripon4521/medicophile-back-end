@@ -48,6 +48,7 @@ const product_route_1 = __importDefault(require("../module/product/product.route
 const courseDetails_route_1 = __importDefault(require("../module/courseDetails/courseDetails.route"));
 const courseReview_route_1 = __importDefault(require("../module/courseReview/courseReview.route"));
 const order_route_1 = __importDefault(require("../module/order/order.route"));
+<<<<<<< HEAD
 const orderDetails_route_1 = __importDefault(require("../module/orderDetails/orderDetails.route"));
 const whatsapp_route_1 = __importDefault(require("../module/whatsapp/whatsapp.route"));
 const offlineBatch_route_1 = __importDefault(require("../module/offlineBatch/offlineBatch.route"));
@@ -60,6 +61,230 @@ const referalReward_route_1 = __importDefault(require("../module/referalReward/r
 const withdraw_route_1 = __importDefault(require("../module/withdraw/withdraw.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
+=======
+<<<<<<< Updated upstream
+const orderDetails_route_1 = __importDefault(
+  require("../module/orderDetails/orderDetails.route"),
+);
+const whatsapp_route_1 = __importDefault(
+  require("../module/whatsapp/whatsapp.route"),
+);
+const offlineBatch_route_1 = __importDefault(
+  require("../module/offlineBatch/offlineBatch.route"),
+);
+const batchStudent_route_1 = __importDefault(
+  require("../module/batchStudent/batchStudent.route"),
+);
+const qrCodeGenerate_route_1 = __importDefault(
+  require("../module/qecodeGenerate/qrCodeGenerate.route"),
+);
+const router = (0, express_1.Router)();
+const moduleRoutes = [
+  {
+    path: "/auth",
+    route: auth_router_1.default,
+  },
+  {
+    path: "/admin",
+    route: admin_router_1.default,
+  },
+  {
+    path: "/user",
+    route: user_router_1.default,
+  },
+  {
+    path: "/student",
+    route: student_router_1.default,
+  },
+  {
+    path: "/faculty",
+    route: faculty_router_1.default,
+  },
+  {
+    path: "/classschedule",
+    route: classschedule_router_1.default,
+  },
+  {
+    path: "/course",
+    route: course_router_1.default,
+  },
+  {
+    path: "/category",
+    route: category_route_1.default,
+  },
+  {
+    path: "/enrollment",
+    route: newEnrollment_route_1.default,
+  },
+  {
+    path: "/lecture",
+    route: lecture_route_1.default,
+  },
+  {
+    path: "/exam",
+    route: exam_route_1.default,
+  },
+  {
+    path: "/note",
+    route: notes_router_1.default,
+  },
+  {
+    path: "/module",
+    route: modules_router_1.default,
+  },
+  {
+    path: "/courseCategory",
+    route: courseCategory_route_1.default,
+  },
+  {
+    path: "/moduleDetails",
+    route: moduleDetails_route_1.default,
+  },
+  {
+    path: "/user-credentials",
+    route: userCredentials_route_1.default,
+  },
+  {
+    path: "/images",
+    route: imageUpload_route_1.default,
+  },
+  {
+    path: "/pdf",
+    route: pdf_route_1.default,
+  },
+  {
+    path: "/cq-question",
+    route: classQuizeQuestion_route_1.default,
+  },
+  {
+    path: "/cq-attemp",
+    route: cqAttemp_route_1.default,
+  },
+  {
+    path: "/cq-marking",
+    route: cqMarking_route_1.default,
+  },
+  {
+    path: "/docs",
+    route: docs_route_1.default,
+  },
+  {
+    path: "/gap-question",
+    route: gapsQuestion_route_1.default,
+  },
+  {
+    path: "/gap-answer",
+    route: gapAnswer_route_1.default,
+  },
+  {
+    path: "/gap-attemp",
+    route: gapAttemp_route_1.default,
+  },
+  {
+    path: "/live-class",
+    route: liveClass_route_1.default,
+  },
+  {
+    path: "/media",
+    route: media_route_1.default,
+  },
+  {
+    path: "/blog-category",
+    route: blogController_route_1.default,
+  },
+  {
+    path: "/blog",
+    route: blog_route_1.default,
+  },
+  {
+    path: "/team",
+    route: team_route_1.default,
+  },
+  {
+    path: "/blog-comment",
+    route: blogComment_route_1.default,
+  },
+  {
+    path: "/coupon",
+    route: coupon_route_1.default,
+  },
+  {
+    path: "/purchase-token",
+    route: purchaseToken_route_1.default,
+  },
+  {
+    path: "/purchase",
+    route: purchase_route_1.default,
+  },
+  {
+    path: "/payment-details",
+    route: paymentDetails_route_1.default,
+  },
+  {
+    path: "/mcq",
+    route: mcq_route_1.default,
+  },
+  {
+    path: "/mcq-attemp",
+    route: mcqAttemp_route_1.default,
+  },
+  {
+    path: "/product-category",
+    route: bookCategory_route_1.default,
+  },
+  {
+    path: "/notice",
+    route: notice_route_1.default,
+  },
+  {
+    path: "/product",
+    route: product_route_1.default,
+  },
+  {
+    path: "/course-details",
+    route: courseDetails_route_1.default,
+  },
+  {
+    path: "/course-reveiw",
+    route: courseReview_route_1.default,
+  },
+  {
+    path: "/order",
+    route: order_route_1.default,
+  },
+  {
+    path: "/order-details",
+    route: orderDetails_route_1.default,
+  },
+  {
+    path: "/whatsapp",
+    route: whatsapp_route_1.default,
+  },
+  {
+    path: "/offline-batch",
+    route: offlineBatch_route_1.default,
+  },
+  {
+    path: "/batch-student",
+    route: batchStudent_route_1.default,
+  },
+  {
+    path: "/qr-code",
+    route: qrCodeGenerate_route_1.default,
+  },
+=======
+const orderDetails_route_1 = __importDefault(require("../module/orderDetails/orderDetails.route"));
+const whatsapp_route_1 = __importDefault(require("../module/whatsapp/whatsapp.route"));
+const offlineBatch_route_1 = __importDefault(require("../module/offlineBatch/offlineBatch.route"));
+const batchStudent_route_1 = __importDefault(require("../module/batchStudent/batchStudent.route"));
+const qrCodeGenerate_route_1 = __importDefault(require("../module/qecodeGenerate/qrCodeGenerate.route"));
+const attendence_route_1 = __importDefault(require("../module/qrcodeAttendeene/attendence.route"));
+const generateReferLink_route_1 = __importDefault(require("../module/generateReferLink/generateReferLink.route"));
+const referDetails_route_1 = __importDefault(require("../module/referDetails/referDetails.route"));
+const referalReward_route_1 = __importDefault(require("../module/referalReward/referalReward.route"));
+const router = (0, express_1.Router)();
+const moduleRoutes = [
+>>>>>>> 893945e (Resolved merge conflicts)
     {
         path: "/auth",
         route: auth_router_1.default,
@@ -215,6 +440,7 @@ const moduleRoutes = [
     {
         path: "/notice",
         route: notice_route_1.default,
+<<<<<<< HEAD
     },
     {
         path: "/product",
@@ -272,6 +498,50 @@ const moduleRoutes = [
         path: "/withdraw",
         route: withdraw_route_1.default,
     },
+=======
+    }, {
+        path: "/product",
+        route: product_route_1.default
+    }, {
+        path: '/course-details',
+        route: courseDetails_route_1.default
+    },
+    {
+        path: '/course-reveiw',
+        route: courseReview_route_1.default
+    }, {
+        path: "/order",
+        route: order_route_1.default
+    }, {
+        path: "/order-details",
+        route: orderDetails_route_1.default
+    }, {
+        path: "/whatsapp",
+        route: whatsapp_route_1.default
+    }, {
+        path: "/offline-batch",
+        route: offlineBatch_route_1.default
+    }, {
+        path: '/batch-student',
+        route: batchStudent_route_1.default
+    }, {
+        path: "/qr-code",
+        route: qrCodeGenerate_route_1.default
+    }, {
+        path: "/attendance",
+        route: attendence_route_1.default
+    }, {
+        path: '/refer-link',
+        route: generateReferLink_route_1.default
+    }, {
+        path: "/refer-details",
+        route: referDetails_route_1.default
+    }, {
+        path: '/refer-reward',
+        route: referalReward_route_1.default
+    }
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
 ];
 moduleRoutes.forEach((route) => {
     router.use(route.path, route.route);

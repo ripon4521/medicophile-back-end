@@ -57,5 +57,9 @@ exports.attendenceController = {
     createAttendence,
     getAllAttendance,
     deleteAttendance,
+<<<<<<< HEAD
     singleAttendance,
+=======
+    singleAttendance
+>>>>>>> 893945e (Resolved merge conflicts)
 };

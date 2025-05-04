@@ -47,6 +47,7 @@ const deleteQrcode = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         message: "Qr Code deleted successfully",
         data: result,
     });
+<<<<<<< HEAD
 }));
 const getSingleQrcode = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
@@ -62,4 +63,30 @@ exports.qrCodeController = {
     getAllQrcode,
     deleteQrcode,
     getSingleQrcode,
+=======
+<<<<<<< Updated upstream
+  }),
+);
+exports.qrCodeController = {
+  generateQrCode,
+  getAllQrcode,
+  deleteQrcode,
+=======
+}));
+const getSingleQrcode = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield qrCodeGenerate_service_1.qrCodeService.getSingleQrCode(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Qr Code get successfully",
+        data: result,
+    });
+}));
+exports.qrCodeController = {
+    generateQrCode,
+    getAllQrcode,
+    deleteQrcode,
+    getSingleQrcode
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
 };

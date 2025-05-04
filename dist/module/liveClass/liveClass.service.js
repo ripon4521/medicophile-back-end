@@ -23,6 +23,36 @@ const createLiveClass = (payload) => __awaiter(void 0, void 0, void 0, function*
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Faled to create Live Class, PLease try again");
     }
     return create;
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+  });
+// const getAllLiveClass = async () => {
+//   const get = await LiveClassModel.find({ isDeleted: false })
+//     .populate("courseId")
+//     .populate("createdBy");
+//   if (!get) {
+//     throw new AppError(
+//       StatusCodes.BAD_REQUEST,
+//       "Faled to get Live Class, PLease try again",
+//     );
+//   }
+//   return get;
+// };
+const getAllLiveClass = (query) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(
+      liveClass_model_1.default,
+      query,
+    )
+      .search(["title"])
+      .filter()
+      .sort()
+      .paginate()
+      .fields()
+      .populate({
+=======
+>>>>>>> 893945e (Resolved merge conflicts)
 });
 const getAllLiveClass = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const courseQuery = new querybuilder_1.default(liveClass_model_1.default, query)
@@ -32,6 +62,10 @@ const getAllLiveClass = (query) => __awaiter(void 0, void 0, void 0, function* (
         .paginate()
         .fields()
         .populate({
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> 893945e (Resolved merge conflicts)
         path: "courseId",
     })
         .populate([
