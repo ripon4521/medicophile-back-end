@@ -8,13 +8,11 @@ export interface IAttemp {
 export interface IMcqAttemp {
   answer: IAttemp[];
   studentId: Types.ObjectId;
-  examId?:Types.ObjectId;
+  examId?: Types.ObjectId;
   totalScore?: number;
   totalAttemp?: number;
   correctCount?: number;
   wrongCount?: number;
-  isDeleted?:boolean;
-  deletedAt?:Date
-
-
+  isDeleted?: boolean;
+  deletedAt?: Date;
 }

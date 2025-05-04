@@ -67,7 +67,7 @@ const getSpecificUserGapsAttempMark = async (
 
   return {
     totalScore,
-    result
+    result,
   };
 };
 

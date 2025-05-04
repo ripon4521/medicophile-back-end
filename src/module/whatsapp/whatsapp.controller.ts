@@ -1,6 +1,5 @@
-import { Request, Response } from 'express';
-import { sendMessage } from './whatsapp.service';
-
+import { Request, Response } from "express";
+import { sendMessage } from "./whatsapp.service";
 
 /**
  * Controller function to handle sending WhatsApp messages
@@ -8,12 +7,20 @@ import { sendMessage } from './whatsapp.service';
  * @param {Response} res
  * @returns {Promise<void>} - We do not return a Response directly here.
  */
-export const sendMessageController = async (req: Request, res: Response): Promise<void> => {
+export const sendMessageController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const { phoneNumber, message } = req.body;
 
   try {
     if (!phoneNumber || !message) {
-      res.status(400).json({ success: false, error: 'Phone number and message are required.' });
+      res
+        .status(400)
+        .json({
+          success: false,
+          error: "Phone number and message are required.",
+        });
       return;
     }
 
@@ -23,14 +30,14 @@ export const sendMessageController = async (req: Request, res: Response): Promis
     // Send success response
     res.status(200).json({
       success: true,
-      message: 'Message sent successfully',
+      message: "Message sent successfully",
       data: result,
     });
   } catch (error) {
-    console.error('❌ Error in sendMessageController:', error);
+    console.error("❌ Error in sendMessageController:", error);
     res.status(500).json({
       success: false,
-      error: error || 'Something went wrong while sending message.',
+      error: error || "Something went wrong while sending message.",
     });
   }
 };

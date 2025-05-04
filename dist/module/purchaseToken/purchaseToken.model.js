@@ -1,39 +1,53 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const crypto_1 = __importDefault(require("crypto")); // for secure random token generation
-const paymentInfoSchema = new mongoose_1.Schema({
+const paymentInfoSchema = new mongoose_1.Schema(
+  {
     transactionId: { type: String, required: true },
     method: {
-        type: String,
-        enum: ["Bkash", "Nagad", "Bank", "Cash"],
-        required: true,
+      type: String,
+      enum: ["Bkash", "Nagad", "Bank", "Cash"],
+      required: true,
     },
     accountNumber: { type: String, required: true },
     paymentMedium: {
-        type: String,
-        enum: ["personal", "agent", "merchant"],
+      type: String,
+      enum: ["personal", "agent", "merchant"],
     },
     paymentDate: { type: Date },
     proofUrl: { type: String },
-}, { _id: false });
-const purchaseTokenSchema = new mongoose_1.Schema({
-    studentId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "User" },
-    courseId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "Course" },
+  },
+  { _id: false },
+);
+const purchaseTokenSchema = new mongoose_1.Schema(
+  {
+    studentId: {
+      type: mongoose_1.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    courseId: {
+      type: mongoose_1.Schema.Types.ObjectId,
+      required: true,
+      ref: "Course",
+    },
     status: {
-        type: String,
-        enum: [
-            "Verified",
-            "Unverified",
-            "Rejected",
-            "Pending",
-            "Refunded",
-            "Partial",
-        ],
-        default: "Unverified",
+      type: String,
+      enum: [
+        "Verified",
+        "Unverified",
+        "Rejected",
+        "Pending",
+        "Refunded",
+        "Partial",
+      ],
+      default: "Unverified",
     },
     purchaseToken: { type: String },
     coupon: { type: String },
@@ -47,11 +61,13 @@ const purchaseTokenSchema = new mongoose_1.Schema({
     phone: { type: String, required: true },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },
-}, {
+  },
+  {
     timestamps: {
-        currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+      currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
-});
+  },
+);
 // purchaseTokenSchema.pre("save", async function (next) {
 //     const doc = this as any;
 //     // Generate purchase token if not set
@@ -94,17 +110,23 @@ const purchaseTokenSchema = new mongoose_1.Schema({
 //   });
 // ✅ Pre-save hook to generate token & set payment date
 purchaseTokenSchema.pre("save", function (next) {
-    const doc = this;
-    // Generate secure token if not already set
-    if (!doc.purchaseToken) {
-        const unique = crypto_1.default.randomBytes(8).toString("hex").toUpperCase();
-        doc.purchaseToken = `PT-${unique}`;
-    }
-    // Set today's date in paymentInfo if not already set
-    if (!doc.paymentInfo.paymentDate) {
-        doc.paymentInfo.paymentDate = new Date();
-    }
-    next();
+  const doc = this;
+  // Generate secure token if not already set
+  if (!doc.purchaseToken) {
+    const unique = crypto_1.default
+      .randomBytes(8)
+      .toString("hex")
+      .toUpperCase();
+    doc.purchaseToken = `PT-${unique}`;
+  }
+  // Set today's date in paymentInfo if not already set
+  if (!doc.paymentInfo.paymentDate) {
+    doc.paymentInfo.paymentDate = new Date();
+  }
+  next();
 });
-const PurchaseTokenModel = (0, mongoose_1.model)("PurchaseToken", purchaseTokenSchema);
+const PurchaseTokenModel = (0, mongoose_1.model)(
+  "PurchaseToken",
+  purchaseTokenSchema,
+);
 exports.default = PurchaseTokenModel;

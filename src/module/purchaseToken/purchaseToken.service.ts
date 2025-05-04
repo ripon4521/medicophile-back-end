@@ -23,7 +23,7 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
       throw new AppError(StatusCodes.BAD_REQUEST, "invalid coupon");
     }
   }
-  
+
   if (!student) {
     throw new AppError(StatusCodes.BAD_REQUEST, "invalid student id");
   } else if (!course) {
@@ -43,12 +43,9 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
       referrerId: payload.ref,
       referredUserId: payload.studentId,
       courseId: payload.courseId,
-      purchaseTokenId: result._id, 
+      purchaseTokenId: result._id,
     });
   }
-
-
-
 
   return result;
 };

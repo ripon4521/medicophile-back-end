@@ -66,13 +66,11 @@ const getSingleQuestion = catchAsync(async (req, res) => {
   });
 });
 
-
-
 export const cqQuestionController = {
   createCqQuestion,
   updateCqQuestion,
   deleteCqQuestion,
   getAllCqQuestion,
   getSpeecificCaq,
-  getSingleQuestion
+  getSingleQuestion,
 };

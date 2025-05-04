@@ -4,7 +4,6 @@ import sendResponse from "../../utils/sendResponse";
 import { batchStudentService } from "./batchStudent.service";
 import AppError from "../../helpers/AppError";
 
-
 const createBatchStudent = catchAsync(async (req, res) => {
   const result = await batchStudentService.createBatchStudent(req.body);
   sendResponse(res, {
@@ -14,17 +13,15 @@ const createBatchStudent = catchAsync(async (req, res) => {
   });
 });
 
-
 const getAllBatchStudent = catchAsync(async (req, res) => {
-    const query = req.query;
-    const result = await batchStudentService.getAllBatchStudents(query);
-    sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      message: "Batch Student  fathced successfully",
-      data: result,
-    });
+  const query = req.query;
+  const result = await batchStudentService.getAllBatchStudents(query);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Batch Student  fathced successfully",
+    data: result,
   });
-
+});
 
 const getSingleBatchStduent = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -39,39 +36,37 @@ const getSingleBatchStduent = catchAsync(async (req, res) => {
   });
 });
 
-
 const updateBacthStudent = catchAsync(async (req, res) => {
-    const { id } = req.params;
-    if (!id) {
-      throw new AppError(StatusCodes.NOT_FOUND, "Please provide a valid id");
-    }
-    const payload = req.body;
-    const result = await batchStudentService.updateBatchStudent(id, payload);
-    sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      message: "Batch Studnet  updated successfully",
-      data: result,
-    });
+  const { id } = req.params;
+  if (!id) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Please provide a valid id");
+  }
+  const payload = req.body;
+  const result = await batchStudentService.updateBatchStudent(id, payload);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Batch Studnet  updated successfully",
+    data: result,
   });
-  
+});
 
-  const deleteBatchStudent = catchAsync(async (req, res) => {
-    const { id } = req.params;
-    if (!id) {
-      throw new AppError(StatusCodes.NOT_FOUND, "Please provide a valid id");
-    }
-    const result = await batchStudentService.deleteBatchStduent(id);
-    sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      message: "Batch Student  Deleted successfully",
-      data: result,
-    });
+const deleteBatchStudent = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Please provide a valid id");
+  }
+  const result = await batchStudentService.deleteBatchStduent(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Batch Student  Deleted successfully",
+    data: result,
   });
+});
 
-export const batchStuentController = { 
-    createBatchStudent,
-    deleteBatchStudent,
-    updateBacthStudent,
-    getAllBatchStudent,
-    getSingleBatchStduent
-}
+export const batchStuentController = {
+  createBatchStudent,
+  deleteBatchStudent,
+  updateBacthStudent,
+  getAllBatchStudent,
+  getSingleBatchStduent,
+};

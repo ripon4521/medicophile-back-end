@@ -10,10 +10,7 @@ const createBlog = async (payload: IBlog) => {
   const category = await BlogCategory.findOne({ _id: payload.categoryId });
   const user = await UserModel.findOne({ _id: payload.createdBy });
   if (!user || user.role === "student") {
-    throw new AppError(
-      StatusCodes.NOT_FOUND,
-      "invalid user id. ",
-    );
+    throw new AppError(StatusCodes.NOT_FOUND, "invalid user id. ");
   } else if (!category) {
     throw new AppError(
       StatusCodes.NOT_FOUND,

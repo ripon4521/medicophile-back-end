@@ -59,7 +59,7 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
   // Save result with examId
   const result = await McqAttemptModel.create({
     studentId: new Types.ObjectId(studentId),
-    examId, 
+    examId,
     answer,
     score,
     total,
@@ -91,19 +91,23 @@ const getAllMcq = async (query: Record<string, unknown>) => {
     })
     .populate({
       path: "examId",
-      select:"examTitle examType totalQuestion positiveMark negativeMark mcqDuration  status"
+      select:
+        "examTitle examType totalQuestion positiveMark negativeMark mcqDuration  status",
     })
-    .populate({path:"answer.questionId", select:"question options correctAnswer subject questionType positiveMark negetiveMark"})
-  
+    .populate({
+      path: "answer.questionId",
+      select:
+        "question options correctAnswer subject questionType positiveMark negetiveMark",
+    });
 
-  const result = await courseQuery.exec(); 
+  const result = await courseQuery.exec();
   return result;
 };
 
 const getSpcificMcqAttemp = async (id: string) => {
-  const result = await McqAttemptModel.find({ studentId: id }).populate({path:"studentId", select:"name role phone"}
-    ,
-  ).populate("answer.questionId");
+  const result = await McqAttemptModel.find({ studentId: id })
+    .populate({ path: "studentId", select: "name role phone" })
+    .populate("answer.questionId");
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,

@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { Types } from "mongoose";
 
-
 const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
-    message: "Invalid ObjectId format",
-  });
+  message: "Invalid ObjectId format",
+});
 
 // Payment Info Schema (Assuming basic structure – customize if needed)
 export const paymentInfoSchema = z.object({
@@ -18,7 +17,7 @@ export const paymentInfoSchema = z.object({
   proofUrl: z.string().url("Invalid proof URL").optional(),
 });
 
- const createOrderZodSchema = z.object({
+const createOrderZodSchema = z.object({
   body: z.object({
     name: z.string().min(1, "Name is required"),
     phone: z.string(),
@@ -36,17 +35,15 @@ export const paymentInfoSchema = z.object({
   }),
 });
 
-
 const updateOrderZodSchema = z.object({
-    body: z.object({
-      name: z.string().min(1, "Name is required").optional(),
-      phone: z.number().min(1000000000, "Invalid phone number").optional(),
-      address: z.string().min(1, "Address is required").optional(),
-    }),
-  });
+  body: z.object({
+    name: z.string().min(1, "Name is required").optional(),
+    phone: z.number().min(1000000000, "Invalid phone number").optional(),
+    address: z.string().min(1, "Address is required").optional(),
+  }),
+});
 
-
-  export const orderValidation = {
-    createOrderZodSchema,
-    updateOrderZodSchema
-  }
+export const orderValidation = {
+  createOrderZodSchema,
+  updateOrderZodSchema,
+};

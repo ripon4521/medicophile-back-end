@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IReferralWithdrawal } from "./withdraw.interface";
 
-
 const referralWithdrawalSchema = new Schema<IReferralWithdrawal>(
   {
     referrerId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
@@ -15,9 +14,12 @@ const referralWithdrawalSchema = new Schema<IReferralWithdrawal>(
     paymentMedium: {
       type: String,
       enum: ["personal", "agent", "merchant"],
-      required:true
+      required: true,
     },
-    requestDate: { type: Date, default:new Date(new Date().getTime() + 6 * 60 * 60 * 1000)},
+    requestDate: {
+      type: Date,
+      default: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+    },
     approved: { type: Boolean, default: false },
     approvedAt: { type: Date },
     note: { type: String },
@@ -33,7 +35,7 @@ const referralWithdrawalSchema = new Schema<IReferralWithdrawal>(
 
 const ReferralWithdrawal = model<IReferralWithdrawal>(
   "ReferralWithdrawal",
-  referralWithdrawalSchema
+  referralWithdrawalSchema,
 );
 
 export default ReferralWithdrawal;

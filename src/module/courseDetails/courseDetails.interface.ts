@@ -6,11 +6,11 @@ export interface IFAQ {
 }
 
 export interface ICourseDetails {
-  courseId:Types.ObjectId;
+  courseId: Types.ObjectId;
   isCourseExist: string[];
   syllabus: IFAQ[];
   courseDetails: IFAQ[];
-  instructors: Types.ObjectId[]; 
-  isDeleted:boolean;
-  deletedAt:Date;
+  instructors: Types.ObjectId[];
+  isDeleted: boolean;
+  deletedAt: Date;
 }

@@ -16,7 +16,7 @@ const courseSchema = new Schema<ICourse>(
       ref: "CourseCategory",
       required: true,
     },
-   
+
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     expireTime: { type: String, required: true },
     daySchedule: { type: [String] },

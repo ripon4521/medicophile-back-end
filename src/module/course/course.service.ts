@@ -97,7 +97,6 @@ const getCourseById = async (slug: string, userId?: string) => {
   return courseObject;
 };
 
-
 const updateCourseInDb = async (slug: string, payload: Partial<ICourse>) => {
   const update = await courseModel.findOneAndUpdate({ slug }, payload, {
     new: true,
@@ -118,7 +117,7 @@ const deleteCourseFromDb = async (slug: string) => {
     { slug },
     {
       isDeleted: true,
-      deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), 
+      deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
     { new: true },
   );
@@ -129,16 +128,15 @@ const deleteCourseFromDb = async (slug: string) => {
   return result;
 };
 
-
-const getUserPurchasedCourses = async (userId:string) => {
+const getUserPurchasedCourses = async (userId: string) => {
   const purchases = await PurchaseModel.find({
     userId,
-    paymentStatus: 'Paid',
-    status: 'Active'
-  }).populate('courseId'); 
+    paymentStatus: "Paid",
+    status: "Active",
+  }).populate("courseId");
 
   // শুধু কোর্স ডেটা রিটার্ন করবো
-  return purchases.map(purchase => purchase.courseId);
+  return purchases.map((purchase) => purchase.courseId);
 };
 export const courseService = {
   createCourseIntoDb,
@@ -146,5 +144,5 @@ export const courseService = {
   getCourseById,
   updateCourseInDb,
   deleteCourseFromDb,
-  getUserPurchasedCourses
+  getUserPurchasedCourses,
 };

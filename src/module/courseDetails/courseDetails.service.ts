@@ -5,28 +5,24 @@ import { ICourseDetails } from "./courseDetails.interface";
 import CourseDetailsModel from "./courseDetails.model";
 import QueryBuilder from "../../builder/querybuilder";
 
-
 const createCourseDetails = async (payload: ICourseDetails) => {
-  const course = await courseModel.findOne({ _id: payload.courseId, isDeleted:false });
-  const exist = await CourseDetailsModel.findOne({courseId:payload.courseId})
+  const course = await courseModel.findOne({
+    _id: payload.courseId,
+    isDeleted: false,
+  });
+  const exist = await CourseDetailsModel.findOne({
+    courseId: payload.courseId,
+  });
   if (!course) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Not Found Course",
-    );
+    throw new AppError(StatusCodes.BAD_REQUEST, "Not Found Course");
   }
   if (exist) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Already exists in database",
-    );
+    throw new AppError(StatusCodes.BAD_REQUEST, "Already exists in database");
   }
 
   const result = await CourseDetailsModel.create(payload);
   return result;
 };
-
-
 
 const getAllCourseDetails = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(CourseDetailsModel, query)
@@ -39,17 +35,17 @@ const getAllCourseDetails = async (query: Record<string, unknown>) => {
       {
         path: "courseId",
       },
-    ]).populate([
-        {
-          path: "instructors",
-          select:"name role phone profile_picture"
-        },
-      ]);
+    ])
+    .populate([
+      {
+        path: "instructors",
+        select: "name role phone profile_picture",
+      },
+    ]);
 
   const result = await courseQuery.exec();
   return result;
 };
-
 
 const updateCourseDetails = async (
   _id: string,
@@ -71,24 +67,22 @@ const updateCourseDetails = async (
   return update;
 };
 
-
-const getSingleCourseDetails = async ( courseId: string ) => {
-    const result = await CourseDetailsModel.findOne({courseId}).populate("courseId").populate("instructors")
+const getSingleCourseDetails = async (courseId: string) => {
+  const result = await CourseDetailsModel.findOne({ courseId })
+    .populate("courseId")
+    .populate("instructors");
   return result;
+};
 
-  };
-
-
-  const deleteCourseDetails = async ( _id: string ) => {
-    const result = await CourseDetailsModel.findOneAndDelete({_id});
+const deleteCourseDetails = async (_id: string) => {
+  const result = await CourseDetailsModel.findOneAndDelete({ _id });
   return result;
+};
 
-  };
-
-  export const courseDetailsService = {
-    createCourseDetails,
-    updateCourseDetails,
-    deleteCourseDetails,
-    getAllCourseDetails,
-    getSingleCourseDetails
-  }
+export const courseDetailsService = {
+  createCourseDetails,
+  updateCourseDetails,
+  deleteCourseDetails,
+  getAllCourseDetails,
+  getSingleCourseDetails,
+};

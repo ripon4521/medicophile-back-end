@@ -39,7 +39,6 @@ const getSingleCourse = catchAsync(async (req, res) => {
   });
 });
 
-
 const updateCourse = catchAsync(async (req, res) => {
   const result = await courseService.updateCourseInDb(
     req.params.slug,
@@ -81,14 +80,11 @@ const getMyCourse = catchAsync(async (req, res) => {
   });
 });
 
-
-
-
 export const courseController = {
   createCourse,
   getAllCourses,
   getSingleCourse,
   updateCourse,
   deleteCourse,
-  getMyCourse
+  getMyCourse,
 };

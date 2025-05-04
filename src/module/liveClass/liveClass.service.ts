@@ -38,7 +38,6 @@ const getAllLiveClass = async (query: Record<string, unknown>) => {
   return result;
 };
 
-
 const updateLiveClass = async (slug: string, payload: ILiveClass) => {
   const get = await LiveClassModel.findOneAndUpdate({ slug }, payload, {
     runValidators: true,

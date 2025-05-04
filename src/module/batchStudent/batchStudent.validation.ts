@@ -6,22 +6,22 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 });
 
 const createBatchStudentSchema = z.object({
-  body:z.object({
-  batchId: ObjectIdSchema,
-  courseId: ObjectIdSchema,
-  studentId: ObjectIdSchema
-})
+  body: z.object({
+    batchId: ObjectIdSchema,
+    courseId: ObjectIdSchema,
+    studentId: ObjectIdSchema,
+  }),
 });
 
 const updateBatchStudentSchema = z.object({
-  body:z.object({
-  batchId: ObjectIdSchema.optional(),
-  courseId: ObjectIdSchema.optional(),
-  studentId: ObjectIdSchema.optional()
-})
+  body: z.object({
+    batchId: ObjectIdSchema.optional(),
+    courseId: ObjectIdSchema.optional(),
+    studentId: ObjectIdSchema.optional(),
+  }),
 });
 
 export const batchStudentValidation = {
-    createBatchStudentSchema,
-    updateBatchStudentSchema
-}
+  createBatchStudentSchema,
+  updateBatchStudentSchema,
+};

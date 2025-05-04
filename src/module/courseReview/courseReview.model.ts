@@ -1,7 +1,5 @@
-
 import { Schema, model, Types } from "mongoose";
 import { ICourseReview } from "./courseReview.interface";
-
 
 const courseReviewSchema = new Schema<ICourseReview>(
   {
@@ -19,5 +17,8 @@ const courseReviewSchema = new Schema<ICourseReview>(
   },
 );
 
- const CourseReviewModel = model<ICourseReview>("CourseReview", courseReviewSchema);
+const CourseReviewModel = model<ICourseReview>(
+  "CourseReview",
+  courseReviewSchema,
+);
 export default CourseReviewModel;

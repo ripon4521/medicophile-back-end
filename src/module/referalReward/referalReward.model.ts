@@ -1,8 +1,8 @@
-
 import mongoose, { Schema } from "mongoose";
 import { IReferralReward } from "./referalReward.interface";
 
-const referralRewardSchema = new Schema<IReferralReward>({
+const referralRewardSchema = new Schema<IReferralReward>(
+  {
     referDetailsId: {
       type: Schema.Types.ObjectId,
       ref: "ReferDetails",
@@ -22,19 +22,24 @@ const referralRewardSchema = new Schema<IReferralReward>({
     note: {
       type: String,
     },
-    isDeleted:{
-        type:Boolean,
-        default:false
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
-    deletedAt:{
-        type:Date
-    }
-  }, {
+    deletedAt: {
+      type: Date,
+    },
+  },
+  {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }
-  });
-  
-  const ReferralReward = mongoose.model<IReferralReward>("ReferralReward", referralRewardSchema);
-  
-  export default ReferralReward;
+    },
+  },
+);
+
+const ReferralReward = mongoose.model<IReferralReward>(
+  "ReferralReward",
+  referralRewardSchema,
+);
+
+export default ReferralReward;

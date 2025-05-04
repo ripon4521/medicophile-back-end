@@ -20,7 +20,7 @@ const authUser = (...requiredRoles: TUserRole[]) => {
 
       // If there's no authorization header, proceed with no user (user is not logged in)
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        req.user = null;  // Set user to null if there's no token
+        req.user = null; // Set user to null if there's no token
         return next();
       }
 
@@ -61,7 +61,6 @@ const authUser = (...requiredRoles: TUserRole[]) => {
     }
   };
 };
-
 
 const onlyAdmin = (...requiredRoles: TUserRole[]) => {
   return catchAsync(

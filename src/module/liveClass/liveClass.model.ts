@@ -14,9 +14,9 @@ const liveClassSchema = new Schema<ILiveClass>(
       required: [true, "Course ID is required"],
       ref: "Course",
     },
-    link:{
-      type:String,
-      required:true
+    link: {
+      type: String,
+      required: true,
     },
     createdBy: {
       type: Schema.Types.ObjectId,

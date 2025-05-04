@@ -213,50 +213,63 @@ const moduleRoutes = [
   {
     path: "/notice",
     route: noticeRoute,
-  },{
-    path:"/product",
-    route:productRouter
-  },{
-    path:'/course-details',
-    route:courseDetailsRouter
   },
   {
-    path:'/course-reveiw',
-    route:courseReveiewRouter
-  },{
-    path:"/order",
-    route:orderRouter
-  },{
-    path:"/order-details",
-    route:orderDetailsRouter
-  },{
-    path:"/whatsapp",
-    route:whatsAppRouter
-  },{
-    path:"/offline-batch",
-    route:offlineBatchRouter
-  },{
-    path:'/batch-student',
-    route:batchStudentRoute
-  },{
-    path:"/qr-code",
-    route:qrCodeGenerateRoute
-  },{
-    path:"/attendance",
-    route:attendanceRoute
-  },{
-    path:'/refer-link',
-    route:referalLinkRouter
-  },{
-    path:"/refer-details",
-    route:referDetailsRoute
-  }, {
-    path:'/refer-reward',
-    route:referRewardRouter
-  },{
-    path:'/withdraw',
-    route:referWithdrawRouter
-  }
+    path: "/product",
+    route: productRouter,
+  },
+  {
+    path: "/course-details",
+    route: courseDetailsRouter,
+  },
+  {
+    path: "/course-reveiw",
+    route: courseReveiewRouter,
+  },
+  {
+    path: "/order",
+    route: orderRouter,
+  },
+  {
+    path: "/order-details",
+    route: orderDetailsRouter,
+  },
+  {
+    path: "/whatsapp",
+    route: whatsAppRouter,
+  },
+  {
+    path: "/offline-batch",
+    route: offlineBatchRouter,
+  },
+  {
+    path: "/batch-student",
+    route: batchStudentRoute,
+  },
+  {
+    path: "/qr-code",
+    route: qrCodeGenerateRoute,
+  },
+  {
+    path: "/attendance",
+    route: attendanceRoute,
+  },
+  {
+    path: "/refer-link",
+    route: referalLinkRouter,
+  },
+  {
+    path: "/refer-details",
+    route: referDetailsRoute,
+  },
+  {
+    path: "/refer-reward",
+    route: referRewardRouter,
+  },
+  {
+    path: "/withdraw",
+    route: referWithdrawRouter,
+  },
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);

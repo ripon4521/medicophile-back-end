@@ -227,14 +227,14 @@ const changePassword = async (
 
 const getUSers = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(UserModel, query)
-        .search(["name", "role"])
-        .filter()
-        .sort()
-        .paginate()
-        .fields()
-    
-      const result = await courseQuery.exec(); 
-      return result;
+    .search(["name", "role"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await courseQuery.exec();
+  return result;
 };
 
 const deleteUser = async () => {

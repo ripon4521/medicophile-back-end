@@ -1,32 +1,31 @@
 import { Schema, model, Types } from "mongoose";
 import { IAttendence } from "./attendence.interface";
 
-
 const attendanceSchema = new Schema<IAttendence>(
   {
     studentId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "User" 
+      ref: "User",
     },
     insertTime: {
       type: Date,
-      default:new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
+      default: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
     batchStudent: {
       type: Schema.Types.ObjectId,
-      ref: "BatchStudent", 
+      ref: "BatchStudent",
     },
     isDeleted: {
       type: Boolean,
-      default:false
+      default: false,
     },
   },
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }
-  }
+    },
+  },
 );
 
 const Attendence = model("Attendence", attendanceSchema);

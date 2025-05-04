@@ -11,7 +11,7 @@ courseRouter.post(
   courseController.createCourse,
 );
 courseRouter.get("/", courseController.getAllCourses);
-courseRouter.get('/my-course', courseController.getMyCourse)
+courseRouter.get("/my-course", courseController.getMyCourse);
 courseRouter.get("/:slug", auth.authUser(), courseController.getSingleCourse);
 courseRouter.patch(
   "/:slug",

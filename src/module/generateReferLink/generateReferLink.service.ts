@@ -1,9 +1,12 @@
-import ReferralLinkModel from './generateReferLink.model'; // মডেল ইম্পোর্ট
-import { IReferral } from './generateReferLink.interface';
-import mongoose from 'mongoose';
+import ReferralLinkModel from "./generateReferLink.model"; // মডেল ইম্পোর্ট
+import { IReferral } from "./generateReferLink.interface";
+import mongoose from "mongoose";
 
-
- const generateReferralLink = async (userId: string, courseSlug: string, courseId: string): Promise<string> => {
+const generateReferralLink = async (
+  userId: string,
+  courseSlug: string,
+  courseId: string,
+): Promise<string> => {
   try {
     // Create or get existing referral for user and course
     let referral = await ReferralLinkModel.findOne({ userId, courseId });
@@ -12,7 +15,7 @@ import mongoose from 'mongoose';
       // Referral doesn't exist, create a new one
       referral = new ReferralLinkModel({
         userId,
-        courseId
+        courseId,
       });
 
       // Save new referral
@@ -26,14 +29,12 @@ import mongoose from 'mongoose';
   }
 };
 
-const getReferLink = async() => {
-    const result = await ReferralLinkModel.find();
-    return result;
-}
+const getReferLink = async () => {
+  const result = await ReferralLinkModel.find();
+  return result;
+};
 
 export const referalLinkService = {
-    generateReferralLink,
-    getReferLink
-}
-
-
+  generateReferralLink,
+  getReferLink,
+};

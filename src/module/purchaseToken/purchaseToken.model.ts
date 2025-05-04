@@ -39,7 +39,7 @@ const purchaseTokenSchema = new Schema<IPurchaseToken>(
     },
     purchaseToken: { type: String },
     coupon: { type: String },
-    ref:{type: Schema.Types.ObjectId, ref:"User" },
+    ref: { type: Schema.Types.ObjectId, ref: "User" },
     price: { type: Number },
     subtotal: { type: Number, required: true },
     discount: { type: Number, required: true },

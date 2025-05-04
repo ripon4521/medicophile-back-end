@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IOrder } from "./order.interface";
 
-
 const orderSchema = new Schema<IOrder>(
   {
     name: { type: String, required: true },
@@ -31,15 +30,15 @@ const orderSchema = new Schema<IOrder>(
     },
     subTotal: { type: Number, required: true },
     discount: { type: Number },
-    coupoun: { type: Schema.Types.ObjectId, ref: "Coupon"},
-    productId: { type: Schema.Types.ObjectId, ref: "Product"},
+    coupoun: { type: Schema.Types.ObjectId, ref: "Coupon" },
+    productId: { type: Schema.Types.ObjectId, ref: "Product" },
     charge: { type: Number },
     shiping: { type: Number, required: true },
     quantity: { type: Number, required: true },
     totalAmount: { type: Number, required: true },
     paidAmount: { type: Number, required: true },
     isDeleted: { type: Boolean, default: false },
-    deletedAt: { type: Date},
+    deletedAt: { type: Date },
   },
   {
     timestamps: {
@@ -48,5 +47,5 @@ const orderSchema = new Schema<IOrder>(
   },
 );
 
- const OrderModel = model<IOrder>("Order", orderSchema);
- export default OrderModel;
+const OrderModel = model<IOrder>("Order", orderSchema);
+export default OrderModel;

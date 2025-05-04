@@ -13,8 +13,7 @@ const mcqQuestionSchema = new Schema(
     },
     questionImg: {
       type: String,
-      default:''
-     
+      default: "",
     },
     options: {
       type: [String],

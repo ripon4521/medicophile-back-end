@@ -179,10 +179,7 @@ const resetPassword = async (phone: string): Promise<string> => {
   // Generate random 6-digit password
   const newPassword = Math.floor(100000 + Math.random() * 900000).toString();
 
-  const sms = await sendSMS(
-    phone,
-    `Your login password is: ${newPassword}`,
-  );
+  const sms = await sendSMS(phone, `Your login password is: ${newPassword}`);
   if (!sms) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Password Reset Failed.");
   }
