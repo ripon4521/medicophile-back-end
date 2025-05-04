@@ -21,6 +21,7 @@ export interface IPurchaseToken {
     | "Partial";
   purchaseToken: string;
   coupon?: string;
+  ref?:Types.ObjectId;
   price: number;
   subtotal: number;
   discount: number;

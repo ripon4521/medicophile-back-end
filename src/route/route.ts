@@ -50,6 +50,7 @@ import batchStudentRoute from "../module/batchStudent/batchStudent.route";
 import qrCodeGenerateRoute from "../module/qecodeGenerate/qrCodeGenerate.route";
 import attendanceRoute from "../module/qrcodeAttendeene/attendence.route";
 import referalLinkRouter from "../module/generateReferLink/generateReferLink.route";
+import referDetailsRoute from "../module/referDetails/referDetails.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -244,6 +245,9 @@ const moduleRoutes = [
   },{
     path:'/refer-link',
     route:referalLinkRouter
+  },{
+    path:"/refer-details",
+    route:referDetailsRoute
   }
 ];
 moduleRoutes.forEach((route) => {

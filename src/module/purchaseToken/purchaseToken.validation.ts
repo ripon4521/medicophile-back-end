@@ -20,6 +20,7 @@ const createPurchaseTokenSchema = z.object({
   body: z.object({
     studentId: ObjectIdSchema,
     courseId: ObjectIdSchema,
+    ref: ObjectIdSchema.optional(),
     coupon: z.string().optional(),
     price: z.number({ required_error: "Price is required" }),
     subtotal: z.number({ required_error: "Subtotal is required" }),

@@ -6,6 +6,7 @@ import PurchaseTokenModel from "./purchaseToken.model";
 import CouponModel from "../coupon/coupon.model";
 import QueryBuilder from "../../builder/querybuilder";
 import courseModel from "../course/course.model";
+import ReferDetails from "../referDetails/referDetails.model";
 
 const createPurchaseToken = async (payload: IPurchaseToken) => {
   const student = await UserModel.findOne({ _id: payload.studentId });
@@ -13,13 +14,16 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
     _id: payload.courseId,
     isDeleted: false,
   });
-  const coupon = await CouponModel.findOne({
-    coupon: payload.coupon,
-    isDeleted: false,
-  });
-  if (!coupon || coupon.coupon !== payload.coupon) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "invalid coupon");
+  if (payload.coupon) {
+    const coupon = await CouponModel.findOne({
+      coupon: payload.coupon,
+      isDeleted: false,
+    });
+    if (!coupon || coupon.coupon !== payload.coupon) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "invalid coupon");
+    }
   }
+  
   if (!student) {
     throw new AppError(StatusCodes.BAD_REQUEST, "invalid student id");
   } else if (!course) {
@@ -33,6 +37,17 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
       "Failed to create purchase token",
     );
   }
+
+  if (payload.ref) {
+    await ReferDetails.create({
+      referrerId: payload.ref,
+      referredUserId: payload.studentId,
+      courseId: payload.courseId,
+      purchaseTokenId: result._id, 
+    });
+  }
+
+
 
 
   return result;
