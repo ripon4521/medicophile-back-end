@@ -52,6 +52,7 @@ import attendanceRoute from "../module/qrcodeAttendeene/attendence.route";
 import referalLinkRouter from "../module/generateReferLink/generateReferLink.route";
 import referDetailsRoute from "../module/referDetails/referDetails.route";
 import referRewardRouter from "../module/referalReward/referalReward.route";
+import referWithdrawRouter from "../module/withdraw/withdraw.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -252,6 +253,9 @@ const moduleRoutes = [
   }, {
     path:'/refer-reward',
     route:referRewardRouter
+  },{
+    path:'/withdraw',
+    route:referWithdrawRouter
   }
 ];
 moduleRoutes.forEach((route) => {
