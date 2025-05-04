@@ -51,6 +51,7 @@ import qrCodeGenerateRoute from "../module/qecodeGenerate/qrCodeGenerate.route";
 import attendanceRoute from "../module/qrcodeAttendeene/attendence.route";
 import referalLinkRouter from "../module/generateReferLink/generateReferLink.route";
 import referDetailsRoute from "../module/referDetails/referDetails.route";
+import referRewardRouter from "../module/referalReward/referalReward.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -248,6 +249,9 @@ const moduleRoutes = [
   },{
     path:"/refer-details",
     route:referDetailsRoute
+  }, {
+    path:'/refer-reward',
+    route:referRewardRouter
   }
 ];
 moduleRoutes.forEach((route) => {

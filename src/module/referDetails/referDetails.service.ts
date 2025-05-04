@@ -46,7 +46,7 @@ const getAllReferDetails = async (query: Record<string, unknown>) => {
     return result;
   };
 
-const singleReferDetails = async(_id:string) => {
+export const singleReferDetails = async(_id:string) => {
     const result = await ReferDetails.findOne({_id}) .populate([
         {
           path: "courseId",
@@ -77,7 +77,32 @@ const singleReferDetails = async(_id:string) => {
       return result;
 }
 
+const deleteReferDetails = async (_id: string) => {
+    if (!_id) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Please provide _id");
+    }
+  
+    const result = await ReferDetails.findOneAndUpdate(
+      { _id },
+      {
+        isDeleted: true,
+        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+      },
+      {
+        new: true,
+      },
+    );
+    if (!result) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        "Failed to delete ",
+      );
+    }
+    return result;
+  };
 
   export const referDetailsService = {
-    getAllReferDetails
+    getAllReferDetails,
+    deleteReferDetails,
+  
   }
