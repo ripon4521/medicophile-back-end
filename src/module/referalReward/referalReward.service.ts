@@ -65,7 +65,69 @@ const getAllReferReward = async (query: Record<string, unknown>) => {
   };
 
 
+  export const singleReferReward = async(_id:string) => {
+    const result = await ReferralReward.findOne({_id}) .populate([
+        {
+          path: "referDetailsId",
+          populate: [{ path: "referrerId", select: "name role phone profile_picture" }, { path:"courseId", select:"course_title duration price"}, 
+            {path:"purchaseTokenId", select:"studentId status ref price totalAmount paymentInfo name phone"}],
+        },
+      ])
+      return result;
+}
+
+
+const deleteReferReward = async (_id: string) => {
+    if (!_id) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Please provide _id");
+    }
+  
+    const result = await ReferralReward.findOneAndUpdate(
+      { _id },
+      {
+        isDeleted: true,
+        deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+      },
+      {
+        new: true,
+      },
+    );
+    if (!result) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        "Failed to delete ",
+      );
+    }
+    return result;
+  };
+
+  const updateReferReward = async (_id: string, payload:IReferralReward) => {
+    if (!_id) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Please provide _id");
+    }
+  
+    const result = await ReferralReward.findOneAndUpdate(
+      { _id },
+      payload,
+      {
+        runValidators:true,
+        new: true,
+      },
+    );
+    if (!result) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        "Failed to update ",
+      );
+    }
+    return result;
+  };
+
+
+
 export const referRewardService = {
     createReferralReward,
-    getAllReferReward
+    getAllReferReward,
+    deleteReferReward,
+    updateReferReward
 }

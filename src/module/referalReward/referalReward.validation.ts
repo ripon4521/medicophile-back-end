@@ -18,7 +18,6 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 
 const updateReferralRewardZodSchema = z.object({
     body:z.object({
-    referDetailsId: ObjectIdSchema.optional(),
     amount: z.number().min(0, "Amount must be a positive number").optional(),
     note: z.string().optional()
         
