@@ -1,42 +1,16 @@
 "use strict";
-var __awaiter =
-  (this && this.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
-    function adopt(value) {
-      return value instanceof P
-        ? value
-        : new P(function (resolve) {
-            resolve(value);
-          });
-    }
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
-      function fulfilled(value) {
-        try {
-          step(generator.next(value));
-        } catch (e) {
-          reject(e);
-        }
-      }
-      function rejected(value) {
-        try {
-          step(generator["throw"](value));
-        } catch (e) {
-          reject(e);
-        }
-      }
-      function step(result) {
-        result.done
-          ? resolve(result.value)
-          : adopt(result.value).then(fulfilled, rejected);
-      }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
-var __importDefault =
-  (this && this.__importDefault) ||
-  function (mod) {
-    return mod && mod.__esModule ? mod : { default: mod };
-  };
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mcqAttempService = void 0;
 const mongoose_1 = require("mongoose");
@@ -46,114 +20,95 @@ const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const http_status_codes_1 = require("http-status-codes");
 const user_model_1 = require("../user/user.model");
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
-const submitAttemptService = (_a) =>
-  __awaiter(void 0, [_a], void 0, function* ({ studentId, answer }) {
+const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* ({ studentId, answer }) {
     const user = yield user_model_1.UserModel.findOne({ _id: studentId });
     if (!user || user.role !== "student") {
-      throw new AppError_1.default(
-        http_status_codes_1.StatusCodes.BAD_REQUEST,
-        "invalid student id. Please provide a valid student id",
-      );
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid student id. Please provide a valid student id");
     }
-    const questionIds = answer.map(
-      (a) => new mongoose_1.Types.ObjectId(a.questionId),
-    );
+    const questionIds = answer.map((a) => new mongoose_1.Types.ObjectId(a.questionId));
     // Fetch all answered questions and populate examId
-    const questions = yield mcq_model_1.default
-      .find({
+    const questions = yield mcq_model_1.default.find({
         _id: { $in: questionIds },
-      })
-      .populate("examId"); // To access positiveMark, negativeMark, and examId
+    }).populate("examId"); // To access positiveMark, negativeMark, and examId
     let score = 0;
     let correctCount = 0;
     let wrongCount = 0;
     let examId = null;
     // Process each answer
     for (const userAnswer of answer) {
-      const matchedQuestion = questions.find(
-        (q) => q._id.toString() === userAnswer.questionId.toString(),
-      );
-      if (!matchedQuestion || !matchedQuestion.examId) continue;
-      // Set the examId from the first matched question
-      if (!examId) {
-        examId = matchedQuestion.examId;
-      }
-      const positiveMark = matchedQuestion.positiveMark || 1;
-      const negativeMark = matchedQuestion.negetiveMark || 0;
-      // Check if the answer is correct
-      if (matchedQuestion.correctAnswer === userAnswer.selectedAnswer) {
-        score += positiveMark;
-        correctCount++;
-      } else {
-        score -= negativeMark;
-        wrongCount++;
-      }
+        const matchedQuestion = questions.find((q) => q._id.toString() === userAnswer.questionId.toString());
+        if (!matchedQuestion || !matchedQuestion.examId)
+            continue;
+        // Set the examId from the first matched question
+        if (!examId) {
+            examId = matchedQuestion.examId;
+        }
+        const positiveMark = matchedQuestion.positiveMark || 1;
+        const negativeMark = matchedQuestion.negetiveMark || 0;
+        // Check if the answer is correct
+        if (matchedQuestion.correctAnswer === userAnswer.selectedAnswer) {
+            score += positiveMark;
+            correctCount++;
+        }
+        else {
+            score -= negativeMark;
+            wrongCount++;
+        }
     }
     const total = answer.length;
     // Save result with examId
     const result = yield mcqAttemp_model_1.default.create({
-      studentId: new mongoose_1.Types.ObjectId(studentId),
-      examId,
-      answer,
-      score,
-      total,
-      correctCount,
-      wrongCount,
+        studentId: new mongoose_1.Types.ObjectId(studentId),
+        examId,
+        answer,
+        score,
+        total,
+        correctCount,
+        wrongCount,
     });
     return {
-      message: "Exam submitted successfully!",
-      score,
-      correctCount,
-      wrongCount,
-      total,
-      examId,
-      attempt: result,
+        message: "Exam submitted successfully!",
+        score,
+        correctCount,
+        wrongCount,
+        total,
+        examId,
+        attempt: result,
     };
-  });
-const getAllMcq = (query) =>
-  __awaiter(void 0, void 0, void 0, function* () {
-    const courseQuery = new querybuilder_1.default(
-      mcqAttemp_model_1.default,
-      query,
-    )
-      .search(["totalScore"])
-      .filter()
-      .sort()
-      .paginate()
-      .fields()
-      .populate({
+});
+const getAllMcq = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(mcqAttemp_model_1.default, query)
+        .search(["totalScore"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .populate({
         path: "studentId",
         select: "name role phone",
-      })
-      .populate({
+    })
+        .populate({
         path: "examId",
-        select:
-          "examTitle examType totalQuestion positiveMark negativeMark mcqDuration  status",
-      })
-      .populate({
+        select: "examTitle examType totalQuestion positiveMark negativeMark mcqDuration  status",
+    })
+        .populate({
         path: "answer.questionId",
-        select:
-          "question options correctAnswer subject questionType positiveMark negetiveMark",
-      });
+        select: "question options correctAnswer subject questionType positiveMark negetiveMark",
+    });
     const result = yield courseQuery.exec();
     return result;
-  });
-const getSpcificMcqAttemp = (id) =>
-  __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield mcqAttemp_model_1.default
-      .find({ studentId: id })
-      .populate({ path: "studentId", select: "name role phone" })
-      .populate("answer.questionId");
+});
+const getSpcificMcqAttemp = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield mcqAttemp_model_1.default.find({ studentId: id })
+        .populate({ path: "studentId", select: "name role phone" })
+        .populate("answer.questionId");
     if (!result) {
-      throw new AppError_1.default(
-        http_status_codes_1.StatusCodes.BAD_REQUEST,
-        "studnt id is not valid or not found in database",
-      );
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "studnt id is not valid or not found in database");
     }
     return result;
-  });
+});
 exports.mcqAttempService = {
-  submitAttemptService,
-  getSpcificMcqAttemp,
-  getAllMcq,
+    submitAttemptService,
+    getSpcificMcqAttemp,
+    getAllMcq,
 };

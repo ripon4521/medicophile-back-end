@@ -1,9 +1,7 @@
 "use strict";
-var __importDefault =
-  (this && this.__importDefault) ||
-  function (mod) {
-    return mod && mod.__esModule ? mod : { default: mod };
-  };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const globalErrorHandler_1 = require("./middlewares/globalErrorHandler");
@@ -17,28 +15,21 @@ const app = (0, express_1.default)();
 //parsers
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
-app.use(
-  (0, cors_1.default)({
+app.use((0, cors_1.default)({
     origin: [
-      "http://localhost:5173",
-      "https://admin.iconadmissionaid.com",
-      "https://iconadmissionaid.com",
+        "http://localhost:5173",
+        "https://admin.iconadmissionaid.com",
+        "https://iconadmissionaid.com",
     ],
-  }),
-);
+}));
 // middleware
 app.use(express_1.default.json());
 // router.use(  auth.authUser('admin'), onlySuperAdmin);
 app.use("/api/v1", route_1.default);
 const getAcontroller = (req, res) => {
-  res.send("🚀 Welcome SuperAdmin to the School Management System");
+    res.send("🚀 Welcome SuperAdmin to the School Management System");
 };
-app.get(
-  "/",
-  auth_1.auth.authUser("superAdmin"),
-  onlySuperAdmin_1.onlySuperAdmin,
-  getAcontroller,
-);
+app.get("/", auth_1.auth.authUser("superAdmin"), onlySuperAdmin_1.onlySuperAdmin, getAcontroller);
 app.use(globalErrorHandler_1.globalErrorHandler);
 app.use(notFound_1.default);
 exports.default = app;
