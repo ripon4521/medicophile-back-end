@@ -53,6 +53,7 @@ import referalLinkRouter from "../module/generateReferLink/generateReferLink.rou
 import referDetailsRoute from "../module/referDetails/referDetails.route";
 import referRewardRouter from "../module/referalReward/referalReward.route";
 import referWithdrawRouter from "../module/withdraw/withdraw.route";
+import performanceRoute from "../module/performance/performance.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -269,7 +270,10 @@ const moduleRoutes = [
   {
     path: "/withdraw",
     route: referWithdrawRouter,
-  },
+  },{
+    path:"/performance",
+    route:performanceRoute
+  }
 ];
 moduleRoutes.forEach((route) => {
   router.use(route.path, route.route);

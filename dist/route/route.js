@@ -58,6 +58,7 @@ const generateReferLink_route_1 = __importDefault(require("../module/generateRef
 const referDetails_route_1 = __importDefault(require("../module/referDetails/referDetails.route"));
 const referalReward_route_1 = __importDefault(require("../module/referalReward/referalReward.route"));
 const withdraw_route_1 = __importDefault(require("../module/withdraw/withdraw.route"));
+const performance_route_1 = __importDefault(require("../module/performance/performance.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -271,7 +272,10 @@ const moduleRoutes = [
     {
         path: "/withdraw",
         route: withdraw_route_1.default,
-    },
+    }, {
+        path: "/performance",
+        route: performance_route_1.default
+    }
 ];
 moduleRoutes.forEach((route) => {
     router.use(route.path, route.route);
