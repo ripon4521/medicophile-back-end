@@ -18,6 +18,10 @@ import httpStatus from "http-status";
 import QueryBuilder from "../../builder/querybuilder";
 
 const createStudentsIntoDB = async (payload: IStudent) => {
+  const isExist = await UserModel.findOne({phone:payload.phone, isDeleted:false});
+  if (isExist) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "This user already exist.Please login")
+  }
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -82,6 +86,10 @@ const createStudentsIntoDB = async (payload: IStudent) => {
 };
 
 const createAdmiIntoDB = async (payload: IAdmin) => {
+  const isExist = await UserModel.findOne({phone:payload.phone, isDeleted:false});
+  if (isExist) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "This user already exist.Please login")
+  }
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -136,6 +144,10 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
 };
 
 const createFacultysIntoDB = async (payload: IFaculty) => {
+  const isExist = await UserModel.findOne({phone:payload.phone, isDeleted:false});
+  if (isExist) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "This user already exist.Please login")
+  }
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
