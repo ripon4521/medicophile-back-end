@@ -14,7 +14,7 @@ const createLectureSchema = z.object({
     server: z.string().min(1, "Server is required"),
     videoId: z.string().url("Invalid video URL"),
     duration: z.number().min(1, "Duration must be greater than 0"),
-    isFree: z.boolean(),
+    isFree: z.boolean().optional(),
     status: z.enum(["Published", "Drafted"]),
     scheduleDate: z
       .preprocess((val) => {

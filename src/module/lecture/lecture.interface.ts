@@ -9,7 +9,7 @@ export interface ILeecture {
   server: "Youtube" | "Vimeo" | "Bunny" | "Others";
   videoId: string;
   duration: number;
-  isFree: boolean;
+  isFree?: boolean;
   status: "Published" | "Drafted";
   tags: string[];
   scheduleDate: Date;
