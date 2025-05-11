@@ -20,7 +20,7 @@ const createNote = async (paload: INotes) => {
   if (!course) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Inavlid course id");
   } else if (!useer || useer.role === "student") {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Inavlid user id");
+    throw new AppError(StatusCodes.BAD_REQUEST, "Inavlid user id.Only admin or teacher can create note");
   } else if (!modul) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Inavlid module id");
   }
