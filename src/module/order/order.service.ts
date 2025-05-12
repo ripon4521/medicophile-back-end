@@ -8,8 +8,13 @@ import OrderDetailsModel from "../orderDetails/orderDetails.model";
 import QueryBuilder from "../../builder/querybuilder";
 import { ProductModel } from "../product/product.model";
 import CouponModel from "../coupon/coupon.model";
+import { UserModel } from "../user/user.model";
 
 const createOrderWithDetails = async (payload: IOrder) => {
+  const user = await UserModel.findOne({_id:payload.userId})
+  if (!user) {
+      throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+  }
   const product = await ProductModel.findOne({
     _id: payload.productId,
     isDeleted: false,
@@ -20,12 +25,12 @@ const createOrderWithDetails = async (payload: IOrder) => {
       isDeleted: false,
     });
     if (!coupon) {
-      throw new AppError(StatusCodes.BAD_REQUEST, "coupon not found");
+      throw new AppError(StatusCodes.NOT_FOUND, "coupon not found");
     }
   }
 
   if (!product) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Product Not Found");
+    throw new AppError(StatusCodes.NOT_FOUND, "Product Not Found");
   }
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -67,6 +72,10 @@ const getAllOrderFromDb = async (query: Record<string, unknown>) => {
     .fields()
     .populate({
       path: "productId",
+    })
+    .populate({
+      path: "userId",
+      select:"name role phone profile_picture"
     })
     .populate([
       {
