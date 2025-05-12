@@ -31,6 +31,7 @@ const orderSchema = new Schema<IOrder>(
     subTotal: { type: Number, required: true },
     discount: { type: Number },
     coupoun: { type: Schema.Types.ObjectId, ref: "Coupon" },
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
     productId: { type: Schema.Types.ObjectId, ref: "Product" },
     charge: { type: Number },
     shiping: { type: Number, required: true },

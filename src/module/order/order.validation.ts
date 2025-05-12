@@ -27,6 +27,7 @@ const createOrderZodSchema = z.object({
     discount: z.number().min(0).optional(),
     coupoun: ObjectIdSchema.optional(),
     productId: ObjectIdSchema,
+    userId: ObjectIdSchema,
     charge: z.number().min(0).optional(),
     shiping: z.number().min(0),
     quantity: z.number().min(0),
