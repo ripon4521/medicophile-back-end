@@ -11,6 +11,7 @@ export interface IOrder {
   subTotal: number;
   discount: number;
   coupoun: Types.ObjectId;
+  userId: Types.ObjectId;
   productId: Types.ObjectId;
   quantity: number;
   charge: number;
