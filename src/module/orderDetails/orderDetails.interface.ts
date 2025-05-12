@@ -3,6 +3,7 @@ import { IPaymentInfo } from "../purchaseToken/purchaseToken.interface";
 
 export interface IOrderDetails {
   orderId: Types.ObjectId;
+  userId: Types.ObjectId;
   productId: Types.ObjectId;
   name: string;
   phone: string;

@@ -46,6 +46,7 @@ const createOrderWithDetails = async (payload: IOrder) => {
       quantity: payload.quantity,
       price: payload.paidAmount,
       status: order.status,
+      userId:payload.userId,
       name: payload.name,
       phone: payload.phone,
       address: payload.address,
