@@ -58,7 +58,7 @@ const purchaseTokenSchema = new Schema<IPurchaseToken>(
   },
 );
 
-// purchaseTokenSchema.pre("save", async function (next) {
+
 //     const doc = this as any;
 
 //     // Generate purchase token if not set

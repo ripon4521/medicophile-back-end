@@ -45,6 +45,9 @@ const createReferralReward = async (payload: IReferralReward) => {
 };
 
 const getAllReferReward = async (query: Record<string, unknown>) => {
+  const referrerId = query.referrerId as string;
+  delete query.referrerId;
+
   const courseQuery = new QueryBuilder(ReferralReward, query)
     .search(["referDetailsId"])
     .filter()
@@ -67,11 +70,23 @@ const getAllReferReward = async (query: Record<string, unknown>) => {
     ]);
 
   const result = await courseQuery.exec();
+
   if (!result) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Failed to get refer reward");
   }
-  return result;
+
+  // ✅ Filter manually based on populated referrerId
+  const filteredResult = referrerId
+    ? result.filter(
+        (item: any) =>
+          item?.referDetailsId?.referrerId?._id?.toString() === referrerId
+      )
+    : result;
+
+  return filteredResult;
 };
+
+
 
 export const singleReferReward = async (_id: string) => {
   const result = await ReferralReward.findOne({ _id }).populate([

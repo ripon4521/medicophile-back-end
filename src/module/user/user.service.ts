@@ -76,7 +76,7 @@ const createStudentsIntoDB = async (payload: IStudent) => {
     return {
       student: createdStudent[0],
       user: newUser[0],
-      password: plainPassword, // send this if needed (for SMS/email)
+  
     };
   } catch (error) {
     await session.abortTransaction();

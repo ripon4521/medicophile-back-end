@@ -7,8 +7,14 @@ import CouponModel from "../coupon/coupon.model";
 import QueryBuilder from "../../builder/querybuilder";
 import courseModel from "../course/course.model";
 import ReferDetails from "../referDetails/referDetails.model";
+import { createStudentWithUser } from "../../utils/createStudentForPurchase";
+
+
 
 const createPurchaseToken = async (payload: IPurchaseToken) => {
+  if (!payload.studentId) {
+    const result = await createStudentWithUser(payload.studentId);
+  }
   const student = await UserModel.findOne({ _id: payload.studentId });
   const course = await courseModel.findOne({
     _id: payload.courseId,
@@ -49,6 +55,16 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
 
   return result;
 };
+
+
+
+
+
+
+
+
+
+
 
 const getAllPurchasseToken = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(PurchaseTokenModel, query)
