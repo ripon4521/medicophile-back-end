@@ -23,7 +23,7 @@ const paymentInfoSchema = new Schema<IPaymentInfo>(
 
 const purchaseTokenSchema = new Schema<IPurchaseToken>(
   {
-    studentId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+    studentId: { type: Schema.Types.ObjectId,  ref: "User" },
     courseId: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
     status: {
       type: String,

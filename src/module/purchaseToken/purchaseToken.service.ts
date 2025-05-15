@@ -8,18 +8,37 @@ import QueryBuilder from "../../builder/querybuilder";
 import courseModel from "../course/course.model";
 import ReferDetails from "../referDetails/referDetails.model";
 import { createStudentWithUser } from "../../utils/createStudentForPurchase";
+import { IStudent } from "../student/student.interface";
 
 
 
 const createPurchaseToken = async (payload: IPurchaseToken) => {
-  if (!payload.studentId) {
-    const result = await createStudentWithUser(payload.studentId);
+ if (!payload.studentId) {
+    const studentPayload: IStudent = {
+      name: payload.name,
+      phone: payload.phone,
+      email: '',
+      role: 'student',
+      profile_picture:  '',
+      userId: undefined,
+      status: 'Active', 
+      isDeleted: false,
+      password:'',
+      gurdianName:'',
+      gurdianPhone:'',
+      address:'',
+   
+    };
+
+    const { user } = await createStudentWithUser(studentPayload);
+    payload.studentId = user._id;
   }
   const student = await UserModel.findOne({ _id: payload.studentId });
   const course = await courseModel.findOne({
     _id: payload.courseId,
     isDeleted: false,
   });
+
   if (payload.coupon) {
     const coupon = await CouponModel.findOne({
       coupon: payload.coupon,
@@ -40,7 +59,7 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to create purchase token",
+      "Failed to create purchase token"
     );
   }
 
@@ -55,14 +74,6 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
 
   return result;
 };
-
-
-
-
-
-
-
-
 
 
 

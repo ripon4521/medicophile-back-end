@@ -6,7 +6,6 @@ import { IPurchase } from "./purchase.interface";
 import { PurchaseModel } from "./purchase.model";
 import mongoose from "mongoose";
 import PaymentDetailsModel from "../paymentDetails/paymentDetails.model";
-import { IPaymentDetails } from "../paymentDetails/paymentDetails.interface";
 import QueryBuilder from "../../builder/querybuilder";
 
 const createPurchase = async (payload: IPurchase) => {
@@ -65,6 +64,11 @@ const createPurchase = async (payload: IPurchase) => {
       payload.status = "Course Out";
       tokenStatus = "Rejected";
     }
+
+    
+   
+
+
 
     await PurchaseTokenModel.updateOne(
       { _id: payload.purchaseToken },

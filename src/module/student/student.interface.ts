@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 export interface IStudent {
   role: "superAdmin" | "admin" | "teacher" | "student";
-  userId: Types.ObjectId;
+  userId?: Types.ObjectId;
   profile_picture: string | null | undefined;
   email: string;
   phone: string;
@@ -12,6 +12,6 @@ export interface IStudent {
   gurdianPhone: string;
   address: string;
   status: "Active" | "Blocked";
-  deletedAt: Date;
+  deletedAt?: Date;
   isDeleted: boolean;
 }

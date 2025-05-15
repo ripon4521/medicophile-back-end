@@ -4,6 +4,8 @@ import { UserModel } from "../user/user.model";
 import { IReferralWithdrawal } from "./withdraw.interface";
 import ReferralWithdrawal from "./withdraw.model";
 import QueryBuilder from "../../builder/querybuilder";
+import ReferDetails from "../referDetails/referDetails.model";
+import ReferralReward from "../referalReward/referalReward.model";
 
 const createReferWithdraw = async (payload: IReferralWithdrawal) => {
   const user = await UserModel.findOne({ _id: payload.referrerId });
@@ -13,8 +15,39 @@ const createReferWithdraw = async (payload: IReferralWithdrawal) => {
       "invalid user id. Please provide valid user id",
     );
   }
+    // ✅ Check minimum amount
+  if (payload.amount < 100) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Minimum withdrawal amount is 100 BDT"
+    );
+  }
+  const referDetails = await ReferDetails.findOne({referrerId:payload.referrerId});
+  if (!referDetails) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "invalid transction",
+    );
+  }
+  const referReward = await ReferralReward.findOne({referDetailsId:referDetails._id});
+    if (!referReward ) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "invalid transction",
+    );
+  }
+  
+    if ((referReward.amount || 0) < payload.amount) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Insufficient referral balance"
+    );
+  }
+
 
   const result = await ReferralWithdrawal.create(payload);
+   referReward.amount = (referReward.amount || 0) - payload.amount;
+    await referReward.save();
   return result;
 };
 

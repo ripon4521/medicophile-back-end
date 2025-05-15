@@ -18,7 +18,7 @@ export const paymentInfoSchema = z.object({
 
 const createPurchaseTokenSchema = z.object({
   body: z.object({
-    studentId: ObjectIdSchema,
+    studentId: ObjectIdSchema.optional(),
     courseId: ObjectIdSchema,
     ref: ObjectIdSchema.optional(),
     coupon: z.string().optional(),
