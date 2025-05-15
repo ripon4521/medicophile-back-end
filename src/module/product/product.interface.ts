@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 export interface IProduct {
   slug: string;
   title: string;
-  pdf: string;
+  pdf?: string;
   description?: string;
   trailer?: string;
   categoryId: Types.ObjectId;
