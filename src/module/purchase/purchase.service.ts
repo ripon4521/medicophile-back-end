@@ -34,9 +34,7 @@ const createPurchase = async (payload: IPurchase) => {
       throw new AppError(StatusCodes.BAD_REQUEST, "Invalid purchase token id.");
     }
 
-    if (!issuedBy) {
-      throw new AppError(StatusCodes.BAD_REQUEST, "Invalid issuedBy id.");
-    }
+   
 
     // Set values from token
     payload.charge = purchaseToken.charge;
@@ -65,7 +63,8 @@ const createPurchase = async (payload: IPurchase) => {
       tokenStatus = "Rejected";
     }
 
-    
+
+
    
 
 
@@ -83,6 +82,7 @@ const createPurchase = async (payload: IPurchase) => {
       if (!result) {
         throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create result");
       }
+  
       const data = {
         purchaseId: result[0]._id,
         studentId: result[0].studentId,

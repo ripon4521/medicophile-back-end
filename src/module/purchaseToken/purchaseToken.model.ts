@@ -4,19 +4,20 @@ import crypto from "crypto"; // for secure random token generation
 
 const paymentInfoSchema = new Schema<IPaymentInfo>(
   {
-    transactionId: { type: String, required: true },
+    transactionId: { type: String , default:""},
     method: {
       type: String,
       enum: ["Bkash", "Nagad", "Bank", "Cash"],
-      required: true,
+      default:"Bkash"
     },
-    accountNumber: { type: String, required: true },
+    accountNumber: { type: String ,  default:""},
     paymentMedium: {
       type: String,
       enum: ["personal", "agent", "merchant"],
+       default:"personal"
     },
-    paymentDate: { type: Date },
-    proofUrl: { type: String },
+    paymentDate: { type: Date , default:new Date(new Date().getTime() + 6 * 60 * 60 * 1000)},
+    proofUrl: { type: String ,  default:""},
   },
   { _id: false },
 );
@@ -45,7 +46,7 @@ const purchaseTokenSchema = new Schema<IPurchaseToken>(
     discount: { type: Number, required: true },
     charge: { type: Number, required: true },
     totalAmount: { type: Number, required: true },
-    paymentInfo: { type: paymentInfoSchema, required: true },
+    paymentInfo: { type: paymentInfoSchema },
     name: { type: String, required: true },
     phone: { type: String, required: true },
     isDeleted: { type: Boolean, default: false },
@@ -118,10 +119,9 @@ purchaseTokenSchema.pre("save", function (next) {
     doc.purchaseToken = `PT-${unique}`;
   }
 
-  // Set today's date in paymentInfo if not already set
-  if (!doc.paymentInfo.paymentDate) {
-    doc.paymentInfo.paymentDate = new Date();
-  }
+  // // Set today's date in paymentInfo if not already set
+  // if (!doc.paymentInfo.paymentDate) {
+  // }
 
   next();
 });

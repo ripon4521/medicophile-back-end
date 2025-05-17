@@ -1,11 +1,11 @@
 import { Types } from "mongoose";
 
 export interface IPaymentInfo {
-  transactionId: string;
-  method: "Bkash" | "Nagad" | "Bank" | "Cash";
+  transactionId?: string;
+  method?: "Bkash" | "Nagad" | "Bank" | "Cash";
   accountNumber?: string;
   paymentMedium?: "personal" | "agent" | "merchant";
-  paymentDate: Date;
+  paymentDate?: Date;
   proofUrl?: string;
 }
 
@@ -27,7 +27,7 @@ export interface IPurchaseToken {
   discount: number;
   charge: number;
   totalAmount: number;
-  paymentInfo: IPaymentInfo;
+  paymentInfo?: IPaymentInfo;
   name: string;
   phone: string;
   isDeleted: boolean;

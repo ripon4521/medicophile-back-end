@@ -5,7 +5,7 @@ export interface IPaymentDetails {
   purchaseId: Types.ObjectId;
   studentId: Types.ObjectId;
   paidAmount: number;
-  paymentInfo: IPaymentInfo;
+  paymentInfo?: IPaymentInfo;
   isDeleted: boolean;
   deletedAt: Date;
 }

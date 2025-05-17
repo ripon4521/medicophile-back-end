@@ -206,9 +206,9 @@ const changePassword = async (
 ): Promise<string> => {
   const { phone, oldPassword, newPassword, confirmPassword } = payload;
 
-  const user = await UserModel.findOne({ phone });
+  const user = await UserModel.findOne({ phone , isDeleted:false});
 
-  if (!user) {
+  if (!user ) {
     throw new AppError(
       httpStatus.NOT_FOUND,
       "User not found with this phone number",

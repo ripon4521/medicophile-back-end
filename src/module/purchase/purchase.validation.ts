@@ -16,7 +16,7 @@ const createPurchaseSchema = z.object({
       "Rejected",
     ]),
     purchaseToken: ObjectIdSchema,
-    issuedBy: ObjectIdSchema,
+    issuedBy: ObjectIdSchema.optional(),
   }),
 });
 

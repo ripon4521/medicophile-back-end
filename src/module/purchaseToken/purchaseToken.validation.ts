@@ -7,11 +7,9 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 
 // Payment Info Validation
 export const paymentInfoSchema = z.object({
-  transactionId: z.string({ required_error: "Transaction ID is required" }),
-  method: z.enum(["Bkash", "Nagad", "Bank", "Cash"], {
-    required_error: "Payment method is required",
-  }),
-  accountNumber: z.string({ required_error: "account number is requried" }),
+  transactionId: z.string({ required_error: "Transaction ID is required" }).optional(),
+  method: z.enum(["Bkash", "Nagad", "Bank", "Cash"]).optional(),
+  accountNumber: z.string({ required_error: "account number is requried" }).optional(),
   paymentMedium: z.enum(["personal", "agent", "merchant"]).optional(),
   proofUrl: z.string().url("Invalid proof URL").optional(),
 });
@@ -27,7 +25,7 @@ const createPurchaseTokenSchema = z.object({
     discount: z.number({ required_error: "Discount is required" }),
     charge: z.number({ required_error: "Charge is required" }),
     totalAmount: z.number({ required_error: "Total amount is required" }),
-    paymentInfo: paymentInfoSchema,
+    paymentInfo: paymentInfoSchema.optional(),
     name: z.string({ required_error: "Name is required" }),
     phone: z.string({ required_error: "Phone is required" }),
   }),
