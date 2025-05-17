@@ -204,38 +204,41 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
 const changePassword = async (
   payload: IChangePasswordPayload,
 ): Promise<string> => {
-  const { phone, oldPassword, newPassword, confirmPassword } = payload;
+  const { phone, oldPassword, newPassword, confrimPassword } = payload;
 
-  const user = await UserModel.findOne({ phone , isDeleted:false});
+  // Basic validation
+  if (!phone || !oldPassword || !newPassword || !confrimPassword) {
+    throw new AppError(httpStatus.BAD_REQUEST, "All fields are required");
+  }
 
-  if (!user ) {
+  const user = await UserModel.findOne({ phone, isDeleted: false });
+
+  if (!user) {
     throw new AppError(
       httpStatus.NOT_FOUND,
       "User not found with this phone number",
     );
   }
 
-  // Check if old password matches
   const isMatch = await bcrypt.compare(oldPassword, user.password);
   if (!isMatch) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Old password is incorrect");
   }
 
-  // Check if new password and confirm password match
-  if (newPassword !== confirmPassword) {
+  if (newPassword !== confrimPassword) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "New password and confirm password do not match",
     );
   }
 
-  // Hash and update new password
   const hashedPassword = await bcrypt.hash(newPassword, 12);
   user.password = hashedPassword;
   await user.save();
 
   return "Password changed successfully";
 };
+
 
 const getUSers = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(UserModel, query)

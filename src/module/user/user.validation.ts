@@ -29,9 +29,9 @@ export const changePasswordValidation = z.object({
   body: z.object({
     phone: z.string({ required_error: "phone number is required" }),
     oldPassword: z.string({ required_error: "old password is required" }),
-    newPassord: z.string({ required_error: "new password is required" }),
-    confrimPassord: z.string({
+    newPassword: z.string({ required_error: "new password is required" }),
+    confrimPassword: z.string({
       required_error: "confrim password is required",
     }),
-  }),
+  }), 
 });
