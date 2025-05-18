@@ -61,10 +61,21 @@ const getSpeecificGaps = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleGaps = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await gapsQuestionService.getSingleGaps(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: " Gaps  fatched successfully",
+    data: result,
+  });
+});
+
 export const gapsQuestionController = {
   createGapQuestion,
   updateGapQuestion,
   deleteGapQuestion,
   getAllGapQuestions,
   getSpeecificGaps,
+  getSingleGaps
 };

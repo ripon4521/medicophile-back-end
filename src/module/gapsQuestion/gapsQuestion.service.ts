@@ -115,10 +115,24 @@ const getSpcificGaps = async (id: string) => {
   return result;
 };
 
+const getSingleGaps = async (_id: string) => {
+  const result = await GapsQuestionModel.findOne({_id})
+    .populate("createdBy")
+    .populate("examId");
+  if (!result) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      " id is not valid or not found in database",
+    );
+  }
+  return result;
+};
+
 export const gapsQuestionService = {
   cretaeGapsQuestion,
   getAllGapsQuestion,
   updateGapsQuestion,
   deleteGapsQuestion,
   getSpcificGaps,
+  getSingleGaps
 };
