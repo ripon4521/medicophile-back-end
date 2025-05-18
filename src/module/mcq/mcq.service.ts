@@ -58,6 +58,21 @@ const getAllMcq = async (query: Record<string, unknown>) => {
   return result;
 };
 
+const getSingleMcq = async(_id:string) => {
+  const result = await McqQuestion.findOne({_id}).populate({
+      path: "examId",
+      select: "examTitle slug examType positiveMark negativeMark status ",
+      //   populate:{path:"courseId", select:"course_title description course_type price offerPrice"},
+    })
+    .populate([
+      {
+        path: "insertBy",
+        select: "name role phone",
+      },
+    ]);
+    return result
+}
+
 const updateMcq = async (_id: string, payload: IMcqQuestion) => {
   const mcq = await McqQuestion.findOne({ _id: _id });
   if (!mcq) {
@@ -121,4 +136,5 @@ export const mcqQuestionService = {
   updateMcq,
   deleteMcq,
   getSpcificMcq,
+  getSingleMcq
 };

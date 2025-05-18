@@ -10,6 +10,7 @@ mcqRoute.post(
   mcqQuestiionController.createMcq,
 );
 mcqRoute.get("/", mcqQuestiionController.getAllMCQ);
+mcqRoute.get("/single/:id", mcqQuestiionController.getSingleMcq);
 mcqRoute.get("/:id", mcqQuestiionController.getSpeecificMccq);
 mcqRoute.patch(
   "/:id",
