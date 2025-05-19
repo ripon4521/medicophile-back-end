@@ -80,7 +80,7 @@ const getSingleModule = async (slug: string) => {
 
 const getSpecificModule = async (id: string) => {
   // console.log(id)
-  const course = await courseModel.findOne({ _id: id });
+  const course = await courseModel.findOne({ _id: id , isDeleted:false});
   // console.log(course)
   if (!course) {
     throw new AppError(StatusCodes.BAD_REQUEST, "invalid course id");
