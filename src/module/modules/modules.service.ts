@@ -85,7 +85,7 @@ const getSpecificModule = async (id: string) => {
   if (!course) {
     throw new AppError(StatusCodes.BAD_REQUEST, "invalid course id");
   }
-  const result = await ModuleModel.find({ courseId: id })
+  const result = await ModuleModel.find({ courseId: id , isDeleted:false})
     .populate("createdBy")
     .populate({
       path: "courseId",
