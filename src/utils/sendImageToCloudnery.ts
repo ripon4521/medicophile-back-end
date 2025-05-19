@@ -37,12 +37,9 @@ export const sendImageToCloudinary = async (
   try {
     const result = await cloudinary.uploader.upload(filePath, {
       public_id: imageName,
-      transformation: {
-        aspect_ratio: 1,
-        width: 400,
-        quality: 60,
-        fetch_format: "auto",
-      },
+      use_filename: true,
+      unique_filename: false,
+      resource_type: "image",
     });
 
     return result as ICloudinaryResponse;
@@ -54,6 +51,7 @@ export const sendImageToCloudinary = async (
     );
   }
 };
+
 
 // Multer storage configuration
 const storage = multer.diskStorage({
