@@ -65,19 +65,21 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
       purchaseTokenId: result._id,
     });
   }
-
-
-  const purchasePayload: IPurchase = {
+if (payload.status === "Verified") {
+    const purchasePayload: IPurchase = {
     ...payload,
     studentId: result.studentId,
     purchaseToken: result._id,
     paymentStatus: "Paid",
     status: "Active",
   };
+   const res = await purchaseService.createPurchase(purchasePayload);
+  if (!res) throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase ');
+}
 
- const res = await purchaseService.createPurchase(purchasePayload);
-  if (!res) throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase token');
- console.log(res)
+
+
+
 
   return result;
 }
