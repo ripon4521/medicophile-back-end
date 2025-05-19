@@ -7,7 +7,7 @@ const paymentInfoSchema = new Schema<IPaymentInfo>(
     transactionId: { type: String , default:''},
     method: {
       type: String,
-      enum: ["Bkash", "Nagad", "Bank", "Cash"],
+      enum: ["Bkash", "Nagad", "Bank", "Cash", "Auto"],
       default:"Bikash"
     },
     accountNumber: { type: String , default:''},

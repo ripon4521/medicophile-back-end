@@ -49,7 +49,6 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
     if (!coupon || coupon.coupon !== payload.coupon) {
       throw new AppError(StatusCodes.BAD_REQUEST, 'invalid coupon');
     }
-    // You can calculate discount here if needed
   }
 
   // Save token
@@ -65,6 +64,7 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
       purchaseTokenId: result._id,
     });
   }
+  // Automatic Payment Logic
 if (payload.status === "Verified") {
     const purchasePayload: IPurchase = {
     ...payload,

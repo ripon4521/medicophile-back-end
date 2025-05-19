@@ -7,6 +7,7 @@ import { PurchaseModel } from "./purchase.model";
 import mongoose from "mongoose";
 import PaymentDetailsModel from "../paymentDetails/paymentDetails.model";
 import QueryBuilder from "../../builder/querybuilder";
+import { IPaymentInfo } from "../purchaseToken/purchaseToken.interface";
 
 const createPurchase = async (payload: IPurchase) => {
   const session = await mongoose.startSession();
@@ -43,6 +44,17 @@ const createPurchase = async (payload: IPurchase) => {
     payload.subtotal = purchaseToken.subtotal;
     payload.courseId = purchaseToken.courseId;
     payload.paymentInfo = purchaseToken.paymentInfo;
+    if (!purchaseToken.paymentInfo) {
+    const  paymentInfo :IPaymentInfo= {
+            transactionId:'',
+            method:"Auto",
+            accountNumber:'',
+            paymentMedium:'personal',
+            proofUrl:'',
+            paymentDate:new Date(new Date().getTime() + 6 * 60 * 60 * 1000)
+      }
+      payload.paymentInfo = paymentInfo
+    }
 
     // Update status based on paymentStatus
     let tokenStatus = "";

@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 export interface IPaymentInfo {
   transactionId?: string;
-  method?: "Bkash" | "Nagad" | "Bank" | "Cash";
+  method?: "Bkash" | "Nagad" | "Bank" | "Cash" | "Auto";
   accountNumber?: string;
   paymentMedium?: "personal" | "agent" | "merchant";
   paymentDate?: Date;
