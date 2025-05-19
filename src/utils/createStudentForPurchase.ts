@@ -23,7 +23,8 @@ export const createStudentWithUser = async (payload: IStudent) => {
     const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
 
     // Step 2: Send SMS
-    const sms = await sendSMS(payload.phone, `Your login password is: ${plainPassword}`);
+    const sms = await sendSMS(payload.phone, `আপনার কোর্সটি পার্চেস হয়েছে। 
+লগ ইন করতে আপনার ফোন নাম্বার এবং এই ${plainPassword} পাসওয়ার্ড দিয়ে লগ ইন করুন।`);
     if (!sms) {
       throw new AppError(StatusCodes.BAD_REQUEST, "Student creation failed while sending SMS.");
     }
