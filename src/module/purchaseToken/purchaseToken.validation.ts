@@ -1,60 +1,62 @@
 import { Types } from "mongoose";
-import { z, object } from "zod";
+import { z } from "zod";
 
+// Reusable ObjectId Schema
 const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
   message: "Invalid ObjectId format",
 });
 
-// Payment Info Validation
+// Reusable basic types
+const optionalObjectId = ObjectIdSchema.optional();
+const requiredNumber = (msg: string) => z.number({ required_error: msg });
+const optionalNumber = (msg: string) => z.number({ required_error: msg }).optional();
+const requiredString = (msg: string) => z.string({ required_error: msg });
+const optionalString = (msg: string) => z.string({ required_error: msg }).optional();
+
+// Payment Info Schema
 export const paymentInfoSchema = z.object({
-  transactionId: z.string({ required_error: "Transaction ID is required" }).optional(),
+  transactionId: optionalString("Transaction ID is required"),
   method: z.enum(["Bkash", "Nagad", "Bank", "Cash"]).optional(),
-  accountNumber: z.string({ required_error: "account number is requried" }).optional(),
+  accountNumber: optionalString("Account number is required"),
   paymentMedium: z.enum(["personal", "agent", "merchant"]).optional(),
   proofUrl: z.string().url("Invalid proof URL").optional(),
 });
 
+// Create PurchaseToken Schema
 const createPurchaseTokenSchema = z.object({
   body: z.object({
-    studentId: ObjectIdSchema.optional(),
+    studentId: optionalObjectId,
     courseId: ObjectIdSchema,
-    ref: ObjectIdSchema.optional(),
+    ref: optionalObjectId,
     coupon: z.string().optional(),
-    price: z.number({ required_error: "Price is required" }),
-    subtotal: z.number({ required_error: "Subtotal is required" }),
-    discount: z.number({ required_error: "Discount is required" }),
-    charge: z.number({ required_error: "Charge is required" }),
-    totalAmount: z.number({ required_error: "Total amount is required" }),
+    price: optionalNumber("Price is required"),
+    subtotal: optionalNumber("Subtotal is required"),
+    discount: optionalNumber("Discount is required"),
+    charge: optionalNumber("Charge is required"),
+    totalAmount: optionalNumber("Total amount is required"),
     paymentInfo: paymentInfoSchema.optional(),
-    name: z.string({ required_error: "Name is required" }),
-    phone: z.string({ required_error: "Phone is required" }),
+    name: requiredString("Name is required"),
+    phone: requiredString("Phone is required"),
   }),
 });
 
+// Update PurchaseToken Schema
 const updatePurchaseTokenSchema = z.object({
   body: z.object({
-    studentId: ObjectIdSchema.optional(),
-    courseId: ObjectIdSchema.optional(),
-    status: z
-      .enum(["Verified", "Unverified", "Rejected"], {
-        required_error: "Status is required",
-      })
-      .optional(),
-    purchaseToken: z
-      .string({ required_error: "Purchase token is required" })
-      .optional(),
+    studentId: optionalObjectId,
+    courseId: optionalObjectId,
+    status: z.enum(["Verified", "Unverified", "Rejected"]).optional(),
+    purchaseToken: optionalString("Purchase token is required"),
     coupon: z.string().optional(),
-    price: z.number({ required_error: "Price is required" }).optional(),
-    subtotal: z.number({ required_error: "Subtotal is required" }).optional(),
-    discount: z.number({ required_error: "Discount is required" }).optional(),
-    charge: z.number({ required_error: "Charge is required" }).optional(),
-    totalAmount: z
-      .number({ required_error: "Total amount is required" })
-      .optional(),
-    issuedBy: ObjectIdSchema.optional(),
+    price: optionalNumber("Price is required"),
+    subtotal: optionalNumber("Subtotal is required"),
+    discount: optionalNumber("Discount is required"),
+    charge: optionalNumber("Charge is required"),
+    totalAmount: optionalNumber("Total amount is required"),
+    issuedBy: optionalObjectId,
     paymentInfo: paymentInfoSchema.optional(),
-    name: z.string({ required_error: "Name is required" }).optional(),
-    phone: z.string({ required_error: "Phone is required" }).optional(),
+    name: optionalString("Name is required"),
+    phone: optionalString("Phone is required"),
   }),
 });
 

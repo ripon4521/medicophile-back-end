@@ -26,16 +26,18 @@ const createReferWithdraw = async (payload: IReferralWithdrawal) => {
   if (!referDetails) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "invalid transction",
+      "invalid transction dd",
     );
   }
+  console.log(referDetails)
   const referReward = await ReferralReward.findOne({referDetailsId:referDetails._id});
     if (!referReward ) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "invalid transction",
+      "invalid transction ff",
     );
   }
+  console.log(referReward)
   
     if ((referReward.amount || 0) < payload.amount) {
     throw new AppError(
