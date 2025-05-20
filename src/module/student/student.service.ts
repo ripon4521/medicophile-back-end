@@ -4,11 +4,16 @@ import { UserModel } from "../user/user.model";
 import { IUser } from "../user/user.interface";
 import { IStudent } from "./student.interface";
 import studentModel from "./student.model";
+import QueryBuilder from "../../builder/querybuilder";
 
-const getAllStudents = async () => {
-  const result = await studentModel
-    .find({ isDeleted: false })
-    .populate("userId");
+const getAllStudents = async (query: Record<string, unknown>) => {
+   const courseQuery = new QueryBuilder(UserModel, query)
+      .search(["name", "role","phone", "email", "address"])
+      .filter()
+      .sort()
+      .paginate()
+      .fields().populate(["userId"]);
+ const result = await courseQuery.exec();
   return result;
 };
 

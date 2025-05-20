@@ -5,7 +5,8 @@ import { studentsService } from "./student.service";
 import AppError from "../../helpers/AppError";
 
 const getAllStudents = catchAsync(async (req, res) => {
-  const students = await studentsService.getAllStudents();
+  const query = req.query;
+  const students = await studentsService.getAllStudents(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Students Get successfully",
