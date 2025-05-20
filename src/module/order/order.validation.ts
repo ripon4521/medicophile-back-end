@@ -9,6 +9,10 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 const optionalNonEmptyString = z.union([z.string().min(1), z.literal("")]).optional();
 const optionalURL = z.union([z.string().url("Invalid URL"), z.literal("")]).optional();
 const optionalPhoneString = z.union([z.string().min(10), z.literal("")]).optional();
+const optionalStatus = z.union([
+  z.enum(["Pending", "Processing", "Courier", "Delivered"]),
+  z.literal(""),
+]).optional();
 
 // Payment Info Schema
 export const paymentInfoSchema = z.object({
@@ -46,6 +50,7 @@ const updateOrderZodSchema = z.object({
     name: optionalNonEmptyString,
     phone: optionalPhoneString,
     address: optionalNonEmptyString,
+    status: optionalStatus,
   }),
 });
 
