@@ -5,22 +5,27 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
   message: "Invalid ObjectId format",
 });
 
-// Payment Info Schema (Assuming basic structure – customize if needed)
+// Helpers
+const optionalNonEmptyString = z.union([z.string().min(1), z.literal("")]).optional();
+const optionalURL = z.union([z.string().url("Invalid URL"), z.literal("")]).optional();
+const optionalPhoneString = z.union([z.string().min(10), z.literal("")]).optional();
+
+// Payment Info Schema
 export const paymentInfoSchema = z.object({
-  transactionId: z.string().min(1, "Transaction ID is required"),
+  transactionId: z.union([z.string().min(1, "Transaction ID is required"), z.literal("")]),
   method: z.enum(["Bkash", "Nagad", "Bank", "Cash"]),
-  accountNumber: z.string().optional(),
+  accountNumber: optionalNonEmptyString,
   medium: z.enum(["personal", "agent", "merchant"]).optional(),
   paymentDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid payment date",
   }),
-  proofUrl: z.string().url("Invalid proof URL").optional(),
+  proofUrl: optionalURL,
 });
 
 const createOrderZodSchema = z.object({
   body: z.object({
     name: z.string().min(1, "Name is required"),
-    phone: z.string(),
+    phone: z.string().min(10, "Phone number must be at least 10 digits"),
     address: z.string().min(1, "Address is required"),
     paymentInfo: paymentInfoSchema,
     subTotal: z.number().min(0),
@@ -38,9 +43,9 @@ const createOrderZodSchema = z.object({
 
 const updateOrderZodSchema = z.object({
   body: z.object({
-    name: z.string().min(1, "Name is required").optional(),
-    phone: z.number().min(1000000000, "Invalid phone number").optional(),
-    address: z.string().min(1, "Address is required").optional(),
+    name: optionalNonEmptyString,
+    phone: optionalPhoneString,
+    address: optionalNonEmptyString,
   }),
 });
 
