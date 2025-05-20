@@ -7,7 +7,7 @@ import studentModel from "./student.model";
 import QueryBuilder from "../../builder/querybuilder";
 
 const getAllStudents = async (query: Record<string, unknown>) => {
-   const courseQuery = new QueryBuilder(UserModel, query)
+   const courseQuery = new QueryBuilder(studentModel, query)
       .search(["name", "role","phone", "email", "address"])
       .filter()
       .sort()
