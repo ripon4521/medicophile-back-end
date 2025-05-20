@@ -31,19 +31,19 @@ const mcqQuestionSchema = new Schema(
     },
     explaination: {
       type: String,
-      required: false,
+     default:''
     },
     tags: {
       type: [String],
-      required: false,
+    default:[]
     },
     subject: {
       type: String,
-      required: false,
+      default:''
     },
     questionType: {
       type: String,
-      required: false,
+    default:''
     },
 
     insertBy: {
