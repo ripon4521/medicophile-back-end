@@ -6,6 +6,7 @@ export interface IProduct {
   pdf?: string;
   description?: string;
   trailer?: string;
+  bookType:"Hard Copy" | "PDF"
   categoryId: Types.ObjectId;
   status: "Active" | "Drafted";
   price: number;
