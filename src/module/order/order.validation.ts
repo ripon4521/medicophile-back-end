@@ -30,7 +30,7 @@ const createOrderZodSchema = z.object({
   body: z.object({
     name: z.string().min(1, "Name is required"),
     phone: z.string().min(10, "Phone number must be at least 10 digits"),
-    address: z.string().min(1, "Address is required"),
+    address: optionalNonEmptyString,
     paymentInfo: paymentInfoSchema,
     subTotal: z.number().min(0),
     discount: z.number().min(0).optional(),

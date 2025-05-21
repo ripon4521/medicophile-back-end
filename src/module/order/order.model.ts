@@ -5,7 +5,7 @@ const orderSchema = new Schema<IOrder>(
   {
     name: { type: String, required: true },
     phone: { type: String, required: true },
-    address: { type: String, required: true },
+    address: { type: String , default:''},
     status: {
       type: String,
       enum: ["Pending", "Processing", "Courier", "Delivered"],
