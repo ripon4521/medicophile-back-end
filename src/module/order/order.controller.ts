@@ -22,6 +22,8 @@ const getAllOrders = catchAsync(async (req, res) => {
   });
 });
 
+
+
 const updateOrder = catchAsync(async (req, res) => {
   const { id } = req.params;
   const payload = req.body;
@@ -46,9 +48,12 @@ const deleteOrder = catchAsync(async (req, res) => {
   });
 });
 
+
+
 export const orderController = {
   createOrder,
   getAllOrders,
   updateOrder,
   deleteOrder,
+  
 };

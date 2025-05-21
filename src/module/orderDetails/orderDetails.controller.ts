@@ -13,6 +13,16 @@ const getAllOrderDetails = catchAsync(async (req, res) => {
   });
 });
 
+const getAllEbook= catchAsync(async (req, res) => {
+  const query = req.query;
+  const result = await orderDetailsService.getEbook(query);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: " Ebook get successfully",
+    data: result,
+  });
+});
+
 const updateOrderDetails = catchAsync(async (req, res) => {
   const { id } = req.params;
   const payload = req.body;
@@ -37,8 +47,20 @@ const deleteOrderDetails = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleEbook = catchAsync(async (req, res) => {
+  const { slug } = req.params;
+  const result = await orderDetailsService.getSingleEbook(slug);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: " Single Ebook fatched successfully",
+    data: result,
+  });
+});
+
 export const orderDetailsController = {
   getAllOrderDetails,
   deleteOrderDetails,
   updateOrderDetails,
+  getAllEbook,
+  getSingleEbook
 };

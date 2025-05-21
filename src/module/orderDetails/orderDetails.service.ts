@@ -4,6 +4,7 @@ import AppError from "../../helpers/AppError";
 import OrderDetailsModel from "./orderDetails.model";
 import OrderModel from "../order/order.model";
 import { IOrderDetails } from "./orderDetails.interface";
+import { ProductModel } from "../product/product.model";
 
 const getAllOrderDetailsFromDb = async (
   query: Record<string, unknown>,
@@ -75,8 +76,47 @@ const deleteOrderDeails = async (_id: string) => {
   return result;
 };
 
+const getEbook = async (query: Record<string, unknown>) => {
+  const courseQuery = new QueryBuilder(OrderDetailsModel, query)
+    .search(["name", "address"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .populate({
+      path: "productId",
+    })
+    .populate({
+      path: "userId",
+      select: "name role phone profile_picture",
+    })
+
+  const result = await courseQuery.exec();
+
+  // Filter only Hard Copy books
+  const hardCopyOnly = result.filter(
+    (order: any) => order.productId?.bookType === "Ebook"
+  );
+
+  return hardCopyOnly;
+};
+
+
+const getSingleEbook = async (slug: string) => {
+  const ebook = await ProductModel.findOne({ slug, isDeleted: false }) .populate("createdBy", "name email role phone") 
+  .populate("categoryId", "name");
+  return ebook;
+};
+
+
+
+
+
+
 export const orderDetailsService = {
   getAllOrderDetailsFromDb,
   updateOrderDetailsAndOrderStatus,
   deleteOrderDeails,
+  getEbook,
+  getSingleEbook
 };

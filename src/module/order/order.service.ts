@@ -193,6 +193,11 @@ const deleteOrderWithOrderDetails = async (_id: string) => {
   }
 };
 
+
+
+
+
+
 const updateOrderAndOrderDetailsCommonFields = async (
   orderId: string,
   data: {
@@ -234,6 +239,10 @@ const updateOrderAndOrderDetailsCommonFields = async (
     throw error;
   }
 };
+
+
+
+
 
 export const orderService = {
   createOrderWithDetails,

@@ -7,7 +7,7 @@ export interface IProduct {
   uploadLink?: string;
   description?: string;
   trailer?: string;
-  bookType:"Hard Copy" | "PDF"
+  bookType:"Hard Copy" | "Ebook"
   categoryId: Types.ObjectId;
   status: "Active" | "Drafted";
   price: number;
