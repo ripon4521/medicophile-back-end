@@ -4,6 +4,7 @@ export interface IProduct {
   slug: string;
   title: string;
   pdf?: string;
+  uploadLink?: string;
   description?: string;
   trailer?: string;
   bookType:"Hard Copy" | "PDF"

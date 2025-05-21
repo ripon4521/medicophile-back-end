@@ -7,6 +7,7 @@ const productSchema = new Schema<IProduct>(
     slug: { type: String, unique: true },
     title: { type: String },
     pdf: { type: String, default: "" },
+    uploadLink: { type: String, default: "" },
     description: { type: String },
     trailer: { type: String },
     categoryId: {
@@ -15,7 +16,7 @@ const productSchema = new Schema<IProduct>(
       required: true,
     },
     status: { type: String, enum: ["Active", "Drafted"], required: true },
-     bookType: { type: String, enum: ["Hard Copy", "PDF"], required: true },
+    bookType: { type: String, enum: ["Hard Copy", "PDF"], required: true },
     price: { type: Number, required: true },
     offerPrice: { type: Number, default: 0 },
     stock: {

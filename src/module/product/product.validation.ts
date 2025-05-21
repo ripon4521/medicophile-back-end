@@ -16,6 +16,7 @@ const createProductSchema = z.object({
     title: z.string().min(1, "Title is required"),
     description: optionalNonEmptyString,
     pdf: optionalNonEmptyString,
+    uploadLink: optionalNonEmptyString,
     trailer: optionalURL,
     categoryId: ObjectIdSchema,
     status: z.enum(["Active", "Drafted"]),
@@ -33,6 +34,8 @@ const updateProductSchema = z.object({
   body: z.object({
     title: optionalNonEmptyString,
     description: optionalNonEmptyString,
+    pdf:optionalNonEmptyString,
+    uploadLink:optionalNonEmptyString,
     trailer: optionalURL,
     categoryId: ObjectIdSchema.optional(),
     status: z.enum(["Active", "Drafted"]).optional(),
