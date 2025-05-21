@@ -10,12 +10,37 @@ import { ProductModel } from "../product/product.model";
 import CouponModel from "../coupon/coupon.model";
 import { UserModel } from "../user/user.model";
 import { IPaymentInfo } from "../purchaseToken/purchaseToken.interface";
+import { IStudent } from "../student/student.interface";
+import { createStudentWithUser } from "../../utils/creaetStudentForOrder";
 
 
 const createOrderWithDetails = async (payload: IOrder) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
+     if (!payload.userId) {
+        const studentPayload: IStudent = {
+          name: payload.name,
+          phone: payload.phone,
+          email: '',
+          role: 'student',
+          profile_picture: '',
+          userId: undefined,
+          status: 'Active',
+          isDeleted: false,
+          password: '',
+          gurdianName: '',
+          gurdianPhone: '',
+          address: '',
+        };
+    
+        const { user } = await createStudentWithUser(studentPayload);
+        if (!user) throw new AppError(StatusCodes.NOT_FOUND, '');
+        payload.userId = user._id;
+      }
+
+
+
 
     // Validate User
     const user = await UserModel.findOne({ _id: payload.userId }).session(session);

@@ -6,6 +6,7 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
 });
 
 // Helpers
+const optionalObjectId = ObjectIdSchema.optional();
 const optionalNonEmptyString = z.union([z.string().min(1), z.literal("")]).optional();
 const optionalURL = z.union([z.string().url("Invalid URL"), z.literal("")]).optional();
 const optionalPhoneString = z.union([z.string().min(10), z.literal("")]).optional();
@@ -41,7 +42,7 @@ const createOrderZodSchema = z.object({
     discount: z.number().min(0).optional(),
     coupoun: ObjectIdSchema.optional(),
     productId: ObjectIdSchema,
-    userId: ObjectIdSchema,
+    userId: optionalObjectId,
     charge: z.number().min(0).optional(),
     shiping: z.number().min(0),
     quantity: z.number().min(0),
