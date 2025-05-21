@@ -14,14 +14,14 @@ const orderSchema = new Schema<IOrder>(
     paymentStatus: {
       type: String,
       enum: ["Paid", "Pending", "Refunded"],
-      default: "Pending",
+      default:"Pending"
     },
     paymentInfo: {
-      transactionId: { type: String, required: true },
+      transactionId: { type: String},
       method: {
         type: String,
         enum: ["Bkash", "Nagad", "Bank", "Cash"],
-        required: true,
+      
       },
       accountNumber: { type: String },
       medium: { type: String, enum: ["personal", "agent", "merchant"] },

@@ -7,7 +7,7 @@ export interface IOrder {
   address: string;
   status: "Pending" | "Processing" | "Courier" | "Delivered";
   paymentStatus: "Paid" | "Pending" | "Refunded";
-  paymentInfo: IPaymentInfo;
+  paymentInfo?: IPaymentInfo;
   subTotal: number;
   discount: number;
   coupoun: Types.ObjectId;

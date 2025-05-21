@@ -13,6 +13,10 @@ const optionalStatus = z.union([
   z.enum(["Pending", "Processing", "Courier", "Delivered"]),
   z.literal(""),
 ]).optional();
+const optionalPaymentStatus = z.union([
+  z.enum(["Paid", "Pending", "Refunded"]),
+  z.literal(""),
+]).optional();
 
 // Payment Info Schema
 export const paymentInfoSchema = z.object({
@@ -31,7 +35,8 @@ const createOrderZodSchema = z.object({
     name: z.string().min(1, "Name is required"),
     phone: z.string().min(10, "Phone number must be at least 10 digits"),
     address: optionalNonEmptyString,
-    paymentInfo: paymentInfoSchema,
+    paymentInfo: paymentInfoSchema.optional(),
+    paymentStatus:optionalPaymentStatus,
     subTotal: z.number().min(0),
     discount: z.number().min(0).optional(),
     coupoun: ObjectIdSchema.optional(),

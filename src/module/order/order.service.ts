@@ -9,60 +9,91 @@ import QueryBuilder from "../../builder/querybuilder";
 import { ProductModel } from "../product/product.model";
 import CouponModel from "../coupon/coupon.model";
 import { UserModel } from "../user/user.model";
+import { IPaymentInfo } from "../purchaseToken/purchaseToken.interface";
+
 
 const createOrderWithDetails = async (payload: IOrder) => {
-  const user = await UserModel.findOne({_id:payload.userId})
-  if (!user) {
-      throw new AppError(StatusCodes.NOT_FOUND, "User not found");
-  }
-  const product = await ProductModel.findOne({
-    _id: payload.productId,
-    isDeleted: false,
-  });
-  if (payload.coupoun) {
-    const coupon = await CouponModel.findOne({
-      _id: payload.coupoun,
-      isDeleted: false,
-    });
-    if (!coupon) {
-      throw new AppError(StatusCodes.NOT_FOUND, "coupon not found");
-    }
-  }
-
-  if (!product) {
-    throw new AppError(StatusCodes.NOT_FOUND, "Product Not Found");
-  }
   const session = await mongoose.startSession();
-  session.startTransaction();
-
   try {
+    session.startTransaction();
+
+    // Validate User
+    const user = await UserModel.findOne({ _id: payload.userId }).session(session);
+    if (!user) {
+      throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+    }
+
+    // Validate Product
+    const product = await ProductModel.findOne({ _id: payload.productId, isDeleted: false }).session(session);
+    if (!product) {
+      throw new AppError(StatusCodes.NOT_FOUND, "Product not found");
+    }
+
+    // Validate Coupon (if exists)
+    if (payload.coupoun) {
+      const coupon = await CouponModel.findOne({ _id: payload.coupoun, isDeleted: false }).session(session);
+      if (!coupon) {
+        throw new AppError(StatusCodes.NOT_FOUND, "Coupon not found");
+      }
+    }
+
+    // Create Order
     const [order] = await OrderModel.create([payload], { session });
     if (!order) {
-      throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create order.");
+      throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create order");
     }
+
+    // Prepare Payment Info
+    let paymentInfo: IPaymentInfo | undefined = order.paymentInfo;
+
+    if (payload.paymentStatus === "Paid") {
+      paymentInfo = {
+        transactionId: '',
+        method: "Auto",
+        accountNumber: '',
+        paymentMedium: 'personal',
+        proofUrl: '',
+        paymentDate: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // +6 hours
+      };
+    }
+
+    // Create Order Details
     const orderDetailsPayload = {
       orderId: order._id,
       productId: payload.productId,
       quantity: payload.quantity,
       price: payload.paidAmount,
       status: order.status,
-      userId:payload.userId,
+      userId: payload.userId,
       name: payload.name,
       phone: payload.phone,
       address: payload.address,
       paymentStatus: order.paymentStatus,
-      paymentInfo: order.paymentInfo,
+      paymentInfo,
     };
-    await OrderDetailsModel.create([orderDetailsPayload], { session });
+
+    const [orderDetails] = await OrderDetailsModel.create([orderDetailsPayload], { session });
+    if (!orderDetails) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create order details");
+    }
+
+    // Commit the transaction
     await session.commitTransaction();
-    session.endSession();
     return order;
+
   } catch (error) {
+    // Rollback on error
     await session.abortTransaction();
-    session.endSession();
     throw error;
+  } finally {
+    session.endSession();
   }
 };
+
+
+
+
+
 
 const getAllOrderFromDb = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(OrderModel, query)

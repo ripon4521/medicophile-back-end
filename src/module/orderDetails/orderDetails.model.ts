@@ -12,11 +12,11 @@ const orderDetailsSchema = new Schema<IOrderDetails>(
     address: { type: String },
     price: { type: Number, required: true },
     paymentInfo: {
-      transactionId: { type: String, required: true },
+      transactionId: { type: String },
       method: {
         type: String,
-        enum: ["Bkash", "Nagad", "Bank", "Cash"],
-        required: true,
+        enum: ["Bkash", "Nagad", "Bank", "Cash", "Auto"],
+       
       },
       accountNumber: { type: String },
       medium: { type: String, enum: ["personal", "agent", "merchant"] },
