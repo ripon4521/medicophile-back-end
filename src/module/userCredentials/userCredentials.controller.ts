@@ -23,7 +23,17 @@ const getSingleCredentials = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteCredintials = catchAsync(async (req: Request, res: Response) => {
+  const result = await userCredentialsService.deleteMany();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: " User Credentials delete successfully",
+    data: result,
+  });
+});
+
 export const userCredentialsController = {
   getAllCredentials,
   getSingleCredentials,
+  deleteCredintials
 };

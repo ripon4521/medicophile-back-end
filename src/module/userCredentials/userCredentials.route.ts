@@ -12,5 +12,6 @@ userCredentialsRoute.get(
   "/:id",
   userCredentialsController.getSingleCredentials,
 );
+userCredentialsRoute.delete('/', userCredentialsController.deleteCredintials)
 
 export default userCredentialsRoute;

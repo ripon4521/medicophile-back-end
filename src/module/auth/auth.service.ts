@@ -32,13 +32,10 @@ const login = async (
     ipAddress: string;
     deviceType: string;
     deviceName: string;
-  },
+  }
 ) => {
   if (!payload.phone || !payload.password) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Phone and password are required",
-    );
+    throw new AppError(StatusCodes.BAD_REQUEST, "Phone and password are required");
   }
 
   const session = await mongoose.startSession();
@@ -46,6 +43,7 @@ const login = async (
   try {
     session.startTransaction();
 
+    // 1️⃣ Find the user with password
     const user = await UserModel.findOne({ phone: payload.phone })
       .select("+password")
       .session(session);
@@ -58,26 +56,13 @@ const login = async (
       throw new AppError(StatusCodes.UNAUTHORIZED, "This user is blocked!");
     }
 
-    const isPasswordMatched = await bcrypt.compare(
-      payload.password,
-      user.password,
-    );
-
+    // 2️⃣ Check password
+    const isPasswordMatched = await bcrypt.compare(payload.password, user.password);
     if (!isPasswordMatched) {
       throw new AppError(StatusCodes.FORBIDDEN, "Invalid password");
     }
 
-    const student = await UserModel.findOne({ _id: user._id }).session(session);
-    if (!student) {
-      throw new AppError(StatusCodes.NOT_FOUND, "User not found");
-    }
-
-    const existingCredential = await UserCredentialsModel.findOne({
-      studentId: student._id,
-      phone: payload.phone,
-      isDeleted: false,
-    }).session(session);
-
+    // 3️⃣ JWT payload
     const jwtPayload = {
       phone: user.phone,
       role: user.role,
@@ -88,14 +73,16 @@ const login = async (
       expiresIn: "1h",
     });
 
-    const refreshToken = jwt.sign(
-      jwtPayload,
+    const refreshToken = jwt.sign(jwtPayload, config.refreshSecret as string, {
+      expiresIn: "30d",
+    });
 
-      config.refreshSecret as string,
-      {
-        expiresIn: "30d",
-      },
-    );
+    // 4️⃣ Check existing session for this user
+    const existingCredential = await UserCredentialsModel.findOne({
+      studentId: user._id,
+      phone: user.phone,
+      isDeleted: false,
+    }).session(session);
 
     if (
       existingCredential &&
@@ -103,13 +90,13 @@ const login = async (
         existingCredential.deviceType !== meta.deviceType ||
         existingCredential.deviceName !== meta.deviceName)
     ) {
+      // ❌ Invalidate old session if device doesn't match
       existingCredential.isDeleted = true;
-      existingCredential.deletedAt = new Date(
-        new Date().getTime() + 6 * 60 * 60 * 1000,
-      );
+      existingCredential.deletedAt = new Date(new Date().getTime() + 6 * 60 * 60 * 1000); // Optional: add buffer
       await existingCredential.save({ session });
     }
 
+    // 5️⃣ Save new credentials
     await UserCredentialsModel.create(
       [
         {
@@ -119,24 +106,30 @@ const login = async (
           deviceType: meta.deviceType,
           deviceName: meta.deviceName,
           isDeleted: false,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
+          accessToken,
+          refreshToken,
           deletedAt: null,
         },
       ],
-      { session },
+      { session }
     );
 
     await session.commitTransaction();
     session.endSession();
 
-    return { accessToken, refreshToken, user };
+    return {
+      accessToken,
+      refreshToken,
+      user,
+    };
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
     throw error;
   }
 };
+
+export default login;
 
 // Logout function
 const logout = async (

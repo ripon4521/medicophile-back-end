@@ -7,20 +7,20 @@ import { USER_ROLE, USER_STATUS } from "../module/user/user.constants";
 import AppError from "../helpers/AppError";
 import { StatusCodes } from "http-status-codes";
 import config from "../config";
+import { UserCredentialsModel } from "../module/userCredentials/userCredentials.model";
 
 // Extend Request type to include user
 interface AuthenticatedRequest extends Request {
   user?: JwtPayload;
 }
 
-const authUser = (...requiredRoles: TUserRole[]) => {
+export const authUser = (...requiredRoles: TUserRole[]) => {
   return async (req: any, res: Response, next: NextFunction) => {
     try {
       const authHeader = req.headers.authorization;
 
-      // If there's no authorization header, proceed with no user (user is not logged in)
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        req.user = null; // Set user to null if there's no token
+        req.user = null;
         return next();
       }
 
@@ -36,7 +36,22 @@ const authUser = (...requiredRoles: TUserRole[]) => {
         );
       }
 
-      const { role, phone } = decoded;
+      const { role, phone, _id } = decoded;
+
+      // 🔐 Check if session is valid in UserCredentialsModel
+      const session = await UserCredentialsModel.findOne({
+        studentId: _id,
+        accessToken,
+        isDeleted: false,
+      });
+
+      if (!session) {
+        throw new AppError(
+          StatusCodes.UNAUTHORIZED,
+          "Your session is invalid or expired. Please log in again."
+        );
+      }
+
       const user = await UserModel.findOne({ phone });
 
       if (!user) {
@@ -54,7 +69,7 @@ const authUser = (...requiredRoles: TUserRole[]) => {
         );
       }
 
-      req.user = decoded; // Attach user info to req object
+      req.user = decoded;
       next();
     } catch (error) {
       next(error);

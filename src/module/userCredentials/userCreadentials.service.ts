@@ -28,7 +28,16 @@ const getSingleCrtedentials = async (_id: string) => {
   return result;
 };
 
+const deleteMany = async() => {
+  const result = await UserCredentialsModel.deleteMany();
+  return result;
+}
+
+
+
+
 export const userCredentialsService = {
   getAllCredentials,
   getSingleCrtedentials,
+  deleteMany
 };
