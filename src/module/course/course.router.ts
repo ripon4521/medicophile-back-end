@@ -11,9 +11,9 @@ courseRouter.post(
   validateRequest(courseValidation.createCourseSchema),
   courseController.createCourse,
 );
-courseRouter.get("/", authUser("admin", "teacher", "superAdmin"), courseController.getAllCourses);
+courseRouter.get("/", authUser("admin", "teacher", "superAdmin","student"), courseController.getAllCourses);
 courseRouter.get("/my-course",authUser("student"), courseController.getMyCourse);
-courseRouter.get("/:slug", auth.authUser(), courseController.getSingleCourse);
+courseRouter.get("/:slug", auth.authUser("admin", "teacher", "superAdmin","student"), courseController.getSingleCourse);
 courseRouter.patch(
   "/:slug",
   authUser("admin", "teacher", "superAdmin"),
