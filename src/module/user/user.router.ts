@@ -1,7 +1,7 @@
 import { Router } from "express";
 import validateRequest from "../../middlewares/validateRequest";
 import { userController } from "./user.controller";
-import { auth } from "../../middlewares/auth";
+import { auth, authUser, onlyAdmin, onlyAdminAndFacultyAndStudent, onlyStudent } from "../../middlewares/auth";
 import { facultyValidation } from "../teacher/faculty.validation";
 import { studentValidation } from "../student/student.validation";
 import { adminValidation } from "../admin/admin.validation";
@@ -22,7 +22,7 @@ userRouter.post(
 );
 userRouter.get(
   "/profile",
-  auth.authUser("superAdmin", "admin", "teacher", "student"),
+  auth.authUser("superAdmin", "admin", "teacher", "student"),onlyAdminAndFacultyAndStudent("admin","teacher","student","superAdmin"),
   userController.getProfile,
 );
 userRouter.post(
@@ -30,10 +30,10 @@ userRouter.post(
   validateRequest(facultyValidation.createFacultyValidationSchema),
   userController.createFaculty,
 );
-userRouter.get("/", userController.getAllUsers);
-userRouter.delete("/", auth.authUser("admin"), userController.deleteUsers);
+userRouter.get("/",authUser(), onlyAdminAndFacultyAndStudent("admin"), userController.getAllUsers);
+userRouter.delete("/", auth.authUser(),onlyAdmin("admin"), userController.deleteUsers);
 userRouter.patch(
-  "/change-password",
+  "/change-password", authUser(), onlyAdminAndFacultyAndStudent("student"),
   validateRequest(changePasswordValidation),
   userController.changePassord,
 );
