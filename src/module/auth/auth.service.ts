@@ -70,7 +70,7 @@ const login = async (
     };
 
     const accessToken = jwt.sign(jwtPayload, config.accessSecret as string, {
-      expiresIn: "1h",
+      expiresIn: "2h",
     });
 
     const refreshToken = jwt.sign(jwtPayload, config.refreshSecret as string, {
