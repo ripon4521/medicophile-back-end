@@ -12,7 +12,7 @@ courseRouter.post(
   courseController.createCourse,
 );
 courseRouter.get("/", authUser("admin", "teacher", "superAdmin","student"), courseController.getAllCourses);
-courseRouter.get("/my-course",authUser("student"), courseController.getMyCourse);
+courseRouter.get("/my-course",auth.authUser("student", "teacher"), courseController.getMyCourse);
 courseRouter.get("/:slug", auth.authUser("admin", "teacher", "superAdmin","student"), courseController.getSingleCourse);
 courseRouter.patch(
   "/:slug",

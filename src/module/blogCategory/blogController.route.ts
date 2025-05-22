@@ -2,6 +2,7 @@ import { Router } from "express";
 import validateRequest from "../../middlewares/validateRequest";
 import { blogCategoryValidation } from "./blogCategory.validation";
 import { blogCategoryController } from "./blogCategory.controller";
+import { auth } from "../../middlewares/auth";
 
 const blogCategoryRoute = Router();
 
@@ -19,6 +20,6 @@ blogCategoryRoute.patch(
   blogCategoryController.updateBlogCategory,
 );
 
-blogCategoryRoute.delete("/:slug", blogCategoryController.deleteBlogCategory);
+blogCategoryRoute.delete("/:slug", auth.authUser("student"), blogCategoryController.deleteBlogCategory);
 
 export default blogCategoryRoute;
