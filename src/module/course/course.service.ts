@@ -47,24 +47,24 @@ const getAllCoursesFromDb = async (query: Record<string, unknown>) => {
     ]);
 
   const result = await courseQuery.exec();
-  const currentDateBD = new Date(
-    new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
-  );
+  // const currentDateBD = new Date(
+  //   new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
+  // );
 
-  // Filter out expired courses
-  const ongoingCourses = result.filter((course: any) => {
-    if (!course.createdAt || !course.duration) return false;
+  // // Filter out expired courses
+  // const ongoingCourses = result.filter((course: any) => {
+  //   if (!course.createdAt || !course.duration) return false;
 
-    const durationMatch = course.duration.match(/(\d+)\s*months?/i);
-    if (!durationMatch) return false;
+  //   const durationMatch = course.duration.match(/(\d+)\s*months?/i);
+  //   if (!durationMatch) return false;
 
-    const months = parseInt(durationMatch[1]);
-    const endDate = addMonths(new Date(course.createdAt), months);
+  //   const months = parseInt(durationMatch[1]);
+  //   const endDate = addMonths(new Date(course.createdAt), months);
 
-    return isAfter(endDate, currentDateBD);
-  });
+  //   return isAfter(endDate, currentDateBD);
+  // });
 
-  return ongoingCourses;
+  return result;
 };
 
 const getCourseById = async (slug: string, userId?: string) => {
