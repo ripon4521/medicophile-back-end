@@ -133,6 +133,7 @@ const getUserPurchasedCourses = async (userId: string) => {
     userId,
     paymentStatus: "Paid",
     status: "Active",
+    isExpire:false
   }).populate("courseId");
 
   // শুধু কোর্স ডেটা রিটার্ন করবো

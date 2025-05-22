@@ -34,6 +34,7 @@ const PurchaseSchema = new Schema<IPurchase>(
     },
     purchaseToken: { type: Schema.Types.ObjectId, required: true },
     subtotal: { type: Number },
+    isExpire:{type:Boolean, default:false},
     discount: { type: Number },
     charge: { type: Number },
     totalAmount: { type: Number },

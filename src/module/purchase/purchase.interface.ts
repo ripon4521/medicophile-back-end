@@ -15,4 +15,7 @@ export interface IPurchase {
   issuedBy?: Types.ObjectId;
   isDeleted: boolean;
   deletedAt: Date;
+  isExpire:boolean;
+  createdAt:Date;
+  
 }
