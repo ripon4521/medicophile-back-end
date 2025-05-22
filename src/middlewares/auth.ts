@@ -77,14 +77,14 @@ export const authUser = (...requiredRoles: TUserRole[]) => {
   };
 };
 
-const onlyAdmin = (...requiredRoles: TUserRole[]) => {
+export const onlyAdmin = (...requiredRoles: TUserRole[]) => {
   return catchAsync(
     async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
       const user = req.user;
       if (!user || !user.role) {
         throw new AppError(
           StatusCodes.FORBIDDEN,
-          "Access denied. No token provided or invalid format.",
+          "Access denied. You are not authorized!",
         );
       }
       if (user.role !== USER_ROLE.admin) {
@@ -98,12 +98,38 @@ const onlyAdmin = (...requiredRoles: TUserRole[]) => {
   );
 };
 
-const onlyStudent = (...requiredRoles: TUserRole[]) => {
+
+export const onlyAdminAndFacultyAndStudent = (...allowedRoles: TUserRole[]) => {
+  return catchAsync(
+    async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+      const user = req.user;
+
+      if (!user || !user.role) {
+        throw new AppError(
+          StatusCodes.FORBIDDEN,
+          "Access denied. You are not authorized!",
+        );
+      }
+
+      if (allowedRoles.length && !allowedRoles.includes(user.role)) {
+        throw new AppError(
+          StatusCodes.FORBIDDEN,
+          "Access denied. You are not authorized!",
+        );
+      }
+
+      next();
+    },
+  );
+};
+
+
+ export const onlyStudent = (...requiredRoles: TUserRole[]) => {
   return catchAsync(
     async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
       const user = req.user;
       if (!user || !user.role) {
-        throw new Error("Access denied. No token provided or invalid format.");
+        throw new Error("Access denied. You are not authorized!");
       }
       if (user.role !== USER_ROLE.student) {
         throw new Error("Access denied only student");
@@ -116,7 +142,7 @@ const onlyStudent = (...requiredRoles: TUserRole[]) => {
   );
 };
 
-const onlyFaculty = (...requiredRoles: TUserRole[]) => {
+ export const onlyFaculty = (...requiredRoles: TUserRole[]) => {
   return catchAsync(
     async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
       const user = req.user;
