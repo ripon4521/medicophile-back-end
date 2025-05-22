@@ -22,7 +22,7 @@ userRouter.post(
 );
 userRouter.get(
   "/profile",
-  auth.authUser("superAdmin", "admin", "teacher", "student"),onlyAdminAndFacultyAndStudent("admin","teacher","student","superAdmin"),
+  authUser(),onlyAdminAndFacultyAndStudent("admin","teacher","student","superAdmin"),
   userController.getProfile,
 );
 userRouter.post(

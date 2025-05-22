@@ -78,23 +78,24 @@ const login = async (
     });
 
     // 4️⃣ Check existing session for this user
-    const existingCredential = await UserCredentialsModel.findOne({
-      studentId: user._id,
-      phone: user.phone,
-      isDeleted: false,
-    }).session(session);
+  await UserCredentialsModel.updateMany(
+  {
+    studentId: user._id,
+    phone: user.phone,
+    isDeleted: false,
+    $or: [
+      { ipAddress: { $ne: meta.ipAddress } },
+      { deviceType: { $ne: meta.deviceType } },
+      { deviceName: { $ne: meta.deviceName } },
+    ],
+  },
+  {
+    isDeleted: true,
+    deletedAt: new Date(),
+  },
+  { session }
+);
 
-    if (
-      existingCredential &&
-      (existingCredential.ipAddress !== meta.ipAddress ||
-        existingCredential.deviceType !== meta.deviceType ||
-        existingCredential.deviceName !== meta.deviceName)
-    ) {
-      // ❌ Invalidate old session if device doesn't match
-      existingCredential.isDeleted = true;
-      existingCredential.deletedAt = new Date(new Date().getTime() + 6 * 60 * 60 * 1000); // Optional: add buffer
-      await existingCredential.save({ session });
-    }
 
     // 5️⃣ Save new credentials
     await UserCredentialsModel.create(
