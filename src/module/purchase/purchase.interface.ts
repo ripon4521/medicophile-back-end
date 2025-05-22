@@ -16,6 +16,6 @@ export interface IPurchase {
   isDeleted: boolean;
   deletedAt: Date;
   isExpire:boolean;
-  createdAt:Date;
-  
+  createdAt?:Date;
+
 }

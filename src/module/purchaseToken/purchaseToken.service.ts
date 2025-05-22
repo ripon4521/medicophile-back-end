@@ -72,6 +72,7 @@ if (payload.status === "Verified") {
     purchaseToken: result._id,
     paymentStatus: "Paid",
     status: "Active",
+    isExpire:false
   };
    const res = await purchaseService.createPurchase(purchasePayload);
   if (!res) throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase ');
