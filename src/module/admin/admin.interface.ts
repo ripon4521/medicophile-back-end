@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export type IAdmin = {
-  role: "superAdmin" | "admin" | "teacher" | "student";
+  role: "superAdmin" | "admin" | "teacher" | "student" | "shop manager";
   userId: Types.ObjectId;
   name: string;
   phone: string;

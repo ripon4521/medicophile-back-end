@@ -13,7 +13,7 @@ const UserSchema = new Schema<IUser>(
     phone: { type: String, required: true, unique: true },
     role: {
       type: String,
-      enum: ["superAdmin", "admin", "teacher", "student"],
+      enum: ["superAdmin", "admin", "teacher", "student", "shop manager"],
     },
     profile_picture: { type: String },
     status: { type: String, enum: ["Active", "Blocked"] },

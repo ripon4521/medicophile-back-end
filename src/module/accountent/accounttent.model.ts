@@ -1,15 +1,17 @@
 import mongoose, { Schema, Types } from "mongoose";
 import bcrypt from "bcrypt";
 import config from "../../config";
+import { IShopManager } from "./accountent.interface";
 
-const facultySchema = new Schema(
+
+const shopManagerSchema = new Schema<IShopManager>(
   {
     role: {
       type: String,
       enum: ["superAdmin", "admin", "teacher", "student", "shop manager"],
-      default: "teacher",
+      default: "shop manager",
     },
-    userId: { type: Types.ObjectId, ref: "User" },
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
     name: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
     email: { type: String, default: "" },
@@ -22,12 +24,12 @@ const facultySchema = new Schema(
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }, // ✅ BD Time (UTC+6)
+    },
   },
 );
 
 // ✅ Middleware: Delete হলে `deletedAt` BD Time অনুযায়ী সেট হবে
-facultySchema.pre("findOneAndUpdate", function (next) {
+shopManagerSchema.pre("findOneAndUpdate", function (next) {
   const update = this.getUpdate() as Record<string, any>;
 
   if (update?.isDeleted === true) {
@@ -37,20 +39,6 @@ facultySchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-// facultySchema.pre("save", async function (next) {
-//   // eslint-disable-next-line @typescript-eslint/no-this-alias
-//   const user = this;
-//   user.password = await bcrypt.hash(
-//     user.password,
-//     Number(config.bcrypt_salt_rounds),
-//   );
-//   next();
-// });
 
-// facultySchema.post("save", async function (doc, next) {
-//   doc.password = "";
-//   next();
-// });
-
-const FacultyUserModel = mongoose.model("Faculty", facultySchema);
-export default FacultyUserModel;
+const shopManagerModel = mongoose.model("ShopManager", shopManagerSchema);
+export default shopManagerModel;

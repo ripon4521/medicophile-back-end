@@ -7,7 +7,7 @@ const stundetSchema = new Schema<IStudent>(
   {
     role: {
       type: String,
-      enum: ["superAdmin", "admin", "teacher", "student"],
+      enum: ["superAdmin", "admin", "teacher", "student", "shop manager"],
       default: "student",
     },
     userId: { type: Schema.Types.ObjectId, ref: "User" },

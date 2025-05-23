@@ -8,13 +8,13 @@ const orderSchema = new Schema<IOrder>(
     address: { type: String , default:''},
     status: {
       type: String,
-      enum: ["Pending", "Processing", "Courier", "Delivered"],
-      default: "Pending",
+      enum: [ "Processing", "Courier", "Delivered", "Cancel"],
+      default: "Processing",
     },
     paymentStatus: {
       type: String,
-      enum: ["Paid", "Pending", "Refunded"],
-      default:"Pending"
+      enum: ["Paid"],
+      default:"Paid"
     },
     paymentInfo: {
       transactionId: { type: String},
@@ -47,6 +47,9 @@ const orderSchema = new Schema<IOrder>(
     },
   },
 );
+
+
+
 
 const OrderModel = model<IOrder>("Order", orderSchema);
 export default OrderModel;

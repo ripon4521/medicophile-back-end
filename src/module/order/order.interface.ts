@@ -5,8 +5,8 @@ export interface IOrder {
   name: string;
   phone: string;
   address: string;
-  status: "Pending" | "Processing" | "Courier" | "Delivered";
-  paymentStatus: "Paid" | "Pending" | "Refunded";
+  status: "Cancel" | "Processing" | "Courier" | "Delivered";
+  paymentStatus: "Paid";
   paymentInfo?: IPaymentInfo;
   subTotal: number;
   discount: number;

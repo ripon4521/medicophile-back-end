@@ -7,7 +7,7 @@ const adminSchema = new Schema<IAdmin>(
   {
     role: {
       type: String,
-      enum: ["superAdmin", "admin", "teacher", "student"],
+      enum: ["superAdmin", "admin", "teacher", "student", "shop manager"],
       default: "admin",
     },
     userId: { type: Schema.Types.ObjectId, ref: "User" },
@@ -37,21 +37,6 @@ adminSchema.pre("findOneAndUpdate", function (next) {
 
   next();
 });
-
-// adminSchema.pre("save", async function (next) {
-//   // eslint-disable-next-line @typescript-eslint/no-this-alias
-//   const user = this;
-//   user.password = await bcrypt.hash(
-//     user.password,
-//     Number(config.bcrypt_salt_rounds),
-//   );
-//   next();
-// });
-
-// adminSchema.post("save", async function (doc, next) {
-//   doc.password = "";
-//   next();
-// });
 
 const adminModel = mongoose.model("Admin", adminSchema);
 export default adminModel;

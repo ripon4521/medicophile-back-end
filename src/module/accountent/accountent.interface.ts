@@ -1,6 +1,8 @@
+
+
 import { Types } from "mongoose";
 
-export type IFaculty = {
+export type IShopManager = {
   role: "superAdmin" | "admin" | "teacher" | "student" | "shop manager";
   userId: Types.ObjectId;
   name: string;
