@@ -20,6 +20,6 @@ courseRouter.patch(
   validateRequest(courseValidation.updateCourseSchema),
   courseController.updateCourse,
 );
-courseRouter.delete("/:slug", authUser(),onlyAdminAndFacultyAndStudent("admin","teacher","superAdmin"), courseController.deleteCourse);
+courseRouter.delete("/:slug", authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"), courseController.deleteCourse);
 
 export default courseRouter;
