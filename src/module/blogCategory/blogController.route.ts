@@ -7,7 +7,7 @@ import { auth, authUser, onlyAdmin, onlyAdminAndFacultyAndStudent, onlyFaculty }
 const blogCategoryRoute = Router();
 
 blogCategoryRoute.post(
-  "/", authUser(),onlyAdminAndFacultyAndStudent("admin", "teacher"),
+  "/", authUser(),onlyAdminAndFacultyAndStudent("admin", "teacher","superAdmin"),
   validateRequest(blogCategoryValidation.createBlogCategorySchema),
   blogCategoryController.createBlogCategory,
 );
@@ -15,11 +15,11 @@ blogCategoryRoute.post(
 blogCategoryRoute.get("/", blogCategoryController.getAllBlogCategory);
 blogCategoryRoute.get("/:slug", blogCategoryController.getSingleBlogCategory);
 blogCategoryRoute.patch(
-  "/:slug", authUser(), onlyAdminAndFacultyAndStudent("admin","teacher"),
+  "/:slug", authUser(), onlyAdminAndFacultyAndStudent("admin","superAdmin","teacher"),
   validateRequest(blogCategoryValidation.updateBlogCategorySchema),
   blogCategoryController.updateBlogCategory,
 );
 
-blogCategoryRoute.delete("/:slug", authUser(), onlyAdminAndFacultyAndStudent("admin", "teacher"), blogCategoryController.deleteBlogCategory);
+blogCategoryRoute.delete("/:slug", authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin"), blogCategoryController.deleteBlogCategory);
 
 export default blogCategoryRoute;
