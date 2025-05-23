@@ -24,7 +24,7 @@ const ExamSchema = new Schema<IExam>(
       type: String,
       enum: ["pending", "completed", "failed"],
     },
-    validTime: { type: Date },
+    validTime: { type: String , default:'' },
     status: { type: String, enum: ["published", "drafted"], required: true },
     scheduleDate: { type: Date },
     deletedAt: { type: Date },
