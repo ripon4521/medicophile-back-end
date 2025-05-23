@@ -10,6 +10,7 @@ const ObjectIdSchema = z
 // Helpers for optional fields that allow empty string
 const optionalNonEmptyString = z.union([z.string().min(1), z.literal("")]).optional();
 const optionalNonEmptyupload = z.union([z.string().min(1), z.literal("")]).optional().nullable();
+const optionalNonEmptyPreview = z.union([z.string().min(1), z.literal("")]).optional().nullable();
 const optionalURL = z.union([z.string().url("Invalid URL"), z.literal("")]).optional();
 
 const createProductSchema = z.object({
@@ -18,6 +19,7 @@ const createProductSchema = z.object({
     description: optionalNonEmptyString,
     pdf: optionalNonEmptyString,
     uploadLink: optionalNonEmptyupload,
+    previewPdf: optionalNonEmptyupload,
     trailer: optionalURL,
     categoryId: ObjectIdSchema,
     status: z.enum(["Active", "Drafted"]),
@@ -37,6 +39,7 @@ const updateProductSchema = z.object({
     description: optionalNonEmptyString,
     pdf:optionalNonEmptyString,
     uploadLink:optionalNonEmptyupload,
+    previewPdf: optionalNonEmptyPreview,
     trailer: optionalURL,
     categoryId: ObjectIdSchema.optional(),
     status: z.enum(["Active", "Drafted"]).optional(),

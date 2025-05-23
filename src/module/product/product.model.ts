@@ -9,6 +9,7 @@ const productSchema = new Schema<IProduct>(
     pdf: { type: String, default: "" },
     uploadLink: { type: String, default: "" },
     description: { type: String },
+    previewPdf:{type:String},
     trailer: { type: String },
     categoryId: {
       type: Schema.Types.ObjectId,

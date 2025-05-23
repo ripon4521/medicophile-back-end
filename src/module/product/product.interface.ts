@@ -4,6 +4,7 @@ export interface IProduct {
   slug: string;
   title: string;
   pdf?: string;
+  previewPdf?:string;
   uploadLink?: string;
   description?: string;
   trailer?: string;
