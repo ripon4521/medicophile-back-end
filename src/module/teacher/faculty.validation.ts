@@ -40,6 +40,7 @@ const updateFacultyValidationSchema = z.object({
     phone: optionalPhone,
     email: optionalEmail,
     password: optionalPassword,
+    address:optionalNonEmptyString,
     profile_picture: optionalURL,
     status: z.enum(["Active", "Blocked"]).optional(),
   }),

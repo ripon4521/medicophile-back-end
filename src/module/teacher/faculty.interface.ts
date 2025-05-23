@@ -6,6 +6,7 @@ export type IFaculty = {
   name: string;
   phone: string;
   email: string;
+  address?:string;
   password: string;
   profile_picture?: string | null | undefined;
   status: "Active" | "Blocked";

@@ -13,6 +13,7 @@ const facultySchema = new Schema(
     name: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
     email: { type: String, default: "" },
+    address:{type:String, default:""},
     password: { type: String, default: "" },
     profile_picture: { type: String, default: "" },
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
