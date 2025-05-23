@@ -17,7 +17,7 @@ moduleRouter.patch(
 
 moduleRouter.get("/", modulesController.getAllModule);
 moduleRouter.get("/:id", modulesController.getSpecificModule);
-moduleRouter.get("/:slug", modulesController.getSingleModule);
+moduleRouter.get("/single/:slug", modulesController.getSingleModule);
 moduleRouter.delete("/:slug", modulesController.deleteModule);
 
 export default moduleRouter;
