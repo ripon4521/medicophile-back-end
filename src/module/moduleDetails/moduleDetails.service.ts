@@ -121,6 +121,8 @@ const deleteModuleDetails = async (_id: string) => {
   if (!_id) {
     throw new AppError(StatusCodes.BAD_REQUEST, "id not found ");
   }
+  
+
   const result = await ModuleDetails.findOneAndUpdate(
     { _id },
     {
@@ -138,6 +140,12 @@ const deleteModuleDetails = async (_id: string) => {
 };
 
 const updateModuleDetails = async (_id: string, payload: IModuleDetails) => {
+  const updatemoduledetails = await ModuleDetails.findOne({_id})
+  if (!updateModuleDetails) {
+      throw new Error("No data found with the provided ID");
+  }
+
+
   try {
     const update = await ModuleDetails.findByIdAndUpdate(_id, payload, {
       new: true,
