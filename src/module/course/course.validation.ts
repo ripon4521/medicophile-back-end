@@ -1,19 +1,30 @@
 import { z } from "zod";
 import { Types } from "mongoose";
 
+// ObjectId Schema
 const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
   message: "Invalid ObjectId format",
 });
+const optionalObjectId = z.union([ObjectIdSchema, z.literal("")]).optional();
 
+// Optional helpers that allow empty string
+const optionalString = (msg: string) =>
+  z.union([z.string().min(1, msg), z.literal("")]).optional();
+const optionalNumber = (msg: string) =>
+  z.union([z.number(), z.literal("")]).optional();
+const optionalArray = () =>
+  z.union([z.array(z.string()).nonempty(), z.literal("")]).optional();
+
+const requiredString = (msg: string) => z.string().min(1, { message: msg });
+const requiredNumber = (msg: string) => z.number({ required_error: msg });
+
+// Create Schema
 const createCourseSchema = z.object({
   body: z.object({
-    cover_photo: z
-      .string()
-      .min(1, { message: "Cover photo URL is required." })
-      .optional(),
-    course_title: z.string().min(1, { message: "Course title is required." }),
-    description: z.string().min(1, { message: "Description is required." }),
-    duration: z.string().min(1, { message: "Duration is required." }),
+    cover_photo: optionalString("Cover photo URL is required."),
+    course_title: requiredString("Course title is required."),
+    description: requiredString("Description is required."),
+    duration: requiredString("Duration is required."),
     preOrder: z.enum(["on", "off"], {
       message: "PreOrder must be either 'on' or 'off'.",
     }),
@@ -22,20 +33,15 @@ const createCourseSchema = z.object({
     }),
     category: ObjectIdSchema,
     createdBy: ObjectIdSchema,
-    expireTime: z.string({ required_error: "expire time is requried" }),
+    expireTime: requiredString("Expire time is required."),
     daySchedule: z
       .array(z.string())
       .nonempty({ message: "Day schedule cannot be empty." }),
     timeShedule: z
       .array(z.string())
       .nonempty({ message: "Time schedule cannot be empty." }),
-    price: z
-      .number()
-      .min(0, { message: "Price must be a non-negative number." }),
-    offerPrice: z
-      .number()
-      .min(0, { message: "Offer price must be a non-negative number." })
-      .optional(),
+    price: requiredNumber("Price must be a non-negative number."),
+    offerPrice: optionalNumber("Offer price must be a non-negative number."),
     takeReview: z
       .enum(["on", "off"], {
         message: "Take review must be either 'on' or 'off'.",
@@ -47,24 +53,13 @@ const createCourseSchema = z.object({
   }),
 });
 
+// Update Schema
 const updateCourseSchema = z.object({
   body: z.object({
-    cover_photo: z
-      .string()
-      .min(1, { message: "Cover photo URL is required." })
-      .optional(),
-    course_title: z
-      .string()
-      .min(1, { message: "Course title is required." })
-      .optional(),
-    description: z
-      .string()
-      .min(1, { message: "Description is required." })
-      .optional(),
-    duration: z
-      .string()
-      .min(1, { message: "Duration is required." })
-      .optional(),
+    cover_photo: optionalString("Cover photo URL is required."),
+    course_title: optionalString("Course title is required."),
+    description: optionalString("Description is required."),
+    duration: optionalString("Duration is required."),
     preOrder: z
       .enum(["on", "off"], {
         message: "PreOrder must be either 'on' or 'off'.",
@@ -75,27 +70,13 @@ const updateCourseSchema = z.object({
         message: "Course type must be either 'online' or 'offline'.",
       })
       .optional(),
-    category: ObjectIdSchema.optional(),
-    createdBy: ObjectIdSchema.optional(),
-    expireTime: z
-      .string({ message: "Expire time must be a valid date." })
-      .optional(),
-    daySchedule: z
-      .array(z.string())
-      .nonempty({ message: "Day schedule cannot be empty." })
-      .optional(),
-    timeShedule: z
-      .array(z.string())
-      .nonempty({ message: "Time schedule cannot be empty." })
-      .optional(),
-    price: z
-      .number()
-      .min(0, { message: "Price must be a non-negative number." })
-      .optional(),
-    offerPrice: z
-      .number()
-      .min(0, { message: "Offer price must be a non-negative number." })
-      .optional(),
+    category: optionalObjectId,
+    createdBy: optionalObjectId,
+    expireTime: optionalString("Expire time must be a valid date."),
+    daySchedule: optionalArray(),
+    timeShedule: optionalArray(),
+    price: optionalNumber("Price must be a non-negative number."),
+    offerPrice: optionalNumber("Offer price must be a non-negative number."),
     takeReview: z
       .enum(["on", "off"], {
         message: "Take review must be either 'on' or 'off'.",
@@ -106,14 +87,11 @@ const updateCourseSchema = z.object({
         message: "Status must be either 'active' or 'inactive'.",
       })
       .optional(),
-    course_tag: z
-      .array(z.string())
-      .nonempty({ message: "At least one course tag is required." })
-      .optional(),
+    course_tag: optionalArray(),
   }),
 });
 
 export const courseValidation = {
-  updateCourseSchema,
   createCourseSchema,
+  updateCourseSchema,
 };

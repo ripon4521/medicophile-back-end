@@ -1,32 +1,31 @@
 import { Types } from "mongoose";
 import { z } from "zod";
 
+// Reusable ObjectId schema
+const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
+  message: "Invalid ObjectId format",
+});
+
+// Reusable answer schema
+const AnswerSchema = z
+  .string()
+  .min(1, { message: "Answer cannot be empty" })
+  .max(500, { message: "Answer is too long" });
+
+// Create Schema
 const createGapAnswerSchema = z.object({
   body: z.object({
-    examId: z.string().refine((val) => Types.ObjectId.isValid(val), {
-      message: "Invalid examId format",
-    }),
-    questionId: z.string().refine((val) => Types.ObjectId.isValid(val), {
-      message: "Invalid questionId format",
-    }),
-    studentId: z.string().refine((val) => Types.ObjectId.isValid(val), {
-      message: "Invalid studentId format",
-    }),
-    answer: z.string().min(1, { message: "Answer cannot be empty" }).max(500, {
-      message: "Answer is too long",
-    }),
+    examId: ObjectIdSchema,
+    questionId: ObjectIdSchema,
+    studentId: ObjectIdSchema,
+    answer: AnswerSchema,
   }),
 });
 
+// Update Schema
 const updateGapAnswerSchema = z.object({
   body: z.object({
-    answer: z
-      .string()
-      .min(1, { message: "Answer cannot be empty" })
-      .max(500, {
-        message: "Answer is too long",
-      })
-      .optional(),
+    answer: AnswerSchema.optional(),
   }),
 });
 
