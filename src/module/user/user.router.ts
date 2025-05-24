@@ -13,7 +13,6 @@ const userRouter = Router();
 // userRouter.post('/create-admin', userController.createAdmin);
 userRouter.post(
   "/create-student",
-  authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"),
   validateRequest(studentValidation.createStudentSchema),
   userController.createStudeent,
 );
