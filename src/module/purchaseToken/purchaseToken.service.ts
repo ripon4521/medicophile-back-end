@@ -65,7 +65,7 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
     });
   }
   // Automatic Payment Logic
-if (payload.status === "Verified") {
+if (result.status === "Verified") {
     const purchasePayload: IPurchase = {
     ...payload,
     studentId: result.studentId,

@@ -18,7 +18,8 @@ export interface IPurchaseToken {
     | "Rejected"
     | "Pending"
     | "Refunded"
-    | "Partial";
+    | "Partial"
+    |"Enrolled";
   purchaseToken: string;
   coupon?: string;
   ref?: Types.ObjectId;

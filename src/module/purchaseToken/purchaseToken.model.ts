@@ -35,8 +35,9 @@ const purchaseTokenSchema = new Schema<IPurchaseToken>(
         "Pending",
         "Refunded",
         "Partial",
+        "Enrolled"
       ],
-      default: "Unverified",
+      default: "Verified",
     },
     purchaseToken: { type: String },
     coupon: { type: String },

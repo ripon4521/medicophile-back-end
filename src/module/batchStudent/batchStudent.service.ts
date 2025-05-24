@@ -4,22 +4,101 @@ import { IBatchStudent } from "./batchStudent.interface";
 import { UserModel } from "../user/user.model";
 import { BatchStudentModel } from "./batchStudent.model";
 import QueryBuilder from "../../builder/querybuilder";
+import courseModel from "../course/course.model";
+import { IPurchase } from "../purchase/purchase.interface";
+import mongoose from "mongoose";
+import PurchaseTokenModel from "../purchaseToken/purchaseToken.model";
+import { PurchaseModel } from "../purchase/purchase.model";
 
 const createBatchStudent = async (payload: IBatchStudent) => {
-  const user = await UserModel.findOne({ _id: payload.studentId });
-  if (!user || user.role !== "student") {
-    throw new AppError(StatusCodes.BAD_REQUEST, "invalid user id.");
-  }
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  const result = await BatchStudentModel.create(payload);
-  if (!result) {
-    throw new AppError(
-      StatusCodes.BAD_REQUEST,
-      "Failed to Create  .  try again",
+  try {
+    const user = await UserModel.findOne({ _id: payload.studentId }).session(session);
+    if (!user || user.role !== "student") {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Invalid student ID.");
+    }
+
+    const course = await courseModel.findOne({ _id: payload.courseId }).session(session);
+    if (!course) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Invalid course ID.");
+    }
+
+    const generatedToken = `PT-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    const price = course?.price || 0;
+    const discount = course?.offerPrice ? price - course.offerPrice : 0;
+    const subtotal = price;
+    const charge = 0;
+    const totalAmount = subtotal - discount + charge;
+
+    // Create Purchase Token
+    const purchaseToken = await PurchaseTokenModel.create(
+      [{
+        studentId: payload.studentId,
+        courseId: payload.courseId,
+        status: "Enrolled",
+        purchaseToken: generatedToken,
+        price,
+        subtotal,
+        discount,
+        charge,
+        totalAmount,
+        name: user.name,
+        phone: user.phone,
+      }],
+      { session }
     );
+
+    // Create Purchase
+    const purchase = await PurchaseModel.create(
+      [{
+        studentId: payload.studentId,
+        courseId: payload.courseId,
+        paymentInfo: undefined,
+        status: "Active",
+        paymentStatus: "Paid",
+        purchaseToken: purchaseToken[0]._id,
+        subtotal,
+        discount,
+        charge,
+        totalAmount,  
+      }],
+      { session }
+    );
+
+    // Create Batch Student
+    const batchStudent = await BatchStudentModel.create([payload], { session });
+
+    // ✅ Commit transaction
+    await session.commitTransaction();
+    session.endSession();
+
+    return {
+      message: "Batch student created with purchase and token.",
+      purchaseToken: purchaseToken[0],
+      purchase: purchase[0],
+      batchStudent: batchStudent[0],
+    };
+
+  } catch (error) {
+    // ❌ Rollback transaction
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
   }
-  return result;
 };
+
+
+
+
+
+
+
+
+
+
+
 
 const getAllBatchStudents = async (query: Record<string, unknown>) => {
   const courseQuery = new QueryBuilder(BatchStudentModel, query)
