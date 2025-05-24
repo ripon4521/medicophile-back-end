@@ -13,6 +13,16 @@ const createStudeent = catchAsync(async (req, res) => {
   });
 });
 
+const createShopManager = catchAsync(async (req, res) => {
+  const payload = req.body;
+  const result = await userService.createShopManagerIntoDB(payload);
+  sendResponse(res, {
+    statusCode: StatusCodes.CREATED,
+    message: "Shop Manager created successfully",
+    data: result,
+  });
+});
+
 const createAdmin = catchAsync(async (req, res) => {
   const payload = req.body;
   const result = await userService.createAdmiIntoDB(payload);
@@ -34,17 +44,7 @@ const createFaculty = catchAsync(async (req, res) => {
   });
 });
 
-// const createAdmin = catchAsync(
-//   async (req, res) => {
-//     const payload = req.body
-//     const result = await userService.createAdminIntoDB(payload)
-//     sendResponse(res, {
-//       statusCode: StatusCodes.CREATED,
-//       message: 'Student created successfully',
-//       data: result,
-//     }
-//     )
-//   });
+
 
 const getAllUsers = catchAsync(async (req, res) => {
   const query = req.query;
@@ -97,4 +97,5 @@ export const userController = {
   deleteUsers,
   getProfile,
   changePassord,
+  createShopManager
 };

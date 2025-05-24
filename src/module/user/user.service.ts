@@ -16,6 +16,8 @@ import { sendSMS } from "../../utils/sendSms";
 import { IChangePasswordPayload } from "./changepassord.interface";
 import httpStatus from "http-status";
 import QueryBuilder from "../../builder/querybuilder";
+import shopManagerModel from "../accountent/accounttent.model";
+import { IShopManager } from "../accountent/accountent.interface";
 
 const createStudentsIntoDB = async (payload: IStudent) => {
   const isExist = await UserModel.findOne({phone:payload.phone, isDeleted:false});
@@ -201,6 +203,67 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
   }
 };
 
+
+
+const createShopManagerIntoDB = async (payload: IShopManager) => {
+  const isExist = await UserModel.findOne({phone:payload.phone, isDeleted:false});
+  if (isExist) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "This user already exist.Please login")
+  }
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    // Step 1: Create admin first (without userId)
+    const plainPassword = Math.floor(
+      100000 + Math.random() * 900000,
+    ).toString();
+
+    const shopmanagerData = { ...payload };
+
+    const sms = await sendSMS(
+      payload.phone,
+      `Your login password is: ${plainPassword}`,
+    );
+    if (!sms) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Shop Manager Create Failed. SMS Creadit End");
+    }
+
+    const createdAdmin = await shopManagerModel.create([shopManagerModel], { session });
+
+    const hashedPassword = await bcrypt.hash(plainPassword, 12);
+    // Step 2: Now create the user using createdAdmin data
+    const userData: Partial<IUser> = {
+      name: createdAdmin[0]?.name,
+      status: createdAdmin[0]?.status,
+      role: createdAdmin[0]?.role,
+      profile_picture: createdAdmin[0]?.profile_picture,
+      phone: createdAdmin[0]?.phone,
+      password: hashedPassword,
+      email: createdAdmin[0]?.email,
+      isDeleted: createdAdmin[0]?.isDeleted,
+      deletedAt: createdAdmin[0]?.deletedAt,
+    };
+
+    const newUser = await UserModel.create([userData], { session });
+
+    // Step 3: Update admin with the newly created userId
+    await shopManagerModel.updateOne(
+      { _id: createdAdmin[0]._id },
+      { userId: newUser[0]._id },
+      { session },
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+    return { admin: createdAdmin[0], user: newUser[0] };
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw new Error("Transaction failed: " + error);
+  }
+};
+
+
 const changePassword = async (
   payload: IChangePasswordPayload,
 ): Promise<string> => {
@@ -278,4 +341,5 @@ export const userService = {
   getPofile,
   createAdmiIntoDB,
   changePassword,
+  createShopManagerIntoDB
 };
