@@ -3,6 +3,7 @@ import { AuthValidation } from "./auth.validation";
 import { AuthControllers } from "./auth.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import { globalErrorHandler } from "../../middlewares/globalErrorHandler";
+import { authUser } from "../../middlewares/auth";
 
 const authRouter = Router();
 
@@ -11,6 +12,7 @@ authRouter.post(
   validateRequest(AuthValidation.loginValidationSchema),
   AuthControllers.login,
 );
+authRouter.post("/admin-login", validateRequest(AuthValidation.loginValidationSchema), AuthControllers.adminlogin)
 
 authRouter.post(
   "/reset-password",

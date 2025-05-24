@@ -44,6 +44,34 @@ const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const adminlogin = catchAsync(async (req: Request, res: Response) => {
+  const meta = getDeviceInfo(req);
+  const result = await AuthService.adminlogin(req.body, meta);
+
+  const { accessToken, refreshToken, user } = result;
+
+  // Set refresh token in HTTP-only cookie
+  res.cookie("refreshToken", refreshToken, {
+    secure: config.nodeEnv === "development",
+    httpOnly: true, // JS access off
+    sameSite: "strict",
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  });
+
+  // Send access token and user data
+  sendResponse(res, {
+    statusCode: StatusCodes.ACCEPTED,
+    status: true,
+    message: "Login successful",
+    data: {
+      accessToken: accessToken || "",
+      user: user || {},
+    },
+  });
+});
+
+
+
 const logout = catchAsync(async (req: Request, res: Response) => {
   const meta = getDeviceInfo(req);
   const payload = req.body;
@@ -127,4 +155,5 @@ export const AuthControllers = {
   logout,
   resetPassword,
   refreshToken,
+  adminlogin
 };

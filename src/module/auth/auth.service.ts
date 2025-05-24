@@ -185,9 +185,133 @@ const resetPassword = async (phone: string): Promise<string> => {
   return "New password sent via SMS and updated successfully.";
 };
 
+
+const adminlogin = async (
+  payload: {
+    phone: string;
+    password: string;
+  },
+  meta: {
+    ipAddress: string;
+    deviceType: string;
+    deviceName: string;
+  }
+) => {
+  if (!payload.phone || !payload.password) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Phone and password are required");
+  }
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    // 1️⃣ Find the user with password
+    const user = await UserModel.findOne({ phone: payload.phone })
+      .select("+password")
+      .session(session);
+
+    if (!user) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "User not found!");
+    }
+
+    if (user.status === "Blocked") {
+      throw new AppError(StatusCodes.UNAUTHORIZED, "This user is blocked!");
+    }
+    
+    // Restrict login if role is student
+    if (user.role === "student") {
+      throw new AppError(StatusCodes.FORBIDDEN, "Students are not allowed to login.");
+    }
+
+    // 2️⃣ Check password
+    const isPasswordMatched = await bcrypt.compare(payload.password, user.password);
+    if (!isPasswordMatched) {
+      throw new AppError(StatusCodes.FORBIDDEN, "Invalid password");
+    }
+
+    // 3️⃣ JWT payload
+    const jwtPayload = {
+      phone: user.phone,
+      role: user.role,
+      _id: user._id.toString(),
+    };
+
+    const accessToken = jwt.sign(jwtPayload, config.accessSecret as string, {
+      expiresIn: "2h",
+    });
+
+    const refreshToken = jwt.sign(jwtPayload, config.refreshSecret as string, {
+      expiresIn: "30d",
+    });
+
+    // 4️⃣ Check existing session for this user
+    await UserCredentialsModel.updateMany(
+      {
+        studentId: user._id,
+        phone: user.phone,
+        isDeleted: false,
+        $or: [
+          { ipAddress: { $ne: meta.ipAddress } },
+          { deviceType: { $ne: meta.deviceType } },
+          { deviceName: { $ne: meta.deviceName } },
+        ],
+      },
+      {
+        isDeleted: true,
+        deletedAt: new Date(),
+      },
+      { session }
+    );
+
+    // 5️⃣ Save new credentials
+    await UserCredentialsModel.create(
+      [
+        {
+          studentId: user._id,
+          phone: user.phone,
+          ipAddress: meta.ipAddress,
+          deviceType: meta.deviceType,
+          deviceName: meta.deviceName,
+          isDeleted: false,
+          accessToken,
+          refreshToken,
+          deletedAt: null,
+        },
+      ],
+      { session }
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return {
+      accessToken,
+      refreshToken,
+      user,
+    };
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
 export const AuthService = {
   register,
   login,
   logout,
   resetPassword,
+  adminlogin
 };
