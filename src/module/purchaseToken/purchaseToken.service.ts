@@ -44,13 +44,13 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
   if (!student) throw new AppError(StatusCodes.BAD_REQUEST, 'invalid student id');
   if (!course) throw new AppError(StatusCodes.BAD_REQUEST, 'invalid course id');
 
-  // Coupon check
-  if (payload.coupon) {
-    const coupon = await CouponModel.findOne({ coupon: payload.coupon, isDeleted: false });
-    if (!coupon || coupon.coupon !== payload.coupon) {
-      throw new AppError(StatusCodes.BAD_REQUEST, 'invalid coupon');
-    }
-  }
+  // // Coupon check
+  // if (payload.coupon) {
+  //   const coupon = await CouponModel.findOne({ coupon: payload.coupon, isDeleted: false });
+  //   if (!coupon || coupon.coupon !== payload.coupon) {
+  //     throw new AppError(StatusCodes.BAD_REQUEST, 'invalid coupon');
+  //   }
+  // }
 
   // Save token
   const result = await PurchaseTokenModel.create(payload);
