@@ -7,16 +7,16 @@ import { authUser, onlyAdminAndFacultyAndStudent } from "../../middlewares/auth"
 const productRouter = Router();
 productRouter.post(
   "/create-product",
-  authUser("admin","superAdmin","teacher"), onlyAdminAndFacultyAndStudent("admin", "superAdmin"),
+  authUser("admin","superAdmin", "shopManager"), onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager"),
   validateRequest(productValidation.createProductSchema),
   productController.createProduct,
 );
 productRouter.get("/", productController.getAllProducts);
 productRouter.get("/:slug", productController.getSingleProduct);
 productRouter.patch(
-  "/:slug", authUser("admin","superAdmin","teacher"),onlyAdminAndFacultyAndStudent("admin", "superAdmin"),
+  "/:slug", authUser("admin","superAdmin", "shopManager"),onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager"),
   validateRequest(productValidation.updateProductSchema),
   productController.updateProduct,
 );
-productRouter.delete("/:slug",authUser("admin","superAdmin","teacher"), onlyAdminAndFacultyAndStudent("admin", "superAdmin"), productController.deleteProduct);
+productRouter.delete("/:slug",authUser("admin","superAdmin"), onlyAdminAndFacultyAndStudent("admin", "superAdmin"), productController.deleteProduct);
 export default productRouter;

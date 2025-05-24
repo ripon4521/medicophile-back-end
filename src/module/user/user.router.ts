@@ -32,7 +32,7 @@ userRouter.post(
 );
 userRouter.get(
   "/profile",
-  authUser(),onlyAdminAndFacultyAndStudent("admin","teacher","student","superAdmin"),
+  authUser(),onlyAdminAndFacultyAndStudent("admin","teacher","student","superAdmin", "shopManager"),
   userController.getProfile,
 );
 userRouter.post(
@@ -44,7 +44,7 @@ userRouter.post(
 userRouter.get("/",    authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"), userController.getAllUsers);
 userRouter.delete("/", auth.authUser(),onlyAdmin("superAdmin"), userController.deleteUsers);
 userRouter.patch(
-  "/change-password", authUser(), onlyAdminAndFacultyAndStudent("student", "teacher", "admin", "superAdmin"),
+  "/change-password", authUser(), onlyAdminAndFacultyAndStudent("student", "teacher", "admin", "superAdmin", "shopManager"),
   validateRequest(changePasswordValidation),
   userController.changePassord,
 );
