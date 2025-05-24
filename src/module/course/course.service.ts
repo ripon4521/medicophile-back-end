@@ -130,7 +130,7 @@ const deleteCourseFromDb = async (slug: string) => {
 
 const getUserPurchasedCourses = async (userId: string) => {
   const purchases = await PurchaseModel.find({
-    userId,
+    studentId:userId,
     paymentStatus: "Paid",
     status: "Active",
     isExpire:false
