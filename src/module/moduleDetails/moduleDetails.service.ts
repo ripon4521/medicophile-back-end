@@ -141,7 +141,7 @@ const deleteModuleDetails = async (_id: string) => {
 
 const updateModuleDetails = async (_id: string, payload: IModuleDetails) => {
   const updatemoduledetails = await ModuleDetails.findOne({_id})
-  if (!updateModuleDetails) {
+  if (!updatemoduledetails) {
       throw new AppError( StatusCodes.NOT_FOUND,"No data found with the provided ID");
   }
 
