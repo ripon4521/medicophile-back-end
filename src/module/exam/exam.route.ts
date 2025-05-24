@@ -1,7 +1,7 @@
 import { Router } from "express";
 import validateRequest from "../../middlewares/validateRequest";
-import { examValidation } from "./exam.validation";
 import { examController } from "./exam.controller";
+import { examValidation } from "./exam.validation";
 
 const examRouter = Router();
 examRouter.post(
