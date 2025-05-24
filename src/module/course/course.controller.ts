@@ -71,8 +71,8 @@ const deleteCourse = catchAsync(async (req, res) => {
 });
 
 const getMyCourse = catchAsync(async (req, res) => {
-  const userId = req.user?.id;
-
+  const userId = req.user?._id;
+  console.log(userId)
   const result = await courseService.getUserPurchasedCourses(userId);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
