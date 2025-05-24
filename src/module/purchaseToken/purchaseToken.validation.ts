@@ -6,12 +6,12 @@ const ObjectIdSchema = z.string().refine((val) => Types.ObjectId.isValid(val), {
   message: "Invalid ObjectId format",
 });
 
-// Reusable basic types
-const optionalObjectId = ObjectIdSchema.optional();
-const requiredNumber = (msg: string) => z.number({ required_error: msg });
-const optionalNumber = (msg: string) => z.number({ required_error: msg }).optional();
+// Helper schemas for flexible updates
+const optionalObjectId = z.union([ObjectIdSchema, z.literal("")]).optional();
+const optionalString = (msg: string) => z.union([z.string().min(1, msg), z.literal("")]).optional();
+const optionalNumber = (msg: string) => z.union([z.number(), z.literal("")]).optional();
 const requiredString = (msg: string) => z.string({ required_error: msg });
-const optionalString = (msg: string) => z.string({ required_error: msg }).optional();
+const requiredNumber = (msg: string) => z.number({ required_error: msg });
 
 // Payment Info Schema
 export const paymentInfoSchema = z.object({

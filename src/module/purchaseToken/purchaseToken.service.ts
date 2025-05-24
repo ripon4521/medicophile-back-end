@@ -38,6 +38,7 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
   }
 
   const student = await UserModel.findOne({ _id: payload.studentId });
+
   const course = await courseModel.findOne({ _id: payload.courseId, isDeleted: false });
 
   if (!student) throw new AppError(StatusCodes.BAD_REQUEST, 'invalid student id');
