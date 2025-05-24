@@ -142,28 +142,22 @@ const deleteModuleDetails = async (_id: string) => {
 const updateModuleDetails = async (_id: string, payload: IModuleDetails) => {
   const updatemoduledetails = await ModuleDetails.findOne({_id})
   if (!updateModuleDetails) {
-      throw new Error("No data found with the provided ID");
+      throw new AppError( StatusCodes.NOT_FOUND,"No data found with the provided ID");
   }
 
 
-  try {
+
     const update = await ModuleDetails.findByIdAndUpdate(_id, payload, {
       new: true,
       runValidators: true,
     });
 
     if (!update) {
-      throw new Error("No data found with the provided ID");
+      throw new AppError( StatusCodes.BAD_REQUEST,"Failed to update data");
     }
 
     return update;
-  } catch (error) {
-    console.error(error);
-    throw new AppError(
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      "An unexpected error occurred while updating",
-    );
-  }
+  
 };
 
 export const moduleDetailsService = {
