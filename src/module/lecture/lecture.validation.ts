@@ -17,7 +17,7 @@ const createLectureSchema = z.object({
     moduleId: ObjectIdSchema,
     title: z.string().min(1, { message: "Title is required" }),
     server: z.string().min(1, { message: "Server is required" }),
-    videoId: z.string().url({ message: "Invalid video URL" }),
+    videoId: optionalNonEmptyString,
     duration: z.number().min(1, { message: "Duration must be greater than 0" }),
     isFree: z.boolean().optional(),
     status: z.enum(["Published", "Drafted"], {
@@ -40,7 +40,7 @@ const updateLectureSchema = z.object({
     moduleId: ObjectIdSchema.optional(),
     title: optionalNonEmptyString,
     server: optionalNonEmptyString,
-    videoId: optionalURL,
+    videoId: optionalNonEmptyString,
     duration: z.number().min(1, { message: "Duration must be greater than 0" }).optional(),
     isFree: z.boolean().optional(),
     status: z.enum(["Published", "Drafted"]).optional(),
