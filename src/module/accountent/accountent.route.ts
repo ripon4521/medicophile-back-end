@@ -8,4 +8,5 @@ const shopManagerRouter = Router();
 shopManagerRouter.get('/',  authUser(), onlyAdminAndFacultyAndStudent("superAdmin", "admin"), shopManagerController.getAllShopManager);
 shopManagerRouter.patch('/:id',  authUser(), onlyAdminAndFacultyAndStudent("superAdmin", "admin"), validateRequest(shopManagerValidation.updateShopManagerValidationSchema), shopManagerController.updateShopMnagaer);
 shopManagerRouter.delete('/:id' ,  authUser(), onlyAdminAndFacultyAndStudent("superAdmin"), shopManagerController.deleteShopMnagaer);
+shopManagerRouter.get('/:id', shopManagerController.getSingleManager)
 export default shopManagerRouter;

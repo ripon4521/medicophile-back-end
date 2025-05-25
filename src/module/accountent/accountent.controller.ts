@@ -48,9 +48,23 @@ const updateShopMnagaer = catchAsync(async (req, res) => {
 });
 
 
+const getSingleManager = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await shopManagerService.getSingleManager(id)
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Shop Manager & Nested User get successfully",
+    data: result,
+  });
+});
+
+
+
+
 
 export const shopManagerController = {
     getAllShopManager,
     updateShopMnagaer,
-    deleteShopMnagaer
+    deleteShopMnagaer,
+    getSingleManager
 }

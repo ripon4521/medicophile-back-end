@@ -87,6 +87,8 @@ const updateShopManager = async (_id: string, updateData: Partial<IShopManager>)
 };
 
 
+
+
 const deleteShopManager = async (_id: string) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -134,8 +136,17 @@ const deleteShopManager = async (_id: string) => {
 };
 
 
+const getSingleManager = async (_id: string) => {
+  const result = await shopManagerModel.findOne({_id}).populate("userId");
+  return result;
+};
+
+
+
+
 export const shopManagerService = {
     getShopManager,
     updateShopManager,
-    deleteShopManager
+    deleteShopManager,
+    getSingleManager
 }
