@@ -15,6 +15,7 @@ const adminRouter = Router();
 adminRouter.get('/', authUser(), onlyAdminAndFacultyAndStudent("superAdmin"), adminController.getAllAdmin);
 adminRouter.patch('/:id', authUser(), onlyAdminAndFacultyAndStudent("superAdmin"), validateRequest(adminValidation.updateAdminValidationSchema), adminController.updateAdmin)
 adminRouter.delete('/:id', authUser(), onlyAdminAndFacultyAndStudent("superAdmin"), adminController.deleteAdmin);
+adminRouter.get('/:id', adminController.getSingleAdmin)
 // adminRouter.get("/overview", adminController.deleteBlogByAdmin);
 
 export default adminRouter;

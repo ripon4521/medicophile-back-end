@@ -137,8 +137,15 @@ const deleteAdmin = async (_id: string) => {
 };
 
 
+const getSingleAdmin = async (_id: string) => {
+  const result = await adminModel.findOne({_id}).populate("userId");
+  return result;
+};
+
+
 export const adminService = {
   updateAdmin,
   getAllAdmin,
-  deleteAdmin
+  deleteAdmin,
+  getSingleAdmin
 }

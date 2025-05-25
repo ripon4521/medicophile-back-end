@@ -43,15 +43,27 @@ const updateAdmin = catchAsync(async (req, res) => {
   const result = await adminService.updateAdmin(id, data);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: "Shop Mnagaer & Nested User Updated successfully",
+    message: "Admin & Nested User Updated successfully",
+    data: result,
+  });
+});
+
+const getSingleAdmin = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await adminService.getSingleAdmin(id)
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Admin & Nested User get successfully",
     data: result,
   });
 });
 
 
 
+
 export const adminController = {
     getAllAdmin,
     updateAdmin,
-    deleteAdmin
+    deleteAdmin,
+    getSingleAdmin
 }
