@@ -19,23 +19,18 @@ const getAllOrders = catchAsync(async (req, res) => {
   const result = await orderService.getAllOrderFromDb(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: " Orders get successfully",
+    message: "Orders fetched successfully",
     data: result,
   });
 });
 
-
-
 const updateOrder = catchAsync(async (req, res) => {
   const { id } = req.params;
   const payload = req.body;
-  const result = await orderService.updateOrderAndOrderDetailsCommonFields(
-    id,
-    payload,
-  );
+  const result = await orderService.updateOrderAndOrderDetailsCommonFields(id, payload);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: " Order updated successfully",
+    message: "Order updated successfully",
     data: result,
   });
 });
@@ -45,69 +40,65 @@ const deleteOrder = catchAsync(async (req, res) => {
   const result = await orderService.deleteOrderWithOrderDetails(id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: " Order deleted successfully",
+    message: "Order deleted successfully",
     data: result,
   });
 });
 
+// ✅ Improved Stats Controller with Full Date, Month, Year Filtering Support
+const getOrderStats = catchAsync(async (req: Request, res: Response) => {
+  const { startDate, endDate, month, year } = req.query;
 
+  let matchCondition: any = { isDeleted: false };
 
+  if (startDate && endDate) {
+    const start = new Date(startDate as string);
+    const end = new Date(endDate as string);
+    end.setHours(23, 59, 59, 999); // include full end day
 
-
-
-
-export const getOrderStats = async (req: Request, res: Response) => {
-  try {
-    const { day, month, year } = req.query;
-
-    let matchCondition: any = {
-      isDeleted: false,
+    matchCondition.createdAt = {
+      $gte: start,
+      $lte: end,
     };
+  } else if (month && year) {
+    const m = String(month).padStart(2, "0"); // make sure month is 2-digit
+    const start = new Date(`${year}-${m}-01T00:00:00.000Z`);
+    const end = new Date(new Date(start).setMonth(start.getMonth() + 1));
+    end.setHours(23, 59, 59, 999);
 
-    const dayNum = day ? Number(day) : null;
-    const monthNum = month ? Number(month) : null;
-    const yearNum = year ? Number(year) : null;
+    matchCondition.createdAt = {
+      $gte: start,
+      $lte: end,
+    };
+  } else if (year) {
+    const start = new Date(`${year}-01-01T00:00:00.000Z`);
+    const end = new Date(`${+year + 1}-01-01T00:00:00.000Z`);
+    end.setHours(23, 59, 59, 999);
 
-    if (dayNum && monthNum && yearNum) {
-      const startDate = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 0, 0, 0));
-      const endDate = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 23, 59, 59, 999));
-      matchCondition.createdAt = { $gte: startDate, $lte: endDate };
-    } else if (monthNum && yearNum) {
-      const startDate = new Date(Date.UTC(yearNum, monthNum - 1, 1));
-      const endDate = new Date(Date.UTC(yearNum, monthNum, 1));
-      matchCondition.createdAt = { $gte: startDate, $lt: endDate };
-    } else if (yearNum) {
-      const startDate = new Date(Date.UTC(yearNum, 0, 1));
-      const endDate = new Date(Date.UTC(yearNum + 1, 0, 1));
-      matchCondition.createdAt = { $gte: startDate, $lt: endDate };
-    }
-
-    const orders = await OrderModel.find(matchCondition)
-      .populate("userId", "name phone")
-      .populate("productId", "title price");
-
-    res.status(200).json({
-      success: true,
-      total: orders.length,
-      data: orders,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error,
-    });
+    matchCondition.createdAt = {
+      $gte: start,
+      $lte: end,
+    };
   }
-};
 
+  const orders = await OrderModel.find(matchCondition)
+    .populate("userId", "name phone")
+    .populate("productId", "title price");
 
-
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Order stats fetched successfully",
+    data: {
+      total: orders.length,
+      orders,
+    },
+  });
+});
 
 export const orderController = {
   createOrder,
   getAllOrders,
   updateOrder,
   deleteOrder,
-  getOrderStats
-  
+  getOrderStats,
 };

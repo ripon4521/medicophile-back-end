@@ -63,31 +63,43 @@ const updatePurchase = catchAsync(async (req, res) => {
 
 
 
-
 export const getPurchaseStats = async (req: Request, res: Response) => {
   try {
-    const { day, month, year } = req.query;
+    const { startDate, endDate, day, month, year } = req.query;
 
     let matchCondition: any = {
       isDeleted: false,
     };
 
-    const dayNum = day ? Number(day) : null;
-    const monthNum = month ? Number(month) : null;
-    const yearNum = year ? Number(year) : null;
+    const dayNum = day ? parseInt(day as string, 10) : null;
+    const monthNum = month ? parseInt(month as string, 10) : null;
+    const yearNum = year ? parseInt(year as string, 10) : null;
 
-    if (dayNum && monthNum && yearNum) {
-      const startDate = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 0, 0, 0));
-      const endDate = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 23, 59, 59, 999));
-      matchCondition.createdAt = { $gte: startDate, $lte: endDate };
+    if (startDate && endDate) {
+      // ✅ startDate & endDate filter
+      const start = new Date(startDate as string);
+      const end = new Date(endDate as string);
+      end.setUTCHours(23, 59, 59, 999);
+      matchCondition.createdAt = { $gte: start, $lte: end };
+
+    } else if (dayNum && monthNum && yearNum) {
+      // ✅ Specific day
+      const start = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 0, 0, 0));
+      const end = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 23, 59, 59, 999));
+      matchCondition.createdAt = { $gte: start, $lte: end };
+
     } else if (monthNum && yearNum) {
-      const startDate = new Date(Date.UTC(yearNum, monthNum - 1, 1));
-      const endDate = new Date(Date.UTC(yearNum, monthNum, 1));
-      matchCondition.createdAt = { $gte: startDate, $lt: endDate };
+      // ✅ Whole month
+      const start = new Date(Date.UTC(yearNum, monthNum - 1, 1, 0, 0, 0));
+      const end = new Date(Date.UTC(yearNum, monthNum, 0, 23, 59, 59, 999)); // last day of month
+      matchCondition.createdAt = { $gte: start, $lte: end };
+
     } else if (yearNum) {
-      const startDate = new Date(Date.UTC(yearNum, 0, 1));
-      const endDate = new Date(Date.UTC(yearNum + 1, 0, 1));
-      matchCondition.createdAt = { $gte: startDate, $lt: endDate };
+      // ✅ Whole year
+      const start = new Date(Date.UTC(yearNum, 0, 1, 0, 0, 0));
+      const end = new Date(Date.UTC(yearNum + 1, 0, 1, 0, 0, 0));
+      end.setUTCHours(23, 59, 59, 999);
+      matchCondition.createdAt = { $gte: start, $lte: end };
     }
 
     const purchases = await PurchaseModel.find(matchCondition)
