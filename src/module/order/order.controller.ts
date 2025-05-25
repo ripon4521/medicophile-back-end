@@ -47,38 +47,39 @@ const deleteOrder = catchAsync(async (req, res) => {
 
 // ✅ Improved Stats Controller with Full Date, Month, Year Filtering Support
 const getOrderStats = catchAsync(async (req: Request, res: Response) => {
-  const { startDate, endDate, month, year } = req.query;
+  const { startDate, endDate, day, month, year } = req.query;
 
   let matchCondition: any = { isDeleted: false };
 
+  const dayNum = day ? parseInt(day as string, 10) : null;
+  const monthNum = month ? parseInt(month as string, 10) : null;
+  const yearNum = year ? parseInt(year as string, 10) : null;
+
   if (startDate && endDate) {
+    // ✅ Filter by custom date range
     const start = new Date(startDate as string);
     const end = new Date(endDate as string);
-    end.setHours(23, 59, 59, 999); // include full end day
-
-    matchCondition.createdAt = {
-      $gte: start,
-      $lte: end,
-    };
-  } else if (month && year) {
-    const m = String(month).padStart(2, "0"); // make sure month is 2-digit
-    const start = new Date(`${year}-${m}-01T00:00:00.000Z`);
-    const end = new Date(new Date(start).setMonth(start.getMonth() + 1));
     end.setHours(23, 59, 59, 999);
+    matchCondition.createdAt = { $gte: start, $lte: end };
 
-    matchCondition.createdAt = {
-      $gte: start,
-      $lte: end,
-    };
-  } else if (year) {
-    const start = new Date(`${year}-01-01T00:00:00.000Z`);
-    const end = new Date(`${+year + 1}-01-01T00:00:00.000Z`);
+  } else if (dayNum && monthNum && yearNum) {
+    // ✅ Filter by specific day
+    const start = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 0, 0, 0));
+    const end = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 23, 59, 59, 999));
+    matchCondition.createdAt = { $gte: start, $lte: end };
+
+  } else if (monthNum && yearNum) {
+    // ✅ Filter by specific month
+    const start = new Date(Date.UTC(yearNum, monthNum - 1, 1, 0, 0, 0));
+    const end = new Date(Date.UTC(yearNum, monthNum, 0, 23, 59, 59, 999)); // last day of the month
+    matchCondition.createdAt = { $gte: start, $lte: end };
+
+  } else if (yearNum) {
+    // ✅ Filter by year
+    const start = new Date(Date.UTC(yearNum, 0, 1, 0, 0, 0));
+    const end = new Date(Date.UTC(yearNum + 1, 0, 1, 0, 0, 0));
     end.setHours(23, 59, 59, 999);
-
-    matchCondition.createdAt = {
-      $gte: start,
-      $lte: end,
-    };
+    matchCondition.createdAt = { $gte: start, $lte: end };
   }
 
   const orders = await OrderModel.find(matchCondition)
@@ -94,6 +95,7 @@ const getOrderStats = catchAsync(async (req: Request, res: Response) => {
     },
   });
 });
+
 
 export const orderController = {
   createOrder,

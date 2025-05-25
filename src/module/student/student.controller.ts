@@ -57,26 +57,44 @@ const updateStudent = catchAsync(async (req, res) => {
 });
 
 
-export const getStudentStats = async (req:Request, res:Response) => {
+export const getStudentStats = async (req: Request, res: Response) => {
   try {
-    const { day, month, year } = req.query;
+    const { startDate, endDate, day, month, year } = req.query;
 
     let matchCondition: any = {
       isDeleted: false,
     };
 
-    if (day && month && year) {
-      const startDate = new Date(`${year}-${month}-${day}T00:00:00.000Z`);
-      const endDate = new Date(`${year}-${month}-${day}T23:59:59.999Z`);
-      matchCondition.createdAt = { $gte: startDate, $lte: endDate };
-    } else if (month && year) {
-      const startDate = new Date(`${year}-${month}-01T00:00:00.000Z`);
-      const endDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + 1));
-      matchCondition.createdAt = { $gte: startDate, $lt: endDate };
-    } else if (year) {
-      const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
-      const endDate = new Date(`${Number(year) + 1}-01-01T00:00:00.000Z`);
-      matchCondition.createdAt = { $gte: startDate, $lt: endDate };
+    const dayNum = day ? Number(day) : null;
+    const monthNum = month ? Number(month) : null;
+    const yearNum = year ? Number(year) : null;
+
+    if (startDate && endDate) {
+      // Custom date range filter
+      const start = new Date(startDate as string);
+      const end = new Date(endDate as string);
+      end.setHours(23, 59, 59, 999);
+      matchCondition.createdAt = { $gte: start, $lte: end };
+
+    } else if (dayNum && monthNum && yearNum) {
+      // Specific day filter
+      const start = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 0, 0, 0));
+      const end = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 23, 59, 59, 999));
+      matchCondition.createdAt = { $gte: start, $lte: end };
+
+    } else if (monthNum && yearNum) {
+      // Month + Year filter
+      const start = new Date(Date.UTC(yearNum, monthNum - 1, 1, 0, 0, 0));
+      // last day of month
+      const end = new Date(Date.UTC(yearNum, monthNum, 0, 23, 59, 59, 999));
+      matchCondition.createdAt = { $gte: start, $lte: end };
+
+    } else if (yearNum) {
+      // Year filter
+      const start = new Date(Date.UTC(yearNum, 0, 1, 0, 0, 0));
+      const end = new Date(Date.UTC(yearNum + 1, 0, 1, 0, 0, 0));
+      end.setHours(23, 59, 59, 999);
+      matchCondition.createdAt = { $gte: start, $lte: end };
     }
 
     const students = await studentModel.find(matchCondition);
