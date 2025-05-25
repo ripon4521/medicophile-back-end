@@ -5,7 +5,7 @@ import { studentValidation } from "./student.validation";
 import { authUser, onlyAdminAndFacultyAndStudent } from "../../middlewares/auth";
 
 const studentRoute = express.Router();
-studentRoute.get('/stats', studentsController.getStudentStats)
+studentRoute.get('/stats', authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin", "teacher"), studentsController.getStudentStats)
 studentRoute.get("/", authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin", "teacher") , studentsController.getAllStudents);
 studentRoute.get("/:id", authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin") , studentsController.getSingleStudent);
 studentRoute.delete("/delete-student", authUser(), onlyAdminAndFacultyAndStudent("superAdmin") , studentsController.deleteStudent);

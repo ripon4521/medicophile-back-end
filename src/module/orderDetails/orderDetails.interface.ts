@@ -10,7 +10,7 @@ export interface IOrderDetails {
   address: string;
   quantity: number;
   price: number;
-  status: "Refunded" | "Delivered" | "Courier" | "Pending";
+  status: "Refunded" | "Delivered" | "Courier" | "Pending" | "Processing";
   paymentStatus: "Paid" | "Pending" | "Refunded";
   paymentInfo?: IPaymentInfo;
   isDeleted: boolean;
