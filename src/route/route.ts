@@ -55,6 +55,7 @@ import referRewardRouter from "../module/referalReward/referalReward.route";
 import referWithdrawRouter from "../module/withdraw/withdraw.route";
 import performanceRoute from "../module/performance/performance.route";
 import bkashRoute from "../module/bkash/bkash.route";
+import shopManagerRouter from "../module/accountent/accountent.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -277,6 +278,10 @@ const moduleRoutes = [
   },{
     path:"/payment",
     route:bkashRoute
+  },{
+    path:"/manager",
+    route:shopManagerRouter
+
   }
 ];
 moduleRoutes.forEach((route) => {

@@ -1,33 +1,57 @@
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
+import AppError from "../../helpers/AppError";
 import { adminService } from "./admin.service";
 
-const userBlockByAdmin = catchAsync(async (req, res) => {
+
+
+
+const getAllAdmin = catchAsync(async (req, res) => {
+  const query = req.query;
+  const result = await adminService.getAllAdmin(query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: "User blocked successfully",
-    data: [],
+    message: "Admin getting successfully",
+    data: result,
   });
 });
 
-const deleteBlogByAdmin = catchAsync(async (req, res) => {
-  if (!req.user || req.user.role !== "admin") {
-    throw new Error("User is not authenticated or authorized");
+
+
+const deleteAdmin = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide _id");
   }
 
-  const { id: blogId } = req.params;
-
+  const result = await adminService.deleteAdmin(id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: "Blog deleted successfully",
-    data: undefined,
+    message: "admin Deleted successfully",
+    data: result,
   });
 });
 
-/* Overview  handel  */
+const updateAdmin = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Please provide _id");
+  }
+  const data = req.body;
+  const result = await adminService.updateAdmin(id, data);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "Shop Mnagaer & Nested User Updated successfully",
+    data: result,
+  });
+});
+
+
 
 export const adminController = {
-  userBlockByAdmin,
-  deleteBlogByAdmin,
-};
+    getAllAdmin,
+    updateAdmin,
+    deleteAdmin
+}

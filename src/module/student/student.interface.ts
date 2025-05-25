@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export interface IStudent {
-  role: "superAdmin" | "admin" | "teacher" | "student" | "shop manager";
+  role: "superAdmin" | "admin" | "teacher" | "student" | "shopManager";
   userId?: Types.ObjectId;
   profile_picture: string | null | undefined;
   email: string;

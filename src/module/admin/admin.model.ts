@@ -7,7 +7,7 @@ const adminSchema = new Schema<IAdmin>(
   {
     role: {
       type: String,
-      enum: ["superAdmin", "admin", "teacher", "student", "shop manager"],
+      enum: ["superAdmin", "admin", "teacher", "student", "shopManager"],
       default: "admin",
     },
     userId: { type: Schema.Types.ObjectId, ref: "User" },

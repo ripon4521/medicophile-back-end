@@ -6,7 +6,7 @@ const facultySchema = new Schema(
   {
     role: {
       type: String,
-      enum: ["superAdmin", "admin", "teacher", "student", "shop manager"],
+      enum: ["superAdmin", "admin", "teacher", "student", "shopManager"],
       default: "teacher",
     },
     userId: { type: Types.ObjectId, ref: "User" },

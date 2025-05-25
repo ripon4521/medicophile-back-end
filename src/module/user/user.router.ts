@@ -25,7 +25,7 @@ userRouter.post(
 
 userRouter.post(
   "/create-manager",
-   authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"),
+  //  authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"),
   validateRequest(shopManagerValidation.createShopManagerValidationSchema),
   userController.createShopManager,
 );

@@ -8,8 +8,8 @@ const shopManagerSchema = new Schema<IShopManager>(
   {
     role: {
       type: String,
-      enum: ["superAdmin", "admin", "teacher", "student", "shop manager"],
-      default: "shop manager",
+      enum: ["superAdmin", "admin", "teacher", "student", "shopManager"],
+      default: "shopManager",
     },
     userId: { type: Schema.Types.ObjectId, ref: "User" },
     name: { type: String, required: true },

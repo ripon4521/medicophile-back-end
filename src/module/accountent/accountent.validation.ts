@@ -30,7 +30,7 @@ const createShopManagerValidationSchema = z.object({
 
 const updateShopManagerValidationSchema = z.object({
   body: z.object({
-    role: z.enum(["superAdmin", "admin", "teacher", "student", "shop manager"]).optional(),
+    role: z.enum(["superAdmin", "admin", "teacher", "student", "shopManager"]).optional(),
     name: optionalNonEmptyString,
     phone: optionalPhone,
     email: optionalEmail,

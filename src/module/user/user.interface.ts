@@ -5,7 +5,7 @@ export interface IUser {
   email: string;
   password: string;
   phone: string;
-  role: "superAdmin" | "admin" | "teacher" | "student" | "shop manager";
+  role: "superAdmin" | "admin" | "teacher" | "student" | "shopManager";
   profile_picture?: string | null | undefined;
   status: "Active" | "Blocked";
   isDeleted: boolean;

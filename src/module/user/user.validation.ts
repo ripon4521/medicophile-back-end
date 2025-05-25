@@ -19,7 +19,7 @@ export const createUserValidationSchema = z.object({
       .string()
       .regex(/^\+?[0-9]{10,15}$/, "Invalid contact number")
       .optional(),
-    role: z.enum(["superAdmin", "admin", "teacher"]).optional(),
+    role: z.enum(["superAdmin", "admin", "teacher", "shopManager"]).optional(),
     profile_picture: z.string().url().optional(),
     status: z.enum(["Active", "Blocked"]).optional(),
   }),
