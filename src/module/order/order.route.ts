@@ -5,6 +5,12 @@ import { orderController } from "./order.controller";
 import { authUser, onlyAdminAndFacultyAndStudent } from "../../middlewares/auth";
 
 const orderRouter = Router();
+orderRouter.get(
+  "/stats",
+  authUser(),
+  // onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager"), 
+  orderController.getOrderStats
+);
 orderRouter.post(
   "/create-order",
   validateRequest(orderValidation.createOrderZodSchema),
