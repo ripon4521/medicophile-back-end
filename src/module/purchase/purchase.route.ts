@@ -5,6 +5,7 @@ import { purchaseController } from "./purcahase.controller";
 import { authUser, onlyAdminAndFacultyAndStudent } from "../../middlewares/auth";
 
 const purchaseRoute = Router();
+purchaseRoute.get('/stats', purchaseController.getPurchaseStats)
 purchaseRoute.post(
   "/create-purchase",
   validateRequest(purchaseValidation.createPurchaseSchema),
