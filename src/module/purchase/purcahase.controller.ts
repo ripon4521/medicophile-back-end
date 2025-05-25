@@ -63,56 +63,105 @@ const updatePurchase = catchAsync(async (req, res) => {
 
 
 
+
+
 export const getPurchaseStats = async (req: Request, res: Response) => {
   try {
-    const { startDate, endDate, day, month, year } = req.query;
+    const { day, month, year, startDate, endDate, courseSlug } = req.query;
 
     let matchCondition: any = {
       isDeleted: false,
     };
 
-    const dayNum = day ? parseInt(day as string, 10) : null;
-    const monthNum = month ? parseInt(month as string, 10) : null;
-    const yearNum = year ? parseInt(year as string, 10) : null;
-
+    // Date filters same as before...
     if (startDate && endDate) {
-      // ✅ startDate & endDate filter
       const start = new Date(startDate as string);
       const end = new Date(endDate as string);
-      end.setUTCHours(23, 59, 59, 999);
+      end.setHours(23, 59, 59, 999);
       matchCondition.createdAt = { $gte: start, $lte: end };
-
-    } else if (dayNum && monthNum && yearNum) {
-      // ✅ Specific day
-      const start = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 0, 0, 0));
-      const end = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 23, 59, 59, 999));
+    } else if (day && month && year) {
+      const start = new Date(`${year}-${month}-${day}T00:00:00.000Z`);
+      const end = new Date(`${year}-${month}-${day}T23:59:59.999Z`);
       matchCondition.createdAt = { $gte: start, $lte: end };
-
-    } else if (monthNum && yearNum) {
-      // ✅ Whole month
-      const start = new Date(Date.UTC(yearNum, monthNum - 1, 1, 0, 0, 0));
-      const end = new Date(Date.UTC(yearNum, monthNum, 0, 23, 59, 59, 999)); // last day of month
+    } else if (month && year) {
+      const start = new Date(`${year}-${month}-01T00:00:00.000Z`);
+      const end = new Date(new Date(start).setMonth(new Date(start).getMonth() + 1));
+      end.setHours(23, 59, 59, 999);
       matchCondition.createdAt = { $gte: start, $lte: end };
-
-    } else if (yearNum) {
-      // ✅ Whole year
-      const start = new Date(Date.UTC(yearNum, 0, 1, 0, 0, 0));
-      const end = new Date(Date.UTC(yearNum + 1, 0, 1, 0, 0, 0));
-      end.setUTCHours(23, 59, 59, 999);
+    } else if (year) {
+      const start = new Date(`${year}-01-01T00:00:00.000Z`);
+      const end = new Date(`${Number(year) + 1}-01-01T00:00:00.000Z`);
+      end.setHours(23, 59, 59, 999);
       matchCondition.createdAt = { $gte: start, $lte: end };
     }
 
-    const purchases = await PurchaseModel.find(matchCondition)
-      .populate("studentId", "name phone")
-      .populate("courseId", "title")
-      .populate("issuedBy", "name");
+    const pipeline: any[] = [
+      { $match: matchCondition },
+
+      {
+        $lookup: {
+          from: "courses",
+          localField: "courseId",
+          foreignField: "_id",
+          as: "course",
+        },
+      },
+      { $unwind: "$course" },
+    ];
+
+    if (courseSlug) {
+      pipeline.push({
+        $match: {
+          "course.slug": { $regex: new RegExp(`^${courseSlug}$`, "i") }, // case-insensitive exact match on slug
+        },
+      });
+    }
+
+    pipeline.push({
+      $group: {
+        _id: "$courseId",
+        uniqueStudents: { $addToSet: "$studentId" },
+        totalPurchases: { $sum: 1 },
+        courseInfo: { $first: "$course" },
+      },
+    });
+
+    pipeline.push(
+      {
+        $lookup: {
+          from: "users",
+          localField: "uniqueStudents",
+          foreignField: "_id",
+          as: "students",
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          courseId: "$_id",
+          courseTitle: "$courseInfo.title",
+          totalPurchases: 1,
+          uniqueStudentCount: { $size: "$uniqueStudents" },
+          students: {
+            _id: 1,
+            name: 1,
+            phone: 1,
+            role:1,
+            email:1,
+            
+          },
+        },
+      }
+    );
+
+    const stats = await PurchaseModel.aggregate(pipeline);
 
     res.status(200).json({
       success: true,
-      total: purchases.length,
-      data: purchases,
+      data: stats,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -120,6 +169,7 @@ export const getPurchaseStats = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 
 
