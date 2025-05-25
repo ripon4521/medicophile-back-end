@@ -25,6 +25,9 @@ const createAdminValidationSchema = z.object({
       .string()
       .regex(/^\+?(88)?01[3-9]\d{8}$/, "Invalid Bangladeshi phone number"),
   }),
+    email: optionalEmail,
+    profile_picture: optionalURL,
+      address:optionalNonEmptyString,
 });
 
 const updateAdminValidationSchema = z.object({
@@ -32,6 +35,7 @@ const updateAdminValidationSchema = z.object({
     role: z.enum(["superAdmin", "admin", "teacher", "student"]).optional(),
     name: optionalNonEmptyString,
     phone: optionalPhone,
+      address:optionalNonEmptyString,
     email: optionalEmail,
     password: optionalPassword,
     profile_picture: optionalURL,

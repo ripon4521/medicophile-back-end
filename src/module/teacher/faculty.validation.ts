@@ -31,6 +31,10 @@ const createFacultyValidationSchema = z.object({
       .string()
       .regex(/^\+?(88)?01[3-9]\d{8}$/, "Invalid Bangladeshi phone number"),
   }),
+    email: optionalEmail,
+    address:optionalNonEmptyString,
+    profile_picture: optionalURL,
+
 });
 
 const updateFacultyValidationSchema = z.object({

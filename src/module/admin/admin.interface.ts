@@ -7,6 +7,7 @@ export type IAdmin = {
   phone: string;
   email: string;
   password: string;
+  address:string;
   profile_picture?: string | null | undefined;
   status: "Active" | "Blocked";
   deletedAt: Date;

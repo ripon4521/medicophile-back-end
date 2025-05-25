@@ -25,6 +25,9 @@ const createShopManagerValidationSchema = z.object({
   body: z.object({
     name: z.string().min(3, "Name must be at least 3 characters"),
     phone: z.string().regex(/^\+?(88)?01[3-9]\d{8}$/, "Invalid Bangladeshi phone number"),
+     email: optionalEmail,
+    profile_picture: optionalURL,
+      address:optionalNonEmptyString,
   }),
 });
 
@@ -34,6 +37,7 @@ const updateShopManagerValidationSchema = z.object({
     name: optionalNonEmptyString,
     phone: optionalPhone,
     email: optionalEmail,
+      address:optionalNonEmptyString,
     password: optionalPassword,
     profile_picture: optionalURL,
     status: z.enum(["Active", "Blocked"]).optional(),

@@ -23,10 +23,18 @@ const optionalPassword = z.union([
 
 const createStudentSchema = z.object({
   body: z.object({
-    phone: z.string().min(10, "Phone number must be at least 10 digits."),
+    phone: z
+      .string()
+      .regex(/^\+?(88)?01[3-9]\d{8}$/, "Invalid Bangladeshi phone number"),
+    }),
     name: z.string().min(1, "Name cannot be empty."),
-  }),
-});
+        email: optionalEmail,
+         profile_picture: optionalURL,
+          gurdianName: optionalNonEmptyString,
+    gurdianPhone: optionalGurdianPhone,
+    address: optionalNonEmptyString,
+  })
+
 
 const updateStudentSchema = z.object({
   body: z.object({
