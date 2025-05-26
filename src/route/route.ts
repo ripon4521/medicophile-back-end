@@ -57,6 +57,7 @@ import performanceRoute from "../module/performance/performance.route";
 import bkashRoute from "../module/bkash/bkash.route";
 import shopManagerRouter from "../module/accountent/accountent.route";
 import pathaoRouter from "../module/courier/coureier.route";
+import accountsRouter from "../module/accounts/accounts.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -286,6 +287,9 @@ const moduleRoutes = [
   },{
     path:"/courier",
     route:pathaoRouter
+  },{
+    path:"/accounts",
+    route:accountsRouter
   }
 ];
 moduleRoutes.forEach((route) => {
