@@ -5,6 +5,8 @@ import { accountsController } from "./accounts.controller";
 import { authUser, onlyAdminAndFacultyAndStudent } from "../../middlewares/auth";
 
 const accountsRouter =Router();
+accountsRouter.get('/income-report', accountsController.getIncomeReport);
+accountsRouter.get('/expence-report', accountsController.getExpenseReport);
 accountsRouter.post('/create-expense', authUser(), onlyAdminAndFacultyAndStudent("admin", "shopManager", "shopManager") ,validateRequest(createexpenseSchema), accountsController.createExpense);
 accountsRouter.get('/all-expense', authUser(), onlyAdminAndFacultyAndStudent("admin", "shopManager", "shopManager") , accountsController.getAllExpense);
 accountsRouter.get('/all-income-order', authUser(), onlyAdminAndFacultyAndStudent("admin", "shopManager", "shopManager") , accountsController.getAllIncomeOrder);

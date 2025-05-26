@@ -114,26 +114,36 @@ const deleteIncomeSales = catchAsync(async (req, res) => {
 
 
 
+
 export const getIncomeReport = async (req: Request, res: Response) => {
   try {
     const { startDate, endDate } = req.query;
 
-    const filter: any = {
-      createdAt: {
-        ...(startDate && { $gte: new Date(startDate as string) }),
-        ...(endDate && { $lte: new Date(endDate as string) }),
-      },
+    const filter: any = {};
+
+    // Only add createdAt filter if at least one date is provided
+    if (startDate || endDate) {
+      filter.createdAt = {};
+      if (startDate) {
+        filter.createdAt.$gte = new Date(startDate as string);
+      }
+      if (endDate) {
+        filter.createdAt.$lte = new Date(endDate as string);
+      }
+    }
+
+    const orderQuery = {
+      ...filter,
+      paymentStatus: "Paid",
     };
 
-    const orders = await OrderModel.find({
+    const salesQuery = {
       ...filter,
-      paymentStatus: 'Paid',
-    });
+      paymentStatus: "Paid",
+    };
 
-    const sales = await SalesModel.find({
-      ...filter,
-      paymentStatus: 'Paid',
-    });
+    const orders = await OrderModel.find(orderQuery);
+    const sales = await SalesModel.find(salesQuery);
 
     const orderIncome = orders.reduce((acc, curr) => acc + curr.paidAmount, 0);
     const salesIncome = sales.reduce((acc, curr) => acc + curr.amount, 0);
@@ -156,8 +166,8 @@ export const getIncomeReport = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
-      message: 'Failed to generate income report',
-      error: error,
+      message: "Failed to generate income report",
+      error,
     });
   }
 };
