@@ -13,92 +13,97 @@ const cretaeGapsAnswer = async (payload: any) => {
   const user = await UserModel.findOne({ _id: payload.studentId });
   const exam = await ExamModel.findOne({ _id: payload.examId });
   const question = await GapsQuestionModel.findOne({ _id: payload.questionId });
+
   if (!user) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Invalid user id");
   } else if (!exam) {
-    throw new AppError(StatusCodes.BAD_REQUEST, " invalid exam  id");
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid exam id");
   } else if (!question) {
-    throw new AppError(StatusCodes.BAD_REQUEST, " invalid question  id");
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid question id");
   }
+
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
     const submissionDate = new Date(new Date().getTime() + 6 * 60 * 60 * 1000);
 
-    const result = await GapAnswerModel.create([payload], { session });
-    if (!result) {
-      throw new AppError(
-        StatusCodes.BAD_REQUEST,
-        "Failed to create Gaps Answer. Please check and try again",
-      );
-    }
+    const isWithinValidTime = exam.validTime
+      ? new Date(submissionDate).getTime() <= new Date(exam.validTime).getTime()
+      : true; // যদি validTime না থাকে, তাহলে সবসময় true
 
-    // Fetch the question from the database
-    const question = await GapsQuestionModel.findOne({
-      _id: result[0].questionId,
-      examId: result[0].examId,
-    }).session(session);
-
-    if (!question) {
-      throw new AppError(StatusCodes.NOT_FOUND, "Question not found.");
-    }
-
-    // Check if the answer is correct
-    const isCorrect = question?.answer?.includes(result[0].answer);
-
-    // Find existing attempt or create a new one
-    let attempt = await GapAttempModel.findOne({
-      studentId: result[0]?.studentId,
-      examId: result[0]?.examId,
-    }).session(session);
-
+    const isCorrect = question?.answer?.includes(payload.answer);
     const score = isCorrect ? question?.mark : 0;
 
-    // // result.durationDate should be the deadline
-    // const durationTime = await GapsQuestionModel.findOne({
-    //   _id: result[0].questionId,
-    // }).session(session);
-    // // console.log(durationTime)
+    const answerData = {
+      ...payload,
+      isCorrect,
+      score,
+      totalMarks: score,
+      submittedTime: submissionDate,
+      createdAt: submissionDate,
+    };
 
-    // Create or update the attempt record
-    if (!attempt) {
-      attempt = new GapAttempModel({
+    if (isWithinValidTime) {
+      const result = await GapAnswerModel.create([payload], { session });
+
+      if (!result || result.length === 0) {
+        throw new AppError(
+          StatusCodes.BAD_REQUEST,
+          "Failed to create Gaps Answer. Please check and try again"
+        );
+      }
+
+      let attempt = await GapAttempModel.findOne({
         studentId: result[0]?.studentId,
         examId: result[0]?.examId,
-        questionId: result[0]?.questionId,
-        score: score,
-        totalMarks: score,
-        submittedTime: submissionDate,
-        attemptedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-        isDeleted: false,
-      });
+      }).session(session);
+
+      if (!attempt) {
+        attempt = new GapAttempModel({
+          studentId: result[0]?.studentId,
+          examId: result[0]?.examId,
+          questionId: result[0]?.questionId,
+          score,
+          totalMarks: score,
+          submittedTime: submissionDate,
+          attemptedAt: submissionDate,
+          isDeleted: false,
+        });
+      } else {
+        attempt.score += score;
+        attempt.totalMarks += score;
+        attempt.submittedTime = submissionDate;
+      }
+
+      await attempt.save({ session });
+
+      await session.commitTransaction();
+      session.endSession();
+
+      return {
+        ...result[0],
+        isCorrect,
+        score,
+        totalMarks: attempt.totalMarks,
+      };
     } else {
-      attempt.score += score;
-      attempt.totalMarks += score; // Adjust this logic if needed
-      attempt.submittedTime = new Date(
-        new Date().getTime() + 6 * 60 * 60 * 1000,
-      );
+      await session.abortTransaction();
+      session.endSession();
+
+      return {
+        ...answerData,
+        notSaved: true,
+        message: "Valid submission time is over. Answer not saved in database.",
+      };
     }
-
-    // Save the attempt record
-    await attempt.save({ session });
-
-    // Commit the transaction if all operations are successful
-    await session.commitTransaction();
-    session.endSession(); // End the session
-
-    // Return the created gap answer
-    return result[0]; // Since result is an array due to `create([payload])`
   } catch (error) {
-    // Rollback the transaction in case of error
     await session.abortTransaction();
-    session.endSession(); // End the session
-
-    // Re-throw the error to handle it elsewhere
+    session.endSession();
     throw error;
   }
 };
+
 
 const getAllGapsAnswer = async (query: Record<string, unknown>) => {
   const result = await GapAnswerModel.find({ isDeleted: false })
