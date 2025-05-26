@@ -8,7 +8,7 @@ const orderRouter = Router();
 orderRouter.get(
   "/stats",
   authUser(),
-  // onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager"), 
+  onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager"), 
   orderController.getOrderStats
 );
 orderRouter.post(
@@ -16,10 +16,12 @@ orderRouter.post(
   validateRequest(orderValidation.createOrderZodSchema),
   orderController.createOrder,
 );
-orderRouter.get("/",  authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager", "student") ,  orderController.getAllOrders);
+orderRouter.get("/",  authUser(),
+//  onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager", "student") , 
+  orderController.getAllOrders);
 orderRouter.patch(
   "/:id",
-  authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager", "student") ,
+  // authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager", "student") ,
   validateRequest(orderValidation.updateOrderZodSchema),
   orderController.updateOrder,
 );

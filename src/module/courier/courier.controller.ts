@@ -1,47 +1,23 @@
-import { Request, Response } from "express";
-import OrderModel from "../order/order.model";
-import AppError from "../../helpers/AppError";
-import { StatusCodes } from "http-status-codes";
-import { createPathaoOrder, getPathaoCityList, getPathaoZoneList } from "./courier.service";
-import sendResponse from "../../utils/sendResponse";
-import { getPathaoToken } from "../../utils/pathao";
+import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import catchAsync from '../../utils/catchAsync';
+import { createPathaoOrderService } from './courier.service';
+import sendResponse from '../../utils/sendResponse';
 
 
+const createPathaoOrder = catchAsync(async (req: Request, res: Response) => {
+  const { orderId } = req.params;
+  const { city, zone } = req.body;
 
+  const result = await createPathaoOrderService(orderId, city, zone);
 
-
-
-export const sendToPathao = async (req: Request, res: Response) => {
-    const data = req.body;
-    const orderId = req.params._id;
-    const order = await OrderModel.findById(orderId);
-    if (!order) {
-        throw new AppError(StatusCodes.NOT_FOUND,  "Order not found")
-    }
-
-
-    const delivery = await createPathaoOrder(order, data);
-sendResponse(res, {
+  sendResponse(res, {
     statusCode: StatusCodes.OK,
-    message: "Percel Send Successfull to courier ",
-    data: delivery,
+    message: 'Order created in Pathao successfully',
+    data: result,
   });
-   
-};
+});
 
-
-// controllers/pathao.controller.ts
-
-
-export const getCities = async (req: Request, res: Response) => {
-  const token = await getPathaoToken();
-  const cities = await getPathaoCityList(token);
-  res.json(cities);
-};
-
-export const getZonesByCity = async (req: Request, res: Response) => {
-  const { cityId } = req.params;
-  const token = await getPathaoToken();
-  const zones = await getPathaoZoneList(Number(cityId), token);
-  res.json(zones);
+export const pathaoController = {
+  createPathaoOrder,
 };
