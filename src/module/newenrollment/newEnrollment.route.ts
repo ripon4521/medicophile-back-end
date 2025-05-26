@@ -6,7 +6,7 @@ import { auth } from "../../middlewares/auth";
 
 const enrollmentRoute = Router();
 enrollmentRoute.post(
-  "/createe-enrollment",
+  "/create-enrollment",
   validateRequest(enrolemntValidation.createEnrollmentSchema),
   enrollmentControlleer.createEnrollment,
 );

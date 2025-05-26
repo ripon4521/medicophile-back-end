@@ -3,17 +3,21 @@ import { Types } from "mongoose";
 import { IEnrollment } from "./newEnrollment.interface";
 
 // Define the Mongoose schema
-const EnrollmentSchema = new Schema(
+const EnrollmentSchema = new Schema<IEnrollment>(
   {
-    studentId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Students",
-    },
+    
     courseId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Course",
+    },
+    studentId:{
+      type: Schema.Types.ObjectId,
+      ref:"User"
+    },
+    batchId:{
+      type: Schema.Types.ObjectId,
+      ref:"OfflineBatch"
     },
     paidAmont: {
       type: Number,
@@ -29,7 +33,7 @@ const EnrollmentSchema = new Schema(
       type: String,
       required: true,
       enum: ["active", "blocked"],
-      default: "blocked",
+      default: "active",
     },
     transctionId: {
       type: String,
@@ -37,12 +41,43 @@ const EnrollmentSchema = new Schema(
     paymentNumber: {
       type: String,
     },
+    due:{
+      type:Number,
+      default:0
+    },
+    discount:{
+      type:Number,
+      default:0
+    },discountReason:{
+      type:String
+    },
+    name:{
+      type:String,
+      required:true
+    },
+    phone:{
+      type:String,
+      required:true
+    },
+    isDeleted:{
+      type:Boolean,
+      default:false
+    },
+    deletedAt:{
+      type:Date
+    }
+
+    
   },
-  { timestamps: true },
+ {
+    timestamps: {
+      currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+    }, // UTC+6 (Bangladesh Time)
+  }
 );
 
 // Create a Mongoose model from the schema
-const enrollMentModel = mongoose.model<IEnrollment & Document>(
+const enrollMentModel = mongoose.model<IEnrollment >(
   "Enrollments",
   EnrollmentSchema,
 );

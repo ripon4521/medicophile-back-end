@@ -69,11 +69,9 @@ export const getPurchaseStats = async (req: Request, res: Response) => {
   try {
     const { day, month, year, startDate, endDate, courseSlug } = req.query;
 
-    let matchCondition: any = {
-      isDeleted: false,
-    };
+    let matchCondition: any = { isDeleted: false };
 
-    // Date filters same as before...
+    // Date filtering
     if (startDate && endDate) {
       const start = new Date(startDate as string);
       const end = new Date(endDate as string);
@@ -112,47 +110,55 @@ export const getPurchaseStats = async (req: Request, res: Response) => {
     if (courseSlug) {
       pipeline.push({
         $match: {
-          "course.slug": { $regex: new RegExp(`^${courseSlug}$`, "i") }, // case-insensitive exact match on slug
+          "course.slug": { $regex: new RegExp(`^${courseSlug}$`, "i") },
         },
       });
     }
 
+    // Join with student
+    pipeline.push({
+      $lookup: {
+        from: "users",
+        localField: "studentId",
+        foreignField: "_id",
+        as: "student",
+      },
+    });
+    pipeline.push({ $unwind: "$student" });
+
+    // Group by course
     pipeline.push({
       $group: {
         _id: "$courseId",
-        uniqueStudents: { $addToSet: "$studentId" },
-        totalPurchases: { $sum: 1 },
         courseInfo: { $first: "$course" },
+        totalPurchases: { $sum: 1 },
+        purchases: {
+          $push: {
+            _id: "$_id",
+            createdAt: "$createdAt",
+            student: {
+              _id: "$student._id",
+              name: "$student.name",
+              email: "$student.email",
+              phone: "$student.phone",
+              role: "$student.role",
+            },
+          },
+        },
       },
     });
 
-    pipeline.push(
-      {
-        $lookup: {
-          from: "users",
-          localField: "uniqueStudents",
-          foreignField: "_id",
-          as: "students",
-        },
+    pipeline.push({
+      $project: {
+        _id: 0,
+        courseId: "$_id",
+        courseTitle: "$courseInfo.title",
+        amount: "$courseInfo.price",
+        courseSlug: "$courseInfo.slug", // optional
+        totalPurchases: 1,
+        purchases: 1,
       },
-      {
-        $project: {
-          _id: 0,
-          courseId: "$_id",
-          courseTitle: "$courseInfo.title",
-          totalPurchases: 1,
-          uniqueStudentCount: { $size: "$uniqueStudents" },
-          students: {
-            _id: 1,
-            name: 1,
-            phone: 1,
-            role:1,
-            email:1,
-            
-          },
-        },
-      }
-    );
+    });
 
     const stats = await PurchaseModel.aggregate(pipeline);
 
@@ -169,6 +175,8 @@ export const getPurchaseStats = async (req: Request, res: Response) => {
     });
   }
 };
+
+
 
 
 

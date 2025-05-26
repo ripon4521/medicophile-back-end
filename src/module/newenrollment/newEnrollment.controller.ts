@@ -13,7 +13,8 @@ const createEnrollment = catchAsync(async (req, res) => {
 });
 
 const getEnrollment = catchAsync(async (req, res) => {
-  const result = await enrollmentService.getAllEnrollment();
+  const query = req.query;
+  const result = await enrollmentService.getAllEnrollment(query);
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,
     message: "Enrollment get successfully",

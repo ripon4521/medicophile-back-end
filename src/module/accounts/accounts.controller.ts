@@ -2,6 +2,10 @@ import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { accountsService } from "./accounts.service";
+import { Request, Response } from "express";
+import OrderModel from "../order/order.model";
+import { SalesModel } from "./sales.model";
+import { ExpenseModel } from "./expense.model";
 
 
 
@@ -108,6 +112,106 @@ const deleteIncomeSales = catchAsync(async (req, res) => {
 });
 
 
+
+
+export const getIncomeReport = async (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    const filter: any = {
+      createdAt: {
+        ...(startDate && { $gte: new Date(startDate as string) }),
+        ...(endDate && { $lte: new Date(endDate as string) }),
+      },
+    };
+
+    const orders = await OrderModel.find({
+      ...filter,
+      paymentStatus: 'Paid',
+    });
+
+    const sales = await SalesModel.find({
+      ...filter,
+      paymentStatus: 'Paid',
+    });
+
+    const orderIncome = orders.reduce((acc, curr) => acc + curr.paidAmount, 0);
+    const salesIncome = sales.reduce((acc, curr) => acc + curr.amount, 0);
+    const totalIncome = orderIncome + salesIncome;
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      totalIncome,
+      breakdown: {
+        orderIncome,
+        salesIncome,
+        orderCount: orders.length,
+        salesCount: sales.length,
+      },
+      details: {
+        orders,
+        sales,
+      },
+    });
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Failed to generate income report',
+      error: error,
+    });
+  }
+};
+
+
+
+
+export const getExpenseReport = async (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    const filter: any = {
+      isDeleted: false,
+      ...(startDate && endDate
+        ? {
+            createdAt: {
+              $gte: new Date(startDate as string),
+              $lte: new Date(endDate as string),
+            },
+          }
+        : {}),
+    };
+
+    const expenses = await ExpenseModel.find(filter);
+
+    const totalExpense = expenses.reduce((acc, curr) => acc + curr.amount, 0);
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      totalExpense,
+      count: expenses.length,
+      expenses,
+    });
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Failed to generate expense report',
+      error: error,
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const accountsController = {
     createExpense,
     getAllExpense,
@@ -117,5 +221,7 @@ export const accountsController = {
     getAllIncomeOrder,
     getAllIncomeSales,
     deleteIncomeOrder,
-    deleteIncomeSales
+    deleteIncomeSales,
+    getIncomeReport,
+    getExpenseReport
 }
