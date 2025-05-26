@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 import PaymentDetailsModel from "../paymentDetails/paymentDetails.model";
 import QueryBuilder from "../../builder/querybuilder";
 import { IPaymentInfo } from "../purchaseToken/purchaseToken.interface";
+import { SalesModel } from "../accounts/sales.model";
+import { ISales } from "../accounts/accounts.interface";
 
 const createPurchase = async (payload: IPurchase) => {
   const session = await mongoose.startSession();
@@ -88,21 +90,33 @@ const createPurchase = async (payload: IPurchase) => {
     );
 
     let result = null;
-    if (payload.paymentStatus === "Paid") {
-      result = await PurchaseModel.create([payload], { session });
-      // set value for payment details
-      if (!result) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create result");
-      }
-  
-      const data = {
-        purchaseId: result[0]._id,
-        studentId: result[0].studentId,
-        paidAmount: result[0].totalAmount,
-        paymentInfo: result[0].paymentInfo,
-      };
-      await PaymentDetailsModel.create([data], { session });
-    }
+
+ if (payload.paymentStatus === "Paid") {
+  result = await PurchaseModel.create([payload], { session });
+  if (!result) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create result");
+  }
+
+  const data = {
+    purchaseId: result[0]._id,
+    studentId: result[0].studentId,
+    paidAmount: result[0].totalAmount,
+    paymentInfo: result[0].paymentInfo,
+  };
+  await PaymentDetailsModel.create([data], { session });
+
+  // ✅ Insert into Sales
+  const salesPayload: ISales = {
+    source: "sales",
+    purchaseId: result[0]._id,
+    customerId: result[0].studentId,
+    amount: result[0].totalAmount,
+
+  };
+
+  await SalesModel.create([salesPayload], { session });
+}
+
 
     await session.commitTransaction();
     session.endSession();

@@ -12,6 +12,8 @@ import { UserModel } from "../user/user.model";
 import { IPaymentInfo } from "../purchaseToken/purchaseToken.interface";
 import { IStudent } from "../student/student.interface";
 import { createStudentWithUser } from "../../utils/creaetStudentForOrder";
+import { IncomeModel } from "../accounts/income.model";
+import { IIncome } from "../accounts/accounts.interface";
 
 
 const createOrderWithDetails = async (payload: IOrder) => {
@@ -67,6 +69,20 @@ const createOrderWithDetails = async (payload: IOrder) => {
     if (!order) {
       throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create order");
     }
+
+    // ✅ Add Order to Income
+  const orderIncomePayload: IIncome = {
+  source: "order",
+  orderId: order._id,
+  customerId: order.userId,
+  amount: order.paidAmount 
+ 
+};
+
+await IncomeModel.create([orderIncomePayload], { session });
+
+
+
 
     // Prepare Payment Info
     let paymentInfo: IPaymentInfo | undefined = order.paymentInfo;
