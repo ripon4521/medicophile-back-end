@@ -8,7 +8,7 @@ const orderRouter = Router();
 orderRouter.get(
   "/stats",
   authUser(),
-  onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager"), 
+  // onlyAdminAndFacultyAndStudent("admin", "superAdmin", "shopManager"), 
   orderController.getOrderStats
 );
 orderRouter.post(
