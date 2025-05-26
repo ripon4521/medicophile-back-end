@@ -13,7 +13,7 @@ export interface IExam {
   mcqDuration: number;
   cqMark: number;
   resultStatus: "pending" | "completed" | "failed";
-  validTime?: string;
+  validTime?: number;
   status: "published" | "drafted";
   scheduleDate: Date;
   createdAt?:Date;

@@ -42,9 +42,7 @@ const createExamSchema = z.object({
     mcqDuration: z.number().int().min(1, "MCQ duration must be at least 1 minute").optional(),
     cqMark: z.number().min(0, "CQ mark must be 0 or more").optional(),
     resultStatus: ResultStatusEnum.optional(),
-    validTime: z.coerce.date({
-      errorMap: () => ({ message: "Valid time must be a valid date" }),
-    }).optional(),
+    validTime: z.number().optional(),
     status: StatusEnum,
     scheduleDate: dateSchema.optional(),
   }),
@@ -64,9 +62,7 @@ const updateExamSchema = z.object({
     mcqDuration: z.number().int().min(0).optional(),
     cqMark: z.number().min(0).optional(),
     resultStatus: ResultStatusEnum.optional(),
-    validTime: z.coerce.date({
-      errorMap: () => ({ message: "Valid time must be a valid date" }),
-    }).optional(),
+     validTime: z.number().optional(),
     status: StatusEnum.optional(),
     scheduleDate: dateSchema.optional(),
   }),
