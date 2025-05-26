@@ -12,7 +12,7 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
   if (!user || user.role !== "student") {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "invalid student id. Please provide a valid student id",
+      "invalid student id. Please provide a valid student id"
     );
   }
 
@@ -21,30 +21,36 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
   // Fetch all answered questions and populate examId
   const questions = await McqQuestion.find({
     _id: { $in: questionIds },
-  }).populate("examId"); // To access positiveMark, negativeMark, and examId
+  }).populate("examId");
 
   let score = 0;
   let correctCount = 0;
   let wrongCount = 0;
   let examId: Types.ObjectId | null = null;
+  let validTimeExpired = false;
 
-  // Process each answer
   for (const userAnswer of answer) {
     const matchedQuestion = questions.find(
-      (q) => q._id.toString() === userAnswer.questionId.toString(),
+      (q) => q._id.toString() === userAnswer.questionId.toString()
     );
 
     if (!matchedQuestion || !matchedQuestion.examId) continue;
 
-    // Set the examId from the first matched question
+    const exam = matchedQuestion.examId as any;
+
     if (!examId) {
-      examId = matchedQuestion.examId;
+      examId = exam._id;
+    }
+
+    // Check validTime
+    const now = new Date(new Date().getTime() + 6 * 60 * 60 * 1000); // BD time
+    if (exam.validTime && new Date(exam.validTime) < now) {
+      validTimeExpired = true;
     }
 
     const positiveMark = matchedQuestion.positiveMark || 1;
     const negativeMark = matchedQuestion.negetiveMark || 0;
 
-    // Check if the answer is correct
     if (matchedQuestion.correctAnswer === userAnswer.selectedAnswer) {
       score += positiveMark;
       correctCount++;
@@ -56,19 +62,23 @@ const submitAttemptService = async ({ studentId, answer }: IMcqAttemp) => {
 
   const total = answer.length;
 
-  // Save result with examId
-  const result = await McqAttemptModel.create({
-    studentId: new Types.ObjectId(studentId),
-    examId,
-    answer,
-    score,
-    total,
-    correctCount,
-    wrongCount,
-  });
+  let result = null;
+  if (!validTimeExpired) {
+    result = await McqAttemptModel.create({
+      studentId: new Types.ObjectId(studentId),
+      examId,
+      answer,
+      score,
+      total,
+      correctCount,
+      wrongCount,
+    });
+  }
 
   return {
-    message: "Exam submitted successfully!",
+    message: validTimeExpired
+      ? "Valid time expired. Result calculated but not saved."
+      : "Exam submitted successfully!",
     score,
     correctCount,
     wrongCount,
