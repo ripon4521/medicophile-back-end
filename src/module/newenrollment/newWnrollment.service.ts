@@ -51,7 +51,7 @@ const createEnrollment = async (payload: IEnrollment) => {
     payload.studentId = user._id;
     const student = await UserModel.findOne({ _id: payload.studentId }).session(session);
     if (!student) {
-      throw new AppError(StatusCodes.BAD_REQUEST, 'Student Fetch Failed');
+      throw new AppError(StatusCodes.BAD_REQUEST, 'Student Not Found ');
     }
 
     const course = await courseModel.findOne({ _id: payload.courseId }).session(session);
