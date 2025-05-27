@@ -2,7 +2,7 @@ import { Router } from "express";
 import validateRequest from "../../middlewares/validateRequest";
 import { enrolemntValidation } from "./newEnrollment.validation";
 import { enrollmentControlleer } from "./newEnrollment.controller";
-import { auth, onlyAdminAndFacultyAndStudent } from "../../middlewares/auth";
+import { auth, authUser, onlyAdminAndFacultyAndStudent } from "../../middlewares/auth";
 
 const enrollmentRoute = Router();
 enrollmentRoute.post(
@@ -12,7 +12,7 @@ enrollmentRoute.post(
 );
 enrollmentRoute.get(
   "/",
-
+authUser(),
  onlyAdminAndFacultyAndStudent("superAdmin","admin","teacher","student"),
   enrollmentControlleer.getEnrollment,
 );
