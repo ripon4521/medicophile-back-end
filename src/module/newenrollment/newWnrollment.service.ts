@@ -50,15 +50,19 @@ const studentPayload: IStudent = {
     if (!user) {
       throw new AppError(StatusCodes.BAD_REQUEST, 'Student Create Failed');
     }
-
-    payload.studentId = user._id;
-    }
-
-    
-    const student = await UserModel.findOne({ _id: payload.studentId }).session(session);
+    if (user) {
+         payload.studentId = user._id;
+           const student = await UserModel.findOne({ _id: user._id }).session(session);
     if (!student) {
       throw new AppError(StatusCodes.BAD_REQUEST, 'Student Not Found ');
     }
+    }
+    }
+
+ 
+
+    
+  
 
     const course = await courseModel.findOne({ _id: payload.courseId }).session(session);
     if (!course) {
