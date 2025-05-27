@@ -12,7 +12,7 @@ enrollmentRoute.post(
 );
 enrollmentRoute.get(
   "/",
-authUser(),
+authUser('superAdmin', "admin", 'teacher'),
  onlyAdminAndFacultyAndStudent("superAdmin","admin","teacher","student"),
   enrollmentControlleer.getEnrollment,
 );
