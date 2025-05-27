@@ -26,8 +26,11 @@ const createEnrollment = async (payload: IEnrollment) => {
         throw new AppError(StatusCodes.NOT_FOUND, "Not Found Batch");
       }
     }
-
-    const studentPayload: IStudent = {
+const studnetId = await UserModel.findOne({phone:payload.phone});
+    if (studnetId) {
+      payload.studentId = studnetId._id;
+    } else{
+const studentPayload: IStudent = {
       name: payload.name,
       phone: payload.phone,
       email: '',
@@ -49,6 +52,9 @@ const createEnrollment = async (payload: IEnrollment) => {
     }
 
     payload.studentId = user._id;
+    }
+
+    
     const student = await UserModel.findOne({ _id: payload.studentId }).session(session);
     if (!student) {
       throw new AppError(StatusCodes.BAD_REQUEST, 'Student Not Found ');
