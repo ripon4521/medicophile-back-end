@@ -1,16 +1,31 @@
-import { Request, Response } from 'express';
-import { createBkashPayment } from './bakash.service';
+import { StatusCodes } from "http-status-codes";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
+import { tokenService } from "./bakash.service";
+
+const createToken = catchAsync(async (req, res) => {
+  const result = await tokenService.createToken(req.body);
+  sendResponse(res, {
+    statusCode: StatusCodes.CREATED,
+    message: "token  Created successfully",
+    data: result,
+  });
+});
 
 
-export const initiatePayment = async (req: Request, res: Response) => {
-  try {
-    const { amount } = req.body;
-    const payment = await createBkashPayment(amount);
-    res.status(200).json(payment);
-  } catch (error: any) {
-    res.status(500).json({
-      message: 'bKash payment initiation failed',
-      error: error,
-    });
-  }
-};
+const getToken = catchAsync(async (req, res) => {
+
+  const result = await tokenService.getToken();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    message: "token get successfully",
+    data: result,
+  });
+});
+
+
+
+export const tokenController = {
+  createToken,
+  getToken
+}

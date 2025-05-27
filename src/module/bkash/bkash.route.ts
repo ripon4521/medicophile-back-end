@@ -1,9 +1,9 @@
-import express from 'express';
-import { initiatePayment } from './bkash.controller';
+import { Router } from "express";
+import validateRequest from "../../middlewares/validateRequest";
+import { TokenSchema } from "./token.validation";
+import { tokenController } from "./bkash.controller";
 
-
-const bkashRoute = express.Router();
-
-bkashRoute.post('/pay', initiatePayment);
-
-export default bkashRoute;
+const tokenRouter = Router();
+tokenRouter.post('/create-token', validateRequest(TokenSchema), tokenController.createToken);
+tokenRouter.get('/', tokenController.getToken);
+export default tokenRouter;

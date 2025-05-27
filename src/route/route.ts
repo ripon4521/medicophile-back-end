@@ -54,10 +54,10 @@ import referDetailsRoute from "../module/referDetails/referDetails.route";
 import referRewardRouter from "../module/referalReward/referalReward.route";
 import referWithdrawRouter from "../module/withdraw/withdraw.route";
 import performanceRoute from "../module/performance/performance.route";
-import bkashRoute from "../module/bkash/bkash.route";
 import shopManagerRouter from "../module/accountent/accountent.route";
 import pathaoRouter from "../module/courier/coureier.route";
 import accountsRouter from "../module/accounts/accounts.route";
+import tokenRouter from "../module/bkash/bkash.route";
 
 const router = Router();
 const moduleRoutes = [
@@ -278,8 +278,8 @@ const moduleRoutes = [
     path:"/performance",
     route:performanceRoute
   },{
-    path:"/payment",
-    route:bkashRoute
+    path:"/token",
+    route:tokenRouter
   },{
     path:"/manager",
     route:shopManagerRouter
