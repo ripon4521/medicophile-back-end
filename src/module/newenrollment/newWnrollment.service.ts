@@ -83,8 +83,8 @@ const studentPayload: IStudent = {
         discount: payload.discount,
         charge,
         totalAmount,
-        name: user.name,
-        phone: user.phone,
+        name: payload.name,
+        phone: payload.phone,
       }],
       { session }
     );
