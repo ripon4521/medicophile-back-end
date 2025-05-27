@@ -45,17 +45,14 @@ const studentPayload: IStudent = {
       address: '',
     };
 
-    const { user } = await createStudentWithUser(studentPayload); // Ensure this function supports session
+    const { user } = await createStudentWithUser(studentPayload); 
+    console.log(user)
 
     if (!user) {
       throw new AppError(StatusCodes.BAD_REQUEST, 'Student Create Failed');
     }
     if (user) {
          payload.studentId = user._id;
-           const student = await UserModel.findOne({ _id: user._id }).session(session);
-    if (!student) {
-      throw new AppError(StatusCodes.BAD_REQUEST, 'Student Not Found ');
-    }
     }
     }
 
