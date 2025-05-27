@@ -12,7 +12,8 @@ enrollmentRoute.post(
 );
 enrollmentRoute.get(
   "/",
- onlyAdminAndFacultyAndStudent("superAdmin","admin","teacher"),
+
+ onlyAdminAndFacultyAndStudent("superAdmin","admin","teacher","student"),
   enrollmentControlleer.getEnrollment,
 );
 enrollmentRoute.get("/:id", enrollmentControlleer.getSingleEnrollment);
