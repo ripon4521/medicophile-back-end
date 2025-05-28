@@ -20,52 +20,56 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
   session.startTransaction();
 
   try {
-    if (payload.phone) {
-      const user = await UserModel.findOne({phone:payload.phone }).session(session);
-      console.log(user)
-      if (user) {
+    // StudentId না থাকলে check করবো phone দিয়ে user খুঁজে পাওয়া যায় কিনা
+    if (!payload.studentId) {
+      if (payload.phone) {
+        const user = await UserModel.findOne({ phone: payload.phone }).session(session);
+        if (user) {
+          payload.studentId = user._id;
+        }
+      }
+
+      // user না পাওয়া গেলে নতুন student তৈরি করবো
+      if (!payload.studentId) {
+        const studentPayload: IStudent = {
+          name: payload.name,
+          phone: payload.phone,
+          email: '',
+          role: 'student',
+          profile_picture: '',
+          userId: undefined,
+          status: 'Active',
+          isDeleted: false,
+          password: '',
+          gurdianName: '',
+          gurdianPhone: '',
+          address: '',
+        };
+
+        const { user } = await createStudentWithUser(studentPayload);
+        if (!user) throw new AppError(StatusCodes.NOT_FOUND, 'Student creation failed');
         payload.studentId = user._id;
       }
     }
 
-    if (!payload.studentId) {
-      const studentPayload: IStudent = {
-        name: payload.name,
-        phone: payload.phone,
-        email: '',
-        role: 'student',
-        profile_picture: '',
-        userId: undefined,
-        status: 'Active',
-        isDeleted: false,
-        password: '',
-        gurdianName: '',
-        gurdianPhone: '',
-        address: '',
-      };
-
-      const { user } = await createStudentWithUser(studentPayload);
-      if (!user) throw new AppError(StatusCodes.NOT_FOUND, 'Student creation failed');
-      payload.studentId = user._id;
-    }
-
+    // Student ও Course validation
     const student = await UserModel.findOne({ _id: payload.studentId }).session(session);
-    const course = await courseModel.findOne({ _id: payload.courseId, isDeleted: false }).session(session);
-
-    if (!student){
-        throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid student id');
+    if (!student) {
+      throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid student id');
     }
-    if (!course){
+
+    const course = await courseModel.findOne({ _id: payload.courseId, isDeleted: false }).session(session);
+    if (!course) {
       throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid course id');
-    } 
+    }
 
-
-    // Save purchase token
+    // Purchase Token create
     const result = await PurchaseTokenModel.create([payload], { session });
-    if (!result || result.length === 0) throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase token');
+    if (!result || result.length === 0) {
+      throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase token');
+    }
 
     const purchaseToken = result[0];
-    console.log(purchaseToken)
 
     // Refer logic
     if (payload.ref) {
@@ -77,24 +81,24 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
       }], { session });
     }
 
+    // Purchase create
     const purchasePayload: IPurchase = {
-      charge:purchaseToken.charge,
-      discount:purchaseToken.discount,
-      totalAmount:purchaseToken.totalAmount,
-      subtotal:purchaseToken.subtotal,
-      courseId:purchaseToken.courseId,
+      charge: purchaseToken.charge,
+      discount: purchaseToken.discount,
+      totalAmount: purchaseToken.totalAmount,
+      subtotal: purchaseToken.subtotal,
+      courseId: purchaseToken.courseId,
       studentId: purchaseToken.studentId,
       purchaseToken: purchaseToken._id,
-      paymentInfo:purchaseToken.paymentInfo,
+      paymentInfo: purchaseToken.paymentInfo,
       paymentStatus: "Paid",
       status: "Active",
       isExpire: false,
     };
 
     const purchaseResult = await purchaseService.createPurchase(purchasePayload, session);
-    console.log(purchaseResult)
     if (!purchaseResult) {
-       throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase');
+      throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase');
     }
 
     await session.commitTransaction();
@@ -104,6 +108,7 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+    console.error('❌ Error creating purchase token:', error);
     throw error;
   }
 };
