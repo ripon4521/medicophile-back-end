@@ -138,12 +138,12 @@ export const getIncomeReport = async (req: Request, res: Response) => {
     };
 
     const salesQuery = {
-      ...filter,
-      paymentStatus: "Paid",
+      ...filter
     };
 
     const orders = await OrderModel.find(orderQuery);
     const sales = await SalesModel.find(salesQuery);
+ 
 
     const orderIncome = orders.reduce((acc, curr) => acc + curr.paidAmount, 0);
     const salesIncome = sales.reduce((acc, curr) => acc + curr.amount, 0);
