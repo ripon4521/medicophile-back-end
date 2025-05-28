@@ -6,7 +6,7 @@ import { authUser, onlyAdminAndFacultyAndStudent } from "../../middlewares/auth"
 
 const purchaseRoute = Router();
 purchaseRoute.get('/stats', authUser(), 
-// onlyAdminAndFacultyAndStudent("admin", "superAdmin"),
+onlyAdminAndFacultyAndStudent("admin", "superAdmin"),
  purchaseController.getPurchaseStats)
 purchaseRoute.post(
   "/create-purchase",
@@ -14,7 +14,7 @@ purchaseRoute.post(
   purchaseController.createPurchase,
 );
 purchaseRoute.get("/", authUser(),
-//  onlyAdminAndFacultyAndStudent("admin", "superAdmin") ,
+ onlyAdminAndFacultyAndStudent("admin", "superAdmin") ,
   purchaseController.getAllPurchase);
 purchaseRoute.patch(
   "/:id",
