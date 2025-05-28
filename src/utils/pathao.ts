@@ -1,8 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
+
 
 export const STORE_ID = "264465";
-const CLIENT_ID = "7N1aMJQbWm";
-const CLIENT_SECRET = "wRcaibZkUdSNz2EI9ZyuXLlNrnAv0TdPUPXMnD39";
+const CLIENT_ID = "MYer23EeOB";
+const CLIENT_SECRET = "ngx5RBpmaxTi9S2zYcL0QjxXKmBcc50wuwlwqB1g";
 
 let accessToken = "";
 let tokenExpiry = 0;
@@ -38,6 +39,7 @@ export const getPathaoToken = async (): Promise<string> => {
 
     return accessToken;
   } catch (error: any) {
+    console.log( error.response?.data)
     console.error("Error fetching Pathao token:", error.response?.data || error.message || error);
     throw new Error("Could not fetch Pathao token");
   }

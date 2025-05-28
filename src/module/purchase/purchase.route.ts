@@ -13,7 +13,9 @@ purchaseRoute.post(
   validateRequest(purchaseValidation.createPurchaseSchema),
   purchaseController.createPurchase,
 );
-purchaseRoute.get("/", authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin") , purchaseController.getAllPurchase);
+purchaseRoute.get("/", authUser(),
+//  onlyAdminAndFacultyAndStudent("admin", "superAdmin") ,
+  purchaseController.getAllPurchase);
 purchaseRoute.patch(
   "/:id",
   authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin") ,

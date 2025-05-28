@@ -96,6 +96,7 @@ export const getPurchaseStats = async (req: Request, res: Response) => {
     const pipeline: any[] = [
       { $match: matchCondition },
 
+      // Join with course
       {
         $lookup: {
           from: "courses",
@@ -105,66 +106,81 @@ export const getPurchaseStats = async (req: Request, res: Response) => {
         },
       },
       { $unwind: "$course" },
+
+      // Filter by courseSlug if provided
+      ...(courseSlug
+        ? [{
+            $match: {
+              "course.slug": { $regex: new RegExp(`^${courseSlug}$`, "i") },
+            },
+          }]
+        : []),
+
+      // Join with student
+      {
+        $lookup: {
+          from: "users",
+          localField: "studentId",
+          foreignField: "_id",
+          as: "student",
+        },
+      },
+      { $unwind: "$student" },
+
+      // Final shape
+      {
+        $project: {
+          _id: 1,
+          createdAt: 1,
+          status: 1,
+          paymentStatus: 1,
+          purchaseToken: 1,
+          subtotal: 1,
+          discount: 1,
+          charge: 1,
+          totalAmount: 1,
+          isExpire: 1,
+          isDeleted: 1,
+
+          student: {
+            _id: "$student._id",
+            name: "$student.name",
+            phone: "$student.phone",
+            role: "$student.role",
+          },
+
+          course: {
+            _id: "$course._id",
+            cover_photo: "$course.cover_photo",
+            course_title: "$course.course_title",
+            description: "$course.description",
+            duration: "$course.duration",
+            preOrder: "$course.preOrder",
+            course_type: "$course.course_type",
+            category: "$course.category",
+            createdBy: "$course.createdBy",
+            expireTime: "$course.expireTime",
+            daySchedule: "$course.daySchedule",
+            timeShedule: "$course.timeShedule",
+            price: "$course.price",
+            offerPrice: "$course.offerPrice",
+            takeReview: "$course.takeReview",
+            status: "$course.status",
+            course_tag: "$course.course_tag",
+            isDeleted: "$course.isDeleted",
+            createdAt: "$course.createdAt",
+            updatedAt: "$course.updatedAt",
+            slug: "$course.slug",
+          }
+        }
+      }
     ];
 
-    if (courseSlug) {
-      pipeline.push({
-        $match: {
-          "course.slug": { $regex: new RegExp(`^${courseSlug}$`, "i") },
-        },
-      });
-    }
-
-    // Join with student
-    pipeline.push({
-      $lookup: {
-        from: "users",
-        localField: "studentId",
-        foreignField: "_id",
-        as: "student",
-      },
-    });
-    pipeline.push({ $unwind: "$student" });
-
-    // Group by course
-    pipeline.push({
-      $group: {
-        _id: "$courseId",
-        courseInfo: { $first: "$course" },
-        totalPurchases: { $sum: 1 },
-        purchases: {
-          $push: {
-            _id: "$_id",
-            createdAt: "$createdAt",
-            student: {
-              _id: "$student._id",
-              name: "$student.name",
-              email: "$student.email",
-              phone: "$student.phone",
-              role: "$student.role",
-            },
-          },
-        },
-      },
-    });
-
-    pipeline.push({
-      $project: {
-        _id: 0,
-        courseId: "$_id",
-        courseTitle: "$courseInfo.title",
-        amount: "$courseInfo.price",
-        courseSlug: "$courseInfo.slug", // optional
-        totalPurchases: 1,
-        purchases: 1,
-      },
-    });
-
-    const stats = await PurchaseModel.aggregate(pipeline);
+    const data = await PurchaseModel.aggregate(pipeline);
 
     res.status(200).json({
       success: true,
-      data: stats,
+      data,
     });
   } catch (error) {
     console.error(error);
