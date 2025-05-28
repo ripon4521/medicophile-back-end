@@ -21,7 +21,8 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
 
   try {
     if (payload.phone) {
-      const user = await UserModel.findOne({ phone: payload.phone }).session(session);
+      const user = await UserModel.findOne({phone:payload.phone }).session(session);
+      console.log(user)
       if (user) {
         payload.studentId = user._id;
       }
@@ -64,6 +65,7 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
     if (!result || result.length === 0) throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase token');
 
     const purchaseToken = result[0];
+    console.log(purchaseToken)
 
     // Refer logic
     if (payload.ref) {
@@ -76,7 +78,11 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
     }
 
     const purchasePayload: IPurchase = {
-      ...payload,
+      charge:purchaseToken.charge,
+      discount:purchaseToken.discount,
+      totalAmount:purchaseToken.totalAmount,
+      subtotal:purchaseToken.subtotal,
+      courseId:purchaseToken.courseId,
       studentId: purchaseToken.studentId,
       purchaseToken: purchaseToken._id,
       paymentInfo:purchaseToken.paymentInfo,
@@ -85,7 +91,8 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
       isExpire: false,
     };
 
-    const purchaseResult = await purchaseService.createPurchase(purchasePayload);
+    const purchaseResult = await purchaseService.createPurchase(purchasePayload, session);
+    console.log(purchaseResult)
     if (!purchaseResult) {
        throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase');
     }

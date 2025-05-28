@@ -32,7 +32,7 @@ const PurchaseSchema = new Schema<IPurchase>(
       enum: ["Paid", "Pending", "Partial", "Refunded", "Rejected"],
       required: true,
     },
-    purchaseToken: { type: Schema.Types.ObjectId, required: true },
+    purchaseToken: { type: Schema.Types.ObjectId, required: true , ref:"PurchaseToken" },
     subtotal: { type: Number },
     isExpire:{type:Boolean, default:false},
     discount: { type: Number },
