@@ -46,7 +46,7 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
           address: '',
         };
 
-        const { user } = await createStudentWithUser(studentPayload);
+        const { user } = await createStudentWithUser(studentPayload, session);
         if (!user) throw new AppError(StatusCodes.NOT_FOUND, 'Student creation failed');
         payload.studentId = user._id;
       }

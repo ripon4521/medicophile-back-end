@@ -9,34 +9,37 @@ import studentModel from '../module/student/student.model';
 import { IUser } from '../module/user/user.interface';
 
 
-export const createStudentWithUser = async (payload: IStudent) => {
+export const createStudentWithUser = async (
+  payload: IStudent,
+  externalSession?: mongoose.ClientSession
+) => {
   const isExist = await UserModel.findOne({ phone: payload.phone, isDeleted: false });
   if (isExist) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "This user already exists. Please login.");
+    throw new AppError(StatusCodes.BAD_REQUEST, 'This user already exists. Please login.');
   }
 
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  const session = externalSession || await mongoose.startSession();
+  const isNewSession = !externalSession;
+
+  if (isNewSession) session.startTransaction();
 
   try {
-    // Step 1: Generate random 6-digit password
     const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Step 2: Send SMS
-    const sms = await sendSMS(payload.phone, `আপনার কোর্সটি অর্ডার সফল হয়েছে। 
-লগ ইন করতে আপনার ফোন নাম্বার এবং এই ${plainPassword} পাসওয়ার্ড দিয়ে লগ ইন করুন।`);
+    const sms = await sendSMS(
+      payload.phone,
+      `আপনার কোর্সটি অর্ডার সফল হয়েছে। 
+লগ ইন করতে আপনার ফোন নাম্বার এবং এই ${plainPassword} পাসওয়ার্ড দিয়ে লগ ইন করুন।`
+    );
     if (!sms) {
-      throw new AppError(StatusCodes.BAD_REQUEST, "Student creation failed while sending SMS.");
+      throw new AppError(StatusCodes.BAD_REQUEST, 'Student creation failed while sending SMS.');
     }
 
-    // Step 3: Create student (without userId)
     const studentData = { ...payload };
     const createdStudent = await studentModel.create([studentData], { session });
 
-    // Step 4: Hash password
     const hashedPassword = await bcrypt.hash(plainPassword, 12);
 
-    // Step 5: Create user
     const userData: Partial<IUser> = {
       name: createdStudent[0].name,
       status: createdStudent[0].status,
@@ -51,24 +54,26 @@ export const createStudentWithUser = async (payload: IStudent) => {
 
     const newUser = await UserModel.create([userData], { session });
 
-    // Step 6: Update student with userId
     await studentModel.updateOne(
       { _id: createdStudent[0]._id },
       { userId: newUser[0]._id },
       { session }
     );
 
-    // Commit and end session
-    await session.commitTransaction();
-    session.endSession();
+    if (isNewSession) {
+      await session.commitTransaction();
+      session.endSession();
+    }
 
     return {
       student: createdStudent[0],
       user: newUser[0],
     };
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    throw new Error("Transaction failed: " + (error instanceof Error ? error.message : error));
+    if (isNewSession) {
+      await session.abortTransaction();
+      session.endSession();
+    }
+    throw new Error('Transaction failed: ' + (error instanceof Error ? error.message : error));
   }
 };
