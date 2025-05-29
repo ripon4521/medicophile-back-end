@@ -279,10 +279,10 @@ const createShopManagerIntoDB = async (payload: IShopManager) => {
 const changePassword = async (
   payload: IChangePasswordPayload,
 ): Promise<string> => {
-  const { phone, oldPassword, newPassword, confrimPassword } = payload;
+  const { phone, oldPassword, newPassord, confrimPassord } = payload;
 
   // Basic validation
-  if (!phone || !oldPassword || !newPassword || !confrimPassword) {
+  if (!phone || !oldPassword || !newPassord || !confrimPassord) {
     throw new AppError(httpStatus.BAD_REQUEST, "All fields are required");
   }
 
@@ -300,14 +300,14 @@ const changePassword = async (
     throw new AppError(httpStatus.UNAUTHORIZED, "Old password is incorrect");
   }
 
-  if (newPassword !== confrimPassword) {
+  if (newPassord !== confrimPassord) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "New password and confirm password do not match",
     );
   }
 
-  const hashedPassword = await bcrypt.hash(newPassword, 12);
+  const hashedPassword = await bcrypt.hash(newPassord, 12);
   user.password = hashedPassword;
   await user.save();
 
