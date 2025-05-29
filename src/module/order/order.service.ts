@@ -20,26 +20,38 @@ const createOrderWithDetails = async (payload: IOrder) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-     if (!payload.userId) {
-        const studentPayload: IStudent = {
-          name: payload.name,
-          phone: payload.phone,
-          email: '',
-          role: 'student',
-          profile_picture: '',
-          userId: undefined,
-          status: 'Active',
-          isDeleted: false,
-          password: '',
-          gurdianName: '',
-          gurdianPhone: '',
-          address: '',
-        };
+
+      if (!payload.userId) {
+          if (payload.phone) {
+            const user = await UserModel.findOne({ phone: payload.phone }).session(session);
+            if (user) {
+              payload.userId = user._id;
+            }
+          }
     
-        const { user } = await createStudentWithUser(studentPayload);
-        if (!user) throw new AppError(StatusCodes.NOT_FOUND, '');
-        payload.userId = user._id;
-      }
+          // user না পাওয়া গেলে নতুন student তৈরি করবো
+          if (!payload.userId) {
+            const studentPayload: IStudent = {
+              name: payload.name,
+              phone: payload.phone,
+              email: '',
+              role: 'student',
+              profile_picture: '',
+              userId: undefined,
+              status: 'Active',
+              isDeleted: false,
+              password: '',
+              gurdianName: '',
+              gurdianPhone: '',
+              address: '',
+            };
+    
+            const { user } = await createStudentWithUser(studentPayload);
+            if (!user) throw new AppError(StatusCodes.NOT_FOUND, 'Student creation failed');
+            payload.userId = user._id;
+          }
+        }
+
 
 
 
