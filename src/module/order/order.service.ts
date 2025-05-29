@@ -22,35 +22,46 @@ const createOrderWithDetails = async (payload: IOrder) => {
     session.startTransaction();
 
       if (!payload.userId) {
-          if (payload.phone) {
-            const user = await UserModel.findOne({ phone: payload.phone }).session(session);
-            if (user) {
-              payload.userId = user._id;
-            }
-          }
-    
-          // user না পাওয়া গেলে নতুন student তৈরি করবো
-          if (!payload.userId) {
-            const studentPayload: IStudent = {
-              name: payload.name,
-              phone: payload.phone,
-              email: '',
-              role: 'student',
-              profile_picture: '',
-              userId: undefined,
-              status: 'Active',
-              isDeleted: false,
-              password: '',
-              gurdianName: '',
-              gurdianPhone: '',
-              address: '',
-            };
-    
-            const { user } = await createStudentWithUser(studentPayload, session);
-            if (!user) throw new AppError(StatusCodes.NOT_FOUND, 'Student creation failed');
-            payload.userId = user._id;
-          }
+      if (payload.phone && payload.phone.trim() !== "") {
+        const user = await UserModel.findOne({ phone: payload.phone.trim() }).session(session);
+        if (user) {
+          payload.userId = user._id;
         }
+      
+      }
+      // If still no studentId, create new student + user
+      if (!payload.userId) {
+        // Basic validation for required fields before creating student
+        if (!payload.name || payload.name.trim() === "") {
+          throw new AppError(StatusCodes.BAD_REQUEST, "Student name is required to create new student");
+        }
+        if (!payload.phone || payload.phone.trim() === "") {
+          throw new AppError(StatusCodes.BAD_REQUEST, "Phone number is required to create new student");
+        }
+
+        const studentPayload:IStudent = {
+          name: payload.name.trim(),
+          phone: payload.phone.trim(),
+          email: '', // Optional or blank
+          role: 'student',
+          profile_picture: '',
+          userId: undefined,
+          status: 'Active',
+          isDeleted: false,
+          password: '', // Should be hashed if set later
+          gurdianName: '',
+          gurdianPhone: '',
+          address: '',
+        };
+
+        const { user } = await createStudentWithUser(studentPayload, session);
+        if (!user) {
+          throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Student creation failed');
+        }
+        payload.userId = user._id;
+      }
+    }
+
 
 
 
