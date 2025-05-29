@@ -28,8 +28,8 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
         if (user) {
           payload.studentId = user._id;
         }
+      
       }
-
       // If still no studentId, create new student + user
       if (!payload.studentId) {
         // Basic validation for required fields before creating student
