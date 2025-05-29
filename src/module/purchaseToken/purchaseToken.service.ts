@@ -53,10 +53,10 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
     }
 
     // Student ও Course validation
-    const student = await UserModel.findOne({ _id: payload.studentId }).session(session);
-    if (!student) {
-      throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid student id');
-    }
+    // const student = await UserModel.findOne({ _id: payload.studentId }).session(session);
+    // if (!student) {
+    //   throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid student id');
+    // }
 
     const course = await courseModel.findOne({ _id: payload.courseId, isDeleted: false }).session(session);
     if (!course) {

@@ -57,10 +57,10 @@ const createOrderWithDetails = async (payload: IOrder) => {
 
 
     // Validate User
-    const user = await UserModel.findOne({ _id: payload.userId }).session(session);
-    if (!user) {
-      throw new AppError(StatusCodes.NOT_FOUND, "User not found");
-    }
+    // const user = await UserModel.findOne({ _id: payload.userId }).session(session);
+    // if (!user) {
+    //   throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+    // }
 
     // Validate Product
     const product = await ProductModel.findOne({ _id: payload.productId, isDeleted: false }).session(session);
