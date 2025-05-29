@@ -56,13 +56,13 @@ class QueryBuilder<T> {
     return this;
   }
 
-  sort() {
-    const sortBy =
-      (this.query.sort as string)?.split(",").join(" ") || "-createdAt";
-    this.modelQuery = this.modelQuery.sort(sortBy);
+ sort() {
+  const sortParam = this.query?.sort;
+  const sortBy = typeof sortParam === "string" ? sortParam.split(",").join(" ") : "-createdAt";
+  this.modelQuery = this.modelQuery.sort(sortBy);
+  return this;
+}
 
-    return this;
-  }
 
   paginate() {
     const page = Number(this.query.page) || 1;
