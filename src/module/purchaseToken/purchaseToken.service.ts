@@ -120,7 +120,7 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
   }
 };
 
-export default createPurchaseToken;
+// export default createPurchaseToken;
 
 
 
