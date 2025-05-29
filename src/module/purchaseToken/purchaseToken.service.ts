@@ -15,63 +15,69 @@ import mongoose from "mongoose";
 
 
 
+
 const createPurchaseToken = async (payload: IPurchaseToken) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    // StudentId না থাকলে check করবো phone দিয়ে user খুঁজে পাওয়া যায় কিনা
+    // Validate studentId or try to find by phone
     if (!payload.studentId) {
-      if (payload.phone) {
-        const user = await UserModel.findOne({ phone: payload.phone }).session(session);
+      if (payload.phone && payload.phone.trim() !== "") {
+        const user = await UserModel.findOne({ phone: payload.phone.trim() }).session(session);
         if (user) {
           payload.studentId = user._id;
         }
       }
 
-      // user না পাওয়া গেলে নতুন student তৈরি করবো
+      // If still no studentId, create new student + user
       if (!payload.studentId) {
-        const studentPayload: IStudent = {
-          name: payload.name,
-          phone: payload.phone,
-          email: '',
+        // Basic validation for required fields before creating student
+        if (!payload.name || payload.name.trim() === "") {
+          throw new AppError(StatusCodes.BAD_REQUEST, "Student name is required to create new student");
+        }
+        if (!payload.phone || payload.phone.trim() === "") {
+          throw new AppError(StatusCodes.BAD_REQUEST, "Phone number is required to create new student");
+        }
+
+        const studentPayload:IStudent = {
+          name: payload.name.trim(),
+          phone: payload.phone.trim(),
+          email: '', // Optional or blank
           role: 'student',
           profile_picture: '',
           userId: undefined,
           status: 'Active',
           isDeleted: false,
-          password: '',
+          password: '', // Should be hashed if set later
           gurdianName: '',
           gurdianPhone: '',
           address: '',
         };
 
         const { user } = await createStudentWithUser(studentPayload, session);
-        if (!user) throw new AppError(StatusCodes.NOT_FOUND, 'Student creation failed');
+        if (!user) {
+          throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Student creation failed');
+        }
         payload.studentId = user._id;
       }
     }
 
-    // Student ও Course validation
-    // const student = await UserModel.findOne({ _id: payload.studentId }).session(session);
-    // if (!student) {
-    //   throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid student id');
-    // }
-
+    // Validate course existence
     const course = await courseModel.findOne({ _id: payload.courseId, isDeleted: false }).session(session);
     if (!course) {
       throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid course id');
     }
 
-    // Purchase Token create
+    // Create PurchaseToken document
     const result = await PurchaseTokenModel.create([payload], { session });
     if (!result || result.length === 0) {
-      throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase token');
+      throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create purchase token');
     }
 
     const purchaseToken = result[0];
 
-    // Refer logic
+    // Create referral detail if referrer exists
     if (payload.ref) {
       await ReferDetails.create([{
         referrerId: payload.ref,
@@ -81,7 +87,7 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
       }], { session });
     }
 
-    // Purchase create
+    // Create Purchase entry based on PurchaseToken info
     const purchasePayload: IPurchase = {
       charge: purchaseToken.charge,
       discount: purchaseToken.discount,
@@ -98,9 +104,10 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
 
     const purchaseResult = await purchaseService.createPurchase(purchasePayload, session);
     if (!purchaseResult) {
-      throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create purchase');
+      throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create purchase');
     }
 
+    // Commit transaction & end session
     await session.commitTransaction();
     session.endSession();
 
@@ -112,6 +119,9 @@ const createPurchaseToken = async (payload: IPurchaseToken) => {
     throw error;
   }
 };
+
+export default createPurchaseToken;
+
 
 
 
