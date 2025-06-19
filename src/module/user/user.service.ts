@@ -36,7 +36,7 @@ const createStudentsIntoDB = async (payload: IStudent) => {
 
     const sms = await sendSMS(
       payload.phone,
-      `Your login password is: ${plainPassword}`,
+      `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`,
     );
     if (!sms) {
       throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.");
@@ -104,7 +104,7 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
 
     const sms = await sendSMS(
       payload.phone,
-      `Your login password is: ${plainPassword}`,
+      `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`,
     );
     if (!sms) {
       throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.");
@@ -160,7 +160,7 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
     ).toString();
     const sms = await sendSMS(
       payload.phone,
-      `Your login password is: ${plainPassword}`,
+      `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`,
     );
     if (!sms) {
       throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.");
@@ -228,7 +228,7 @@ const createShopManagerIntoDB = async (payload: IShopManager) => {
     // Step 2: Send SMS
     const sms = await sendSMS(
       payload.phone,
-      `Your login password is: ${plainPassword}`,
+      `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`,
     );
 
     if (!sms) {
