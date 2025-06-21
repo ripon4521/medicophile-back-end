@@ -2,12 +2,12 @@ import axios from "axios";
 import OrderModel from "../order/order.model";
 
 export const pathaoConfig = {
-  baseUrl: "https://api-hermes.pathao.com/aladdin/api/v1",
-  storeId: 264465,
-  clientId: "MYer23EeOB",
-  clientSecret: "ngx5RBpmaxTi9S2zYcL0QjxXKmBcc50wuwlwqB1g",
-  username: "iconadmission99@gmail.com",
-  password: "ICONAdmissionAid@99",
+  baseUrl: "https://courier-api-sandbox.pathao.com/aladdin/api/v1",
+  storeId: 148058,
+  clientId: "7N1aMJQbWm",
+  clientSecret: "wRcaibZkUdSNz2EI9ZyuXLlNrnAv0TdPUPXMnD39",
+  username: "test@pathao.com",
+  password: "lovePathao",
 };
 
 let accessToken = "";
@@ -129,7 +129,7 @@ export const createPathaoOrderService = async (
     merchant_order_id: order._id,
     recipient_name: order.name,
     recipient_phone: cleanPhoneNumber(order.phone),
-    recipient_address: "This order is test order",
+    recipient_address: "This order is test address",
     delivery_type: 48,
     item_type: 2,
     item_description: "Product Delivery",
