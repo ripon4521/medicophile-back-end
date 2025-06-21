@@ -22,6 +22,7 @@ const requiredNumber = (msg: string) => z.number({ required_error: msg });
 const createCourseSchema = z.object({
   body: z.object({
     cover_photo: optionalString("Cover photo URL is required."),
+    prefix:optionalString("Prefix is requried"),
     course_title: requiredString("Course title is required."),
     description: requiredString("Description is required."),
     duration: requiredString("Duration is required."),
@@ -57,6 +58,7 @@ const createCourseSchema = z.object({
 const updateCourseSchema = z.object({
   body: z.object({
     cover_photo: optionalString("Cover photo URL is required."),
+    prefix:optionalString("Prefix is requeried"),
     course_title: optionalString("Course title is required."),
     description: optionalString("Description is required."),
     duration: optionalString("Duration is required."),

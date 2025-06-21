@@ -5,6 +5,7 @@ import { generateUniqueSlug } from "../../utils/generateSlug";
 const courseSchema = new Schema<ICourse>(
   {
     slug: { type: String, unique: true },
+    prefix:{type:String, default:''},
     cover_photo: { type: String, default: "" },
     course_title: { type: String, required: true },
     description: { type: String, required: true },

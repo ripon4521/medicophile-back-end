@@ -1,26 +1,28 @@
 import axios from 'axios';
 
-
 export const STORE_ID = "264465";
-const CLIENT_ID = "MYer23EeOB";
-const CLIENT_SECRET = "ngx5RBpmaxTi9S2zYcL0QjxXKmBcc50wuwlwqB1g";
+const CLIENT_ID = "7N1aMJQbWm";
+const CLIENT_SECRET = "wRcaibZkUdSNz2EI9ZyuXLlNrnAv0TdPUPXMnD39";
+const USERNAME = "test@pathao.com"; // Sandbox credentials
+const PASSWORD = "lovePathao";      // Sandbox credentials
 
 let accessToken = "";
 let tokenExpiry = 0;
 
 export const getPathaoToken = async (): Promise<string> => {
   try {
-    // Check if token exists and not expired
     if (accessToken && Date.now() < tokenExpiry) {
       return accessToken;
     }
 
-    // Request new token
     const response = await axios.post(
-      "https://api-hermes.pathao.com/aladdin/api/v1/issue-token",
+      "https://courier-api-sandbox.pathao.com/aladdin/api/v1/issue-token",
       {
         client_id: CLIENT_ID,
         client_secret: CLIENT_SECRET,
+        grant_type: "password",
+        username: USERNAME,
+        password: PASSWORD,
       },
       {
         headers: {
@@ -30,17 +32,16 @@ export const getPathaoToken = async (): Promise<string> => {
       }
     );
 
-    if (!response.data || !response.data.token) {
+    if (!response.data || !response.data.access_token) {
       throw new Error("Failed to get token from Pathao");
     }
 
-    accessToken = response.data.token;
-    tokenExpiry = Date.now() + 3600 * 1000; // 1 hour expiry
+    accessToken = response.data.access_token;
+    tokenExpiry = Date.now() + 3600 * 1000;
 
     return accessToken;
   } catch (error: any) {
-    console.log( error.response?.data)
-    console.error("Error fetching Pathao token:", error.response?.data || error.message || error);
+    console.error("Error fetching Pathao token:", error.response?.data || error.message);
     throw new Error("Could not fetch Pathao token");
   }
 };

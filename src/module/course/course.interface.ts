@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 
 export interface ICourse {
   slug: string;
+  prefix?:string;
   cover_photo: string;
   course_title: string;
   description: string;
