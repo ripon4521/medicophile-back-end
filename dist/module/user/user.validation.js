@@ -19,7 +19,7 @@ exports.createUserValidationSchema = zod_1.z.object({
             .string()
             .regex(/^\+?[0-9]{10,15}$/, "Invalid contact number")
             .optional(),
-        role: zod_1.z.enum(["superAdmin", "admin", "teacher"]).optional(),
+        role: zod_1.z.enum(["superAdmin", "admin", "teacher", "shopManager"]).optional(),
         profile_picture: zod_1.z.string().url().optional(),
         status: zod_1.z.enum(["Active", "Blocked"]).optional(),
     }),

@@ -36,12 +36,9 @@ const sendImageToCloudinary = (imageName, filePath) => __awaiter(void 0, void 0,
     try {
         const result = yield cloudinary_1.v2.uploader.upload(filePath, {
             public_id: imageName,
-            transformation: {
-                aspect_ratio: 1,
-                width: 400,
-                quality: 60,
-                fetch_format: "auto",
-            },
+            use_filename: true,
+            unique_filename: false,
+            resource_type: "image",
         });
         return result;
     }

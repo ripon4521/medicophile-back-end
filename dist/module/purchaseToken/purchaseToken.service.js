@@ -17,45 +17,105 @@ const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const user_model_1 = require("../user/user.model");
 const purchaseToken_model_1 = __importDefault(require("./purchaseToken.model"));
-const coupon_model_1 = __importDefault(require("../coupon/coupon.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const course_model_1 = __importDefault(require("../course/course.model"));
 const referDetails_model_1 = __importDefault(require("../referDetails/referDetails.model"));
+const createStudentForPurchase_1 = require("../../utils/createStudentForPurchase");
+const purchase_service_1 = require("../purchase/purchase.service");
+const mongoose_1 = __importDefault(require("mongoose"));
 const createPurchaseToken = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const student = yield user_model_1.UserModel.findOne({ _id: payload.studentId });
-    const course = yield course_model_1.default.findOne({
-        _id: payload.courseId,
-        isDeleted: false,
-    });
-    if (payload.coupon) {
-        const coupon = yield coupon_model_1.default.findOne({
-            coupon: payload.coupon,
-            isDeleted: false,
-        });
-        if (!coupon || coupon.coupon !== payload.coupon) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid coupon");
+    const session = yield mongoose_1.default.startSession();
+    session.startTransaction();
+    try {
+        // Validate studentId or try to find by phone
+        if (!payload.studentId) {
+            if (payload.phone && payload.phone.trim() !== "") {
+                const user = yield user_model_1.UserModel.findOne({ phone: payload.phone.trim() }).session(session);
+                if (user) {
+                    payload.studentId = user._id;
+                }
+            }
+            // If still no studentId, create new student + user
+            if (!payload.studentId) {
+                // Basic validation for required fields before creating student
+                if (!payload.name || payload.name.trim() === "") {
+                    throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Student name is required to create new student");
+                }
+                if (!payload.phone || payload.phone.trim() === "") {
+                    throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Phone number is required to create new student");
+                }
+                const studentPayload = {
+                    name: payload.name.trim(),
+                    phone: payload.phone.trim(),
+                    email: '', // Optional or blank
+                    role: 'student',
+                    profile_picture: '',
+                    userId: undefined,
+                    status: 'Active',
+                    isDeleted: false,
+                    password: '', // Should be hashed if set later
+                    gurdianName: '',
+                    gurdianPhone: '',
+                    address: '',
+                };
+                const { user } = yield (0, createStudentForPurchase_1.createStudentWithUser)(studentPayload, session);
+                if (!user) {
+                    throw new AppError_1.default(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, 'Student creation failed');
+                }
+                payload.studentId = user._id;
+            }
         }
+        // Validate course existence
+        const course = yield course_model_1.default.findOne({ _id: payload.courseId, isDeleted: false }).session(session);
+        if (!course) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, 'Invalid course id');
+        }
+        // Create PurchaseToken document
+        const result = yield purchaseToken_model_1.default.create([payload], { session });
+        if (!result || result.length === 0) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create purchase token');
+        }
+        const purchaseToken = result[0];
+        // Create referral detail if referrer exists
+        if (payload.ref) {
+            yield referDetails_model_1.default.create([{
+                    referrerId: payload.ref,
+                    referredUserId: payload.studentId,
+                    courseId: payload.courseId,
+                    purchaseTokenId: purchaseToken._id,
+                }], { session });
+        }
+        // Create Purchase entry based on PurchaseToken info
+        const purchasePayload = {
+            charge: purchaseToken.charge,
+            discount: purchaseToken.discount,
+            totalAmount: purchaseToken.totalAmount,
+            subtotal: purchaseToken.subtotal,
+            courseId: purchaseToken.courseId,
+            studentId: purchaseToken.studentId,
+            purchaseToken: purchaseToken._id,
+            paymentInfo: purchaseToken.paymentInfo,
+            paymentStatus: "Paid",
+            status: "Active",
+            isExpire: false,
+        };
+        const purchaseResult = yield purchase_service_1.purchaseService.createPurchase(purchasePayload, session);
+        if (!purchaseResult) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create purchase');
+        }
+        // Commit transaction & end session
+        yield session.commitTransaction();
+        session.endSession();
+        return purchaseToken;
     }
-    if (!student) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid student id");
+    catch (error) {
+        yield session.abortTransaction();
+        session.endSession();
+        console.error('❌ Error creating purchase token:', error);
+        throw error;
     }
-    else if (!course) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid course id");
-    }
-    const result = yield purchaseToken_model_1.default.create(payload);
-    if (!result) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to create purchase token");
-    }
-    if (payload.ref) {
-        yield referDetails_model_1.default.create({
-            referrerId: payload.ref,
-            referredUserId: payload.studentId,
-            courseId: payload.courseId,
-            purchaseTokenId: result._id,
-        });
-    }
-    return result;
 });
+// export default createPurchaseToken;
 const getAllPurchasseToken = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const courseQuery = new querybuilder_1.default(purchaseToken_model_1.default, query)
         .search([""])

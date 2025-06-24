@@ -28,7 +28,7 @@ const generateReferralLink = (userId, courseSlug, courseId) => __awaiter(void 0,
             yield referral.save();
         }
         // Return referral link
-        return `https://iconadmissionaid.com/course-details/${courseSlug}?courseId=${courseId}?ref=${referral.userId}`;
+        return `https://iconadmissionaid.com/course-details/${courseSlug}?courseId=${courseId}&ref=${referral.userId}`;
     }
     catch (error) {
         throw new Error(`Error generating referral link: ${error}`);

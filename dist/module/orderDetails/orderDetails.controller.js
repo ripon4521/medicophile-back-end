@@ -26,6 +26,15 @@ const getAllOrderDetails = (0, catchAsync_1.default)((req, res) => __awaiter(voi
         data: result,
     });
 }));
+const getAllEbook = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = req.query;
+    const result = yield orderDetails_service_1.orderDetailsService.getEbook(query);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: " Ebook get successfully",
+        data: result,
+    });
+}));
 const updateOrderDetails = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const payload = req.body;
@@ -45,8 +54,19 @@ const deleteOrderDetails = (0, catchAsync_1.default)((req, res) => __awaiter(voi
         data: result,
     });
 }));
+const getSingleEbook = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { slug } = req.params;
+    const result = yield orderDetails_service_1.orderDetailsService.getSingleEbook(slug);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: " Single Ebook fatched successfully",
+        data: result,
+    });
+}));
 exports.orderDetailsController = {
     getAllOrderDetails,
     deleteOrderDetails,
     updateOrderDetails,
+    getAllEbook,
+    getSingleEbook
 };

@@ -37,7 +37,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const stundetSchema = new mongoose_1.Schema({
     role: {
         type: String,
-        enum: ["superAdmin", "admin", "teacher", "student"],
+        enum: ["superAdmin", "admin", "teacher", "student", "shopManager"],
         default: "student",
     },
     userId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" },

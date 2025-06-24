@@ -26,6 +26,15 @@ const createStudeent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
         data: result,
     });
 }));
+const createShopManager = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.body;
+    const result = yield user_service_1.userService.createShopManagerIntoDB(payload);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.CREATED,
+        message: "Shop Manager created successfully",
+        data: result,
+    });
+}));
 const createAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
     const result = yield user_service_1.userService.createAdmiIntoDB(payload);
@@ -45,17 +54,6 @@ const createFaculty = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result,
     });
 }));
-// const createAdmin = catchAsync(
-//   async (req, res) => {
-//     const payload = req.body
-//     const result = await userService.createAdminIntoDB(payload)
-//     sendResponse(res, {
-//       statusCode: StatusCodes.CREATED,
-//       message: 'Student created successfully',
-//       data: result,
-//     }
-//     )
-//   });
 const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = req.query;
     const result = yield user_service_1.userService.getUSers(query);
@@ -101,4 +99,5 @@ exports.userController = {
     deleteUsers,
     getProfile,
     changePassord,
+    createShopManager
 };

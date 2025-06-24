@@ -38,6 +38,7 @@ const login = (payload, meta) => __awaiter(void 0, void 0, void 0, function* () 
     const session = yield mongoose_1.default.startSession();
     try {
         session.startTransaction();
+        // 1️⃣ Find the user with password
         const user = yield user_model_1.UserModel.findOne({ phone: payload.phone })
             .select("+password")
             .session(session);
@@ -47,38 +48,38 @@ const login = (payload, meta) => __awaiter(void 0, void 0, void 0, function* () 
         if (user.status === "Blocked") {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "This user is blocked!");
         }
+        // 2️⃣ Check password
         const isPasswordMatched = yield bcrypt_1.default.compare(payload.password, user.password);
         if (!isPasswordMatched) {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Invalid password");
         }
-        const student = yield user_model_1.UserModel.findOne({ _id: user._id }).session(session);
-        if (!student) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "User not found");
-        }
-        const existingCredential = yield userCredentials_model_1.UserCredentialsModel.findOne({
-            studentId: student._id,
-            phone: payload.phone,
-            isDeleted: false,
-        }).session(session);
+        // 3️⃣ JWT payload
         const jwtPayload = {
             phone: user.phone,
             role: user.role,
             _id: user._id.toString(),
         };
         const accessToken = jsonwebtoken_1.default.sign(jwtPayload, config_1.default.accessSecret, {
-            expiresIn: "1h",
+            expiresIn: "2h",
         });
         const refreshToken = jsonwebtoken_1.default.sign(jwtPayload, config_1.default.refreshSecret, {
             expiresIn: "30d",
         });
-        if (existingCredential &&
-            (existingCredential.ipAddress !== meta.ipAddress ||
-                existingCredential.deviceType !== meta.deviceType ||
-                existingCredential.deviceName !== meta.deviceName)) {
-            existingCredential.isDeleted = true;
-            existingCredential.deletedAt = new Date(new Date().getTime() + 6 * 60 * 60 * 1000);
-            yield existingCredential.save({ session });
-        }
+        // 4️⃣ Check existing session for this user
+        yield userCredentials_model_1.UserCredentialsModel.updateMany({
+            studentId: user._id,
+            phone: user.phone,
+            isDeleted: false,
+            $or: [
+                { ipAddress: { $ne: meta.ipAddress } },
+                { deviceType: { $ne: meta.deviceType } },
+                { deviceName: { $ne: meta.deviceName } },
+            ],
+        }, {
+            isDeleted: true,
+            deletedAt: new Date(),
+        }, { session });
+        // 5️⃣ Save new credentials
         yield userCredentials_model_1.UserCredentialsModel.create([
             {
                 studentId: user._id,
@@ -87,14 +88,18 @@ const login = (payload, meta) => __awaiter(void 0, void 0, void 0, function* () 
                 deviceType: meta.deviceType,
                 deviceName: meta.deviceName,
                 isDeleted: false,
-                accessToken: accessToken,
-                refreshToken: refreshToken,
+                accessToken,
+                refreshToken,
                 deletedAt: null,
             },
         ], { session });
         yield session.commitTransaction();
         session.endSession();
-        return { accessToken, refreshToken, user };
+        return {
+            accessToken,
+            refreshToken,
+            user,
+        };
     }
     catch (error) {
         yield session.abortTransaction();
@@ -102,6 +107,7 @@ const login = (payload, meta) => __awaiter(void 0, void 0, void 0, function* () 
         throw error;
     }
 });
+exports.default = login;
 // Logout function
 const logout = (payload, meta) => __awaiter(void 0, void 0, void 0, function* () {
     // Find the user credentials using phone and device info
@@ -139,9 +145,90 @@ const resetPassword = (phone) => __awaiter(void 0, void 0, void 0, function* () 
     yield user.save();
     return "New password sent via SMS and updated successfully.";
 });
+const adminlogin = (payload, meta) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!payload.phone || !payload.password) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Phone and password are required");
+    }
+    const session = yield mongoose_1.default.startSession();
+    try {
+        session.startTransaction();
+        // 1️⃣ Find the user with password
+        const user = yield user_model_1.UserModel.findOne({ phone: payload.phone })
+            .select("+password")
+            .session(session);
+        if (!user) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "User not found!");
+        }
+        if (user.status === "Blocked") {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "This user is blocked!");
+        }
+        // Restrict login if role is student
+        if (user.role === "student") {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Students are not allowed to login.");
+        }
+        // 2️⃣ Check password
+        const isPasswordMatched = yield bcrypt_1.default.compare(payload.password, user.password);
+        if (!isPasswordMatched) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Invalid password");
+        }
+        // 3️⃣ JWT payload
+        const jwtPayload = {
+            phone: user.phone,
+            role: user.role,
+            _id: user._id.toString(),
+        };
+        const accessToken = jsonwebtoken_1.default.sign(jwtPayload, config_1.default.accessSecret, {
+            expiresIn: "2h",
+        });
+        const refreshToken = jsonwebtoken_1.default.sign(jwtPayload, config_1.default.refreshSecret, {
+            expiresIn: "30d",
+        });
+        // 4️⃣ Check existing session for this user
+        yield userCredentials_model_1.UserCredentialsModel.updateMany({
+            studentId: user._id,
+            phone: user.phone,
+            isDeleted: false,
+            $or: [
+                { ipAddress: { $ne: meta.ipAddress } },
+                { deviceType: { $ne: meta.deviceType } },
+                { deviceName: { $ne: meta.deviceName } },
+            ],
+        }, {
+            isDeleted: true,
+            deletedAt: new Date(),
+        }, { session });
+        // 5️⃣ Save new credentials
+        yield userCredentials_model_1.UserCredentialsModel.create([
+            {
+                studentId: user._id,
+                phone: user.phone,
+                ipAddress: meta.ipAddress,
+                deviceType: meta.deviceType,
+                deviceName: meta.deviceName,
+                isDeleted: false,
+                accessToken,
+                refreshToken,
+                deletedAt: null,
+            },
+        ], { session });
+        yield session.commitTransaction();
+        session.endSession();
+        return {
+            accessToken,
+            refreshToken,
+            user,
+        };
+    }
+    catch (error) {
+        yield session.abortTransaction();
+        session.endSession();
+        throw error;
+    }
+});
 exports.AuthService = {
     register,
     login,
     logout,
     resetPassword,
+    adminlogin
 };

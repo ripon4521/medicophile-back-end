@@ -98,10 +98,20 @@ const getSpcificGaps = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
+const getSingleGaps = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield gapsQuestion_model_1.default.findOne({ _id })
+        .populate("createdBy")
+        .populate("examId");
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, " id is not valid or not found in database");
+    }
+    return result;
+});
 exports.gapsQuestionService = {
     cretaeGapsQuestion,
     getAllGapsQuestion,
     updateGapsQuestion,
     deleteGapsQuestion,
     getSpcificGaps,
+    getSingleGaps
 };

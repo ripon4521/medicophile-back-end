@@ -36,15 +36,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 // Define the Mongoose schema
 const EnrollmentSchema = new mongoose_1.Schema({
-    studentId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        required: true,
-        ref: "Students",
-    },
     courseId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
         ref: "Course",
+    },
+    studentId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    batchId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "OfflineBatch"
     },
     paidAmont: {
         type: Number,
@@ -60,7 +63,7 @@ const EnrollmentSchema = new mongoose_1.Schema({
         type: String,
         required: true,
         enum: ["active", "blocked"],
-        default: "blocked",
+        default: "active",
     },
     transctionId: {
         type: String,
@@ -68,7 +71,36 @@ const EnrollmentSchema = new mongoose_1.Schema({
     paymentNumber: {
         type: String,
     },
-}, { timestamps: true });
+    due: {
+        type: Number,
+        default: 0
+    },
+    discount: {
+        type: Number,
+        default: 0
+    }, discountReason: {
+        type: String
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    deletedAt: {
+        type: Date
+    }
+}, {
+    timestamps: {
+        currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+    }, // UTC+6 (Bangladesh Time)
+});
 // Create a Mongoose model from the schema
 const enrollMentModel = mongoose_1.default.model("Enrollments", EnrollmentSchema);
 exports.default = enrollMentModel;

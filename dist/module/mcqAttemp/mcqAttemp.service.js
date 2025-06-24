@@ -29,23 +29,27 @@ const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* (
     // Fetch all answered questions and populate examId
     const questions = yield mcq_model_1.default.find({
         _id: { $in: questionIds },
-    }).populate("examId"); // To access positiveMark, negativeMark, and examId
+    }).populate("examId");
     let score = 0;
     let correctCount = 0;
     let wrongCount = 0;
     let examId = null;
-    // Process each answer
+    let validTimeExpired = false;
     for (const userAnswer of answer) {
         const matchedQuestion = questions.find((q) => q._id.toString() === userAnswer.questionId.toString());
         if (!matchedQuestion || !matchedQuestion.examId)
             continue;
-        // Set the examId from the first matched question
+        const exam = matchedQuestion.examId;
         if (!examId) {
-            examId = matchedQuestion.examId;
+            examId = exam._id;
+        }
+        // Check validTime
+        const now = new Date(new Date().getTime() + 6 * 60 * 60 * 1000); // BD time
+        if (exam.validTime && new Date(exam.validTime) < now) {
+            validTimeExpired = true;
         }
         const positiveMark = matchedQuestion.positiveMark || 1;
         const negativeMark = matchedQuestion.negetiveMark || 0;
-        // Check if the answer is correct
         if (matchedQuestion.correctAnswer === userAnswer.selectedAnswer) {
             score += positiveMark;
             correctCount++;
@@ -56,18 +60,22 @@ const submitAttemptService = (_a) => __awaiter(void 0, [_a], void 0, function* (
         }
     }
     const total = answer.length;
-    // Save result with examId
-    const result = yield mcqAttemp_model_1.default.create({
-        studentId: new mongoose_1.Types.ObjectId(studentId),
-        examId,
-        answer,
-        score,
-        total,
-        correctCount,
-        wrongCount,
-    });
+    let result = null;
+    if (!validTimeExpired) {
+        result = yield mcqAttemp_model_1.default.create({
+            studentId: new mongoose_1.Types.ObjectId(studentId),
+            examId,
+            answer,
+            score,
+            total,
+            correctCount,
+            wrongCount,
+        });
+    }
     return {
-        message: "Exam submitted successfully!",
+        message: validTimeExpired
+            ? "Valid time expired. Result calculated but not saved."
+            : "Exam submitted successfully!",
         score,
         correctCount,
         wrongCount,

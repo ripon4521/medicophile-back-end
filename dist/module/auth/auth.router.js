@@ -10,6 +10,7 @@ const validateRequest_1 = __importDefault(require("../../middlewares/validateReq
 const globalErrorHandler_1 = require("../../middlewares/globalErrorHandler");
 const authRouter = (0, express_1.Router)();
 authRouter.post("/login", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginValidationSchema), auth_controller_1.AuthControllers.login);
+authRouter.post("/admin-login", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginValidationSchema), auth_controller_1.AuthControllers.adminlogin);
 authRouter.post("/reset-password", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.resetValidationSchema), auth_controller_1.AuthControllers.resetPassword);
 authRouter.patch("/logout", auth_controller_1.AuthControllers.logout);
 authRouter.post("/refresh-token", auth_controller_1.AuthControllers.refreshToken);

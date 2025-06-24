@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const referDetails_controller_1 = require("./referDetails.controller");
+const auth_1 = require("../../middlewares/auth");
 const referDetailsRoute = (0, express_1.Router)();
-referDetailsRoute.get("/", referDetails_controller_1.referDetailsController.getAllReferDetails);
-referDetailsRoute.get("/:id", referDetails_controller_1.referDetailsController.getSingleReferDetails);
-referDetailsRoute.delete("/:id", referDetails_controller_1.referDetailsController.deleteReferDetails);
+referDetailsRoute.get("/", (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin", "student"), referDetails_controller_1.referDetailsController.getAllReferDetails);
+referDetailsRoute.get("/:id", (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin", "student"), referDetails_controller_1.referDetailsController.getSingleReferDetails);
+referDetailsRoute.delete("/:id", (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin"), referDetails_controller_1.referDetailsController.deleteReferDetails);
 exports.default = referDetailsRoute;

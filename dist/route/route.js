@@ -59,6 +59,10 @@ const referDetails_route_1 = __importDefault(require("../module/referDetails/ref
 const referalReward_route_1 = __importDefault(require("../module/referalReward/referalReward.route"));
 const withdraw_route_1 = __importDefault(require("../module/withdraw/withdraw.route"));
 const performance_route_1 = __importDefault(require("../module/performance/performance.route"));
+const accountent_route_1 = __importDefault(require("../module/accountent/accountent.route"));
+const coureier_route_1 = __importDefault(require("../module/courier/coureier.route"));
+const accounts_route_1 = __importDefault(require("../module/accounts/accounts.route"));
+const bkash_route_1 = __importDefault(require("../module/bkash/bkash.route"));
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -275,6 +279,18 @@ const moduleRoutes = [
     }, {
         path: "/performance",
         route: performance_route_1.default
+    }, {
+        path: "/token",
+        route: bkash_route_1.default
+    }, {
+        path: "/manager",
+        route: accountent_route_1.default
+    }, {
+        path: "/courier",
+        route: coureier_route_1.default
+    }, {
+        path: "/accounts",
+        route: accounts_route_1.default
     }
 ];
 moduleRoutes.forEach((route) => {

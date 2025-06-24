@@ -3,18 +3,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.courseValidation = void 0;
 const zod_1 = require("zod");
 const mongoose_1 = require("mongoose");
+// ObjectId Schema
 const ObjectIdSchema = zod_1.z.string().refine((val) => mongoose_1.Types.ObjectId.isValid(val), {
     message: "Invalid ObjectId format",
 });
+const optionalObjectId = zod_1.z.union([ObjectIdSchema, zod_1.z.literal("")]).optional();
+// Optional helpers that allow empty string
+const optionalString = (msg) => zod_1.z.union([zod_1.z.string().min(1, msg), zod_1.z.literal("")]).optional();
+const optionalNumber = (msg) => zod_1.z.union([zod_1.z.number(), zod_1.z.literal("")]).optional();
+const optionalArray = () => zod_1.z.union([zod_1.z.array(zod_1.z.string()).nonempty(), zod_1.z.literal("")]).optional();
+const requiredString = (msg) => zod_1.z.string().min(1, { message: msg });
+const requiredNumber = (msg) => zod_1.z.number({ required_error: msg });
+// Create Schema
 const createCourseSchema = zod_1.z.object({
     body: zod_1.z.object({
-        cover_photo: zod_1.z
-            .string()
-            .min(1, { message: "Cover photo URL is required." })
-            .optional(),
-        course_title: zod_1.z.string().min(1, { message: "Course title is required." }),
-        description: zod_1.z.string().min(1, { message: "Description is required." }),
-        duration: zod_1.z.string().min(1, { message: "Duration is required." }),
+        cover_photo: optionalString("Cover photo URL is required."),
+        prefix: optionalString("Prefix is requried"),
+        course_title: requiredString("Course title is required."),
+        description: requiredString("Description is required."),
+        duration: requiredString("Duration is required."),
         preOrder: zod_1.z.enum(["on", "off"], {
             message: "PreOrder must be either 'on' or 'off'.",
         }),
@@ -23,20 +30,15 @@ const createCourseSchema = zod_1.z.object({
         }),
         category: ObjectIdSchema,
         createdBy: ObjectIdSchema,
-        expireTime: zod_1.z.string({ required_error: "expire time is requried" }),
+        expireTime: requiredString("Expire time is required."),
         daySchedule: zod_1.z
             .array(zod_1.z.string())
             .nonempty({ message: "Day schedule cannot be empty." }),
         timeShedule: zod_1.z
             .array(zod_1.z.string())
             .nonempty({ message: "Time schedule cannot be empty." }),
-        price: zod_1.z
-            .number()
-            .min(0, { message: "Price must be a non-negative number." }),
-        offerPrice: zod_1.z
-            .number()
-            .min(0, { message: "Offer price must be a non-negative number." })
-            .optional(),
+        price: requiredNumber("Price must be a non-negative number."),
+        offerPrice: optionalNumber("Offer price must be a non-negative number."),
         takeReview: zod_1.z
             .enum(["on", "off"], {
             message: "Take review must be either 'on' or 'off'.",
@@ -47,24 +49,14 @@ const createCourseSchema = zod_1.z.object({
         }),
     }),
 });
+// Update Schema
 const updateCourseSchema = zod_1.z.object({
     body: zod_1.z.object({
-        cover_photo: zod_1.z
-            .string()
-            .min(1, { message: "Cover photo URL is required." })
-            .optional(),
-        course_title: zod_1.z
-            .string()
-            .min(1, { message: "Course title is required." })
-            .optional(),
-        description: zod_1.z
-            .string()
-            .min(1, { message: "Description is required." })
-            .optional(),
-        duration: zod_1.z
-            .string()
-            .min(1, { message: "Duration is required." })
-            .optional(),
+        cover_photo: optionalString("Cover photo URL is required."),
+        prefix: optionalString("Prefix is requeried"),
+        course_title: optionalString("Course title is required."),
+        description: optionalString("Description is required."),
+        duration: optionalString("Duration is required."),
         preOrder: zod_1.z
             .enum(["on", "off"], {
             message: "PreOrder must be either 'on' or 'off'.",
@@ -75,27 +67,13 @@ const updateCourseSchema = zod_1.z.object({
             message: "Course type must be either 'online' or 'offline'.",
         })
             .optional(),
-        category: ObjectIdSchema.optional(),
-        createdBy: ObjectIdSchema.optional(),
-        expireTime: zod_1.z
-            .string({ message: "Expire time must be a valid date." })
-            .optional(),
-        daySchedule: zod_1.z
-            .array(zod_1.z.string())
-            .nonempty({ message: "Day schedule cannot be empty." })
-            .optional(),
-        timeShedule: zod_1.z
-            .array(zod_1.z.string())
-            .nonempty({ message: "Time schedule cannot be empty." })
-            .optional(),
-        price: zod_1.z
-            .number()
-            .min(0, { message: "Price must be a non-negative number." })
-            .optional(),
-        offerPrice: zod_1.z
-            .number()
-            .min(0, { message: "Offer price must be a non-negative number." })
-            .optional(),
+        category: optionalObjectId,
+        createdBy: optionalObjectId,
+        expireTime: optionalString("Expire time must be a valid date."),
+        daySchedule: optionalArray(),
+        timeShedule: optionalArray(),
+        price: optionalNumber("Price must be a non-negative number."),
+        offerPrice: optionalNumber("Offer price must be a non-negative number."),
         takeReview: zod_1.z
             .enum(["on", "off"], {
             message: "Take review must be either 'on' or 'off'.",
@@ -106,13 +84,10 @@ const updateCourseSchema = zod_1.z.object({
             message: "Status must be either 'active' or 'inactive'.",
         })
             .optional(),
-        course_tag: zod_1.z
-            .array(zod_1.z.string())
-            .nonempty({ message: "At least one course tag is required." })
-            .optional(),
+        course_tag: optionalArray(),
     }),
 });
 exports.courseValidation = {
-    updateCourseSchema,
     createCourseSchema,
+    updateCourseSchema,
 };

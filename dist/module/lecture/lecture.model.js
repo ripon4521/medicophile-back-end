@@ -48,7 +48,7 @@ const LectureSchema = new mongoose_1.Schema({
     },
     videoId: { type: String, required: true },
     duration: { type: Number, required: true },
-    isFree: { type: Boolean },
+    isFree: { type: Boolean, default: false },
     status: {
         type: String,
         enum: ["Published", "Drafted"],

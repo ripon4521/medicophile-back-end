@@ -17,7 +17,7 @@ const createPurchaseSchema = zod_1.z.object({
             "Rejected",
         ]),
         purchaseToken: ObjectIdSchema,
-        issuedBy: ObjectIdSchema,
+        issuedBy: ObjectIdSchema.optional(),
     }),
 });
 const updatePurchaseSchema = zod_1.z.object({

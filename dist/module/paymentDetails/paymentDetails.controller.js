@@ -18,7 +18,8 @@ const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const paymentDetails_service_1 = require("./paymentDetails.service");
 const getAllPamentyDetails = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield paymentDetails_service_1.pamentDetailsService.getAllPaymentDetails();
+    const query = req.query;
+    const result = yield paymentDetails_service_1.pamentDetailsService.getAllPaymentDetails(query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         message: "Payment Details get successfully",

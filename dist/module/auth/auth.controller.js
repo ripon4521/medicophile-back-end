@@ -52,6 +52,28 @@ const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, 
         },
     });
 }));
+const adminlogin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const meta = (0, getDeviceInfo_1.getDeviceInfo)(req);
+    const result = yield auth_service_1.AuthService.adminlogin(req.body, meta);
+    const { accessToken, refreshToken, user } = result;
+    // Set refresh token in HTTP-only cookie
+    res.cookie("refreshToken", refreshToken, {
+        secure: config_1.default.nodeEnv === "development",
+        httpOnly: true, // JS access off
+        sameSite: "strict",
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
+    // Send access token and user data
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.ACCEPTED,
+        status: true,
+        message: "Login successful",
+        data: {
+            accessToken: accessToken || "",
+            user: user || {},
+        },
+    });
+}));
 const logout = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const meta = (0, getDeviceInfo_1.getDeviceInfo)(req);
     const payload = req.body;
@@ -112,4 +134,5 @@ exports.AuthControllers = {
     logout,
     resetPassword,
     refreshToken,
+    adminlogin
 };

@@ -81,12 +81,12 @@ const getSingleModule = (slug) => __awaiter(void 0, void 0, void 0, function* ()
 });
 const getSpecificModule = (id) => __awaiter(void 0, void 0, void 0, function* () {
     // console.log(id)
-    const course = yield course_model_1.default.findOne({ _id: id });
+    const course = yield course_model_1.default.findOne({ _id: id, isDeleted: false });
     // console.log(course)
     if (!course) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid course id");
     }
-    const result = yield modules_model_1.default.find({ courseId: id })
+    const result = yield modules_model_1.default.find({ courseId: id, isDeleted: false })
         .populate("createdBy")
         .populate({
         path: "courseId",

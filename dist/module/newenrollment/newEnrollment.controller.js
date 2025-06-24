@@ -26,7 +26,8 @@ const createEnrollment = (0, catchAsync_1.default)((req, res) => __awaiter(void 
     });
 }));
 const getEnrollment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield newWnrollment_service_1.enrollmentService.getAllEnrollment();
+    const query = req.query;
+    const result = yield newWnrollment_service_1.enrollmentService.getAllEnrollment(query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.CREATED,
         message: "Enrollment get successfully",

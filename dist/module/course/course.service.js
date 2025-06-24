@@ -19,7 +19,6 @@ const course_model_1 = __importDefault(require("./course.model"));
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const http_status_codes_1 = require("http-status-codes");
 const user_model_1 = require("../user/user.model");
-const date_fns_1 = require("date-fns");
 const purchase_model_1 = require("../purchase/purchase.model");
 const createCourseIntoDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const id = payload.createdBy;
@@ -49,19 +48,19 @@ const getAllCoursesFromDb = (query) => __awaiter(void 0, void 0, void 0, functio
         },
     ]);
     const result = yield courseQuery.exec();
-    const currentDateBD = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }));
-    // Filter out expired courses
-    const ongoingCourses = result.filter((course) => {
-        if (!course.createdAt || !course.duration)
-            return false;
-        const durationMatch = course.duration.match(/(\d+)\s*months?/i);
-        if (!durationMatch)
-            return false;
-        const months = parseInt(durationMatch[1]);
-        const endDate = (0, date_fns_1.addMonths)(new Date(course.createdAt), months);
-        return (0, date_fns_1.isAfter)(endDate, currentDateBD);
-    });
-    return ongoingCourses;
+    // const currentDateBD = new Date(
+    //   new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
+    // );
+    // // Filter out expired courses
+    // const ongoingCourses = result.filter((course: any) => {
+    //   if (!course.createdAt || !course.duration) return false;
+    //   const durationMatch = course.duration.match(/(\d+)\s*months?/i);
+    //   if (!durationMatch) return false;
+    //   const months = parseInt(durationMatch[1]);
+    //   const endDate = addMonths(new Date(course.createdAt), months);
+    //   return isAfter(endDate, currentDateBD);
+    // });
+    return result;
 });
 const getCourseById = (slug, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield course_model_1.default
@@ -108,9 +107,10 @@ const deleteCourseFromDb = (slug) => __awaiter(void 0, void 0, void 0, function*
 });
 const getUserPurchasedCourses = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const purchases = yield purchase_model_1.PurchaseModel.find({
-        userId,
+        studentId: userId,
         paymentStatus: "Paid",
         status: "Active",
+        isExpire: false
     }).populate("courseId");
     // শুধু কোর্স ডেটা রিটার্ন করবো
     return purchases.map((purchase) => purchase.courseId);

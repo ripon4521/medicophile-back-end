@@ -7,16 +7,18 @@ const mongoose_1 = require("mongoose");
 const ObjectIdSchema = zod_1.z.string().refine((val) => mongoose_1.Types.ObjectId.isValid(val), {
     message: "Invalid ObjectId format",
 });
+// Optional non-empty string or empty string for optional string fields
+const optionalNonEmptyString = zod_1.z.union([zod_1.z.string().min(1), zod_1.z.literal("")]).optional();
 const createModuleSchema = zod_1.z.object({
     body: zod_1.z.object({
-        moduleTitle: zod_1.z.string().min(1),
+        moduleTitle: zod_1.z.string().min(1, "Module title is required"),
         courseId: ObjectIdSchema,
         createdBy: ObjectIdSchema,
     }),
 });
 const updateModuleSchema = zod_1.z.object({
     body: zod_1.z.object({
-        moduleTitle: zod_1.z.string().min(1).optional(),
+        moduleTitle: optionalNonEmptyString,
         courseId: ObjectIdSchema.optional(),
         createdBy: ObjectIdSchema.optional(),
     }),

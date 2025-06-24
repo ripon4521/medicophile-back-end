@@ -116,20 +116,18 @@ const deleteModuleDetails = (_id) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 const updateModuleDetails = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const update = yield moduleDetails_model_1.default.findByIdAndUpdate(_id, payload, {
-            new: true,
-            runValidators: true,
-        });
-        if (!update) {
-            throw new Error("No data found with the provided ID");
-        }
-        return update;
+    const updatemoduledetails = yield moduleDetails_model_1.default.findOne({ _id });
+    if (!updatemoduledetails) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "No data found with the provided ID");
     }
-    catch (error) {
-        console.error(error);
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, "An unexpected error occurred while updating");
+    const update = yield moduleDetails_model_1.default.findByIdAndUpdate(_id, payload, {
+        new: true,
+        runValidators: true,
+    });
+    if (!update) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to update data");
     }
+    return update;
 });
 exports.moduleDetailsService = {
     createModuleDetails,

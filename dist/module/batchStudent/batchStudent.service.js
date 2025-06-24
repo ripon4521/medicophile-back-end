@@ -18,16 +18,73 @@ const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const user_model_1 = require("../user/user.model");
 const batchStudent_model_1 = require("./batchStudent.model");
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
+const course_model_1 = __importDefault(require("../course/course.model"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const purchaseToken_model_1 = __importDefault(require("../purchaseToken/purchaseToken.model"));
+const purchase_model_1 = require("../purchase/purchase.model");
 const createBatchStudent = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.UserModel.findOne({ _id: payload.studentId });
-    if (!user || user.role !== "student") {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "invalid user id.");
+    const session = yield mongoose_1.default.startSession();
+    session.startTransaction();
+    try {
+        const user = yield user_model_1.UserModel.findOne({ _id: payload.studentId }).session(session);
+        if (!user || user.role !== "student") {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid student ID.");
+        }
+        const course = yield course_model_1.default.findOne({ _id: payload.courseId }).session(session);
+        if (!course) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Invalid course ID.");
+        }
+        const generatedToken = `PT-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+        const price = (course === null || course === void 0 ? void 0 : course.price) || 0;
+        const discount = (course === null || course === void 0 ? void 0 : course.offerPrice) ? price - course.offerPrice : 0;
+        const subtotal = price;
+        const charge = 0;
+        const totalAmount = subtotal - discount + charge;
+        // Create Purchase Token
+        const purchaseToken = yield purchaseToken_model_1.default.create([{
+                studentId: payload.studentId,
+                courseId: payload.courseId,
+                status: "Enrolled",
+                purchaseToken: generatedToken,
+                price,
+                subtotal,
+                discount,
+                charge,
+                totalAmount,
+                name: user.name,
+                phone: user.phone,
+            }], { session });
+        // Create Purchase
+        const purchase = yield purchase_model_1.PurchaseModel.create([{
+                studentId: payload.studentId,
+                courseId: payload.courseId,
+                paymentInfo: undefined,
+                status: "Active",
+                paymentStatus: "Paid",
+                purchaseToken: purchaseToken[0]._id,
+                subtotal,
+                discount,
+                charge,
+                totalAmount,
+            }], { session });
+        // Create Batch Student
+        const batchStudent = yield batchStudent_model_1.BatchStudentModel.create([payload], { session });
+        // ✅ Commit transaction
+        yield session.commitTransaction();
+        session.endSession();
+        return {
+            message: "Batch student created with purchase and token.",
+            purchaseToken: purchaseToken[0],
+            purchase: purchase[0],
+            batchStudent: batchStudent[0],
+        };
     }
-    const result = yield batchStudent_model_1.BatchStudentModel.create(payload);
-    if (!result) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to Create  .  try again");
+    catch (error) {
+        // ❌ Rollback transaction
+        yield session.abortTransaction();
+        session.endSession();
+        throw error;
     }
-    return result;
 });
 const getAllBatchStudents = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const courseQuery = new querybuilder_1.default(batchStudent_model_1.BatchStudentModel, query)

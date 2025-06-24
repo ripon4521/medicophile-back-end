@@ -18,6 +18,7 @@ const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const orderDetails_model_1 = __importDefault(require("./orderDetails.model"));
 const order_model_1 = __importDefault(require("../order/order.model"));
+const product_model_1 = require("../product/product.model");
 const getAllOrderDetailsFromDb = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const courseQuery = new querybuilder_1.default(orderDetails_model_1.default, query)
         .search(["name", "address"])
@@ -63,8 +64,34 @@ const deleteOrderDeails = (_id) => __awaiter(void 0, void 0, void 0, function* (
     }
     return result;
 });
+const getEbook = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(orderDetails_model_1.default, query)
+        .search(["name", "address"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .populate({
+        path: "productId",
+    })
+        .populate({
+        path: "userId",
+        select: "name role phone profile_picture",
+    });
+    const result = yield courseQuery.exec();
+    // Filter only Hard Copy books
+    const hardCopyOnly = result.filter((order) => { var _a; return ((_a = order.productId) === null || _a === void 0 ? void 0 : _a.bookType) === "Ebook"; });
+    return hardCopyOnly;
+});
+const getSingleEbook = (slug) => __awaiter(void 0, void 0, void 0, function* () {
+    const ebook = yield product_model_1.ProductModel.findOne({ slug, isDeleted: false }).populate("createdBy", "name email role phone")
+        .populate("categoryId", "name");
+    return ebook;
+});
 exports.orderDetailsService = {
     getAllOrderDetailsFromDb,
     updateOrderDetailsAndOrderStatus,
     deleteOrderDeails,
+    getEbook,
+    getSingleEbook
 };

@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const account_validation_1 = require("./account.validation");
+const accounts_controller_1 = require("./accounts.controller");
+const auth_1 = require("../../middlewares/auth");
+const accountsRouter = (0, express_1.Router)();
+accountsRouter.get('/income-report', accounts_controller_1.accountsController.getIncomeReport);
+accountsRouter.get('/expence-report', accounts_controller_1.accountsController.getExpenseReport);
+accountsRouter.post('/create-expense', (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin", "shopManager"), (0, validateRequest_1.default)(account_validation_1.createexpenseSchema), accounts_controller_1.accountsController.createExpense);
+accountsRouter.get('/all-expense', (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin", "shopManager"), accounts_controller_1.accountsController.getAllExpense);
+accountsRouter.get('/all-income-order', (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin", "shopManager"), accounts_controller_1.accountsController.getAllIncomeOrder);
+accountsRouter.get('/all-income-sales', (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin", "shopManager"), accounts_controller_1.accountsController.getAllIncomeSales);
+accountsRouter.get('/single-expense/:slug', (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin", "shopManager"), accounts_controller_1.accountsController.getSingleExpense);
+accountsRouter.patch('/update-expense/:slug', (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin", "shopManager"), (0, validateRequest_1.default)(account_validation_1.updateexpenseSchema), accounts_controller_1.accountsController.updateExpense);
+accountsRouter.delete('/delete-expense/:slug', (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin"), accounts_controller_1.accountsController.deleteExpense);
+accountsRouter.delete('/delete-income-order/:id', (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin"), accounts_controller_1.accountsController.deleteIncomeOrder);
+accountsRouter.delete('/delete-income-sales/:id', (0, auth_1.authUser)(), (0, auth_1.onlyAdminAndFacultyAndStudent)("admin", "superAdmin"), accounts_controller_1.accountsController.deleteIncomeSales);
+exports.default = accountsRouter;

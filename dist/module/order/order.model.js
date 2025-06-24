@@ -4,23 +4,22 @@ const mongoose_1 = require("mongoose");
 const orderSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     phone: { type: String, required: true },
-    address: { type: String, required: true },
+    address: { type: String, default: '' },
     status: {
         type: String,
-        enum: ["Pending", "Processing", "Courier", "Delivered"],
-        default: "Pending",
+        enum: ["Processing", "Courier", "Delivered", "Cancel"],
+        default: "Processing",
     },
     paymentStatus: {
         type: String,
-        enum: ["Paid", "Pending", "Refunded"],
-        default: "Pending",
+        enum: ["Paid"],
+        default: "Paid"
     },
     paymentInfo: {
-        transactionId: { type: String, required: true },
+        transactionId: { type: String },
         method: {
             type: String,
             enum: ["Bkash", "Nagad", "Bank", "Cash"],
-            required: true,
         },
         accountNumber: { type: String },
         medium: { type: String, enum: ["personal", "agent", "merchant"] },
@@ -30,6 +29,7 @@ const orderSchema = new mongoose_1.Schema({
     subTotal: { type: Number, required: true },
     discount: { type: Number },
     coupoun: { type: mongoose_1.Schema.Types.ObjectId, ref: "Coupon" },
+    userId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" },
     productId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Product" },
     charge: { type: Number },
     shiping: { type: Number, required: true },

@@ -44,13 +44,14 @@ class QueryBuilder {
     }
     sort() {
         var _a;
-        const sortBy = ((_a = this.query.sort) === null || _a === void 0 ? void 0 : _a.split(",").join(" ")) || "-createdAt";
+        const sortParam = (_a = this.query) === null || _a === void 0 ? void 0 : _a.sort;
+        const sortBy = typeof sortParam === "string" ? sortParam.split(",").join(" ") : "-createdAt";
         this.modelQuery = this.modelQuery.sort(sortBy);
         return this;
     }
     paginate() {
         const page = Number(this.query.page) || 1;
-        const limit = Number(this.query.limit) || 10;
+        const limit = Number(this.query.limit) || 20;
         const skip = (page - 1) * limit;
         this.modelQuery = this.modelQuery.skip(skip).limit(limit);
         return this;

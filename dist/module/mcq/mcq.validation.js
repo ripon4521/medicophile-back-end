@@ -6,33 +6,34 @@ const zod_1 = require("zod");
 const ObjectIdSchema = zod_1.z.string().refine((val) => mongoose_1.Types.ObjectId.isValid(val), {
     message: "Invalid ObjectId format",
 });
+// Optional string that allows empty string or minimum 1 character string
+const optionalNonEmptyString = zod_1.z.union([zod_1.z.string().min(1), zod_1.z.literal("")]).optional();
+// Optional array of non-empty strings, or empty string (to allow clearing the field)
+const optionalStringArray = zod_1.z.union([zod_1.z.array(zod_1.z.string().min(1)), zod_1.z.literal("")]).optional();
 const createMcqQuestionSchema = zod_1.z.object({
     body: zod_1.z.object({
         examId: ObjectIdSchema,
         question: zod_1.z.string().min(1, "Question is required"),
-        questionImg: zod_1.z.string().min(1, "Question image is required").optional(),
-        options: zod_1.z.array(zod_1.z.string()).min(2, "There must be at least two options"),
+        questionImg: optionalNonEmptyString,
+        options: zod_1.z.array(zod_1.z.string().min(1)).min(2, "There must be at least two options"),
         correctAnswer: zod_1.z.string().min(1, "Correct answer is required"),
-        explaination: zod_1.z.string().min(1, "Explanation is required").optional(),
-        tags: zod_1.z.array(zod_1.z.string()).min(1, "At least one tag is required").optional(),
-        subject: zod_1.z.string().min(1, "Subject is required").optional(),
+        explaination: optionalNonEmptyString,
+        tags: optionalStringArray,
+        subject: optionalNonEmptyString,
         insertBy: ObjectIdSchema,
     }),
 });
 const updateMcqQuestionSchema = zod_1.z.object({
     body: zod_1.z.object({
         examId: ObjectIdSchema.optional(),
-        question: zod_1.z.string().min(1, "Question is required").optional(),
-        questionImg: zod_1.z.string().min(1, "Question image is required").optional(),
-        options: zod_1.z
-            .array(zod_1.z.string())
-            .min(2, "There must be at least two options")
-            .optional(),
-        correctAnswer: zod_1.z.string().min(1, "Correct answer is required").optional(),
-        explaination: zod_1.z.string().min(1, "Explanation is required").optional(),
-        tags: zod_1.z.array(zod_1.z.string()).min(1, "At least one tag is required").optional(),
-        subject: zod_1.z.string().min(1, "Subject is required").optional(),
-        questionType: zod_1.z.string().min(1, "Question type is required").optional(),
+        question: optionalNonEmptyString,
+        questionImg: optionalNonEmptyString,
+        options: zod_1.z.array(zod_1.z.string().min(1)).min(2, "There must be at least two options").optional(),
+        correctAnswer: optionalNonEmptyString,
+        explaination: optionalNonEmptyString,
+        tags: optionalStringArray,
+        subject: optionalNonEmptyString,
+        questionType: optionalNonEmptyString,
         insertBy: ObjectIdSchema.optional(),
     }),
 });

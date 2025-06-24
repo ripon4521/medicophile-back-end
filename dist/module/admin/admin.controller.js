@@ -16,26 +16,54 @@ exports.adminController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const userBlockByAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const AppError_1 = __importDefault(require("../../helpers/AppError"));
+const admin_service_1 = require("./admin.service");
+const getAllAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = req.query;
+    const result = yield admin_service_1.adminService.getAllAdmin(query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
-        message: "User blocked successfully",
-        data: [],
+        message: "Admin getting successfully",
+        data: result,
     });
 }));
-const deleteBlogByAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.user || req.user.role !== "admin") {
-        throw new Error("User is not authenticated or authorized");
+const deleteAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    if (!id) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Please provide _id");
     }
-    const { id: blogId } = req.params;
+    const result = yield admin_service_1.adminService.deleteAdmin(id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
-        message: "Blog deleted successfully",
-        data: undefined,
+        message: "admin Deleted successfully",
+        data: result,
     });
 }));
-/* Overview  handel  */
+const updateAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    if (!id) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Please provide _id");
+    }
+    const data = req.body;
+    const result = yield admin_service_1.adminService.updateAdmin(id, data);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Admin & Nested User Updated successfully",
+        data: result,
+    });
+}));
+const getSingleAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield admin_service_1.adminService.getSingleAdmin(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Admin & Nested User get successfully",
+        data: result,
+    });
+}));
 exports.adminController = {
-    userBlockByAdmin,
-    deleteBlogByAdmin,
+    getAllAdmin,
+    updateAdmin,
+    deleteAdmin,
+    getSingleAdmin
 };

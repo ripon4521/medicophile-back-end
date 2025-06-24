@@ -33,7 +33,7 @@ const createNote = (paload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid course id");
     }
     else if (!useer || useer.role === "student") {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid user id");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid user id.Only admin or teacher can create note");
     }
     else if (!modul) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Inavlid module id");

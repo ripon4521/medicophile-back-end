@@ -13,9 +13,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pamentDetailsService = void 0;
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const paymentDetails_model_1 = __importDefault(require("./paymentDetails.model"));
-const getAllPaymentDetails = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield paymentDetails_model_1.default.find({ isDeleted: false });
+// const getAllPaymentDetails = async () => {
+//   const result = await PaymentDetailsModel.find({ isDeleted: false });
+//   return result;
+// };
+const getAllPaymentDetails = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(paymentDetails_model_1.default, query)
+        .search(["method", "accountNumber"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+    const result = yield courseQuery.exec();
     return result;
 });
 exports.pamentDetailsService = {

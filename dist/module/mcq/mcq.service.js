@@ -61,6 +61,20 @@ const getAllMcq = (query) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
+const getSingleMcq = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield mcq_model_1.default.findOne({ _id }).populate({
+        path: "examId",
+        select: "examTitle slug examType positiveMark negativeMark status ",
+        //   populate:{path:"courseId", select:"course_title description course_type price offerPrice"},
+    })
+        .populate([
+        {
+            path: "insertBy",
+            select: "name role phone",
+        },
+    ]);
+    return result;
+});
 const updateMcq = (_id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const mcq = yield mcq_model_1.default.findOne({ _id: _id });
     if (!mcq) {
@@ -106,4 +120,5 @@ exports.mcqQuestionService = {
     updateMcq,
     deleteMcq,
     getSpcificMcq,
+    getSingleMcq
 };

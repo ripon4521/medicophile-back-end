@@ -20,52 +20,119 @@ const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const orderDetails_model_1 = __importDefault(require("../orderDetails/orderDetails.model"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const product_model_1 = require("../product/product.model");
-const coupon_model_1 = __importDefault(require("../coupon/coupon.model"));
+const user_model_1 = require("../user/user.model");
+const creaetStudentForOrder_1 = require("../../utils/creaetStudentForOrder");
+const income_model_1 = require("../accounts/income.model");
 const createOrderWithDetails = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = yield product_model_1.ProductModel.findOne({
-        _id: payload.productId,
-        isDeleted: false,
-    });
-    if (payload.coupoun) {
-        const coupon = yield coupon_model_1.default.findOne({
-            _id: payload.coupoun,
-            isDeleted: false,
-        });
-        if (!coupon) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "coupon not found");
-        }
-    }
-    if (!product) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Product Not Found");
-    }
     const session = yield mongoose_1.default.startSession();
-    session.startTransaction();
     try {
+        session.startTransaction();
+        if (!payload.userId) {
+            if (payload.phone && payload.phone.trim() !== "") {
+                const user = yield user_model_1.UserModel.findOne({ phone: payload.phone.trim() }).session(session);
+                if (user) {
+                    payload.userId = user._id;
+                }
+            }
+            // If still no studentId, create new student + user
+            if (!payload.userId) {
+                // Basic validation for required fields before creating student
+                if (!payload.name || payload.name.trim() === "") {
+                    throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Student name is required to create new student");
+                }
+                if (!payload.phone || payload.phone.trim() === "") {
+                    throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Phone number is required to create new student");
+                }
+                const studentPayload = {
+                    name: payload.name.trim(),
+                    phone: payload.phone.trim(),
+                    email: '', // Optional or blank
+                    role: 'student',
+                    profile_picture: '',
+                    userId: undefined,
+                    status: 'Active',
+                    isDeleted: false,
+                    password: '', // Should be hashed if set later
+                    gurdianName: '',
+                    gurdianPhone: '',
+                    address: '',
+                };
+                const { user } = yield (0, creaetStudentForOrder_1.createStudentWithUser)(studentPayload, session);
+                if (!user) {
+                    throw new AppError_1.default(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, 'Student creation failed');
+                }
+                payload.userId = user._id;
+            }
+        }
+        // Validate User
+        // const user = await UserModel.findOne({ _id: payload.userId }).session(session);
+        // if (!user) {
+        //   throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+        // }
+        // Validate Product
+        const product = yield product_model_1.ProductModel.findOne({ _id: payload.productId, isDeleted: false }).session(session);
+        if (!product) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Product not found");
+        }
+        // Validate Coupon (if exists)
+        // if (payload.coupoun) {
+        //   const coupon = await CouponModel.findOne({ _id: payload.coupoun, isDeleted: false }).session(session);
+        //   if (!coupon) {
+        //     throw new AppError(StatusCodes.NOT_FOUND, "Coupon not found");
+        // Create Order
         const [order] = yield order_model_1.default.create([payload], { session });
         if (!order) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to create order.");
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to create order");
         }
+        // ✅ Add Order to Income
+        const orderIncomePayload = {
+            source: "order",
+            orderId: order._id,
+            customerId: order.userId,
+            amount: order.paidAmount
+        };
+        yield income_model_1.IncomeModel.create([orderIncomePayload], { session });
+        // Prepare Payment Info
+        let paymentInfo = order.paymentInfo;
+        if (payload.paymentStatus === "Paid") {
+            paymentInfo = {
+                transactionId: '',
+                method: "Auto",
+                accountNumber: '',
+                paymentMedium: 'personal',
+                proofUrl: '',
+                paymentDate: new Date(new Date().getTime() + 6 * 60 * 60 * 1000), // +6 hours
+            };
+        }
+        // Create Order Details
         const orderDetailsPayload = {
             orderId: order._id,
             productId: payload.productId,
             quantity: payload.quantity,
             price: payload.paidAmount,
             status: order.status,
+            userId: payload.userId,
             name: payload.name,
             phone: payload.phone,
             address: payload.address,
             paymentStatus: order.paymentStatus,
-            paymentInfo: order.paymentInfo,
+            paymentInfo,
         };
-        yield orderDetails_model_1.default.create([orderDetailsPayload], { session });
+        const [orderDetails] = yield orderDetails_model_1.default.create([orderDetailsPayload], { session });
+        if (!orderDetails) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to create order details");
+        }
+        // Commit the transaction
         yield session.commitTransaction();
-        session.endSession();
         return order;
     }
     catch (error) {
+        // Rollback on error
         yield session.abortTransaction();
-        session.endSession();
         throw error;
+    }
+    finally {
+        session.endSession();
     }
 });
 const getAllOrderFromDb = (query) => __awaiter(void 0, void 0, void 0, function* () {
@@ -77,6 +144,10 @@ const getAllOrderFromDb = (query) => __awaiter(void 0, void 0, void 0, function*
         .fields()
         .populate({
         path: "productId",
+    })
+        .populate({
+        path: "userId",
+        select: "name role phone profile_picture"
     })
         .populate([
         {

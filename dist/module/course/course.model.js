@@ -37,6 +37,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const generateSlug_1 = require("../../utils/generateSlug");
 const courseSchema = new mongoose_1.Schema({
     slug: { type: String, unique: true },
+    prefix: { type: String, default: '' },
     cover_photo: { type: String, default: "" },
     course_title: { type: String, required: true },
     description: { type: String, required: true },

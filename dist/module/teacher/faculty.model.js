@@ -37,13 +37,14 @@ const mongoose_1 = __importStar(require("mongoose"));
 const facultySchema = new mongoose_1.Schema({
     role: {
         type: String,
-        enum: ["superAdmin", "admin", "teacher", "student"],
+        enum: ["superAdmin", "admin", "teacher", "student", "shopManager"],
         default: "teacher",
     },
     userId: { type: mongoose_1.Types.ObjectId, ref: "User" },
     name: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
     email: { type: String, default: "" },
+    address: { type: String, default: "" },
     password: { type: String, default: "" },
     profile_picture: { type: String, default: "" },
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },

@@ -7,6 +7,8 @@ const mongoose_1 = require("mongoose");
 const ObjectIdSchema = zod_1.z.string().refine((val) => mongoose_1.Types.ObjectId.isValid(val), {
     message: "Invalid ObjectId format",
 });
+// Optional review string (can be empty or non-empty)
+const optionalReview = zod_1.z.union([zod_1.z.string().min(1, "Review cannot be empty"), zod_1.z.literal("")]);
 const createCourseReviewZodSchema = zod_1.z.object({
     body: zod_1.z.object({
         studentId: ObjectIdSchema,
@@ -25,7 +27,7 @@ const updateCourseReviewZodSchema = zod_1.z.object({
             .min(1, "Rating must be at least 1")
             .max(5, "Rating cannot be more than 5")
             .optional(),
-        review: zod_1.z.string().min(1, "Review cannot be empty").optional(),
+        review: optionalReview.optional(),
     }),
 });
 exports.coursReviewValidation = {

@@ -16,10 +16,15 @@ exports.studentsService = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const user_model_1 = require("../user/user.model");
 const student_model_1 = __importDefault(require("./student.model"));
-const getAllStudents = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield student_model_1.default
-        .find({ isDeleted: false })
-        .populate("userId");
+const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
+const getAllStudents = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseQuery = new querybuilder_1.default(student_model_1.default, query)
+        .search(["name", "role", "phone", "email", "address"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields().populate(["userId"]);
+    const result = yield courseQuery.exec();
     return result;
 });
 const getStudentById = (_id) => __awaiter(void 0, void 0, void 0, function* () {

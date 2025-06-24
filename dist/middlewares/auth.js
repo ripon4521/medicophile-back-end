@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.auth = void 0;
+exports.auth = exports.onlyFaculty = exports.onlyStudent = exports.onlyAdminAndFacultyAndStudent = exports.onlyAdmin = exports.authUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const user_model_1 = require("../module/user/user.model");
@@ -20,13 +20,13 @@ const user_constants_1 = require("../module/user/user.constants");
 const AppError_1 = __importDefault(require("../helpers/AppError"));
 const http_status_codes_1 = require("http-status-codes");
 const config_1 = __importDefault(require("../config"));
+const userCredentials_model_1 = require("../module/userCredentials/userCredentials.model");
 const authUser = (...requiredRoles) => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const authHeader = req.headers.authorization;
-            // If there's no authorization header, proceed with no user (user is not logged in)
             if (!authHeader || !authHeader.startsWith("Bearer ")) {
-                req.user = null; // Set user to null if there's no token
+                req.user = null;
                 return next();
             }
             const accessToken = authHeader.split(" ")[1];
@@ -37,7 +37,16 @@ const authUser = (...requiredRoles) => {
             catch (err) {
                 throw new AppError_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "Invalid or expired token.");
             }
-            const { role, phone } = decoded;
+            const { role, phone, _id } = decoded;
+            // 🔐 Check if session is valid in UserCredentialsModel
+            const session = yield userCredentials_model_1.UserCredentialsModel.findOne({
+                studentId: _id,
+                accessToken,
+                isDeleted: false,
+            });
+            if (!session) {
+                throw new AppError_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "Your session is invalid or expired. Please log in again.");
+            }
             const user = yield user_model_1.UserModel.findOne({ phone });
             if (!user) {
                 throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "User not found.");
@@ -48,7 +57,7 @@ const authUser = (...requiredRoles) => {
             if (requiredRoles.length && !requiredRoles.includes(role)) {
                 throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "You are not authorized to access this resource.");
             }
-            req.user = decoded; // Attach user info to req object
+            req.user = decoded;
             next();
         }
         catch (error) {
@@ -56,11 +65,12 @@ const authUser = (...requiredRoles) => {
         }
     });
 };
+exports.authUser = authUser;
 const onlyAdmin = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const user = req.user;
         if (!user || !user.role) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Access denied. No token provided or invalid format.");
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Access denied. You are not authorized!");
         }
         if (user.role !== user_constants_1.USER_ROLE.admin) {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Access denied only admin");
@@ -71,11 +81,25 @@ const onlyAdmin = (...requiredRoles) => {
         next();
     }));
 };
+exports.onlyAdmin = onlyAdmin;
+const onlyAdminAndFacultyAndStudent = (...allowedRoles) => {
+    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const user = req.user;
+        if (!user || !user.role) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Access denied. You are not authorized!");
+        }
+        if (allowedRoles.length && !allowedRoles.includes(user.role)) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Access denied. You are not authorized!");
+        }
+        next();
+    }));
+};
+exports.onlyAdminAndFacultyAndStudent = onlyAdminAndFacultyAndStudent;
 const onlyStudent = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const user = req.user;
         if (!user || !user.role) {
-            throw new Error("Access denied. No token provided or invalid format.");
+            throw new Error("Access denied. You are not authorized!");
         }
         if (user.role !== user_constants_1.USER_ROLE.student) {
             throw new Error("Access denied only student");
@@ -86,6 +110,7 @@ const onlyStudent = (...requiredRoles) => {
         next();
     }));
 };
+exports.onlyStudent = onlyStudent;
 const onlyFaculty = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const user = req.user;
@@ -101,4 +126,5 @@ const onlyFaculty = (...requiredRoles) => {
         next();
     }));
 };
-exports.auth = { authUser, onlyAdmin, onlyFaculty };
+exports.onlyFaculty = onlyFaculty;
+exports.auth = { authUser: exports.authUser, onlyAdmin: exports.onlyAdmin, onlyFaculty: exports.onlyFaculty };

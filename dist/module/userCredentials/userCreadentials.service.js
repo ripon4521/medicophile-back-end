@@ -30,7 +30,12 @@ const getSingleCrtedentials = (_id) => __awaiter(void 0, void 0, void 0, functio
     }
     return result;
 });
+const deleteMany = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield userCredentials_model_1.UserCredentialsModel.deleteMany();
+    return result;
+});
 exports.userCredentialsService = {
     getAllCredentials,
     getSingleCrtedentials,
+    deleteMany
 };

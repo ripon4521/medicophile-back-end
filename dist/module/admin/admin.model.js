@@ -37,13 +37,14 @@ const mongoose_1 = __importStar(require("mongoose"));
 const adminSchema = new mongoose_1.Schema({
     role: {
         type: String,
-        enum: ["superAdmin", "admin", "teacher", "student"],
+        enum: ["superAdmin", "admin", "teacher", "student", "shopManager"],
         default: "admin",
     },
     userId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" },
     name: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
     email: { type: String, default: "" },
+    address: { type: String, default: "" },
     password: { type: String, default: "" },
     profile_picture: { type: String, default: "" },
     status: { type: String, enum: ["Active", "Blocked"], default: "Active" },
@@ -62,18 +63,5 @@ adminSchema.pre("findOneAndUpdate", function (next) {
     }
     next();
 });
-// adminSchema.pre("save", async function (next) {
-//   // eslint-disable-next-line @typescript-eslint/no-this-alias
-//   const user = this;
-//   user.password = await bcrypt.hash(
-//     user.password,
-//     Number(config.bcrypt_salt_rounds),
-//   );
-//   next();
-// });
-// adminSchema.post("save", async function (doc, next) {
-//   doc.password = "";
-//   next();
-// });
 const adminModel = mongoose_1.default.model("Admin", adminSchema);
 exports.default = adminModel;

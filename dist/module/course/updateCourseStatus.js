@@ -15,35 +15,42 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const node_cron_1 = __importDefault(require("node-cron"));
 const date_fns_1 = require("date-fns");
 const course_model_1 = __importDefault(require("./course.model"));
-// Cron task: Every 24 hours at 2 AM BD time (Asia/Dhaka)
-node_cron_1.default.schedule("0 2 * * *", () => __awaiter(void 0, void 0, void 0, function* () {
+// Cron task: Every 12 hours at minute 0 (i.e., 2 AM & 2 PM BD time approx.)
+node_cron_1.default.schedule("0 */12 * * *", () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Get current date and time in Bangladesh Time (Asia/Dhaka)
         const currentDateBD = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }));
-        // Fetch all active courses that are not deleted
         const activeCourses = yield course_model_1.default.find({
             status: "active",
             isDeleted: false,
         });
         for (const course of activeCourses) {
             const { duration, createdAt } = course;
-            // Skip if there is no duration or createdAt date
             if (!duration || !createdAt)
                 continue;
-            // Extract the number of months from the duration (e.g., "3 months" => 3)
-            const match = duration.match(/(\d+)\s*months?/i);
+            const match = duration.match(/(\d+)\s*(day|month|year)s?/i);
             if (!match)
                 continue;
-            const months = parseInt(match[1]);
-            const expiryDate = (0, date_fns_1.addMonths)(new Date(createdAt), months);
-            // If the current date is after the expiry date, update the status to inactive
+            const amount = parseInt(match[1]);
+            const unit = match[2].toLowerCase();
+            let expiryDate;
+            if (unit === "day") {
+                expiryDate = (0, date_fns_1.addDays)(new Date(createdAt), amount);
+            }
+            else if (unit === "month") {
+                expiryDate = (0, date_fns_1.addMonths)(new Date(createdAt), amount);
+            }
+            else if (unit === "year") {
+                expiryDate = (0, date_fns_1.addYears)(new Date(createdAt), amount);
+            }
+            else {
+                continue; // Unknown unit
+            }
             if ((0, date_fns_1.isAfter)(currentDateBD, expiryDate)) {
-                // Update course status to inactive
                 yield course_model_1.default.updateOne({ _id: course._id }, { $set: { status: "inactive" } });
                 console.log(`Course "${course.course_title}" set to inactive (expired).`);
             }
         }
-        console.log("24-hour course expiry check complete.");
+        console.log("12-hour course expiry check complete.");
     }
     catch (error) {
         console.error("Error during course expiry check:", error);

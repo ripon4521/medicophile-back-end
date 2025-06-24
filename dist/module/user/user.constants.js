@@ -6,6 +6,7 @@ exports.USER_ROLE = {
     admin: "admin",
     teacher: "teacher",
     student: "student",
+    shopManager: "shopManager"
 };
 exports.USER_STATUS = {
     Active: "Active",

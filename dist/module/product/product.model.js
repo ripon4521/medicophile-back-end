@@ -5,9 +5,11 @@ const mongoose_1 = require("mongoose");
 const generateSlug_1 = require("../../utils/generateSlug");
 const productSchema = new mongoose_1.Schema({
     slug: { type: String, unique: true },
-    title: { type: String, required: true },
+    title: { type: String },
     pdf: { type: String, default: "" },
+    uploadLink: { type: String, default: "" },
     description: { type: String },
+    previewPdf: { type: String },
     trailer: { type: String },
     categoryId: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -15,6 +17,7 @@ const productSchema = new mongoose_1.Schema({
         required: true,
     },
     status: { type: String, enum: ["Active", "Drafted"], required: true },
+    bookType: { type: String, enum: ["Hard copy", "Ebook"], required: true },
     price: { type: Number, required: true },
     offerPrice: { type: Number, default: 0 },
     stock: {

@@ -14,22 +14,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.qrCodeService = void 0;
 const qrcode_1 = __importDefault(require("qrcode"));
-const purchase_model_1 = require("../purchase/purchase.model");
 const qrCodeGenerate_model_1 = __importDefault(require("./qrCodeGenerate.model"));
 const batchStudent_model_1 = require("../batchStudent/batchStudent.model");
 const AppError_1 = __importDefault(require("../../helpers/AppError"));
 const http_status_codes_1 = require("http-status-codes");
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
 const generateQrCodeForStudent = (studentId) => __awaiter(void 0, void 0, void 0, function* () {
-    const student = yield purchase_model_1.PurchaseModel.findOne({ studentId });
-    if (!student) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Student not found in purchase");
-    }
+    // const student = await PurchaseModel.findOne({ studentId });
+    // if (!student) {
+    //   throw new AppError(StatusCodes.NOT_FOUND, "Student not found in purchase");
+    // }
     const batchStudent = yield batchStudent_model_1.BatchStudentModel.findOne({ studentId });
     if (!batchStudent) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Student not admitted in batch");
     }
-    const qrData = student._id.toString();
+    const qrData = studentId.toString();
     const qrImage = yield qrcode_1.default.toDataURL(qrData);
     const result = yield qrCodeGenerate_model_1.default.create({ qrCode: qrImage });
     return result;

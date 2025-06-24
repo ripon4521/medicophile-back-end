@@ -47,6 +47,8 @@ const createReferralReward = (payload) => __awaiter(void 0, void 0, void 0, func
     return newReward;
 });
 const getAllReferReward = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const referrerId = query.referrerId;
+    delete query.referrerId;
     const courseQuery = new querybuilder_1.default(referalReward_model_1.default, query)
         .search(["referDetailsId"])
         .filter()
@@ -70,7 +72,11 @@ const getAllReferReward = (query) => __awaiter(void 0, void 0, void 0, function*
     if (!result) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Failed to get refer reward");
     }
-    return result;
+    // ✅ Filter manually based on populated referrerId
+    const filteredResult = referrerId
+        ? result.filter((item) => { var _a, _b, _c; return ((_c = (_b = (_a = item === null || item === void 0 ? void 0 : item.referDetailsId) === null || _a === void 0 ? void 0 : _a.referrerId) === null || _b === void 0 ? void 0 : _b._id) === null || _c === void 0 ? void 0 : _c.toString()) === referrerId; })
+        : result;
+    return filteredResult;
 });
 const singleReferReward = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield referalReward_model_1.default.findOne({ _id }).populate([

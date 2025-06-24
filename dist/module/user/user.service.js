@@ -25,14 +25,19 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const sendSms_1 = require("../../utils/sendSms");
 const http_status_1 = __importDefault(require("http-status"));
 const querybuilder_1 = __importDefault(require("../../builder/querybuilder"));
+const accounttent_model_1 = __importDefault(require("../accountent/accounttent.model"));
 const createStudentsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const isExist = yield user_model_1.UserModel.findOne({ phone: payload.phone, isDeleted: false });
+    if (isExist) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "This user already exist.Please login");
+    }
     const session = yield mongoose_1.default.startSession();
     session.startTransaction();
     try {
         // Step 1: Create student first (without userId)
         const studentData = Object.assign({}, payload);
         const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
-        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Your login password is: ${plainPassword}`);
+        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`);
         if (!sms) {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Student Create Failed.");
         }
@@ -61,7 +66,6 @@ const createStudentsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
         return {
             student: createdStudent[0],
             user: newUser[0],
-            password: plainPassword, // send this if needed (for SMS/email)
         };
     }
     catch (error) {
@@ -72,13 +76,17 @@ const createStudentsIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
 });
 const createAdmiIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e, _f, _g, _h;
+    const isExist = yield user_model_1.UserModel.findOne({ phone: payload.phone, isDeleted: false });
+    if (isExist) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "This user already exist.Please login");
+    }
     const session = yield mongoose_1.default.startSession();
     session.startTransaction();
     try {
         // Step 1: Create admin first (without userId)
         const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
         const adminData = Object.assign({}, payload);
-        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Your login password is: ${plainPassword}`);
+        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`);
         if (!sms) {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Student Create Failed.");
         }
@@ -111,13 +119,17 @@ const createAdmiIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
 });
 const createFacultysIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e, _f, _g, _h;
+    const isExist = yield user_model_1.UserModel.findOne({ phone: payload.phone, isDeleted: false });
+    if (isExist) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "This user already exist.Please login");
+    }
     const session = yield mongoose_1.default.startSession();
     session.startTransaction();
     try {
         // Step 1: Create admin first (without userId)
         const faculty = Object.assign({}, payload);
         const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
-        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Your login password is: ${plainPassword}`);
+        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`);
         if (!sms) {
             throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Student Create Failed.");
         }
@@ -150,23 +162,72 @@ const createFacultysIntoDB = (payload) => __awaiter(void 0, void 0, void 0, func
         throw new Error("Transaction failed: " + error);
     }
 });
+const createShopManagerIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e, _f, _g, _h;
+    const isExist = yield user_model_1.UserModel.findOne({
+        phone: payload.phone,
+        isDeleted: false,
+    });
+    if (isExist) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, 'This user already exists. Please login');
+    }
+    const session = yield mongoose_1.default.startSession();
+    session.startTransaction();
+    try {
+        // Step 1: Prepare plain password
+        const plainPassword = Math.floor(100000 + Math.random() * 900000).toString();
+        // Step 2: Send SMS
+        const sms = yield (0, sendSms_1.sendSMS)(payload.phone, `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`);
+        if (!sms) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, 'Shop Manager creation failed. SMS credit ended.');
+        }
+        // Step 3: Create shop manager (admin)
+        const shopmanagerData = Object.assign({}, payload);
+        const createdAdmin = yield accounttent_model_1.default.create([shopmanagerData], { session });
+        // Step 4: Hash password and create user
+        const hashedPassword = yield bcrypt_1.default.hash(plainPassword, 12);
+        const userData = {
+            name: (_a = createdAdmin[0]) === null || _a === void 0 ? void 0 : _a.name,
+            status: (_b = createdAdmin[0]) === null || _b === void 0 ? void 0 : _b.status,
+            role: (_c = createdAdmin[0]) === null || _c === void 0 ? void 0 : _c.role,
+            profile_picture: (_d = createdAdmin[0]) === null || _d === void 0 ? void 0 : _d.profile_picture,
+            phone: (_e = createdAdmin[0]) === null || _e === void 0 ? void 0 : _e.phone,
+            password: hashedPassword,
+            email: (_f = createdAdmin[0]) === null || _f === void 0 ? void 0 : _f.email,
+            isDeleted: (_g = createdAdmin[0]) === null || _g === void 0 ? void 0 : _g.isDeleted,
+            deletedAt: (_h = createdAdmin[0]) === null || _h === void 0 ? void 0 : _h.deletedAt,
+        };
+        const newUser = yield user_model_1.UserModel.create([userData], { session });
+        // Step 5: Update shop manager with userId
+        yield accounttent_model_1.default.updateOne({ _id: createdAdmin[0]._id }, { userId: newUser[0]._id }, { session });
+        yield session.commitTransaction();
+        session.endSession();
+        return { admin: createdAdmin[0], user: newUser[0] };
+    }
+    catch (error) {
+        yield session.abortTransaction();
+        session.endSession();
+        throw new Error('Transaction failed: ' + error.message);
+    }
+});
 const changePassword = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const { phone, oldPassword, newPassword, confirmPassword } = payload;
-    const user = yield user_model_1.UserModel.findOne({ phone });
+    const { phone, oldPassword, newPassord, confrimPassord } = payload;
+    // Basic validation
+    if (!phone || !oldPassword || !newPassord || !confrimPassord) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "All fields are required");
+    }
+    const user = yield user_model_1.UserModel.findOne({ phone, isDeleted: false });
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, "User not found with this phone number");
     }
-    // Check if old password matches
     const isMatch = yield bcrypt_1.default.compare(oldPassword, user.password);
     if (!isMatch) {
         throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, "Old password is incorrect");
     }
-    // Check if new password and confirm password match
-    if (newPassword !== confirmPassword) {
+    if (newPassord !== confrimPassord) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "New password and confirm password do not match");
     }
-    // Hash and update new password
-    const hashedPassword = yield bcrypt_1.default.hash(newPassword, 12);
+    const hashedPassword = yield bcrypt_1.default.hash(newPassord, 12);
     user.password = hashedPassword;
     yield user.save();
     return "Password changed successfully";
@@ -201,4 +262,5 @@ exports.userService = {
     getPofile,
     createAdmiIntoDB,
     changePassword,
+    createShopManagerIntoDB
 };

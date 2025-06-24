@@ -2,19 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const paymentInfoSchema = new mongoose_1.Schema({
-    transactionId: { type: String, required: true },
+    transactionId: { type: String, default: '' },
     method: {
         type: String,
-        enum: ["Bkash", "Nagad", "Bank", "Cash"],
-        required: true,
+        enum: ["Bkash", "Nagad", "Bank", "Cash", "Auto"],
+        default: "Bikash"
     },
-    accountNumber: { type: String },
+    accountNumber: { type: String, default: '' },
     paymentMedium: {
         type: String,
         enum: ["personal", "agent", "merchant"],
+        default: "personal"
     },
-    paymentDate: { type: Date },
-    proofUrl: { type: String },
+    paymentDate: { type: Date, default: new Date(new Date().getTime() + 6 * 60 * 60 * 1000) },
+    proofUrl: { type: String, default: '' },
 }, { _id: false });
 const PaymentDetailsSchema = new mongoose_1.Schema({
     purchaseId: {

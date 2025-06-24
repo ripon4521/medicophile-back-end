@@ -16,16 +16,16 @@ exports.sendToCloudinary = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../helpers/AppError"));
 const cloudinary_1 = require("cloudinary");
-const path_1 = __importDefault(require("path")); // ⬅️ Add this
+const path_1 = __importDefault(require("path"));
 const sendToCloudinary = (fileName, filePath) => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => {
-        const fileNameWithoutExt = fileName.replace(path_1.default.extname(fileName), ""); // ✅ Remove extension
+        const fileNameWithoutExt = fileName.replace(path_1.default.extname(fileName), "");
         cloudinary_1.v2.uploader.upload(filePath, {
-            public_id: fileNameWithoutExt, // ✅ Prevents double extension
-            resource_type: "auto",
+            public_id: fileNameWithoutExt,
+            resource_type: "raw", // ⬅️ important for PDF and other non-image files
         }, (err, result) => {
-            if (err) {
-                reject(new AppError_1.default(http_status_codes_1.StatusCodes.CONFLICT, "File cannot upload", err === null || err === void 0 ? void 0 : err.name));
+            if (err || !result) {
+                return reject(new AppError_1.default(http_status_codes_1.StatusCodes.CONFLICT, "File cannot be uploaded to Cloudinary", (err === null || err === void 0 ? void 0 : err.name) || "CloudinaryUploadError"));
             }
             resolve(result);
         });

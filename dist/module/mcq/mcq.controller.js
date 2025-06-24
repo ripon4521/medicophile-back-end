@@ -69,10 +69,20 @@ const getSpeecificMccq = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         data: result,
     });
 }));
+const getSingleMcq = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield mcq_service_1.mcqQuestionService.getSingleMcq(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: " MCQ  fatched successfully",
+        data: result,
+    });
+}));
 exports.mcqQuestiionController = {
     createMcq,
     getAllMCQ,
     updateMCQ,
     deleteMCQ,
+    getSingleMcq,
     getSpeecificMccq,
 };

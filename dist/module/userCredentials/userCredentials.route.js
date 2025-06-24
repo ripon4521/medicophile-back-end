@@ -7,4 +7,5 @@ userCredentialsRoute.get("/",
 // auth.authUser("admin"),
 userCredentials_controller_1.userCredentialsController.getAllCredentials);
 userCredentialsRoute.get("/:id", userCredentials_controller_1.userCredentialsController.getSingleCredentials);
+userCredentialsRoute.delete('/', userCredentials_controller_1.userCredentialsController.deleteCredintials);
 exports.default = userCredentialsRoute;
