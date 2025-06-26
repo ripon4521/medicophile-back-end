@@ -5,9 +5,14 @@ export interface IFAQ {
   answer: string[];
 }
 
+export interface ICourseExistItem {
+  text: string;
+  icon: string; 
+}
+
 export interface ICourseDetails {
   courseId: Types.ObjectId;
-  isCourseExist: string[];
+  isCourseExist: ICourseExistItem;
   syllabus: IFAQ[];
   courseDetails: IFAQ[];
   instructors: Types.ObjectId[];

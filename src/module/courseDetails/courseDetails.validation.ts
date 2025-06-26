@@ -14,19 +14,27 @@ const optionalNonEmptyStringArray = z
 
 // FAQ Schema
 export const faqSchema = z.object({
-  question: z.union([z.string().min(1, "Question is required"), z.literal("")]).optional(),
+  question: z
+    .union([z.string().min(1, "Question is required"), z.literal("")])
+    .optional(),
   answer: z
     .array(z.union([z.string().min(1, "Answer can't be empty"), z.literal("")]))
     .optional(),
 });
 
-// Create Schema (strict)
+// ✅ isCourseExist item schema
+const courseExistItemSchema = z.object({
+  text: z.string().min(1, "Text is required"),
+  icon: z.string().min(1, "Icon is required"),
+});
+
+// ✅ Create Schema
 const createCourseDetailsZodSchema = z.object({
   body: z.object({
     courseId: ObjectIdSchema,
     isCourseExist: z
-      .array(z.string().min(1))
-      .nonempty("At least one course must exist"),
+      .array(courseExistItemSchema)
+      .nonempty("At least one course feature must exist"),
     syllabus: z.array(faqSchema).optional(),
     courseDetails: z.array(faqSchema).optional(),
     instructors: z.array(
@@ -37,10 +45,10 @@ const createCourseDetailsZodSchema = z.object({
   }),
 });
 
-// Update Schema (flexible)
+// ✅ Update Schema
 const updateCourseDetailsZodSchema = z.object({
   body: z.object({
-    isCourseExist: optionalNonEmptyStringArray,
+    isCourseExist: z.array(courseExistItemSchema).optional(),
     syllabus: z.array(faqSchema).optional(),
     courseDetails: z.array(faqSchema).optional(),
     instructors: z
