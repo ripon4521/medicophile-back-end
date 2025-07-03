@@ -7,16 +7,16 @@ import { auth, authUser, onlyAdmin, onlyAdminAndFacultyAndStudent, onlyFaculty }
 const courseRouter = express.Router();
 courseRouter.post(
   "/create-course",
-  authUser(),onlyAdminAndFacultyAndStudent("admin","teacher","superAdmin"),
+  authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"),
   validateRequest(courseValidation.createCourseSchema),
   courseController.createCourse,
 );
 courseRouter.get("/", courseController.getAllCourses);
-courseRouter.get("/my-course", auth.authUser("student", "teacher","superAdmin"),onlyAdminAndFacultyAndStudent("admin","teacher","student"), courseController.getMyCourse);
+courseRouter.get("/my-course", auth.authUser("student","superAdmin"),onlyAdminAndFacultyAndStudent("admin","teacher","student"), courseController.getMyCourse);
 courseRouter.get("/:slug", courseController.getSingleCourse);
 courseRouter.patch(
   "/:slug",
- authUser(),onlyAdminAndFacultyAndStudent("admin","teacher","superAdmin"),
+ authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"),
   validateRequest(courseValidation.updateCourseSchema),
   courseController.updateCourse,
 );
