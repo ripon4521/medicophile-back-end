@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+type Weekday = "saturday" | "sunday" | "monday" | "tuesday" | "wednesday" | "thursday" | "friday";
 
 export interface ICourse {
   slug: string;
@@ -13,7 +14,9 @@ export interface ICourse {
   createdBy: Types.ObjectId;
   expireTime: string;
   daySchedule: [string];
-  timeShedule: [string];
+ timeShedule: {
+    [key: string]: string[];
+  }[];
   price: number;
   offerPrice: number;
   takeReview: "on" | "off";

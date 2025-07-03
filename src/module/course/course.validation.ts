@@ -18,11 +18,29 @@ const optionalArray = () =>
 const requiredString = (msg: string) => z.string().min(1, { message: msg });
 const requiredNumber = (msg: string) => z.number({ required_error: msg });
 
+// ✅ Time Schedule Schema (array of objects with day:string[] pair)
+const timeScheduleSchema = z
+  .array(
+    z.record(
+      z.enum([
+        "saturday",
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+      ]),
+      z.array(z.string().min(1))
+    )
+  )
+  .nonempty({ message: "Time schedule cannot be empty." });
+
 // Create Schema
 const createCourseSchema = z.object({
   body: z.object({
     cover_photo: optionalString("Cover photo URL is required."),
-    prefix:optionalString("Prefix is requried"),
+    prefix: optionalString("Prefix is required"),
     course_title: requiredString("Course title is required."),
     description: requiredString("Description is required."),
     duration: requiredString("Duration is required."),
@@ -38,9 +56,7 @@ const createCourseSchema = z.object({
     daySchedule: z
       .array(z.string())
       .nonempty({ message: "Day schedule cannot be empty." }),
-    timeShedule: z
-      .array(z.string())
-      .nonempty({ message: "Time schedule cannot be empty." }),
+    timeShedule: timeScheduleSchema,
     price: requiredNumber("Price must be a non-negative number."),
     offerPrice: optionalNumber("Offer price must be a non-negative number."),
     takeReview: z
@@ -58,7 +74,7 @@ const createCourseSchema = z.object({
 const updateCourseSchema = z.object({
   body: z.object({
     cover_photo: optionalString("Cover photo URL is required."),
-    prefix:optionalString("Prefix is requeried"),
+    prefix: optionalString("Prefix is required"),
     course_title: optionalString("Course title is required."),
     description: optionalString("Description is required."),
     duration: optionalString("Duration is required."),
@@ -76,7 +92,9 @@ const updateCourseSchema = z.object({
     createdBy: optionalObjectId,
     expireTime: optionalString("Expire time must be a valid date."),
     daySchedule: optionalArray(),
-    timeShedule: optionalArray(),
+    timeShedule: z
+      .union([timeScheduleSchema, z.literal("")])
+      .optional(),
     price: optionalNumber("Price must be a non-negative number."),
     offerPrice: optionalNumber("Offer price must be a non-negative number."),
     takeReview: z

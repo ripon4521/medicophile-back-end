@@ -5,7 +5,7 @@ import { generateUniqueSlug } from "../../utils/generateSlug";
 const courseSchema = new Schema<ICourse>(
   {
     slug: { type: String, unique: true },
-    prefix:{type:String, default:''},
+    prefix: { type: String, default: "" },
     cover_photo: { type: String, default: "" },
     course_title: { type: String, required: true },
     description: { type: String, required: true },
@@ -17,11 +17,21 @@ const courseSchema = new Schema<ICourse>(
       ref: "CourseCategory",
       required: true,
     },
-
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     expireTime: { type: String, required: true },
     daySchedule: { type: [String] },
-    timeShedule: { type: [String] },
+
+    // ✅ timeShedule: array of objects with dynamic keys
+    timeShedule: {
+      type: [
+        {
+          type: Map,
+          of: [String],
+        },
+      ],
+      default: [],
+    },
+
     price: { type: Number, required: true, min: 0 },
     offerPrice: { type: Number, default: 0 },
     takeReview: { type: String, enum: ["on", "off"], default: "on" },
@@ -33,9 +43,11 @@ const courseSchema = new Schema<ICourse>(
   {
     timestamps: {
       currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
-    }, // UTC+6 (Bangladesh Time)
-  },
+    },
+  }
 );
+
+// ✅ Auto-generate slug before save
 courseSchema.pre("save", function (next) {
   if (this.isModified("course_title")) {
     const uniqueSlug = generateUniqueSlug(this.course_title);
@@ -44,7 +56,6 @@ courseSchema.pre("save", function (next) {
   next();
 });
 
-// Create Mongoose model
+// ✅ Mongoose Model
 const courseModel = mongoose.model<ICourse>("Course", courseSchema);
-
 export default courseModel;
