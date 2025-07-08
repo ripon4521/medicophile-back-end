@@ -13,28 +13,33 @@ const optionalString = (msg: string) =>
 const optionalNumber = (msg: string) =>
   z.union([z.number(), z.literal("")]).optional();
 const optionalArray = () =>
-  z.union([z.array(z.string()).nonempty(), z.literal("")]).optional();
+  z.union([z.array(z.string()), z.literal("")]).optional();
 
 const requiredString = (msg: string) => z.string().min(1, { message: msg });
 const requiredNumber = (msg: string) => z.number({ required_error: msg });
 
 // ✅ Time Schedule Schema (array of objects with day:string[] pair)
-const timeScheduleSchema = z
-  .array(
-    z.record(
-      z.enum([
-        "saturday",
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-      ]),
-      z.array(z.string().min(1))
-    )
+const timeScheduleSchema = z.array(
+  z.record(
+    z.enum([
+      "saturday",
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+    ]),
+    z.array(z.string().min(1))
   )
-  .nonempty({ message: "Time schedule cannot be empty." });
+);
+
+// ✅ Flexible Time Schedule for update (allows "", [] or valid schedule)
+const flexibleTimeScheduleSchema = z.union([
+  timeScheduleSchema,
+  z.array(z.any()), // Accepts empty array
+  z.literal(""),
+]);
 
 // Create Schema
 const createCourseSchema = z.object({
@@ -56,7 +61,7 @@ const createCourseSchema = z.object({
     daySchedule: z
       .array(z.string())
       .nonempty({ message: "Day schedule cannot be empty." }),
-    timeShedule: timeScheduleSchema,
+    timeShedule: timeScheduleSchema, // keeping strict validation in create
     price: requiredNumber("Price must be a non-negative number."),
     offerPrice: optionalNumber("Offer price must be a non-negative number."),
     takeReview: z
@@ -92,9 +97,7 @@ const updateCourseSchema = z.object({
     createdBy: optionalObjectId,
     expireTime: optionalString("Expire time must be a valid date."),
     daySchedule: optionalArray(),
-    timeShedule: z
-      .union([timeScheduleSchema, z.literal("")])
-      .optional(),
+    timeShedule: flexibleTimeScheduleSchema.optional(), // ✅ updated here
     price: optionalNumber("Price must be a non-negative number."),
     offerPrice: optionalNumber("Offer price must be a non-negative number."),
     takeReview: z
