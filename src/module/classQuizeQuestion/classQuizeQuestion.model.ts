@@ -14,6 +14,7 @@ const CqQuestionSchema = new Schema<ICqQuestion>(
       ref: "User",
     },
     question: { type: String, required: true },
+    validTime:{type:Number},
     status: { type: String, enum: ["Published", "Drafted"], required: true },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },
