@@ -6,6 +6,7 @@ export interface IEnrollment {
   studentId?: Types.ObjectId;
   courseId: Types.ObjectId;
   batchId?:Types.ObjectId;
+  studentRoll?:string;
   paidAmont: number;
   due?:number;
   discount?:number;
