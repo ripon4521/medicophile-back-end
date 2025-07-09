@@ -16,7 +16,7 @@ courseRouter.get("/my-course", auth.authUser("student","superAdmin"),onlyAdminAn
 courseRouter.get("/:slug", courseController.getSingleCourse);
 courseRouter.patch(
   "/:slug",
- authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"),
+//  authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"),
   validateRequest(courseValidation.updateCourseSchema),
   courseController.updateCourse,
 );

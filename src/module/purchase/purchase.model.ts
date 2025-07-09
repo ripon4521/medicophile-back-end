@@ -3,6 +3,10 @@ import { IPurchase } from "./purchase.interface";
 import { IPaymentInfo } from "../purchaseToken/purchaseToken.interface";
 import courseModel from "../course/course.model";
 
+// utils/bdTime.ts
+export const getBDTime = () => new Date(Date.now() + 6 * 60 * 60 * 1000);
+
+
 const paymentInfoSchema = new Schema<IPaymentInfo>(
   {
     transactionId: { type: String , default:''},
@@ -46,10 +50,12 @@ const PurchaseSchema = new Schema<IPurchase>(
   },
   {
     timestamps: {
-      currentTime: () => new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
+      currentTime: getBDTime,
     },
   },
 );
+
+
 
 
 PurchaseSchema.pre("save", async function (next) {
