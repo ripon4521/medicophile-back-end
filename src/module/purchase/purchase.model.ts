@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 import { IPurchase } from "./purchase.interface";
 import { IPaymentInfo } from "../purchaseToken/purchaseToken.interface";
+import courseModel from "../course/course.model";
 
 const paymentInfoSchema = new Schema<IPaymentInfo>(
   {
@@ -34,6 +35,7 @@ const PurchaseSchema = new Schema<IPurchase>(
     },
     purchaseToken: { type: Schema.Types.ObjectId, required: true , ref:"PurchaseToken" },
     subtotal: { type: Number },
+    studentRoll:{type:String},
     isExpire:{type:Boolean, default:false},
     discount: { type: Number },
     charge: { type: Number },
@@ -48,5 +50,45 @@ const PurchaseSchema = new Schema<IPurchase>(
     },
   },
 );
+
+
+PurchaseSchema.pre("save", async function (next) {
+  if (!this.studentRoll) {
+    try {
+      const course = await courseModel.findById(this.courseId).select("prefix");
+      if (course?.prefix) {
+        let studentRoll = "";
+        let isUnique = false;
+
+        while (!isUnique) {
+          const randomNumber = Math.floor(1000 + Math.random() * 9000); // e.g. 3947
+          studentRoll = `${course.prefix}-${randomNumber}`; // e.g. WD-3947
+
+          const existing = await PurchaseModel.findOne({
+            courseId: this.courseId,
+            studentRoll: studentRoll,
+          });
+
+          if (!existing) {
+            isUnique = true;
+            this.studentRoll = studentRoll;
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error)
+      return next();
+    }
+  }
+  next();
+});
+
+
+
+
+
+
+
+
 
 export const PurchaseModel = model<IPurchase>("Purchase", PurchaseSchema);

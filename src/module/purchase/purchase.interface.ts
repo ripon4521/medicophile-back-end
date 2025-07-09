@@ -8,6 +8,7 @@ export interface IPurchase {
   status?: "Archive" | "Course Out" | "Active";
   paymentStatus?: "Paid" | "Pending" | "Partial" | "Refunded" | "Rejected";
   purchaseToken: Types.ObjectId;
+  studentRoll?:string,
   subtotal: number;
   discount: number;
   charge: number;
