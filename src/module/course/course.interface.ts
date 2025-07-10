@@ -13,7 +13,6 @@ export interface ICourse {
   category: Types.ObjectId;
   createdBy: Types.ObjectId;
   expireTime: string;
-  daySchedule: [string];
  timeShedule: {
     [key: string]: string[];
   }[];

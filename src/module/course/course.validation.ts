@@ -58,9 +58,6 @@ const createCourseSchema = z.object({
     category: ObjectIdSchema,
     createdBy: ObjectIdSchema,
     expireTime: requiredString("Expire time is required."),
-    daySchedule: z
-      .array(z.string())
-      .nonempty({ message: "Day schedule cannot be empty." }),
     timeShedule: timeScheduleSchema, // keeping strict validation in create
     price: requiredNumber("Price must be a non-negative number."),
     offerPrice: optionalNumber("Offer price must be a non-negative number."),
@@ -96,7 +93,6 @@ const updateCourseSchema = z.object({
     category: optionalObjectId,
     createdBy: optionalObjectId,
     expireTime: optionalString("Expire time must be a valid date."),
-    daySchedule: optionalArray(),
     timeShedule: flexibleTimeScheduleSchema.optional(), // ✅ updated here
     price: optionalNumber("Price must be a non-negative number."),
     offerPrice: optionalNumber("Offer price must be a non-negative number."),

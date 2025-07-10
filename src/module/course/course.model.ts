@@ -19,7 +19,6 @@ const courseSchema = new Schema<ICourse>(
     },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     expireTime: { type: String, required: true },
-    daySchedule: { type: [String] },
 
     // ✅ timeShedule: array of objects with dynamic keys
     timeShedule: {
