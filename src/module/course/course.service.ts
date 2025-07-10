@@ -16,7 +16,7 @@ const createCourseIntoDb = async (payload: ICourse): Promise<ICourse> => {
   if (!user || user?.role === "student") {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "User not found. Please provide valid user id. ony admin and teacher is valid",
+      "User not found. Please provide valid user id. ony admin and teacher is valid"
     );
   }
   const result = await courseModel.create(payload);
@@ -82,7 +82,7 @@ const getCourseById = async (slug: string, userId?: string) => {
   if (!result) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to get Course Category. Slug is not valid, reload or go back and try again",
+      "Failed to get Course Category. Slug is not valid, reload or go back and try again"
     );
   }
 
@@ -91,10 +91,16 @@ const getCourseById = async (slug: string, userId?: string) => {
     studentId: userId,
     courseId: result._id,
   });
-  const courseObject = result.toObject();
+
+
+  const courseObject = result;
   courseObject.access = hasPurchased ? true : false;
 
   return courseObject;
+
+
+
+
 };
 
 const updateCourseInDb = async (slug: string, payload: Partial<ICourse>) => {
@@ -105,7 +111,7 @@ const updateCourseInDb = async (slug: string, payload: Partial<ICourse>) => {
   if (!update) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
-      "Failed to update Course Ctaegory. Slug is not valid, reload or go back and try again",
+      "Failed to update Course Ctaegory. Slug is not valid, reload or go back and try again"
     );
   }
 
@@ -119,7 +125,7 @@ const deleteCourseFromDb = async (slug: string) => {
       isDeleted: true,
       deletedAt: new Date(new Date().getTime() + 6 * 60 * 60 * 1000),
     },
-    { new: true },
+    { new: true }
   );
 
   if (!result) {
@@ -130,10 +136,10 @@ const deleteCourseFromDb = async (slug: string) => {
 
 const getUserPurchasedCourses = async (userId: string) => {
   const purchases = await PurchaseModel.find({
-    studentId:userId,
+    studentId: userId,
     paymentStatus: "Paid",
     status: "Active",
-    isExpire:false
+    isExpire: false,
   }).populate("courseId");
 
   // শুধু কোর্স ডেটা রিটার্ন করবো

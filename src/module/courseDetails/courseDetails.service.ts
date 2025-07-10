@@ -68,6 +68,7 @@ const updateCourseDetails = async (
 };
 
 const getSingleCourseDetails = async (courseId: string) => {
+
   const result = await CourseDetailsModel.findOne({ courseId })
     .populate("courseId")
     .populate("instructors");
