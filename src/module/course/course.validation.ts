@@ -49,6 +49,7 @@ const createCourseSchema = z.object({
     course_title: requiredString("Course title is required."),
     description: requiredString("Description is required."),
     duration: requiredString("Duration is required."),
+    daySchedule: optionalArray(),
     preOrder: z.enum(["on", "off"], {
       message: "PreOrder must be either 'on' or 'off'.",
     }),
@@ -78,6 +79,7 @@ const updateCourseSchema = z.object({
     cover_photo: optionalString("Cover photo URL is required."),
     prefix: optionalString("Prefix is required"),
     course_title: optionalString("Course title is required."),
+     daySchedule: optionalArray(),
     description: optionalString("Description is required."),
     duration: optionalString("Duration is required."),
     preOrder: z

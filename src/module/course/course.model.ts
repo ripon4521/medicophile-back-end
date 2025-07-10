@@ -10,6 +10,11 @@ const courseSchema = new Schema<ICourse>(
     course_title: { type: String, required: true },
     description: { type: String, required: true },
     duration: { type: String, required: true },
+    daySchedule: {
+    type: [String],
+    required: true,
+    default: [],
+  },
     preOrder: { type: String, enum: ["on", "off"], required: true },
     course_type: { type: String, enum: ["online", "offline"], required: true },
     category: {
