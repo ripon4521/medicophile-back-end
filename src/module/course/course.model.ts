@@ -10,10 +10,8 @@ const courseSchema = new Schema<ICourse>(
     course_title: { type: String, required: true },
     description: { type: String, required: true },
     duration: { type: String, required: true },
-    daySchedule: {
-    type: [String],
-    required: true,
-    default: [],
+    routine: {
+  type:String
   },
     preOrder: { type: String, enum: ["on", "off"], required: true },
     course_type: { type: String, enum: ["online", "offline"], required: true },
@@ -24,17 +22,6 @@ const courseSchema = new Schema<ICourse>(
     },
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     expireTime: { type: String, required: true },
-
-    // ✅ timeShedule: array of objects with dynamic keys
-    timeShedule: {
-      type: [
-        {
-          type: Map,
-          of: [String],
-        },
-      ],
-      default: [],
-    },
 
     price: { type: Number, required: true, min: 0 },
     offerPrice: { type: Number, default: 0 },

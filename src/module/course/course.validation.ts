@@ -49,7 +49,7 @@ const createCourseSchema = z.object({
     course_title: requiredString("Course title is required."),
     description: requiredString("Description is required."),
     duration: requiredString("Duration is required."),
-    daySchedule: optionalArray(),
+    routine: requiredString("Routine is required."),
     preOrder: z.enum(["on", "off"], {
       message: "PreOrder must be either 'on' or 'off'.",
     }),
@@ -59,7 +59,6 @@ const createCourseSchema = z.object({
     category: ObjectIdSchema,
     createdBy: ObjectIdSchema,
     expireTime: requiredString("Expire time is required."),
-    timeShedule: timeScheduleSchema, // keeping strict validation in create
     price: requiredNumber("Price must be a non-negative number."),
     offerPrice: optionalNumber("Offer price must be a non-negative number."),
     takeReview: z
@@ -79,7 +78,7 @@ const updateCourseSchema = z.object({
     cover_photo: optionalString("Cover photo URL is required."),
     prefix: optionalString("Prefix is required"),
     course_title: optionalString("Course title is required."),
-     daySchedule: optionalArray(),
+     routine: optionalString("Routine is Requried"),
     description: optionalString("Description is required."),
     duration: optionalString("Duration is required."),
     preOrder: z
@@ -95,7 +94,6 @@ const updateCourseSchema = z.object({
     category: optionalObjectId,
     createdBy: optionalObjectId,
     expireTime: optionalString("Expire time must be a valid date."),
-    timeShedule: flexibleTimeScheduleSchema.optional(), // ✅ updated here
     price: optionalNumber("Price must be a non-negative number."),
     offerPrice: optionalNumber("Offer price must be a non-negative number."),
     takeReview: z
