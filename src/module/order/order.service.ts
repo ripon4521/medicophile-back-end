@@ -67,23 +67,11 @@ const createOrderWithDetails = async (payload: IOrder) => {
 
 
 
-    // Validate User
-    // const user = await UserModel.findOne({ _id: payload.userId }).session(session);
-    // if (!user) {
-    //   throw new AppError(StatusCodes.NOT_FOUND, "User not found");
-    // }
-
-    // Validate Product
     const product = await ProductModel.findOne({ _id: payload.productId, isDeleted: false }).session(session);
     if (!product) {
       throw new AppError(StatusCodes.NOT_FOUND, "Product not found");
     }
 
-    // Validate Coupon (if exists)
-    // if (payload.coupoun) {
-    //   const coupon = await CouponModel.findOne({ _id: payload.coupoun, isDeleted: false }).session(session);
-    //   if (!coupon) {
-    //     throw new AppError(StatusCodes.NOT_FOUND, "Coupon not found");
 
     // Create Order
     const [order] = await OrderModel.create([payload], { session });
