@@ -1,5 +1,5 @@
 
-# 🧩 LMS
+# 🧩 MEDICOPHILE
 
 A scalable backend application built using **TypeScript**, **Node.js**, **Express.js**, and **MongoDB**, designed for managing users, products, orders, and payments efficiently. Ideal for e-commerce, course purchases, or digital product systems.
 
@@ -46,8 +46,6 @@ src/
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/Mehedi01616720009/icon-aid.git
-cd icon-aid
 ```
 
 
