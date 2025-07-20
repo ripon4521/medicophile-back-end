@@ -46,7 +46,7 @@ async function server() {
     // Start the server with the desired port (use `5000` directly or from config)
     httpServer.listen(3000, () => {
       console.log(
-        `School Management Server is running on port 3000 - Alhamdulillah`,
+        `MedicoPhile Server is running on port 3000 - Alhamdulillah`,
       );
     });
   } catch (error) {

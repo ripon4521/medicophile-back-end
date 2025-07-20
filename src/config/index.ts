@@ -20,8 +20,8 @@ if (!DB_NAME) {
 const port = process.env.PORT || "3000";
 
 // Updated database URL with DB_NAME
-const databaseUrl = `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASS}@cluster0.b1mistq.mongodb.net/${DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
-
+const databaseUrl = `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASS}@medicophile.f1vbs7w.mongodb.net/${DB_NAME}?retryWrites=true&w=majority&appName=Medicophile`;
+// @medicophile.f1vbs7w.mongodb.net/?retryWrites=true&w=majority&appName=Medicophile
 export default {
   database_url: databaseUrl,
   port: process.env.PORT,
