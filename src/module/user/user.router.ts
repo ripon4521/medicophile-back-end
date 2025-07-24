@@ -36,7 +36,7 @@ userRouter.get(
 );
 userRouter.post(
   "/create-faculty",
-     authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"),
+    //  authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"),
   validateRequest(facultyValidation.createFacultyValidationSchema),
   userController.createFaculty,
 );

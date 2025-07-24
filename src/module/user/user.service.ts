@@ -27,19 +27,12 @@ const createStudentsIntoDB = async (payload: IStudent) => {
   }
   const session = await mongoose.startSession();
   session.startTransaction();
-
   try {
-    // Step 1: Create student first (without userId)
     const studentData = { ...payload };
-    
-
     const createdStudent = await studentModel.create([studentData], {
       session,
     });
-
     const hashedPassword = await bcrypt.hash(payload.password, 12);
-
-    // Step 4: Create user using data from createdStudent
     const userData: Partial<IUser> = {
       name: createdStudent[0].name,
       status: createdStudent[0].status,
@@ -51,23 +44,17 @@ const createStudentsIntoDB = async (payload: IStudent) => {
       isDeleted: createdStudent[0].isDeleted,
       deletedAt: createdStudent[0].deletedAt,
     };
-
     const newUser = await UserModel.create([userData], { session });
-
-    // Step 5: Update student with userId
     await studentModel.updateOne(
       { _id: createdStudent[0]._id },
       { userId: newUser[0]._id },
       { session },
     );
-
     await session.commitTransaction();
     session.endSession();
-
     return {
       student: createdStudent[0],
       user: newUser[0],
-  
     };
   } catch (error) {
     await session.abortTransaction();
@@ -86,25 +73,9 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    // Step 1: Create admin first (without userId)
-    const plainPassword = Math.floor(
-      100000 + Math.random() * 900000,
-    ).toString();
-
     const adminData = { ...payload };
-
-    const sms = await sendSMS(
-      payload.phone,
-      `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`,
-    );
-    if (!sms) {
-      throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.");
-    }
-
     const createdAdmin = await adminModel.create([adminData], { session });
-
-    const hashedPassword = await bcrypt.hash(plainPassword, 12);
-    // Step 2: Now create the user using createdAdmin data
+    const hashedPassword = await bcrypt.hash(payload.password, 12);
     const userData: Partial<IUser> = {
       name: createdAdmin[0]?.name,
       status: createdAdmin[0]?.status,
@@ -118,8 +89,6 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
     };
 
     const newUser = await UserModel.create([userData], { session });
-
-    // Step 3: Update admin with the newly created userId
     await adminModel.updateOne(
       { _id: createdAdmin[0]._id },
       { userId: newUser[0]._id },
@@ -136,6 +105,8 @@ const createAdmiIntoDB = async (payload: IAdmin) => {
   }
 };
 
+
+
 const createFacultysIntoDB = async (payload: IFaculty) => {
   const isExist = await UserModel.findOne({phone:payload.phone, isDeleted:false});
   if (isExist) {
@@ -144,25 +115,11 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    // Step 1: Create admin first (without userId)
     const faculty = { ...payload };
-    const plainPassword = Math.floor(
-      100000 + Math.random() * 900000,
-    ).toString();
-    const sms = await sendSMS(
-      payload.phone,
-      `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`,
-    );
-    if (!sms) {
-      throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.");
-    }
-
     const createdFaculty = await FacultyUserModel.create([faculty], {
       session,
     });
-
-    const hashedPassword = await bcrypt.hash(plainPassword, 12);
-    // Step 2: Now create the user using createdAdmin data
+    const hashedPassword = await bcrypt.hash(payload.password, 12);
     const userData: Partial<IUser> = {
       name: createdFaculty[0]?.name,
       status: createdFaculty[0]?.status,
@@ -174,16 +131,12 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
       isDeleted: createdFaculty[0]?.isDeleted,
       deletedAt: createdFaculty[0]?.deletedAt,
     };
-
     const newUser = await UserModel.create([userData], { session });
-
-    // Step 3: Update admin with the newly created userId
     await FacultyUserModel.updateOne(
       { _id: createdFaculty[0]._id },
       { userId: newUser[0]._id },
       { session },
     );
-
     await session.commitTransaction();
     session.endSession();
     return { admin: createdFaculty[0], user: newUser[0] };

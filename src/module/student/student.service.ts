@@ -108,31 +108,26 @@ userUpdateData.profile_picture = updateStudentData?.profile_picture;
 userUpdateData.isDeleted = updateStudentData?.isDeleted;
 userUpdateData.deletedAt = updateStudentData?.deletedAt;
 
-// ✅ Password hashing if updated
+
 if (updateStudentData?.password) {
   const hashedPassword = await bcrypt.hash(updateStudentData.password, 12);
   userUpdateData.password = hashedPassword;
 }
 
 
-    // Update user model
+ 
     const updatedUser = await UserModel.findByIdAndUpdate(
       student.userId,
       userUpdateData,
       { new: true, runValidators: true, session },
     );
-
     if (!updatedUser) {
       throw new Error("Failed to update user");
     }
-
-    // Commit transaction if everything is fine
     await session.commitTransaction();
     session.endSession();
-
     return updatedStudent;
   } catch (error) {
-    // Rollback transaction if error occurs
     await session.abortTransaction();
     session.endSession();
 

@@ -5,6 +5,7 @@ import { UserModel } from "../user/user.model";
 import { IFaculty } from "./faculty.interface";
 import AppError from "../../helpers/AppError";
 import { StatusCodes } from "http-status-codes";
+import bcrypt from 'bcrypt';
 
 const getAllFacultys = async () => {
   const result = await FacultyUserModel.find({ isDeleted: false }).populate(
@@ -21,28 +22,22 @@ const getFacultyById = async (_id: string) => {
 const updateFaculty = async (_id: string, updateData: Partial<IFaculty>) => {
   const session = await mongoose.startSession();
   session.startTransaction();
-
   try {
     const teacher = await FacultyUserModel.findOne({ _id }).session(session);
     if (!teacher) {
       throw new AppError(StatusCodes.FORBIDDEN, "Faculty not found");
     }
-
-    // Other updates for faculty details...
     const updatedStudent = await FacultyUserModel.findOneAndUpdate(
       { _id },
       updateData,
       { new: true, runValidators: true, session },
     );
-
     if (!updatedStudent) {
       throw new Error("Failed to update faculty");
     }
-
     const userUpdateData: Partial<IUser> = {};
     const updateStudentData =
       await FacultyUserModel.findById(_id).session(session);
-    console.log(updatedStudent);
 
     userUpdateData.email = updateStudentData?.email;
     userUpdateData.name = updateStudentData?.name;
@@ -52,7 +47,12 @@ const updateFaculty = async (_id: string, updateData: Partial<IFaculty>) => {
     userUpdateData.isDeleted = updateStudentData?.isDeleted;
     userUpdateData.profile_picture = updateStudentData?.profile_picture;
 
-    // Update user model
+    if (updateStudentData?.password) {
+      const hashedPassword = await bcrypt.hash(updateStudentData.password, 12);
+      userUpdateData.password = hashedPassword;
+    }
+    
+
     const updatedUser = await UserModel.findByIdAndUpdate(
       teacher.userId,
       userUpdateData,
@@ -62,14 +62,11 @@ const updateFaculty = async (_id: string, updateData: Partial<IFaculty>) => {
     if (!updatedUser) {
       throw new AppError(StatusCodes.FORBIDDEN, "Failed to update user");
     }
-
-    // Commit transaction if everything is fine
     await session.commitTransaction();
     session.endSession();
 
     return updatedStudent;
   } catch (error) {
-    // Rollback transaction if error occurs
     await session.abortTransaction();
     session.endSession();
 

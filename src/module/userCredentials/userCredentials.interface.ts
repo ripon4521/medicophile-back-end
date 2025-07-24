@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 export interface IUserCredebtials {
   studentId: Types.ObjectId;
-  phone: string;
+  email: string;
   ipAddress: string;
   accessToken: string;
   refreshToken: string;

@@ -24,15 +24,15 @@ const login = catchAsync(async (req: Request, res: Response) => {
 
   const { accessToken, refreshToken, user } = result;
 
-  // Set refresh token in HTTP-only cookie
+ 
   res.cookie("refreshToken", refreshToken, {
     secure: config.nodeEnv === "development",
-    httpOnly: true, // JS access off
+    httpOnly: true, 
     sameSite: "strict",
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    maxAge: 30 * 24 * 60 * 60 * 1000, 
   });
 
-  // Send access token and user data
+
   sendResponse(res, {
     statusCode: StatusCodes.ACCEPTED,
     status: true,
