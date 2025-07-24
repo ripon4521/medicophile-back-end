@@ -9,7 +9,7 @@ const userCredentialsSchema = new Schema(
       ref: "Students",
       required: true,
     },
-    email: {
+    phone: {
       type: String,
       required: true,
     },

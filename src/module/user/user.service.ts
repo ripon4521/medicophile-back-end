@@ -132,11 +132,13 @@ const createFacultysIntoDB = async (payload: IFaculty) => {
       deletedAt: createdFaculty[0]?.deletedAt,
     };
     const newUser = await UserModel.create([userData], { session });
+
     await FacultyUserModel.updateOne(
       { _id: createdFaculty[0]._id },
       { userId: newUser[0]._id },
       { session },
     );
+
     await session.commitTransaction();
     session.endSession();
     return { admin: createdFaculty[0], user: newUser[0] };

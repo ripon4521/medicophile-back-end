@@ -25,7 +25,7 @@ const register = async (payload: IUser) => {
 
 const login = async (
   payload: {
-    email: string;
+    phone: string;
     password: string;
   },
   meta: {
@@ -34,7 +34,7 @@ const login = async (
     deviceName: string;
   }
 ) => {
-  if (!payload.email || !payload.password) {
+  if (!payload.phone || !payload.password) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Phone and password are required");
   }
 
@@ -44,7 +44,7 @@ const login = async (
     session.startTransaction();
 
     // 1️⃣ Find the user with password
-    const user = await UserModel.findOne({ email: payload.email })
+    const user = await UserModel.findOne({ phone: payload.phone })
       .select("+password")
       .session(session);
 
@@ -64,7 +64,7 @@ const login = async (
 
     // 3️⃣ JWT payload
     const jwtPayload = {
-      email: user.email,
+      phone: user.phone,
       role: user.role,
       _id: user._id.toString(),
     };
@@ -102,7 +102,7 @@ const login = async (
       [
         {
           studentId: user._id,
-          email: user.email,
+          phone: user.phone,
           ipAddress: meta.ipAddress,
           deviceType: meta.deviceType,
           deviceName: meta.deviceName,

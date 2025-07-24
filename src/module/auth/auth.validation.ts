@@ -2,11 +2,9 @@ import { z } from "zod";
 
 const loginValidationSchema = z.object({
   body: z.object({
-     email: z
-      .string()
-      .regex(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, {
-        message: "Only valid Gmail addresses are allowed",
-      }),
+    phone: z.string({
+      required_error: "Phone number must be valid and 11 charchters ",
+    }),
     password: z.string({ required_error: "Password is required" }),
   }),
 });

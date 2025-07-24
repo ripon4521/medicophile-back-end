@@ -35,11 +35,7 @@ const educationSchema = z.object({
 const createFacultyValidationSchema = z.object({
   body: z.object({
     name: z.string().min(3, "Name must be at least 3 characters"),
-    email: z
-      .string()
-      .regex(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, {
-        message: "Only valid Gmail addresses are allowed",
-      }),
+    email: optionalEmail,
     password: z.string().min(6, "Password must be at least 6 characters"),
     phone: optionalPhone,
     address: optionalNonEmptyString,
