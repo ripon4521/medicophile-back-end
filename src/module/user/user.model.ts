@@ -6,11 +6,9 @@ import config from "../../config";
 const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
-    email: { type: String },
+    email: { type: String, required: true, unique: true },
     password: { type: String },
-    // studentId:{ type: mongoose.Schema.ObjectId},
-    // teacherId: {type:mongoose.Schema.ObjectId},
-    phone: { type: String, required: true, unique: true },
+    phone: { type: String,  },
     role: {
       type: String,
       enum: ["superAdmin", "admin", "teacher", "student", "shopManager"],
@@ -19,7 +17,7 @@ const UserSchema = new Schema<IUser>(
     status: { type: String, enum: ["Active", "Blocked"] },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date },
-    pin: { type: String },
+
   },
   {
     timestamps: {
@@ -28,19 +26,6 @@ const UserSchema = new Schema<IUser>(
   },
 );
 
-// UserSchema.pre("save", async function (next) {
-//   // eslint-disable-next-line @typescript-eslint/no-this-alias
-//   const user = this;
-//   user.password = await bcrypt.hash(
-//     user.password,
-//     Number(config.bcrypt_salt_rounds),
-//   );
-//   next();
-// });
 
-// UserSchema.post("save", async function (doc, next) {
-//   doc.password = "";
-//   next();
-// });
 
 export const UserModel = model<IUser>("User", UserSchema);

@@ -27,10 +27,10 @@ app.use(express.json());
 app.use("/api/v1", router);
 
 const getAcontroller = (req: Request, res: Response) => {
-  res.send("🚀 Welcome SuperAdmin to the School Management System");
+  res.send("🚀 Welcome SuperAdmin to the MedichoPhile Server System");
 };
 
-app.get("/", auth.authUser("superAdmin"), onlySuperAdmin, getAcontroller);
+app.get("/", getAcontroller);
 
 app.use(globalErrorHandler);
 app.use(notFound);

@@ -40,7 +40,7 @@ userRouter.post(
   validateRequest(facultyValidation.createFacultyValidationSchema),
   userController.createFaculty,
 );
-userRouter.get("/",    authUser(),onlyAdminAndFacultyAndStudent("admin","superAdmin"), userController.getAllUsers);
+userRouter.get("/",   userController.getAllUsers);
 userRouter.delete("/", auth.authUser(),onlyAdmin("superAdmin"), userController.deleteUsers);
 userRouter.patch(
   "/change-password", authUser(), onlyAdminAndFacultyAndStudent("student", "teacher", "admin", "superAdmin", "shopManager"),

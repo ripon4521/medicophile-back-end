@@ -7,10 +7,14 @@ import { object, z } from "zod";
 
 export const createUserValidationSchema = z.object({
   body: z.object({
-    // studentId:ObjectIdSchema.optional(),
-    // teacherId:ObjectIdSchema.optional(),
     name: z.string().min(1, "Name is required").optional(),
-    email: z.string().email("Invalid Gmail address").optional(),
+    email: z
+      .string()
+      .regex(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, {
+        message: "Only valid Gmail addresses are allowed",
+      })
+      .optional(),
+
     password: z
       .string()
       .min(6, "Password must be at least 6 characters long")
@@ -33,5 +37,5 @@ export const changePasswordValidation = z.object({
     confrimPassord: z.string({
       required_error: "confrim password is required",
     }),
-  }), 
+  }),
 });

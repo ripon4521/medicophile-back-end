@@ -5,6 +5,7 @@ import { IUser } from "../user/user.interface";
 import { IStudent } from "./student.interface";
 import studentModel from "./student.model";
 import QueryBuilder from "../../builder/querybuilder";
+import bcrypt from 'bcrypt';
 
 const getAllStudents = async (query: Record<string, unknown>) => {
    const courseQuery = new QueryBuilder(studentModel, query)
@@ -96,15 +97,23 @@ const updateStudent = async (_id: string, updateData: Partial<IStudent>) => {
 
     const userUpdateData: Partial<IUser> = {};
 
-    const updateStudentData = await studentModel.findById(_id).session(session);
-    userUpdateData.email = updateStudentData?.email;
-    userUpdateData.role = updateStudentData?.role;
-    userUpdateData.name = updateStudentData?.name;
-    userUpdateData.phone = updateStudentData?.phone;
-    userUpdateData.status = updateStudentData?.status;
-    userUpdateData.profile_picture = updateStudentData?.profile_picture;
-    userUpdateData.isDeleted = updateStudentData?.isDeleted;
-    userUpdateData.deletedAt = updateStudentData?.deletedAt;
+
+const updateStudentData = await studentModel.findById(_id).session(session);
+userUpdateData.email = updateStudentData?.email;
+userUpdateData.role = updateStudentData?.role;
+userUpdateData.name = updateStudentData?.name;
+userUpdateData.phone = updateStudentData?.phone;
+userUpdateData.status = updateStudentData?.status;
+userUpdateData.profile_picture = updateStudentData?.profile_picture;
+userUpdateData.isDeleted = updateStudentData?.isDeleted;
+userUpdateData.deletedAt = updateStudentData?.deletedAt;
+
+// ✅ Password hashing if updated
+if (updateStudentData?.password) {
+  const hashedPassword = await bcrypt.hash(updateStudentData.password, 12);
+  userUpdateData.password = hashedPassword;
+}
+
 
     // Update user model
     const updatedUser = await UserModel.findByIdAndUpdate(

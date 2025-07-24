@@ -9,7 +9,6 @@ export interface IUser {
   profile_picture?: string | null | undefined;
   status: "Active" | "Blocked";
   isDeleted: boolean;
-  pin: string;
   deletedAt: Date | null;
 }
 export type TUserRole = keyof typeof USER_ROLE;

@@ -19,6 +19,7 @@ import QueryBuilder from "../../builder/querybuilder";
 import shopManagerModel from "../accountent/accounttent.model";
 import { IShopManager } from "../accountent/accountent.interface";
 
+
 const createStudentsIntoDB = async (payload: IStudent) => {
   const isExist = await UserModel.findOne({phone:payload.phone, isDeleted:false});
   if (isExist) {
@@ -30,25 +31,13 @@ const createStudentsIntoDB = async (payload: IStudent) => {
   try {
     // Step 1: Create student first (without userId)
     const studentData = { ...payload };
-    const plainPassword = Math.floor(
-      100000 + Math.random() * 900000,
-    ).toString();
-
-    const sms = await sendSMS(
-      payload.phone,
-      `Welcome To ICON Admission Aid!  Your login password is: ${plainPassword} (Please do not share this Password with others)`,
-    );
-    if (!sms) {
-      throw new AppError(StatusCodes.BAD_REQUEST, "Student Create Failed.");
-    }
-
-    // console.log(sms)
+    
 
     const createdStudent = await studentModel.create([studentData], {
       session,
     });
 
-    const hashedPassword = await bcrypt.hash(plainPassword, 12);
+    const hashedPassword = await bcrypt.hash(payload.password, 12);
 
     // Step 4: Create user using data from createdStudent
     const userData: Partial<IUser> = {
@@ -86,6 +75,8 @@ const createStudentsIntoDB = async (payload: IStudent) => {
     throw new Error("Transaction failed: " + error);
   }
 };
+
+
 
 const createAdmiIntoDB = async (payload: IAdmin) => {
   const isExist = await UserModel.findOne({phone:payload.phone, isDeleted:false});

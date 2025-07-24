@@ -1,7 +1,6 @@
 import { z } from "zod";
-import { Types } from "mongoose";
 
-// Helper: Accepts either a non-empty string or an empty string (for optional fields)
+// 🔹 Helper Validators
 const optionalNonEmptyString = z.union([z.string().min(1), z.literal("")]).optional();
 const optionalPhone = z.union([
   z.string().min(10, "Phone number must be at least 10 digits."),
@@ -21,22 +20,44 @@ const optionalPassword = z.union([
   z.literal(""),
 ]).optional();
 
+// 🔹 SSC Schema
+const sscSchema = z
+  .object({
+    schoolName: optionalNonEmptyString,
+    boardName: optionalNonEmptyString,
+    passingYear: optionalNonEmptyString,
+    sscGpa: z.union([z.number(), z.literal(0)]).optional(),
+    sscRoll: optionalNonEmptyString,
+    sscRegeistration: optionalNonEmptyString,
+  })
+  .optional();
+
+// 🔹 HSC Schema
+const hscSchema = z
+  .object({
+    schoolName: optionalNonEmptyString,
+    boardName: optionalNonEmptyString,
+    passingYear: optionalNonEmptyString,
+    hscGpa: z.union([z.number(), z.literal(0)]).optional(),
+    hscRoll: optionalNonEmptyString,
+    hscRegeistration: optionalNonEmptyString,
+  })
+  .optional();
+
+// 🔹 Create Schema
 const createStudentSchema = z.object({
   body: z.object({
     name: z.string().min(1, "Name cannot be empty."),
-    phone: z
+    email: z
       .string()
-      .regex(/^\+?(88)?01[3-9]\d{8}$/, "Invalid Bangladeshi phone number"),
-    email: optionalEmail,
-    profile_picture: optionalURL,
-    gurdianName: optionalNonEmptyString,
-    gurdianPhone: optionalGurdianPhone,
-    address: optionalNonEmptyString,
+      .regex(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, {
+        message: "Only valid Gmail addresses are allowed",
+      }),
+    password: z.string().min(6, "Password must be at least 6 characters long."),
   }),
 });
 
-
-
+// 🔹 Update Schema
 const updateStudentSchema = z.object({
   body: z.object({
     role: z.literal("student").optional(),
@@ -49,9 +70,12 @@ const updateStudentSchema = z.object({
     gurdianPhone: optionalGurdianPhone,
     address: optionalNonEmptyString,
     status: z.enum(["Active", "Blocked"]).optional(),
+    ssc: sscSchema,
+    hsc: hscSchema,
   }),
 });
 
+// 🔹 Export All
 export const studentValidation = {
   createStudentSchema,
   updateStudentSchema,

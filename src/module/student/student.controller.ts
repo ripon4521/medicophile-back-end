@@ -42,13 +42,13 @@ const deleteStudent = catchAsync(async (req, res) => {
 });
 
 const updateStudent = catchAsync(async (req, res) => {
-  const { _id } = req.body;
-  if (!_id) {
+  const {id}= req.params;
+
+  if (!id) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Please provide _id");
   }
   const data = req.body;
-  delete data._id;
-  const result = await studentsService.updateStudent(_id, data);
+  const result = await studentsService.updateStudent(id, data);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: "Student & Nested User Updated successfully",
