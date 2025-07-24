@@ -48,7 +48,7 @@ const createFacultyValidationSchema = z.object({
     department: optionalNonEmptyString,
     demoClassLink: z.array(z.string().url("Invalid URL")).optional(),
     exprienced: z.coerce.number().optional(),
-    education: educationSchema.optional(), 
+    education: educationSchema, 
   }),
 });
 

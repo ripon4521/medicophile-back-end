@@ -6,11 +6,11 @@ import { authUser, onlyAdminAndFacultyAndStudent } from "../../middlewares/auth"
 // import { facultysValidation } from './faculty.validation';
 
 const facultRoute = express.Router();
-facultRoute.get("/", authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin") , facultysController.getAllFaculty);
+facultRoute.get("/", authUser(), facultysController.getAllFaculty);
 facultRoute.get("/:id", authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin") , facultysController.getSingleFaculty);
 facultRoute.patch(
   "/update-faculty/:id",
-  authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin") ,
+  // authUser(), onlyAdminAndFacultyAndStudent("admin", "superAdmin") ,
   validateRequest(facultyValidation.updateFacultyValidationSchema),
   facultysController.updatedFaculty,
 );
